@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "782193312243",
+    "project_id": "wateranalytics-odoo",
+    "storage_bucket": "wateranalytics-odoo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782193312243:android:1277371388ba40000f5286",
+        "android_client_info": {
+          "package_name": "com.example.water_analytics_australia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4tj-ItYM6n02OzFPs2VgHDLmFJRhrgT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
