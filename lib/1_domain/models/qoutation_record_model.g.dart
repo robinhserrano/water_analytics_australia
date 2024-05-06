@@ -23,10 +23,10 @@ _$QuotationRecordImpl _$$QuotationRecordImplFromJson(
       currencyId: json['currency_id'] == null
           ? null
           : IdModel.fromJson(json['currency_id'] as Map<String, dynamic>),
-      activityState: json['activity_state'],
       activityIds: (json['activity_ids'] as List<dynamic>?)
           ?.map((e) => ActivityIdModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      activityState: json['activity_state'],
       activityExceptionDecoration:
           json['activity_exception_decoration'] as bool? ?? false,
       activityExceptionIcon: json['activity_exception_icon'] as bool? ?? false,
@@ -46,8 +46,8 @@ Map<String, dynamic> _$$QuotationRecordImplToJson(
       'date_order': instance.dateOrder?.toIso8601String(),
       'state': instance.state,
       'currency_id': instance.currencyId,
-      'activity_state': instance.activityState,
       'activity_ids': instance.activityIds,
+      'activity_state': instance.activityState,
       'activity_exception_decoration': instance.activityExceptionDecoration,
       'activity_exception_icon': instance.activityExceptionIcon,
       'activity_summary': instance.activitySummary,

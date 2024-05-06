@@ -16,8 +16,8 @@ class SalesDetailsStateLoading extends SalesDetailsCubitState {
 }
 
 class SalesDetailsStateLoaded extends SalesDetailsCubitState {
-  const SalesDetailsStateLoaded();
- // final List<QuotationRecord> records;
+  const SalesDetailsStateLoaded(this.order);
+  final SalesOrder order;
 
   @override
   List<Object> get props => [];

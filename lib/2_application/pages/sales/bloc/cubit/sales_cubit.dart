@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
-import 'package:water_analytics_australia/1_domain/models/qoutation_record_model.dart';
+import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 part 'sales_state.dart';
 
 class SalesCubit extends Cubit<SalesCubitState> {

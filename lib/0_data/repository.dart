@@ -1,7 +1,7 @@
 // ignore_for_file: inference_failure_on_collection_literal
 
 import 'package:odoo_rpc/odoo_rpc.dart';
-import 'package:water_analytics_australia/1_domain/models/qoutation_record_model.dart';
+import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 
 class Repository {
   Repository({required this.client});
@@ -20,34 +20,61 @@ class Repository {
     }
   }
 
-  Future<List<QuotationRecord>?> fetchSales() async {
+  Future<List<SalesOrder>?> fetchSales() async {
+    // final specification = {
+    //   'name': {},
+    //   'partner_id': {
+    //     'fields': {
+    //       'display_name': {},
+    //     },
+    //   },
+    //   'amount_total': {},
+    //   'amount_to_invoice': {},
+    //   'date_order': {},
+    //   'state': {},
+    //   'currency_id': {
+    //     'fields': {
+    //       'display_name': {},
+    //     },
+    //   },
+    //   'activity_state': {},
+    //   'activity_ids': {'fields': {}},
+    //   'activity_exception_decoration': {},
+    //   'activity_exception_icon': {},
+    //   'activity_summary': {},
+    //   'activity_type_icon': {},
+    //   'activity_type_id': {
+    //     'fields': {
+    //       'display_name': {},
+    //     },
+    //   },
+    // };
     final specification = {
-      'name': {},
+      'name': {}, //A
+      'create_date': {}, //B
       'partner_id': {
+        //C-E
         'fields': {
           'display_name': {},
+          'contact_address': {},
+          'phone': {},
         },
       },
-      'amount_total': {},
-      'amount_to_invoice': {},
-      'date_order': {},
-      'state': {},
-      'currency_id': {
+      'x_studio_sales_rep_1': {}, //F
+      'x_studio_sales_source': {}, //G
+      'x_studio_commission_paid': {}, //H
+      'x_studio_referred_by': {
         'fields': {
-          'display_name': {},
+          'display_name': {}, //I
         },
       },
-      'activity_state': {},
-      'activity_ids': {'fields': {}},
-      'activity_exception_decoration': {},
-      'activity_exception_icon': {},
-      'activity_summary': {},
-      'activity_type_icon': {},
-      'activity_type_id': {
-        'fields': {
-          'display_name': {},
-        },
-      },
+      'x_studio_referrer_processed': {}, //J
+      'x_studio_payment_type': {}, //K
+      'amount_total': {}, //L
+      'delivery_status': {}, //M
+      'amount_to_invoice': {}, //N
+      'x_studio_invoice_payment_status': {}, //O
+      'internal_note_display': {}, //P
     };
 
     final domain = [
@@ -58,16 +85,73 @@ class Repository {
       final response = await client.callKw({
         'model': 'sale.order',
         'method': 'web_search_read',
-        'args': [domain, specification],
+        'args': [
+          domain,
+          specification,
+        ],
         'kwargs': {},
       });
 
       final data =
           ((response as Map<String, dynamic>)['records'] as List<dynamic>)
               .cast<Map<String, dynamic>>();
-      final parsedData = data.map(QuotationRecord.fromJson).toList();
+      final parsedData = data.map(SalesOrder.fromJson).toList();
 
       return parsedData;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<SalesOrder?> fetchSalesById(String id) async {
+    final specification = {
+      'name': {}, //A
+      'create_date': {}, //B
+      'partner_id': {
+        //C-E
+        'fields': {
+          'display_name': {},
+          'contact_address': {},
+          'phone': {},
+        },
+      },
+      'x_studio_sales_rep_1': {}, //F
+      'x_studio_sales_source': {}, //G
+      'x_studio_commission_paid': {}, //H
+      'x_studio_referred_by': {
+        'fields': {
+          'display_name': {}, //I
+        },
+      },
+      'x_studio_referrer_processed': {}, //J
+      'x_studio_payment_type': {}, //K
+      'amount_total': {}, //L
+      'delivery_status': {}, //M
+      'amount_to_invoice': {}, //N
+      'x_studio_invoice_payment_status': {}, //O
+      'internal_note_display': {}, //P
+    };
+
+    try {
+      final response = await client.callRPC(
+        '/web/dataset/call_kw',
+        'call',
+        {
+          'model': 'sale.order',
+          'method': 'web_read',
+          'args': [
+            [int.parse(id)],
+          ],
+          'kwargs': {
+            'specification': specification,
+          },
+        },
+      );
+
+      final data = (response as List<dynamic>).cast<Map<String, dynamic>>();
+      final parsedData = data.map(SalesOrder.fromJson).toList();
+
+      return parsedData.first;
     } catch (e) {
       return null;
     }

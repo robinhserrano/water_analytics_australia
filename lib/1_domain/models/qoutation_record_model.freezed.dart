@@ -33,10 +33,10 @@ mixin _$QuotationRecord {
   String? get state => throw _privateConstructorUsedError;
   @JsonKey(name: 'currency_id')
   IdModel? get currencyId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'activity_state')
-  dynamic get activityState => throw _privateConstructorUsedError;
   @JsonKey(name: 'activity_ids')
   List<ActivityIdModel>? get activityIds => throw _privateConstructorUsedError;
+  @JsonKey(name: 'activity_state')
+  dynamic get activityState => throw _privateConstructorUsedError;
   @JsonKey(name: 'activity_exception_decoration')
   bool get activityExceptionDecoration => throw _privateConstructorUsedError;
   @JsonKey(name: 'activity_exception_icon')
@@ -69,8 +69,8 @@ abstract class $QuotationRecordCopyWith<$Res> {
       @JsonKey(name: 'date_order') DateTime? dateOrder,
       String? state,
       @JsonKey(name: 'currency_id') IdModel? currencyId,
-      @JsonKey(name: 'activity_state') dynamic activityState,
       @JsonKey(name: 'activity_ids') List<ActivityIdModel>? activityIds,
+      @JsonKey(name: 'activity_state') dynamic activityState,
       @JsonKey(name: 'activity_exception_decoration')
       bool activityExceptionDecoration,
       @JsonKey(name: 'activity_exception_icon') bool activityExceptionIcon,
@@ -103,8 +103,8 @@ class _$QuotationRecordCopyWithImpl<$Res, $Val extends QuotationRecord>
     Object? dateOrder = freezed,
     Object? state = freezed,
     Object? currencyId = freezed,
-    Object? activityState = freezed,
     Object? activityIds = freezed,
+    Object? activityState = freezed,
     Object? activityExceptionDecoration = null,
     Object? activityExceptionIcon = null,
     Object? activitySummary = freezed,
@@ -144,14 +144,14 @@ class _$QuotationRecordCopyWithImpl<$Res, $Val extends QuotationRecord>
           ? _value.currencyId
           : currencyId // ignore: cast_nullable_to_non_nullable
               as IdModel?,
-      activityState: freezed == activityState
-          ? _value.activityState
-          : activityState // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       activityIds: freezed == activityIds
           ? _value.activityIds
           : activityIds // ignore: cast_nullable_to_non_nullable
               as List<ActivityIdModel>?,
+      activityState: freezed == activityState
+          ? _value.activityState
+          : activityState // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       activityExceptionDecoration: null == activityExceptionDecoration
           ? _value.activityExceptionDecoration
           : activityExceptionDecoration // ignore: cast_nullable_to_non_nullable
@@ -217,8 +217,8 @@ abstract class _$$QuotationRecordImplCopyWith<$Res>
       @JsonKey(name: 'date_order') DateTime? dateOrder,
       String? state,
       @JsonKey(name: 'currency_id') IdModel? currencyId,
-      @JsonKey(name: 'activity_state') dynamic activityState,
       @JsonKey(name: 'activity_ids') List<ActivityIdModel>? activityIds,
+      @JsonKey(name: 'activity_state') dynamic activityState,
       @JsonKey(name: 'activity_exception_decoration')
       bool activityExceptionDecoration,
       @JsonKey(name: 'activity_exception_icon') bool activityExceptionIcon,
@@ -251,8 +251,8 @@ class __$$QuotationRecordImplCopyWithImpl<$Res>
     Object? dateOrder = freezed,
     Object? state = freezed,
     Object? currencyId = freezed,
-    Object? activityState = freezed,
     Object? activityIds = freezed,
+    Object? activityState = freezed,
     Object? activityExceptionDecoration = null,
     Object? activityExceptionIcon = null,
     Object? activitySummary = freezed,
@@ -292,14 +292,14 @@ class __$$QuotationRecordImplCopyWithImpl<$Res>
           ? _value.currencyId
           : currencyId // ignore: cast_nullable_to_non_nullable
               as IdModel?,
-      activityState: freezed == activityState
-          ? _value.activityState
-          : activityState // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       activityIds: freezed == activityIds
           ? _value._activityIds
           : activityIds // ignore: cast_nullable_to_non_nullable
               as List<ActivityIdModel>?,
+      activityState: freezed == activityState
+          ? _value.activityState
+          : activityState // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       activityExceptionDecoration: null == activityExceptionDecoration
           ? _value.activityExceptionDecoration
           : activityExceptionDecoration // ignore: cast_nullable_to_non_nullable
@@ -336,9 +336,9 @@ class _$QuotationRecordImpl implements _QuotationRecord {
       @JsonKey(name: 'date_order') required this.dateOrder,
       required this.state,
       @JsonKey(name: 'currency_id') required this.currencyId,
-      @JsonKey(name: 'activity_state') this.activityState,
       @JsonKey(name: 'activity_ids')
       required final List<ActivityIdModel>? activityIds,
+      @JsonKey(name: 'activity_state') this.activityState,
       @JsonKey(name: 'activity_exception_decoration')
       this.activityExceptionDecoration = false,
       @JsonKey(name: 'activity_exception_icon')
@@ -372,9 +372,6 @@ class _$QuotationRecordImpl implements _QuotationRecord {
   @override
   @JsonKey(name: 'currency_id')
   final IdModel? currencyId;
-  @override
-  @JsonKey(name: 'activity_state')
-  final dynamic activityState;
   final List<ActivityIdModel>? _activityIds;
   @override
   @JsonKey(name: 'activity_ids')
@@ -386,6 +383,9 @@ class _$QuotationRecordImpl implements _QuotationRecord {
     return EqualUnmodifiableListView(value);
   }
 
+  @override
+  @JsonKey(name: 'activity_state')
+  final dynamic activityState;
   @override
   @JsonKey(name: 'activity_exception_decoration')
   final bool activityExceptionDecoration;
@@ -404,7 +404,7 @@ class _$QuotationRecordImpl implements _QuotationRecord {
 
   @override
   String toString() {
-    return 'QuotationRecord(id: $id, name: $name, partnerId: $partnerId, amountTotal: $amountTotal, amountToInvoice: $amountToInvoice, dateOrder: $dateOrder, state: $state, currencyId: $currencyId, activityState: $activityState, activityIds: $activityIds, activityExceptionDecoration: $activityExceptionDecoration, activityExceptionIcon: $activityExceptionIcon, activitySummary: $activitySummary, activityTypeIcon: $activityTypeIcon, activityTypeId: $activityTypeId)';
+    return 'QuotationRecord(id: $id, name: $name, partnerId: $partnerId, amountTotal: $amountTotal, amountToInvoice: $amountToInvoice, dateOrder: $dateOrder, state: $state, currencyId: $currencyId, activityIds: $activityIds, activityState: $activityState, activityExceptionDecoration: $activityExceptionDecoration, activityExceptionIcon: $activityExceptionIcon, activitySummary: $activitySummary, activityTypeIcon: $activityTypeIcon, activityTypeId: $activityTypeId)';
   }
 
   @override
@@ -426,9 +426,9 @@ class _$QuotationRecordImpl implements _QuotationRecord {
             (identical(other.currencyId, currencyId) ||
                 other.currencyId == currencyId) &&
             const DeepCollectionEquality()
-                .equals(other.activityState, activityState) &&
-            const DeepCollectionEquality()
                 .equals(other._activityIds, _activityIds) &&
+            const DeepCollectionEquality()
+                .equals(other.activityState, activityState) &&
             (identical(other.activityExceptionDecoration,
                     activityExceptionDecoration) ||
                 other.activityExceptionDecoration ==
@@ -455,8 +455,8 @@ class _$QuotationRecordImpl implements _QuotationRecord {
       dateOrder,
       state,
       currencyId,
-      const DeepCollectionEquality().hash(activityState),
       const DeepCollectionEquality().hash(_activityIds),
+      const DeepCollectionEquality().hash(activityState),
       activityExceptionDecoration,
       activityExceptionIcon,
       const DeepCollectionEquality().hash(activitySummary),
@@ -489,9 +489,9 @@ abstract class _QuotationRecord implements QuotationRecord {
           @JsonKey(name: 'date_order') required final DateTime? dateOrder,
           required final String? state,
           @JsonKey(name: 'currency_id') required final IdModel? currencyId,
-          @JsonKey(name: 'activity_state') final dynamic activityState,
           @JsonKey(name: 'activity_ids')
           required final List<ActivityIdModel>? activityIds,
+          @JsonKey(name: 'activity_state') final dynamic activityState,
           @JsonKey(name: 'activity_exception_decoration')
           final bool activityExceptionDecoration,
           @JsonKey(name: 'activity_exception_icon')
@@ -526,11 +526,11 @@ abstract class _QuotationRecord implements QuotationRecord {
   @JsonKey(name: 'currency_id')
   IdModel? get currencyId;
   @override
-  @JsonKey(name: 'activity_state')
-  dynamic get activityState;
-  @override
   @JsonKey(name: 'activity_ids')
   List<ActivityIdModel>? get activityIds;
+  @override
+  @JsonKey(name: 'activity_state')
+  dynamic get activityState;
   @override
   @JsonKey(name: 'activity_exception_decoration')
   bool get activityExceptionDecoration;

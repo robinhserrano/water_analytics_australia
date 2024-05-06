@@ -102,16 +102,6 @@ class _SalesPageState extends State<SalesPage> {
                                   );
                                 },
                               ),
-                        // floatingActionButton: FloatingActionButton(
-                        //   backgroundColor: const Color(0xff0083ff),
-                        //   onPressed: () {
-                        //     //context.pushNamed(CreateInvoicePage.name);
-                        //   },
-                        //   child: const HeroIcon(
-                        //     HeroIcons.plus,
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
                       );
                     } else if (state is SalesStateError) {
                       return SalesListPageError(
