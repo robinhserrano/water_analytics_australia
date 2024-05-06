@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
+import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/2_application/pages/login/bloc/login_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
@@ -13,8 +14,12 @@ Future<void> init() async {
   sl
     ..registerFactory(() => LoginCubit(repo: sl<Repository>()))
     ..registerFactory(() => SalesCubit(repo: sl<Repository>()))
-    ..registerFactory(() => SalesDetailsCubit(repo: sl<Repository>()))
-//     ..registerFactory(() => ProductDetailsCubit(productDetailsUseCases: sl()))
+    ..registerFactory(
+      () => SalesDetailsCubit(
+        repo: sl<Repository>(),
+        firestoreService: sl(),
+      ),
+    )
 
 // // ! domain Layer
 //     ..registerFactory(() => ProductUseCases(productRepo: sl()))
@@ -28,6 +33,7 @@ Future<void> init() async {
 //       () => ProductRemoteDatasourceImpl(client: sl()),
 //     )
     ..registerFactory<Repository>(() => Repository(client: sl<OdooClient>()))
+    ..registerFactory(FirebaseFirestoreService.new)
 
 // ! externs
     ..registerSingleton(OdooClient('https://wateranalytics.odoo.com'));
