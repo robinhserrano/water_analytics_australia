@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 
 class FirebaseFirestoreService {
@@ -34,11 +35,12 @@ class FirebaseFirestoreService {
     }
   }
 
-  // Future<List<SalesEntity>> getSales() async {
-  //   final querySnapshot = await _firestore.collection(_collectionPath).get();
-  //   final jobs = querySnapshot.docs.map(SalesEntity.fromFirestore).toList();
-  //   return jobs;
-  // }
+  Future<List<CloudSalesOrder>?> getSales() async {
+    final querySnapshot = await _firestore.collection(_collectionPath).get();
+    final order =
+        querySnapshot.docs.map(CloudSalesOrder.fromFirestore).toList();
+    return order;
+  }
 
   // Future<SalesEntity?> getSaleById(String id) async {
   //   final docSnapshot =

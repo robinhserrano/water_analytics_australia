@@ -65,7 +65,6 @@ class _SalesPageState extends State<SalesPage> {
           ),
         ],
       ),
-
       body: RefreshIndicator(
         color: const Color(0xff0083ff),
         onRefresh: () => context.read<SalesCubit>().fetchSales(),
