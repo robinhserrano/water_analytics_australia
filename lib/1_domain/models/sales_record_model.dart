@@ -17,8 +17,9 @@ class SalesOrder with _$SalesOrder {
     required String xStudioSalesSource, //G
     @JsonKey(name: 'x_studio_commission_paid')
     required bool xStudioCommissionPaid, //H,
-    // @JsonKey(name: 'x_studio_referred_by')
-    // required ReferredByModel? xStudioReferredBy,
+    @JsonKey(name: 'x_studio_referred_by')
+    @BoolRefferedByConverter()
+    required ReferredByModel xStudioReferredBy,
     @JsonKey(name: 'x_studio_referrer_processed')
     required bool xStudioReferrerProcessed, //J,
     @JsonKey(name: 'x_studio_payment_type')
@@ -52,9 +53,7 @@ class PartnerIdModel with _$PartnerIdModel {
 @freezed
 class ReferredByModel with _$ReferredByModel {
   const factory ReferredByModel({
-    @JsonKey(name: 'display_name')
-    @BoolStringConverter()
-    required String? displayName,
+    @JsonKey(name: 'display_name') required String? displayName,
   }) = _ReferredByModel;
 
   factory ReferredByModel.fromJson(Map<String, dynamic> json) =>

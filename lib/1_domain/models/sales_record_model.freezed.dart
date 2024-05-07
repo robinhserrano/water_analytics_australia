@@ -32,8 +32,9 @@ mixin _$SalesOrder {
   String get xStudioSalesSource => throw _privateConstructorUsedError; //G
   @JsonKey(name: 'x_studio_commission_paid')
   bool get xStudioCommissionPaid => throw _privateConstructorUsedError; //H,
-// @JsonKey(name: 'x_studio_referred_by')
-// required ReferredByModel? xStudioReferredBy,
+  @JsonKey(name: 'x_studio_referred_by')
+  @BoolRefferedByConverter()
+  ReferredByModel get xStudioReferredBy => throw _privateConstructorUsedError;
   @JsonKey(name: 'x_studio_referrer_processed')
   bool get xStudioReferrerProcessed => throw _privateConstructorUsedError; //J,
   @JsonKey(name: 'x_studio_payment_type')
@@ -71,6 +72,9 @@ abstract class $SalesOrderCopyWith<$Res> {
       @JsonKey(name: 'x_studio_sales_rep_1') String xStudioSalesRep1,
       @JsonKey(name: 'x_studio_sales_source') String xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid') bool xStudioCommissionPaid,
+      @JsonKey(name: 'x_studio_referred_by')
+      @BoolRefferedByConverter()
+      ReferredByModel xStudioReferredBy,
       @JsonKey(name: 'x_studio_referrer_processed')
       bool xStudioReferrerProcessed,
       @JsonKey(name: 'x_studio_payment_type') String xStudioPaymentType,
@@ -83,6 +87,7 @@ abstract class $SalesOrderCopyWith<$Res> {
       String? state});
 
   $PartnerIdModelCopyWith<$Res>? get partnerId;
+  $ReferredByModelCopyWith<$Res> get xStudioReferredBy;
 }
 
 /// @nodoc
@@ -105,6 +110,7 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
     Object? xStudioSalesRep1 = null,
     Object? xStudioSalesSource = null,
     Object? xStudioCommissionPaid = null,
+    Object? xStudioReferredBy = null,
     Object? xStudioReferrerProcessed = null,
     Object? xStudioPaymentType = null,
     Object? amountTotal = freezed,
@@ -143,6 +149,10 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
           ? _value.xStudioCommissionPaid
           : xStudioCommissionPaid // ignore: cast_nullable_to_non_nullable
               as bool,
+      xStudioReferredBy: null == xStudioReferredBy
+          ? _value.xStudioReferredBy
+          : xStudioReferredBy // ignore: cast_nullable_to_non_nullable
+              as ReferredByModel,
       xStudioReferrerProcessed: null == xStudioReferrerProcessed
           ? _value.xStudioReferrerProcessed
           : xStudioReferrerProcessed // ignore: cast_nullable_to_non_nullable
@@ -189,6 +199,14 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
       return _then(_value.copyWith(partnerId: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ReferredByModelCopyWith<$Res> get xStudioReferredBy {
+    return $ReferredByModelCopyWith<$Res>(_value.xStudioReferredBy, (value) {
+      return _then(_value.copyWith(xStudioReferredBy: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -207,6 +225,9 @@ abstract class _$$SalesOrderImplCopyWith<$Res>
       @JsonKey(name: 'x_studio_sales_rep_1') String xStudioSalesRep1,
       @JsonKey(name: 'x_studio_sales_source') String xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid') bool xStudioCommissionPaid,
+      @JsonKey(name: 'x_studio_referred_by')
+      @BoolRefferedByConverter()
+      ReferredByModel xStudioReferredBy,
       @JsonKey(name: 'x_studio_referrer_processed')
       bool xStudioReferrerProcessed,
       @JsonKey(name: 'x_studio_payment_type') String xStudioPaymentType,
@@ -220,6 +241,8 @@ abstract class _$$SalesOrderImplCopyWith<$Res>
 
   @override
   $PartnerIdModelCopyWith<$Res>? get partnerId;
+  @override
+  $ReferredByModelCopyWith<$Res> get xStudioReferredBy;
 }
 
 /// @nodoc
@@ -240,6 +263,7 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
     Object? xStudioSalesRep1 = null,
     Object? xStudioSalesSource = null,
     Object? xStudioCommissionPaid = null,
+    Object? xStudioReferredBy = null,
     Object? xStudioReferrerProcessed = null,
     Object? xStudioPaymentType = null,
     Object? amountTotal = freezed,
@@ -278,6 +302,10 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
           ? _value.xStudioCommissionPaid
           : xStudioCommissionPaid // ignore: cast_nullable_to_non_nullable
               as bool,
+      xStudioReferredBy: null == xStudioReferredBy
+          ? _value.xStudioReferredBy
+          : xStudioReferredBy // ignore: cast_nullable_to_non_nullable
+              as ReferredByModel,
       xStudioReferrerProcessed: null == xStudioReferrerProcessed
           ? _value.xStudioReferrerProcessed
           : xStudioReferrerProcessed // ignore: cast_nullable_to_non_nullable
@@ -326,6 +354,9 @@ class _$SalesOrderImpl implements _SalesOrder {
       @JsonKey(name: 'x_studio_sales_source') required this.xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid')
       required this.xStudioCommissionPaid,
+      @JsonKey(name: 'x_studio_referred_by')
+      @BoolRefferedByConverter()
+      required this.xStudioReferredBy,
       @JsonKey(name: 'x_studio_referrer_processed')
       required this.xStudioReferrerProcessed,
       @JsonKey(name: 'x_studio_payment_type') required this.xStudioPaymentType,
@@ -365,8 +396,10 @@ class _$SalesOrderImpl implements _SalesOrder {
   @JsonKey(name: 'x_studio_commission_paid')
   final bool xStudioCommissionPaid;
 //H,
-// @JsonKey(name: 'x_studio_referred_by')
-// required ReferredByModel? xStudioReferredBy,
+  @override
+  @JsonKey(name: 'x_studio_referred_by')
+  @BoolRefferedByConverter()
+  final ReferredByModel xStudioReferredBy;
   @override
   @JsonKey(name: 'x_studio_referrer_processed')
   final bool xStudioReferrerProcessed;
@@ -399,7 +432,7 @@ class _$SalesOrderImpl implements _SalesOrder {
 
   @override
   String toString() {
-    return 'SalesOrder(id: $id, name: $name, createDate: $createDate, partnerId: $partnerId, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state)';
+    return 'SalesOrder(id: $id, name: $name, createDate: $createDate, partnerId: $partnerId, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferredBy: $xStudioReferredBy, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state)';
   }
 
   @override
@@ -419,6 +452,8 @@ class _$SalesOrderImpl implements _SalesOrder {
                 other.xStudioSalesSource == xStudioSalesSource) &&
             (identical(other.xStudioCommissionPaid, xStudioCommissionPaid) ||
                 other.xStudioCommissionPaid == xStudioCommissionPaid) &&
+            (identical(other.xStudioReferredBy, xStudioReferredBy) ||
+                other.xStudioReferredBy == xStudioReferredBy) &&
             (identical(
                     other.xStudioReferrerProcessed, xStudioReferrerProcessed) ||
                 other.xStudioReferrerProcessed == xStudioReferrerProcessed) &&
@@ -449,6 +484,7 @@ class _$SalesOrderImpl implements _SalesOrder {
       xStudioSalesRep1,
       xStudioSalesSource,
       xStudioCommissionPaid,
+      xStudioReferredBy,
       xStudioReferrerProcessed,
       xStudioPaymentType,
       amountTotal,
@@ -484,6 +520,9 @@ abstract class _SalesOrder implements SalesOrder {
       required final String xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid')
       required final bool xStudioCommissionPaid,
+      @JsonKey(name: 'x_studio_referred_by')
+      @BoolRefferedByConverter()
+      required final ReferredByModel xStudioReferredBy,
       @JsonKey(name: 'x_studio_referrer_processed')
       required final bool xStudioReferrerProcessed,
       @JsonKey(name: 'x_studio_payment_type')
@@ -521,8 +560,10 @@ abstract class _SalesOrder implements SalesOrder {
   @JsonKey(name: 'x_studio_commission_paid')
   bool get xStudioCommissionPaid;
   @override //H,
-// @JsonKey(name: 'x_studio_referred_by')
-// required ReferredByModel? xStudioReferredBy,
+  @JsonKey(name: 'x_studio_referred_by')
+  @BoolRefferedByConverter()
+  ReferredByModel get xStudioReferredBy;
+  @override
   @JsonKey(name: 'x_studio_referrer_processed')
   bool get xStudioReferrerProcessed;
   @override //J,
@@ -755,7 +796,6 @@ ReferredByModel _$ReferredByModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ReferredByModel {
   @JsonKey(name: 'display_name')
-  @BoolStringConverter()
   String? get displayName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -770,10 +810,7 @@ abstract class $ReferredByModelCopyWith<$Res> {
           ReferredByModel value, $Res Function(ReferredByModel) then) =
       _$ReferredByModelCopyWithImpl<$Res, ReferredByModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: 'display_name')
-      @BoolStringConverter()
-      String? displayName});
+  $Res call({@JsonKey(name: 'display_name') String? displayName});
 }
 
 /// @nodoc
@@ -808,10 +845,7 @@ abstract class _$$ReferredByModelImplCopyWith<$Res>
       __$$ReferredByModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: 'display_name')
-      @BoolStringConverter()
-      String? displayName});
+  $Res call({@JsonKey(name: 'display_name') String? displayName});
 }
 
 /// @nodoc
@@ -840,16 +874,13 @@ class __$$ReferredByModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReferredByModelImpl implements _ReferredByModel {
   const _$ReferredByModelImpl(
-      {@JsonKey(name: 'display_name')
-      @BoolStringConverter()
-      required this.displayName});
+      {@JsonKey(name: 'display_name') required this.displayName});
 
   factory _$ReferredByModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReferredByModelImplFromJson(json);
 
   @override
   @JsonKey(name: 'display_name')
-  @BoolStringConverter()
   final String? displayName;
 
   @override
@@ -887,16 +918,14 @@ class _$ReferredByModelImpl implements _ReferredByModel {
 
 abstract class _ReferredByModel implements ReferredByModel {
   const factory _ReferredByModel(
-      {@JsonKey(name: 'display_name')
-      @BoolStringConverter()
-      required final String? displayName}) = _$ReferredByModelImpl;
+          {@JsonKey(name: 'display_name') required final String? displayName}) =
+      _$ReferredByModelImpl;
 
   factory _ReferredByModel.fromJson(Map<String, dynamic> json) =
       _$ReferredByModelImpl.fromJson;
 
   @override
   @JsonKey(name: 'display_name')
-  @BoolStringConverter()
   String? get displayName;
   @override
   @JsonKey(ignore: true)

@@ -111,15 +111,17 @@ class _SalesPageState extends State<SalesPage> {
                             ? const Center(
                                 child: Text('No sales yet.'),
                               )
-                            : ListView.builder(
-                                itemCount: state.records.length,
-                                itemBuilder: (context, index) {
-                                  final record = state.records[index];
-                                  return SalesRecordCard(
-                                    record: record,
-                                  );
-                                },
-                              ),
+                            : Scrollbar(
+                              child: ListView.builder(
+                                  itemCount: state.records.length,
+                                  itemBuilder: (context, index) {
+                                    final record = state.records[index];
+                                    return SalesRecordCard(
+                                      record: record,
+                                    );
+                                  },
+                                ),
+                            ),
                       );
                     } else if (state is SalesStateError) {
                       return SalesListPageError(
@@ -213,6 +215,11 @@ class EndDrawer extends StatelessWidget {
                             user.first.userLogin,
                             style: const TextStyle(color: Color(0xff7a7a7a)),
                           ),
+                          // Text(
+                          //   textAlign: TextAlign.center,
+                          //   user.first.userTz,
+                          //   style: const TextStyle(color: Color(0xff7a7a7a)),
+                          // ),
                         ],
                       );
                     }

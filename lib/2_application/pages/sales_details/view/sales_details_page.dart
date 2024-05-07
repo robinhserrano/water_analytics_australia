@@ -255,12 +255,12 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                       'Referred By',
                     ),
                     const Spacer(),
-                    // Text(
-                    //   order.xStudioReferredBy?.displayName ?? '',
-                    //   style: const TextStyle(
-                    //     color: Color(0xff7a7a7a),
-                    //   ),
-                    // ),
+                    Text(
+                      order.xStudioReferredBy.displayName ?? '',
+                      style: const TextStyle(
+                        color: Color(0xff7a7a7a),
+                      ),
+                    ),
                   ],
                 ),
                 Row(

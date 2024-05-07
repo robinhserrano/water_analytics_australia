@@ -19,6 +19,8 @@ _$SalesOrderImpl _$$SalesOrderImplFromJson(Map<String, dynamic> json) =>
       xStudioSalesRep1: json['x_studio_sales_rep_1'] as String,
       xStudioSalesSource: json['x_studio_sales_source'] as String,
       xStudioCommissionPaid: json['x_studio_commission_paid'] as bool,
+      xStudioReferredBy: const BoolRefferedByConverter()
+          .fromJson(json['x_studio_referred_by']),
       xStudioReferrerProcessed: json['x_studio_referrer_processed'] as bool,
       xStudioPaymentType: json['x_studio_payment_type'] as String,
       amountTotal: (json['amount_total'] as num?)?.toDouble(),
@@ -38,6 +40,8 @@ Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
       'x_studio_sales_rep_1': instance.xStudioSalesRep1,
       'x_studio_sales_source': instance.xStudioSalesSource,
       'x_studio_commission_paid': instance.xStudioCommissionPaid,
+      'x_studio_referred_by':
+          const BoolRefferedByConverter().toJson(instance.xStudioReferredBy),
       'x_studio_referrer_processed': instance.xStudioReferrerProcessed,
       'x_studio_payment_type': instance.xStudioPaymentType,
       'amount_total': instance.amountTotal,
@@ -66,18 +70,11 @@ Map<String, dynamic> _$$PartnerIdModelImplToJson(
 _$ReferredByModelImpl _$$ReferredByModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ReferredByModelImpl(
-      displayName: const BoolStringConverter().fromJson(json['display_name']),
+      displayName: json['display_name'] as String?,
     );
 
 Map<String, dynamic> _$$ReferredByModelImplToJson(
         _$ReferredByModelImpl instance) =>
     <String, dynamic>{
-      'display_name': _$JsonConverterToJson<dynamic, String>(
-          instance.displayName, const BoolStringConverter().toJson),
+      'display_name': instance.displayName,
     };
-
-Json? _$JsonConverterToJson<Json, Value>(
-  Value? value,
-  Json? Function(Value value) toJson,
-) =>
-    value == null ? null : toJson(value);

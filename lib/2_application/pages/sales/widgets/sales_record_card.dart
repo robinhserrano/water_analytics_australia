@@ -107,7 +107,7 @@ class SalesRecordCard extends StatelessWidget {
                   height: 8,
                 ),
                 // Text('Referred by '
-                //     '${record.xStudioReferredBy?.displayName ?? ''}'),
+                //     '${record.xStudioReferredBy.displayName ?? ''}'),
               ],
             ),
           ),
