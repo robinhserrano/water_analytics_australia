@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:heroicons/heroicons.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
 
   static const name = 'home';
   static const path = '/home';
@@ -16,8 +17,7 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
     const SalesPageWrapperProvider(),
-    const SalesPageWrapperProvider(),
-    // Add more screens as needed
+    const CloudSalesPageWrapperProvider(),
   ];
 
   void _onItemTapped(int index) {
@@ -30,23 +30,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        // appBar: AppBar(
-        //   title: Text('MyApp'),
-        // ),
         body: _screens[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: _onItemTapped,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: HeroIcon(HeroIcons.home),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
+              icon: HeroIcon(HeroIcons.fire),
+              label: 'Firebase',
             ),
-            // Add more items for additional screens
           ],
         ),
       ),

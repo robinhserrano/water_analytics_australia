@@ -2,6 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/login/bloc/login_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales_details/bloc/sales_details_cubit.dart';
@@ -13,10 +15,25 @@ Future<void> init() async {
   // Factory = every time a new/fresh instance of that class
   sl
     ..registerFactory(() => LoginCubit(repo: sl<Repository>()))
-    ..registerFactory(() => SalesCubit(repo: sl<Repository>()))
+    ..registerFactory(
+      () => SalesCubit(
+        repo: sl<Repository>(),
+        firestoreService: sl(),
+      ),
+    )
     ..registerFactory(
       () => SalesDetailsCubit(
         repo: sl<Repository>(),
+        firestoreService: sl(),
+      ),
+    )
+    ..registerFactory(
+      () => CloudSalesCubit(
+        firestoreService: sl(),
+      ),
+    )
+    ..registerFactory(
+      () => CloudSalesDetailsCubit(
         firestoreService: sl(),
       ),
     )

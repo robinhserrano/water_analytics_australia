@@ -3,97 +3,59 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
-import 'package:water_analytics_australia/2_application/pages/sales_details/bloc/sales_details_cubit.dart';
+import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
 import 'package:water_analytics_australia/injection.dart';
 
-class SalesDetailsPageWrapperProvider extends StatelessWidget {
-  const SalesDetailsPageWrapperProvider({required this.id, super.key});
+class CloudSalesDetailsPageWrapperProvider extends StatelessWidget {
+  const CloudSalesDetailsPageWrapperProvider({required this.id, super.key});
   final String id;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<SalesDetailsCubit>(),
-      child: SalesDetailsPage(
+      create: (context) => sl<CloudSalesDetailsCubit>(),
+      child: CloudSalesDetailsPage(
         id: id,
       ),
     );
   }
 }
 
-class SalesDetailsPage extends StatefulWidget {
-  const SalesDetailsPage({required this.id, super.key});
+class CloudSalesDetailsPage extends StatefulWidget {
+  const CloudSalesDetailsPage({required this.id, super.key});
 
-  static const name = 'salesDetail';
-  static const path = '/salesDetail/:id';
+  static const name = 'cloudSalesDetail';
+  static const path = '/cloudSalesDetail/:id';
 
   final String id;
 
   @override
-  State<SalesDetailsPage> createState() => _SalesDetailsPageState();
+  State<CloudSalesDetailsPage> createState() => _CloudSalesDetailsPageState();
 }
 
-class _SalesDetailsPageState extends State<SalesDetailsPage> {
+class _CloudSalesDetailsPageState extends State<CloudSalesDetailsPage> {
   @override
   void initState() {
     super.initState();
-    context.read<SalesDetailsCubit>().fetchSalesDetails(widget.id);
+    context.read<CloudSalesDetailsCubit>().fetchCloudSalesDetails(widget.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xff0083ff),
         title: const Text(
-          'Detail',
+          'Detail - Firebase',
           style: TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        actions: [
-          BlocBuilder<SalesDetailsCubit, SalesDetailsCubitState>(
-            builder: (context, state) {
-              if (state is SalesDetailsStateLoaded) {
-                return IconButton(
-                  onPressed: () async {
-                    final success = await context
-                        .read<SalesDetailsCubit>()
-                        .saveSales(state.order);
-                    if (success) {
-                      const snackBar = SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text('Successfully saved order.'),
-                      );
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    } else {
-                      const snackBar = SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('Failed to save order.'),
-                      );
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    }
-                  },
-                  icon: const HeroIcon(
-                    HeroIcons.arrowUpTray,
-                  ),
-                );
-              }
-              return const SizedBox();
-            },
-          ),
-        ],
       ),
-      body: BlocBuilder<SalesDetailsCubit, SalesDetailsCubitState>(
+      body: BlocBuilder<CloudSalesDetailsCubit, CloudSalesDetailsCubitState>(
         builder: (context, state) {
-          if (state is SalesDetailsStateLoading) {
+          if (state is CloudSalesDetailsStateLoading) {
             return const Column(
               children: [
                 Expanded(
@@ -105,19 +67,19 @@ class _SalesDetailsPageState extends State<SalesDetailsPage> {
                 ),
               ],
             );
-          } else if (state is SalesDetailsStateLoaded) {
+          } else if (state is CloudSalesDetailsStateLoaded) {
             return SingleChildScrollView(
-              child: SalesDetailsPageLoaded(
+              child: CloudSalesDetailsPageLoaded(
                 order: state.order,
               ),
             );
-          } else if (state is SalesDetailsStateError) {
+          } else if (state is CloudSalesDetailsStateError) {
             return Column(
               children: [
                 Expanded(
                   child: DetailPageError(
-                    onRefresh: () => context.read<SalesDetailsCubit>()
-                      ..fetchSalesDetails(
+                    onRefresh: () => context.read<CloudSalesDetailsCubit>()
+                      ..fetchCloudSalesDetails(
                         widget.id,
                       ),
                   ),
@@ -132,14 +94,14 @@ class _SalesDetailsPageState extends State<SalesDetailsPage> {
   }
 }
 
-class SalesDetailsPageLoaded extends StatelessWidget {
-  const SalesDetailsPageLoaded({required this.order, super.key});
+class CloudSalesDetailsPageLoaded extends StatelessWidget {
+  const CloudSalesDetailsPageLoaded({required this.order, super.key});
 
-  final SalesOrder order;
+  final CloudSalesOrder order;
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SalesDetailsCubit, SalesDetailsCubitState>(
+    return BlocListener<CloudSalesDetailsCubit, CloudSalesDetailsCubitState>(
       listener: (context, state) {},
       child: Container(
         padding: const EdgeInsets.all(8),
@@ -188,7 +150,7 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      order.xStudioPaymentType,
+                      order.xStudioPaymentType ?? '',
                       style: const TextStyle(
                         color: Color(0xff7a7a7a),
                       ),
@@ -249,18 +211,18 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                Row(
+                const Row(
                   children: [
-                    const Text(
+                    Text(
                       'Referred By',
                     ),
-                    const Spacer(),
-                    // Text(
-                    //   order.xStudioReferredBy?.displayName ?? '',
-                    //   style: const TextStyle(
-                    //     color: Color(0xff7a7a7a),
-                    //   ),
-                    // ),
+                    Spacer(),
+                    Text(
+                      '',
+                      style: TextStyle(
+                        color: Color(0xff7a7a7a),
+                      ),
+                    ),
                   ],
                 ),
                 Row(
@@ -310,7 +272,7 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                order.partnerId?.displayName ?? '',
+                                order.partnerIdDisplayName ?? '',
                                 style: const TextStyle(
                                   fontSize: 14,
                                 ),
@@ -333,8 +295,7 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                (order.partnerId?.contactAddress ?? '')
-                                    .toString(),
+                                order.partnerIdContactAddress ?? '',
                                 style: const TextStyle(
                                   color: Color(0xff7a7a7a),
                                   fontSize: 14,
@@ -357,7 +318,7 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                (order.partnerId?.phone ?? '').toString(),
+                                (order.partnerIdPhone ?? '').toString(),
                                 style: const TextStyle(
                                   color: Color(0xff7a7a7a),
                                   fontSize: 14,
@@ -413,7 +374,7 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  order.xStudioSalesRep1,
+                                  order.xStudioSalesRep1 ?? '',
                                   style: const TextStyle(
                                     color: Color(0xff7a7a7a),
                                   ),
@@ -430,7 +391,7 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  order.xStudioSalesSource,
+                                  order.xStudioSalesSource ?? '',
                                   style: const TextStyle(
                                     color: Color(0xff7a7a7a),
                                   ),

@@ -7,28 +7,28 @@ import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/widget/cloud_sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
-class SalesPageWrapperProvider extends StatelessWidget {
-  const SalesPageWrapperProvider({super.key});
+class CloudSalesPageWrapperProvider extends StatelessWidget {
+  const CloudSalesPageWrapperProvider({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<SalesCubit>(),
-      child: SalesPage(
+      create: (context) => sl<CloudSalesCubit>(),
+      child: CloudSalesPage(
         client: sl<OdooClient>(),
       ),
     );
   }
 }
 
-class SalesPage extends StatefulWidget {
-  const SalesPage({required this.client, super.key});
+class CloudSalesPage extends StatefulWidget {
+  const CloudSalesPage({required this.client, super.key});
 
   static const name = 'sales';
   static const path = '/sales';
@@ -36,10 +36,10 @@ class SalesPage extends StatefulWidget {
   final OdooClient client;
 
   @override
-  State<SalesPage> createState() => _SalesPageState();
+  State<CloudSalesPage> createState() => _CloudSalesPageState();
 }
 
-class _SalesPageState extends State<SalesPage> {
+class _CloudSalesPageState extends State<CloudSalesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
@@ -52,7 +52,7 @@ class _SalesPageState extends State<SalesPage> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff0083ff),
         title: const Text(
-          'Sales Quotation',
+          'Sales Quotation - Firebase',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
@@ -67,15 +67,15 @@ class _SalesPageState extends State<SalesPage> {
       ),
       body: RefreshIndicator(
         color: const Color(0xff0083ff),
-        onRefresh: () => context.read<SalesCubit>().fetchSales(),
+        onRefresh: () => context.read<CloudSalesCubit>().fetchCloudSales(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Column(
             children: [
               Expanded(
-                child: BlocBuilder<SalesCubit, SalesCubitState>(
+                child: BlocBuilder<CloudSalesCubit, CloudSalesCubitState>(
                   builder: (context, state) {
-                    if (state is SalesStateLoading) {
+                    if (state is CloudSalesStateLoading) {
                       return ListView.builder(
                         itemCount: 10,
                         itemBuilder: (context, index) => const Padding(
@@ -86,7 +86,7 @@ class _SalesPageState extends State<SalesPage> {
                           ),
                         ),
                       );
-                    } else if (state is SalesStateLoaded) {
+                    } else if (state is CloudSalesStateLoaded) {
                       return Scaffold(
                         backgroundColor: const Color(0xfff9fafb),
                         body: state.records.isEmpty
@@ -97,16 +97,16 @@ class _SalesPageState extends State<SalesPage> {
                                 itemCount: state.records.length,
                                 itemBuilder: (context, index) {
                                   final record = state.records[index];
-                                  return SalesRecordCard(
+                                  return CloudSalesRecordCard(
                                     record: record,
                                   );
                                 },
                               ),
                       );
-                    } else if (state is SalesStateError) {
+                    } else if (state is CloudSalesStateError) {
                       return SalesListPageError(
                         onRefresh: () =>
-                            context.read<SalesCubit>().fetchSales(),
+                            context.read<CloudSalesCubit>().fetchCloudSales(),
                       );
                     }
                     return const SizedBox();

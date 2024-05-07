@@ -75,6 +75,7 @@ class Repository {
       'amount_to_invoice': {}, //N
       'x_studio_invoice_payment_status': {}, //O
       'internal_note_display': {}, //P
+      'state': {},
     };
 
     final domain = [
@@ -130,6 +131,7 @@ class Repository {
       'amount_to_invoice': {}, //N
       'x_studio_invoice_payment_status': {}, //O
       'internal_note_display': {}, //P
+      'state': {},
     };
 
     try {

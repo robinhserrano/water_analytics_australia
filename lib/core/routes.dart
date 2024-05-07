@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
@@ -42,6 +43,15 @@ final routes = GoRouter(
       path: HomePage.path,
       builder: (context, state) {
         return const HomePage();
+      },
+    ),
+    GoRoute(
+      name: CloudSalesDetailsPage.name,
+      path: CloudSalesDetailsPage.path,
+      builder: (context, state) {
+        return CloudSalesDetailsPageWrapperProvider(
+          id: state.pathParameters['id']!,
+        );
       },
     ),
   ],

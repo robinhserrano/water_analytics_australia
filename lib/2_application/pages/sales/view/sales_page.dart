@@ -7,6 +7,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
+import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sales_record_card.dart';
@@ -44,18 +45,35 @@ class _SalesPageState extends State<SalesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SalesCubit>();
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: const EndDrawer(),
-      backgroundColor: const Color(0xfff9fafb), // Colors.blueGrey.shade50,
+      backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xff0083ff),
+        backgroundColor: Colors.black,
         title: const Text(
-          'Sales Quotation',
+          'Sales Quotation - Odoo',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
+          BlocBuilder<SalesCubit, SalesCubitState>(
+            builder: (context, state) {
+              if (state is SalesStateLoaded) {
+                return IconButton(
+                  onPressed: () {
+                    showSaveAllSalesModal(context, state.records, cubit);
+                  },
+                  icon: const HeroIcon(
+                    HeroIcons.arrowUpOnSquareStack,
+                    color: Colors.white,
+                  ),
+                );
+              }
+              return const SizedBox();
+            },
+          ),
           IconButton(
             onPressed: () => _scaffoldKey.currentState!.openEndDrawer(),
             icon: const HeroIcon(
@@ -65,7 +83,6 @@ class _SalesPageState extends State<SalesPage> {
           ),
         ],
       ),
-
       body: RefreshIndicator(
         color: const Color(0xff0083ff),
         onRefresh: () => context.read<SalesCubit>().fetchSales(),
@@ -236,5 +253,150 @@ class EndDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> showSaveAllSalesModal(
+  BuildContext context,
+  List<SalesOrder> sales,
+  SalesCubit cubit,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: SaveAllSalesModal(
+        sales: sales,
+        cubit: cubit,
+      ),
+    ),
+  );
+}
+
+class SaveAllSalesModal extends StatefulWidget {
+  const SaveAllSalesModal({
+    required this.sales,
+    required this.cubit,
+    super.key,
+  });
+  final List<SalesOrder> sales;
+  final SalesCubit cubit;
+
+  @override
+  State<SaveAllSalesModal> createState() => _SaveAllSalesModalState();
+}
+
+class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
+  bool isSaving = false;
+  double progress = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return isSaving
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                'Syncing Sales Orders... (${progress.toStringAsFixed(2)}%)',
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              LinearProgressIndicator(
+                value: progress / 100,
+                backgroundColor: Colors.grey[300],
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              const Text(
+                'Sync oodo data now to Firebase?',
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: const Color(0xffB3B7C2),
+                      ),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Color(0xffFFFFFF),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          isSaving = true;
+                        });
+
+                        final isSaved = await widget.cubit
+                            .saveAllSales(widget.sales, (progress) {
+                          setState(() {
+                            this.progress = progress;
+                          });
+                        });
+
+                        if (isSaved) {
+                          if (context.mounted) {
+                            context.pop();
+                          }
+
+                          const snackBar = SnackBar(
+                            backgroundColor: Colors.red,
+                            content:
+                                Text('Successfully synced data to firebase.'),
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          // }
+                        } else {
+                          if (context.mounted) {
+                            context.pop();
+                          }
+
+                          const snackBar = SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Failed to sync data to firebase.'),
+                          );
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: const Color(0xff0083ff),
+                      ),
+                      child: const Text(
+                        'Confirm',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
   }
 }

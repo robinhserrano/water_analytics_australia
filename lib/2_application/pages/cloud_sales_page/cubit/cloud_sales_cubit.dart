@@ -17,7 +17,7 @@ class CloudSalesCubit extends Cubit<CloudSalesCubitState> {
     try {
       final data = await firestoreService.getSales();
       if (data != null) {
-        emit(CloudSalesStateLoaded(data));
+        emit(CloudSalesStateLoaded(data.reversed.toList()));
       } else {
         emit(const CloudSalesStateError(message: 'Sales Failed'));
       }

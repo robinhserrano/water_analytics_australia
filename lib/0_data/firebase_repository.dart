@@ -13,6 +13,7 @@ class FirebaseFirestoreService {
           );
 
       final data = <String, dynamic>{
+        'name': job.name,
         'create_date': job.createDate,
         'partner_id_display_name': job.partnerId?.displayName,
         'partner_id_contact_address': job.partnerId?.contactAddress,
@@ -26,6 +27,8 @@ class FirebaseFirestoreService {
         'delivery_status': job.deliveryStatus,
         'amount_to_invoice': job.amountToInvoice,
         'x_studio_invoice_payment_status': job.xStudioInvoicePaymentStatus,
+        'internal_note_display': job.internalNoteDisplay,
+        'state': job.state,
       };
       await docRef.set(data);
       return true;
@@ -36,21 +39,26 @@ class FirebaseFirestoreService {
   }
 
   Future<List<CloudSalesOrder>?> getSales() async {
-    final querySnapshot = await _firestore.collection(_collectionPath).get();
-    final order =
-        querySnapshot.docs.map(CloudSalesOrder.fromFirestore).toList();
-    return order;
+    try {
+      final querySnapshot = await _firestore.collection(_collectionPath).get();
+      final order =
+          querySnapshot.docs.map(CloudSalesOrder.fromFirestore).toList();
+      return order;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
-  // Future<SalesEntity?> getSaleById(String id) async {
-  //   final docSnapshot =
-  //       await _firestore.collection(_collectionPath).doc(id).get();
-  //   if (docSnapshot.exists) {
-  //     return SalesEntity.fromFirestore(docSnapshot);
-  //   } else {
-  //     return null;
-  //   }
-  // }
+  Future<CloudSalesOrder?> getSaleById(String id) async {
+    final docSnapshot =
+        await _firestore.collection(_collectionPath).doc(id).get();
+    if (docSnapshot.exists) {
+      return CloudSalesOrder.fromFirestore(docSnapshot);
+    } else {
+      return null;
+    }
+  }
 
   // Future<bool> deleteSaleById(String saleId) async {
   //   try {

@@ -26,6 +26,7 @@ _$SalesOrderImpl _$$SalesOrderImplFromJson(Map<String, dynamic> json) =>
       amountToInvoice: (json['amount_to_invoice'] as num?)?.toDouble(),
       xStudioInvoicePaymentStatus: json['x_studio_invoice_payment_status'],
       internalNoteDisplay: json['internal_note_display'] as String?,
+      state: json['state'] as String?,
     );
 
 Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
@@ -44,6 +45,7 @@ Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
       'amount_to_invoice': instance.amountToInvoice,
       'x_studio_invoice_payment_status': instance.xStudioInvoicePaymentStatus,
       'internal_note_display': instance.internalNoteDisplay,
+      'state': instance.state,
     };
 
 _$PartnerIdModelImpl _$$PartnerIdModelImplFromJson(Map<String, dynamic> json) =>
@@ -60,3 +62,22 @@ Map<String, dynamic> _$$PartnerIdModelImplToJson(
       'contact_address': instance.contactAddress,
       'phone': instance.phone,
     };
+
+_$ReferredByModelImpl _$$ReferredByModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ReferredByModelImpl(
+      displayName: const BoolStringConverter().fromJson(json['display_name']),
+    );
+
+Map<String, dynamic> _$$ReferredByModelImplToJson(
+        _$ReferredByModelImpl instance) =>
+    <String, dynamic>{
+      'display_name': _$JsonConverterToJson<dynamic, String>(
+          instance.displayName, const BoolStringConverter().toJson),
+    };
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_annotation_target, always_put_required_named_parameters_first
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:water_analytics_australia/core/bool_string_converter.dart';
 part 'sales_record_model.freezed.dart';
 part 'sales_record_model.g.dart';
 
@@ -29,6 +30,7 @@ class SalesOrder with _$SalesOrder {
     required dynamic xStudioInvoicePaymentStatus, //O
     @JsonKey(name: 'internal_note_display') //P
     required String? internalNoteDisplay,
+    required String? state,
   }) = _SalesOrder;
 
   factory SalesOrder.fromJson(Map<String, dynamic> json) =>
@@ -47,6 +49,17 @@ class PartnerIdModel with _$PartnerIdModel {
       _$PartnerIdModelFromJson(json);
 }
 
+@freezed
+class ReferredByModel with _$ReferredByModel {
+  const factory ReferredByModel({
+    @JsonKey(name: 'display_name')
+    @BoolStringConverter()
+    required String? displayName,
+  }) = _ReferredByModel;
+
+  factory ReferredByModel.fromJson(Map<String, dynamic> json) =>
+      _$ReferredByModelFromJson(json);
+}
 // @freezed
 // class ReferredByModel with _$ReferredByModel {
 //   const factory ReferredByModel({

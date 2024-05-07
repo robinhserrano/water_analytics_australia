@@ -58,12 +58,6 @@ class _LoginPageState extends State<LoginPage> {
           } else if (state is LoginStateSuccess) {
             context
               ..pop()
-              // const snackBar = SnackBar(
-              //   backgroundColor: Colors.green,
-              //   content: Text('Login Success'),
-              // );
-
-              // ScaffoldMessenger.of(context).showSnackBar(snackBar);
               ..pushReplacementNamed(HomePage.name);
           }
         },
@@ -117,9 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                           await cubit.login(
                             'wateranalytics',
                             emailCtrl.text,
-                            //'michael.w@wateranalytics.com.au',
                             passwordCtrl.text,
-                            // 'Water@2022',
                           );
                         },
                   style: ElevatedButton.styleFrom(

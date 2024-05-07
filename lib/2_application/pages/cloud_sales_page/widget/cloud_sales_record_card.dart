@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
-import 'package:water_analytics_australia/2_application/pages/sales_details/view/sales_details_page.dart';
+import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 
-class SalesRecordCard extends StatelessWidget {
-  const SalesRecordCard({required this.record, super.key});
-  final SalesOrder record;
+class CloudSalesRecordCard extends StatelessWidget {
+  const CloudSalesRecordCard({required this.record, super.key});
+  final CloudSalesOrder record;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => context.pushNamed(
-        SalesDetailsPage.name,
+        CloudSalesDetailsPage.name,
         pathParameters: {'id': record.id.toString()},
       ),
       child: Container(
@@ -35,7 +35,7 @@ class SalesRecordCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        record.partnerId?.displayName ?? '',
+                        record.partnerIdDisplayName ?? '',
                         style: const TextStyle(
                           fontSize: 16,
                         ),
@@ -106,8 +106,6 @@ class SalesRecordCard extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                // Text('Referred by '
-                //     '${record.xStudioReferredBy?.displayName ?? ''}'),
               ],
             ),
           ),

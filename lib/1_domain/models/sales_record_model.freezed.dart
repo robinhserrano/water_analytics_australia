@@ -49,6 +49,7 @@ mixin _$SalesOrder {
       throw _privateConstructorUsedError; //O
   @JsonKey(name: 'internal_note_display')
   String? get internalNoteDisplay => throw _privateConstructorUsedError;
+  String? get state => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -78,7 +79,8 @@ abstract class $SalesOrderCopyWith<$Res> {
       @JsonKey(name: 'amount_to_invoice') double? amountToInvoice,
       @JsonKey(name: 'x_studio_invoice_payment_status')
       dynamic xStudioInvoicePaymentStatus,
-      @JsonKey(name: 'internal_note_display') String? internalNoteDisplay});
+      @JsonKey(name: 'internal_note_display') String? internalNoteDisplay,
+      String? state});
 
   $PartnerIdModelCopyWith<$Res>? get partnerId;
 }
@@ -110,6 +112,7 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
     Object? amountToInvoice = freezed,
     Object? xStudioInvoicePaymentStatus = freezed,
     Object? internalNoteDisplay = freezed,
+    Object? state = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -168,6 +171,10 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
           ? _value.internalNoteDisplay
           : internalNoteDisplay // ignore: cast_nullable_to_non_nullable
               as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -208,7 +215,8 @@ abstract class _$$SalesOrderImplCopyWith<$Res>
       @JsonKey(name: 'amount_to_invoice') double? amountToInvoice,
       @JsonKey(name: 'x_studio_invoice_payment_status')
       dynamic xStudioInvoicePaymentStatus,
-      @JsonKey(name: 'internal_note_display') String? internalNoteDisplay});
+      @JsonKey(name: 'internal_note_display') String? internalNoteDisplay,
+      String? state});
 
   @override
   $PartnerIdModelCopyWith<$Res>? get partnerId;
@@ -239,6 +247,7 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
     Object? amountToInvoice = freezed,
     Object? xStudioInvoicePaymentStatus = freezed,
     Object? internalNoteDisplay = freezed,
+    Object? state = freezed,
   }) {
     return _then(_$SalesOrderImpl(
       id: freezed == id
@@ -297,6 +306,10 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
           ? _value.internalNoteDisplay
           : internalNoteDisplay // ignore: cast_nullable_to_non_nullable
               as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -321,8 +334,8 @@ class _$SalesOrderImpl implements _SalesOrder {
       @JsonKey(name: 'amount_to_invoice') required this.amountToInvoice,
       @JsonKey(name: 'x_studio_invoice_payment_status')
       required this.xStudioInvoicePaymentStatus,
-      @JsonKey(name: 'internal_note_display')
-      required this.internalNoteDisplay});
+      @JsonKey(name: 'internal_note_display') required this.internalNoteDisplay,
+      required this.state});
 
   factory _$SalesOrderImpl.fromJson(Map<String, dynamic> json) =>
       _$$SalesOrderImplFromJson(json);
@@ -381,10 +394,12 @@ class _$SalesOrderImpl implements _SalesOrder {
   @override
   @JsonKey(name: 'internal_note_display')
   final String? internalNoteDisplay;
+  @override
+  final String? state;
 
   @override
   String toString() {
-    return 'SalesOrder(id: $id, name: $name, createDate: $createDate, partnerId: $partnerId, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay)';
+    return 'SalesOrder(id: $id, name: $name, createDate: $createDate, partnerId: $partnerId, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state)';
   }
 
   @override
@@ -419,7 +434,8 @@ class _$SalesOrderImpl implements _SalesOrder {
                 other.xStudioInvoicePaymentStatus,
                 xStudioInvoicePaymentStatus) &&
             (identical(other.internalNoteDisplay, internalNoteDisplay) ||
-                other.internalNoteDisplay == internalNoteDisplay));
+                other.internalNoteDisplay == internalNoteDisplay) &&
+            (identical(other.state, state) || other.state == state));
   }
 
   @JsonKey(ignore: true)
@@ -439,7 +455,8 @@ class _$SalesOrderImpl implements _SalesOrder {
       const DeepCollectionEquality().hash(deliveryStatus),
       amountToInvoice,
       const DeepCollectionEquality().hash(xStudioInvoicePaymentStatus),
-      internalNoteDisplay);
+      internalNoteDisplay,
+      state);
 
   @JsonKey(ignore: true)
   @override
@@ -478,7 +495,8 @@ abstract class _SalesOrder implements SalesOrder {
       @JsonKey(name: 'x_studio_invoice_payment_status')
       required final dynamic xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display')
-      required final String? internalNoteDisplay}) = _$SalesOrderImpl;
+      required final String? internalNoteDisplay,
+      required final String? state}) = _$SalesOrderImpl;
 
   factory _SalesOrder.fromJson(Map<String, dynamic> json) =
       _$SalesOrderImpl.fromJson;
@@ -525,6 +543,8 @@ abstract class _SalesOrder implements SalesOrder {
   @override //O
   @JsonKey(name: 'internal_note_display')
   String? get internalNoteDisplay;
+  @override
+  String? get state;
   @override
   @JsonKey(ignore: true)
   _$$SalesOrderImplCopyWith<_$SalesOrderImpl> get copyWith =>
@@ -725,5 +745,161 @@ abstract class _PartnerIdModel implements PartnerIdModel {
   @override
   @JsonKey(ignore: true)
   _$$PartnerIdModelImplCopyWith<_$PartnerIdModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ReferredByModel _$ReferredByModelFromJson(Map<String, dynamic> json) {
+  return _ReferredByModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ReferredByModel {
+  @JsonKey(name: 'display_name')
+  @BoolStringConverter()
+  String? get displayName => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ReferredByModelCopyWith<ReferredByModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ReferredByModelCopyWith<$Res> {
+  factory $ReferredByModelCopyWith(
+          ReferredByModel value, $Res Function(ReferredByModel) then) =
+      _$ReferredByModelCopyWithImpl<$Res, ReferredByModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'display_name')
+      @BoolStringConverter()
+      String? displayName});
+}
+
+/// @nodoc
+class _$ReferredByModelCopyWithImpl<$Res, $Val extends ReferredByModel>
+    implements $ReferredByModelCopyWith<$Res> {
+  _$ReferredByModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? displayName = freezed,
+  }) {
+    return _then(_value.copyWith(
+      displayName: freezed == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ReferredByModelImplCopyWith<$Res>
+    implements $ReferredByModelCopyWith<$Res> {
+  factory _$$ReferredByModelImplCopyWith(_$ReferredByModelImpl value,
+          $Res Function(_$ReferredByModelImpl) then) =
+      __$$ReferredByModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'display_name')
+      @BoolStringConverter()
+      String? displayName});
+}
+
+/// @nodoc
+class __$$ReferredByModelImplCopyWithImpl<$Res>
+    extends _$ReferredByModelCopyWithImpl<$Res, _$ReferredByModelImpl>
+    implements _$$ReferredByModelImplCopyWith<$Res> {
+  __$$ReferredByModelImplCopyWithImpl(
+      _$ReferredByModelImpl _value, $Res Function(_$ReferredByModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? displayName = freezed,
+  }) {
+    return _then(_$ReferredByModelImpl(
+      displayName: freezed == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ReferredByModelImpl implements _ReferredByModel {
+  const _$ReferredByModelImpl(
+      {@JsonKey(name: 'display_name')
+      @BoolStringConverter()
+      required this.displayName});
+
+  factory _$ReferredByModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ReferredByModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'display_name')
+  @BoolStringConverter()
+  final String? displayName;
+
+  @override
+  String toString() {
+    return 'ReferredByModel(displayName: $displayName)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ReferredByModelImpl &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, displayName);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ReferredByModelImplCopyWith<_$ReferredByModelImpl> get copyWith =>
+      __$$ReferredByModelImplCopyWithImpl<_$ReferredByModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ReferredByModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ReferredByModel implements ReferredByModel {
+  const factory _ReferredByModel(
+      {@JsonKey(name: 'display_name')
+      @BoolStringConverter()
+      required final String? displayName}) = _$ReferredByModelImpl;
+
+  factory _ReferredByModel.fromJson(Map<String, dynamic> json) =
+      _$ReferredByModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'display_name')
+  @BoolStringConverter()
+  String? get displayName;
+  @override
+  @JsonKey(ignore: true)
+  _$$ReferredByModelImplCopyWith<_$ReferredByModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

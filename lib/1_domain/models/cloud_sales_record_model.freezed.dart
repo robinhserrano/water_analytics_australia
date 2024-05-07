@@ -20,7 +20,7 @@ CloudSalesOrder _$CloudSalesOrderFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CloudSalesOrder {
-  int? get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError; //A
   @JsonKey(name: 'create_date')
   DateTime? get createDate => throw _privateConstructorUsedError; //B
@@ -29,11 +29,11 @@ mixin _$CloudSalesOrder {
   @JsonKey(name: 'partner_id_contact_address')
   String? get partnerIdContactAddress => throw _privateConstructorUsedError; //D
   @JsonKey(name: 'partner_id_phone')
-  String? get partnerIdPhone => throw _privateConstructorUsedError; //E
+  dynamic get partnerIdPhone => throw _privateConstructorUsedError; //E
   @JsonKey(name: 'x_studio_sales_rep_1')
-  String get xStudioSalesRep1 => throw _privateConstructorUsedError; //F
+  String? get xStudioSalesRep1 => throw _privateConstructorUsedError; //F
   @JsonKey(name: 'x_studio_sales_source')
-  String get xStudioSalesSource => throw _privateConstructorUsedError; //G
+  String? get xStudioSalesSource => throw _privateConstructorUsedError; //G
   @JsonKey(name: 'x_studio_commission_paid')
   bool get xStudioCommissionPaid => throw _privateConstructorUsedError; //H,
 // @JsonKey(name: 'x_studio_referred_by')
@@ -41,7 +41,7 @@ mixin _$CloudSalesOrder {
   @JsonKey(name: 'x_studio_referrer_processed')
   bool get xStudioReferrerProcessed => throw _privateConstructorUsedError; //J,
   @JsonKey(name: 'x_studio_payment_type')
-  String get xStudioPaymentType => throw _privateConstructorUsedError; //K
+  String? get xStudioPaymentType => throw _privateConstructorUsedError; //K
   @JsonKey(name: 'amount_total')
   double? get amountTotal => throw _privateConstructorUsedError; // L
   @JsonKey(name: 'delivery_status')
@@ -53,6 +53,7 @@ mixin _$CloudSalesOrder {
       throw _privateConstructorUsedError; //O
   @JsonKey(name: 'internal_note_display')
   String? get internalNoteDisplay => throw _privateConstructorUsedError;
+  String? get state => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -67,25 +68,26 @@ abstract class $CloudSalesOrderCopyWith<$Res> {
       _$CloudSalesOrderCopyWithImpl<$Res, CloudSalesOrder>;
   @useResult
   $Res call(
-      {int? id,
+      {String? id,
       String? name,
       @JsonKey(name: 'create_date') DateTime? createDate,
       @JsonKey(name: 'partner_id_display_name') String? partnerIdDisplayName,
       @JsonKey(name: 'partner_id_contact_address')
       String? partnerIdContactAddress,
-      @JsonKey(name: 'partner_id_phone') String? partnerIdPhone,
-      @JsonKey(name: 'x_studio_sales_rep_1') String xStudioSalesRep1,
-      @JsonKey(name: 'x_studio_sales_source') String xStudioSalesSource,
+      @JsonKey(name: 'partner_id_phone') dynamic partnerIdPhone,
+      @JsonKey(name: 'x_studio_sales_rep_1') String? xStudioSalesRep1,
+      @JsonKey(name: 'x_studio_sales_source') String? xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid') bool xStudioCommissionPaid,
       @JsonKey(name: 'x_studio_referrer_processed')
       bool xStudioReferrerProcessed,
-      @JsonKey(name: 'x_studio_payment_type') String xStudioPaymentType,
+      @JsonKey(name: 'x_studio_payment_type') String? xStudioPaymentType,
       @JsonKey(name: 'amount_total') double? amountTotal,
       @JsonKey(name: 'delivery_status') dynamic deliveryStatus,
       @JsonKey(name: 'amount_to_invoice') double? amountToInvoice,
       @JsonKey(name: 'x_studio_invoice_payment_status')
       dynamic xStudioInvoicePaymentStatus,
-      @JsonKey(name: 'internal_note_display') String? internalNoteDisplay});
+      @JsonKey(name: 'internal_note_display') String? internalNoteDisplay,
+      String? state});
 }
 
 /// @nodoc
@@ -107,22 +109,23 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
     Object? partnerIdDisplayName = freezed,
     Object? partnerIdContactAddress = freezed,
     Object? partnerIdPhone = freezed,
-    Object? xStudioSalesRep1 = null,
-    Object? xStudioSalesSource = null,
+    Object? xStudioSalesRep1 = freezed,
+    Object? xStudioSalesSource = freezed,
     Object? xStudioCommissionPaid = null,
     Object? xStudioReferrerProcessed = null,
-    Object? xStudioPaymentType = null,
+    Object? xStudioPaymentType = freezed,
     Object? amountTotal = freezed,
     Object? deliveryStatus = freezed,
     Object? amountToInvoice = freezed,
     Object? xStudioInvoicePaymentStatus = freezed,
     Object? internalNoteDisplay = freezed,
+    Object? state = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -142,15 +145,15 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
       partnerIdPhone: freezed == partnerIdPhone
           ? _value.partnerIdPhone
           : partnerIdPhone // ignore: cast_nullable_to_non_nullable
-              as String?,
-      xStudioSalesRep1: null == xStudioSalesRep1
+              as dynamic,
+      xStudioSalesRep1: freezed == xStudioSalesRep1
           ? _value.xStudioSalesRep1
           : xStudioSalesRep1 // ignore: cast_nullable_to_non_nullable
-              as String,
-      xStudioSalesSource: null == xStudioSalesSource
+              as String?,
+      xStudioSalesSource: freezed == xStudioSalesSource
           ? _value.xStudioSalesSource
           : xStudioSalesSource // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       xStudioCommissionPaid: null == xStudioCommissionPaid
           ? _value.xStudioCommissionPaid
           : xStudioCommissionPaid // ignore: cast_nullable_to_non_nullable
@@ -159,10 +162,10 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
           ? _value.xStudioReferrerProcessed
           : xStudioReferrerProcessed // ignore: cast_nullable_to_non_nullable
               as bool,
-      xStudioPaymentType: null == xStudioPaymentType
+      xStudioPaymentType: freezed == xStudioPaymentType
           ? _value.xStudioPaymentType
           : xStudioPaymentType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       amountTotal: freezed == amountTotal
           ? _value.amountTotal
           : amountTotal // ignore: cast_nullable_to_non_nullable
@@ -183,6 +186,10 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
           ? _value.internalNoteDisplay
           : internalNoteDisplay // ignore: cast_nullable_to_non_nullable
               as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -196,25 +203,26 @@ abstract class _$$CloudSalesOrderImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? id,
+      {String? id,
       String? name,
       @JsonKey(name: 'create_date') DateTime? createDate,
       @JsonKey(name: 'partner_id_display_name') String? partnerIdDisplayName,
       @JsonKey(name: 'partner_id_contact_address')
       String? partnerIdContactAddress,
-      @JsonKey(name: 'partner_id_phone') String? partnerIdPhone,
-      @JsonKey(name: 'x_studio_sales_rep_1') String xStudioSalesRep1,
-      @JsonKey(name: 'x_studio_sales_source') String xStudioSalesSource,
+      @JsonKey(name: 'partner_id_phone') dynamic partnerIdPhone,
+      @JsonKey(name: 'x_studio_sales_rep_1') String? xStudioSalesRep1,
+      @JsonKey(name: 'x_studio_sales_source') String? xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid') bool xStudioCommissionPaid,
       @JsonKey(name: 'x_studio_referrer_processed')
       bool xStudioReferrerProcessed,
-      @JsonKey(name: 'x_studio_payment_type') String xStudioPaymentType,
+      @JsonKey(name: 'x_studio_payment_type') String? xStudioPaymentType,
       @JsonKey(name: 'amount_total') double? amountTotal,
       @JsonKey(name: 'delivery_status') dynamic deliveryStatus,
       @JsonKey(name: 'amount_to_invoice') double? amountToInvoice,
       @JsonKey(name: 'x_studio_invoice_payment_status')
       dynamic xStudioInvoicePaymentStatus,
-      @JsonKey(name: 'internal_note_display') String? internalNoteDisplay});
+      @JsonKey(name: 'internal_note_display') String? internalNoteDisplay,
+      String? state});
 }
 
 /// @nodoc
@@ -234,22 +242,23 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
     Object? partnerIdDisplayName = freezed,
     Object? partnerIdContactAddress = freezed,
     Object? partnerIdPhone = freezed,
-    Object? xStudioSalesRep1 = null,
-    Object? xStudioSalesSource = null,
+    Object? xStudioSalesRep1 = freezed,
+    Object? xStudioSalesSource = freezed,
     Object? xStudioCommissionPaid = null,
     Object? xStudioReferrerProcessed = null,
-    Object? xStudioPaymentType = null,
+    Object? xStudioPaymentType = freezed,
     Object? amountTotal = freezed,
     Object? deliveryStatus = freezed,
     Object? amountToInvoice = freezed,
     Object? xStudioInvoicePaymentStatus = freezed,
     Object? internalNoteDisplay = freezed,
+    Object? state = freezed,
   }) {
     return _then(_$CloudSalesOrderImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -269,15 +278,15 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
       partnerIdPhone: freezed == partnerIdPhone
           ? _value.partnerIdPhone
           : partnerIdPhone // ignore: cast_nullable_to_non_nullable
-              as String?,
-      xStudioSalesRep1: null == xStudioSalesRep1
+              as dynamic,
+      xStudioSalesRep1: freezed == xStudioSalesRep1
           ? _value.xStudioSalesRep1
           : xStudioSalesRep1 // ignore: cast_nullable_to_non_nullable
-              as String,
-      xStudioSalesSource: null == xStudioSalesSource
+              as String?,
+      xStudioSalesSource: freezed == xStudioSalesSource
           ? _value.xStudioSalesSource
           : xStudioSalesSource // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       xStudioCommissionPaid: null == xStudioCommissionPaid
           ? _value.xStudioCommissionPaid
           : xStudioCommissionPaid // ignore: cast_nullable_to_non_nullable
@@ -286,10 +295,10 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
           ? _value.xStudioReferrerProcessed
           : xStudioReferrerProcessed // ignore: cast_nullable_to_non_nullable
               as bool,
-      xStudioPaymentType: null == xStudioPaymentType
+      xStudioPaymentType: freezed == xStudioPaymentType
           ? _value.xStudioPaymentType
           : xStudioPaymentType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       amountTotal: freezed == amountTotal
           ? _value.amountTotal
           : amountTotal // ignore: cast_nullable_to_non_nullable
@@ -309,6 +318,10 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
       internalNoteDisplay: freezed == internalNoteDisplay
           ? _value.internalNoteDisplay
           : internalNoteDisplay // ignore: cast_nullable_to_non_nullable
+              as String?,
+      state: freezed == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -338,14 +351,14 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
       @JsonKey(name: 'amount_to_invoice') required this.amountToInvoice,
       @JsonKey(name: 'x_studio_invoice_payment_status')
       required this.xStudioInvoicePaymentStatus,
-      @JsonKey(name: 'internal_note_display')
-      required this.internalNoteDisplay});
+      @JsonKey(name: 'internal_note_display') required this.internalNoteDisplay,
+      required this.state});
 
   factory _$CloudSalesOrderImpl.fromJson(Map<String, dynamic> json) =>
       _$$CloudSalesOrderImplFromJson(json);
 
   @override
-  final int? id;
+  final String? id;
   @override
   final String? name;
 //A
@@ -363,15 +376,15 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
 //D
   @override
   @JsonKey(name: 'partner_id_phone')
-  final String? partnerIdPhone;
+  final dynamic partnerIdPhone;
 //E
   @override
   @JsonKey(name: 'x_studio_sales_rep_1')
-  final String xStudioSalesRep1;
+  final String? xStudioSalesRep1;
 //F
   @override
   @JsonKey(name: 'x_studio_sales_source')
-  final String xStudioSalesSource;
+  final String? xStudioSalesSource;
 //G
   @override
   @JsonKey(name: 'x_studio_commission_paid')
@@ -385,7 +398,7 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
 //J,
   @override
   @JsonKey(name: 'x_studio_payment_type')
-  final String xStudioPaymentType;
+  final String? xStudioPaymentType;
 //K
   @override
   @JsonKey(name: 'amount_total')
@@ -406,10 +419,12 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
   @override
   @JsonKey(name: 'internal_note_display')
   final String? internalNoteDisplay;
+  @override
+  final String? state;
 
   @override
   String toString() {
-    return 'CloudSalesOrder(id: $id, name: $name, createDate: $createDate, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay)';
+    return 'CloudSalesOrder(id: $id, name: $name, createDate: $createDate, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state)';
   }
 
   @override
@@ -426,8 +441,8 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
             (identical(
                     other.partnerIdContactAddress, partnerIdContactAddress) ||
                 other.partnerIdContactAddress == partnerIdContactAddress) &&
-            (identical(other.partnerIdPhone, partnerIdPhone) ||
-                other.partnerIdPhone == partnerIdPhone) &&
+            const DeepCollectionEquality()
+                .equals(other.partnerIdPhone, partnerIdPhone) &&
             (identical(other.xStudioSalesRep1, xStudioSalesRep1) ||
                 other.xStudioSalesRep1 == xStudioSalesRep1) &&
             (identical(other.xStudioSalesSource, xStudioSalesSource) ||
@@ -449,7 +464,8 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
                 other.xStudioInvoicePaymentStatus,
                 xStudioInvoicePaymentStatus) &&
             (identical(other.internalNoteDisplay, internalNoteDisplay) ||
-                other.internalNoteDisplay == internalNoteDisplay));
+                other.internalNoteDisplay == internalNoteDisplay) &&
+            (identical(other.state, state) || other.state == state));
   }
 
   @JsonKey(ignore: true)
@@ -461,7 +477,7 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
       createDate,
       partnerIdDisplayName,
       partnerIdContactAddress,
-      partnerIdPhone,
+      const DeepCollectionEquality().hash(partnerIdPhone),
       xStudioSalesRep1,
       xStudioSalesSource,
       xStudioCommissionPaid,
@@ -471,7 +487,8 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
       const DeepCollectionEquality().hash(deliveryStatus),
       amountToInvoice,
       const DeepCollectionEquality().hash(xStudioInvoicePaymentStatus),
-      internalNoteDisplay);
+      internalNoteDisplay,
+      state);
 
   @JsonKey(ignore: true)
   @override
@@ -490,24 +507,24 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
 
 abstract class _CloudSalesOrder implements CloudSalesOrder {
   const factory _CloudSalesOrder(
-      {required final int? id,
+      {required final String? id,
       required final String? name,
       @JsonKey(name: 'create_date') required final DateTime? createDate,
       @JsonKey(name: 'partner_id_display_name')
       required final String? partnerIdDisplayName,
       @JsonKey(name: 'partner_id_contact_address')
       required final String? partnerIdContactAddress,
-      @JsonKey(name: 'partner_id_phone') required final String? partnerIdPhone,
+      @JsonKey(name: 'partner_id_phone') required final dynamic partnerIdPhone,
       @JsonKey(name: 'x_studio_sales_rep_1')
-      required final String xStudioSalesRep1,
+      required final String? xStudioSalesRep1,
       @JsonKey(name: 'x_studio_sales_source')
-      required final String xStudioSalesSource,
+      required final String? xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid')
       required final bool xStudioCommissionPaid,
       @JsonKey(name: 'x_studio_referrer_processed')
       required final bool xStudioReferrerProcessed,
       @JsonKey(name: 'x_studio_payment_type')
-      required final String xStudioPaymentType,
+      required final String? xStudioPaymentType,
       @JsonKey(name: 'amount_total') required final double? amountTotal,
       @JsonKey(name: 'delivery_status') required final dynamic deliveryStatus,
       @JsonKey(name: 'amount_to_invoice')
@@ -515,13 +532,14 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
       @JsonKey(name: 'x_studio_invoice_payment_status')
       required final dynamic xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display')
-      required final String? internalNoteDisplay}) = _$CloudSalesOrderImpl;
+      required final String? internalNoteDisplay,
+      required final String? state}) = _$CloudSalesOrderImpl;
 
   factory _CloudSalesOrder.fromJson(Map<String, dynamic> json) =
       _$CloudSalesOrderImpl.fromJson;
 
   @override
-  int? get id;
+  String? get id;
   @override
   String? get name;
   @override //A
@@ -535,13 +553,13 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
   String? get partnerIdContactAddress;
   @override //D
   @JsonKey(name: 'partner_id_phone')
-  String? get partnerIdPhone;
+  dynamic get partnerIdPhone;
   @override //E
   @JsonKey(name: 'x_studio_sales_rep_1')
-  String get xStudioSalesRep1;
+  String? get xStudioSalesRep1;
   @override //F
   @JsonKey(name: 'x_studio_sales_source')
-  String get xStudioSalesSource;
+  String? get xStudioSalesSource;
   @override //G
   @JsonKey(name: 'x_studio_commission_paid')
   bool get xStudioCommissionPaid;
@@ -552,7 +570,7 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
   bool get xStudioReferrerProcessed;
   @override //J,
   @JsonKey(name: 'x_studio_payment_type')
-  String get xStudioPaymentType;
+  String? get xStudioPaymentType;
   @override //K
   @JsonKey(name: 'amount_total')
   double? get amountTotal;
@@ -568,6 +586,8 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
   @override //O
   @JsonKey(name: 'internal_note_display')
   String? get internalNoteDisplay;
+  @override
+  String? get state;
   @override
   @JsonKey(ignore: true)
   _$$CloudSalesOrderImplCopyWith<_$CloudSalesOrderImpl> get copyWith =>
