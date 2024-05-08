@@ -112,7 +112,7 @@ class _SalesPageState extends State<SalesPage> {
                                 child: Text('No sales yet.'),
                               )
                             : Scrollbar(
-                              child: ListView.builder(
+                                child: ListView.builder(
                                   itemCount: state.records.length,
                                   itemBuilder: (context, index) {
                                     final record = state.records[index];
@@ -121,7 +121,7 @@ class _SalesPageState extends State<SalesPage> {
                                     );
                                   },
                                 ),
-                            ),
+                              ),
                       );
                     } else if (state is SalesStateError) {
                       return SalesListPageError(
@@ -373,8 +373,10 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
                                 Text('Successfully synced data to firebase.'),
                           );
 
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          // }
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
                         } else {
                           if (context.mounted) {
                             context.pop();
@@ -384,8 +386,11 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
                             backgroundColor: Colors.red,
                             content: Text('Failed to sync data to firebase.'),
                           );
-
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(

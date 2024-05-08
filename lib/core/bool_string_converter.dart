@@ -14,15 +14,15 @@ class BoolStringConverter extends JsonConverter<String, dynamic> {
   dynamic toJson(String object) => object;
 }
 
-class BoolRefferedByConverter extends JsonConverter<ReferredByModel, dynamic> {
+class BoolRefferedByConverter extends JsonConverter<DisplayNameModel, dynamic> {
   const BoolRefferedByConverter();
 
   @override
-  ReferredByModel fromJson(dynamic json) {
-    if (json is Map<String, dynamic>) return ReferredByModel.fromJson(json);
-    return const ReferredByModel(displayName: '');
+  DisplayNameModel fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return DisplayNameModel.fromJson(json);
+    return const DisplayNameModel(displayName: '');
   }
 
   @override
-  dynamic toJson(ReferredByModel object) => object;
+  dynamic toJson(DisplayNameModel object) => object;
 }

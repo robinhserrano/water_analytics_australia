@@ -1,10 +1,12 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/sales_details/bloc/sales_details_cubit.dart';
+import 'package:water_analytics_australia/core/widgets/custom_data_table.dart';
 import 'package:water_analytics_australia/injection.dart';
 
 class SalesDetailsPageWrapperProvider extends StatelessWidget {
@@ -450,6 +452,20 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Salesperson',
+                                ),
+                                const Spacer(),
+                                Text(
+                                  order.userId?.displayName ?? '',
+                                  style: const TextStyle(
+                                    color: Color(0xff7a7a7a),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ],
@@ -502,6 +518,16 @@ class SalesDetailsPageLoaded extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ),
+                  ),
+                ],
+                if (order.orderLine != null) ...[
+                  Container(
+                    height: 200,
+                    child: CustomDataTable(
+                      data: order.orderLine ?? [],
+                      total: order.orderLine?.length ?? 0,
+                      sortDescending: false,
                     ),
                   ),
                 ],

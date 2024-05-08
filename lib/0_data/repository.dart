@@ -76,6 +76,29 @@ class Repository {
       'x_studio_invoice_payment_status': {}, //O
       'internal_note_display': {}, //P
       'state': {},
+      'user_id': {
+        'fields': {
+          'display_name': {},
+        },
+      },
+      // 'order_line': {
+      //   'fields': {
+      //     'product_template_id': {
+      //       'fields': {'display_name': {}},
+      //     }, // a
+      //     'name': {}, //b
+      //     'product_uom_qty': {}, //c
+      //     'qty_delivered': {}, //d
+      //     'qty_invoiced': {}, //e
+      //     'price_unit': {}, //f
+      //     'tax_id': {
+      //       //g
+      //       'fields': {'display_name': {}},
+      //     },
+      //     'discount': {}, //h
+      //     'price_subtotal': {}, //i
+      //   },
+      // },
     };
 
     final domain = [
@@ -132,6 +155,29 @@ class Repository {
       'x_studio_invoice_payment_status': {}, //O
       'internal_note_display': {}, //P
       'state': {},
+      'user_id': {
+        'fields': {
+          'display_name': {},
+        },
+      },
+      'order_line': {
+        'fields': {
+          'product_template_id': {
+            'fields': {'display_name': {}},
+          }, // a
+          'name': {}, //b
+          'product_uom_qty': {}, //c
+          'qty_delivered': {}, //d
+          'qty_invoiced': {}, //e
+          'price_unit': {}, //f
+          'tax_id': {
+            //g
+            'fields': {'display_name': {}},
+          },
+          'discount': {}, //h
+          'price_subtotal': {}, //i
+        },
+      },
     };
 
     try {

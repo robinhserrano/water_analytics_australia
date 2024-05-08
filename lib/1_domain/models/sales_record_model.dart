@@ -19,7 +19,7 @@ class SalesOrder with _$SalesOrder {
     required bool xStudioCommissionPaid, //H,
     @JsonKey(name: 'x_studio_referred_by')
     @BoolRefferedByConverter()
-    required ReferredByModel xStudioReferredBy,
+    required DisplayNameModel xStudioReferredBy,
     @JsonKey(name: 'x_studio_referrer_processed')
     required bool xStudioReferrerProcessed, //J,
     @JsonKey(name: 'x_studio_payment_type')
@@ -32,10 +32,33 @@ class SalesOrder with _$SalesOrder {
     @JsonKey(name: 'internal_note_display') //P
     required String? internalNoteDisplay,
     required String? state,
+    @JsonKey(name: 'user_id')
+    @BoolRefferedByConverter()
+    required DisplayNameModel? userId,
+    @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
   }) = _SalesOrder;
 
   factory SalesOrder.fromJson(Map<String, dynamic> json) =>
       _$SalesOrderFromJson(json);
+}
+
+@freezed
+class OrderLine with _$OrderLine {
+  const factory OrderLine({
+    @JsonKey(name: 'product_template_id')
+    required DisplayNameModel? productTemplateId, //B
+    @JsonKey(name: 'name') required String? name, //C-E
+    @JsonKey(name: 'product_uom_qty') required double? productUomQty, //F
+    @JsonKey(name: 'qty_delivered') required double? qtyDelivered, //G
+    @JsonKey(name: 'qty_invoiced') required double? qtyInvoiced, //H,
+    @JsonKey(name: 'price_unit') required double? priceUnit,
+    @JsonKey(name: 'tax_id') required List<DisplayNameModel>? taxId, //J,
+    @JsonKey(name: 'discount') required double? discount, //K
+    @JsonKey(name: 'price_subtotal') required double? priceSubtotal, // L
+  }) = _OrderLine;
+
+  factory OrderLine.fromJson(Map<String, dynamic> json) =>
+      _$OrderLineFromJson(json);
 }
 
 @freezed
@@ -51,26 +74,26 @@ class PartnerIdModel with _$PartnerIdModel {
 }
 
 @freezed
-class ReferredByModel with _$ReferredByModel {
-  const factory ReferredByModel({
+class DisplayNameModel with _$DisplayNameModel {
+  const factory DisplayNameModel({
     @JsonKey(name: 'display_name') required String? displayName,
-  }) = _ReferredByModel;
+  }) = _DisplayNameModel;
 
-  factory ReferredByModel.fromJson(Map<String, dynamic> json) =>
-      _$ReferredByModelFromJson(json);
+  factory DisplayNameModel.fromJson(Map<String, dynamic> json) =>
+      _$DisplayNameModelFromJson(json);
 }
 // @freezed
-// class ReferredByModel with _$ReferredByModel {
-//   const factory ReferredByModel({
+// class DisplayNameModel with _$DisplayNameModel {
+//   const factory DisplayNameModel({
 //     required int? id,
 //     @JsonKey(name: 'display_name') required String? displayName,
-//   }) = _ReferredByModel;
+//   }) = _DisplayNameModel;
 
-//   factory ReferredByModel.fromJson(dynamic json) {
+//   factory DisplayNameModel.fromJson(dynamic json) {
 //     if (json is bool) {
-//       return const ReferredByModel(id: null, displayName: null);
+//       return const DisplayNameModel(id: null, displayName: null);
 //     } else {
-//       return _$ReferredByModelFromJson(json as Map<String, dynamic>);
+//       return _$DisplayNameModelFromJson(json as Map<String, dynamic>);
 //     }
 //   }
 // }

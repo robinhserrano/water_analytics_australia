@@ -29,6 +29,10 @@ _$SalesOrderImpl _$$SalesOrderImplFromJson(Map<String, dynamic> json) =>
       xStudioInvoicePaymentStatus: json['x_studio_invoice_payment_status'],
       internalNoteDisplay: json['internal_note_display'] as String?,
       state: json['state'] as String?,
+      userId: const BoolRefferedByConverter().fromJson(json['user_id']),
+      orderLine: (json['order_line'] as List<dynamic>?)
+          ?.map((e) => OrderLine.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
@@ -50,6 +54,46 @@ Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
       'x_studio_invoice_payment_status': instance.xStudioInvoicePaymentStatus,
       'internal_note_display': instance.internalNoteDisplay,
       'state': instance.state,
+      'user_id': _$JsonConverterToJson<dynamic, DisplayNameModel>(
+          instance.userId, const BoolRefferedByConverter().toJson),
+      'order_line': instance.orderLine,
+    };
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
+
+_$OrderLineImpl _$$OrderLineImplFromJson(Map<String, dynamic> json) =>
+    _$OrderLineImpl(
+      productTemplateId: json['product_template_id'] == null
+          ? null
+          : DisplayNameModel.fromJson(
+              json['product_template_id'] as Map<String, dynamic>),
+      name: json['name'] as String?,
+      productUomQty: (json['product_uom_qty'] as num?)?.toDouble(),
+      qtyDelivered: (json['qty_delivered'] as num?)?.toDouble(),
+      qtyInvoiced: (json['qty_invoiced'] as num?)?.toDouble(),
+      priceUnit: (json['price_unit'] as num?)?.toDouble(),
+      taxId: (json['tax_id'] as List<dynamic>?)
+          ?.map((e) => DisplayNameModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      discount: (json['discount'] as num?)?.toDouble(),
+      priceSubtotal: (json['price_subtotal'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$$OrderLineImplToJson(_$OrderLineImpl instance) =>
+    <String, dynamic>{
+      'product_template_id': instance.productTemplateId,
+      'name': instance.name,
+      'product_uom_qty': instance.productUomQty,
+      'qty_delivered': instance.qtyDelivered,
+      'qty_invoiced': instance.qtyInvoiced,
+      'price_unit': instance.priceUnit,
+      'tax_id': instance.taxId,
+      'discount': instance.discount,
+      'price_subtotal': instance.priceSubtotal,
     };
 
 _$PartnerIdModelImpl _$$PartnerIdModelImplFromJson(Map<String, dynamic> json) =>
@@ -67,14 +111,14 @@ Map<String, dynamic> _$$PartnerIdModelImplToJson(
       'phone': instance.phone,
     };
 
-_$ReferredByModelImpl _$$ReferredByModelImplFromJson(
+_$DisplayNameModelImpl _$$DisplayNameModelImplFromJson(
         Map<String, dynamic> json) =>
-    _$ReferredByModelImpl(
+    _$DisplayNameModelImpl(
       displayName: json['display_name'] as String?,
     );
 
-Map<String, dynamic> _$$ReferredByModelImplToJson(
-        _$ReferredByModelImpl instance) =>
+Map<String, dynamic> _$$DisplayNameModelImplToJson(
+        _$DisplayNameModelImpl instance) =>
     <String, dynamic>{
       'display_name': instance.displayName,
     };
