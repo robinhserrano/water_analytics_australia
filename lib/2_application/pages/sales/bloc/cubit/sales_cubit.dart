@@ -32,17 +32,6 @@ class SalesCubit extends Cubit<SalesCubitState> {
     }
   }
 
-  // Future<bool> saveAllSales(List<SalesOrder> sales) async {
-  //   try {
-  //     for (final sale in sales) {
-  //       await firestoreService.saveSales(sale);
-  //     }
-  //     return true;
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
-
   Future<bool> saveAllSales(
     List<SalesOrder> sales,
     void Function(double) onProgress,

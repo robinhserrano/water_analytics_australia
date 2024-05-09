@@ -54,8 +54,15 @@ mixin _$SalesOrder {
   @JsonKey(name: 'user_id')
   @BoolRefferedByConverter()
   DisplayNameModel? get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'team_id')
+  @BoolRefferedByConverter()
+  DisplayNameModel? get teamId => throw _privateConstructorUsedError;
   @JsonKey(name: 'order_line')
   List<OrderLine>? get orderLine => throw _privateConstructorUsedError;
+  @JsonKey(name: 'tag_ids')
+  List<TagIdModel>? get tagIds => throw _privateConstructorUsedError;
+  @JsonKey(name: 'tax_totals')
+  TaxTotalsModel? get taxTotals => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -93,11 +100,18 @@ abstract class $SalesOrderCopyWith<$Res> {
       @JsonKey(name: 'user_id')
       @BoolRefferedByConverter()
       DisplayNameModel? userId,
-      @JsonKey(name: 'order_line') List<OrderLine>? orderLine});
+      @JsonKey(name: 'team_id')
+      @BoolRefferedByConverter()
+      DisplayNameModel? teamId,
+      @JsonKey(name: 'order_line') List<OrderLine>? orderLine,
+      @JsonKey(name: 'tag_ids') List<TagIdModel>? tagIds,
+      @JsonKey(name: 'tax_totals') TaxTotalsModel? taxTotals});
 
   $PartnerIdModelCopyWith<$Res>? get partnerId;
   $DisplayNameModelCopyWith<$Res> get xStudioReferredBy;
   $DisplayNameModelCopyWith<$Res>? get userId;
+  $DisplayNameModelCopyWith<$Res>? get teamId;
+  $TaxTotalsModelCopyWith<$Res>? get taxTotals;
 }
 
 /// @nodoc
@@ -130,7 +144,10 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
     Object? internalNoteDisplay = freezed,
     Object? state = freezed,
     Object? userId = freezed,
+    Object? teamId = freezed,
     Object? orderLine = freezed,
+    Object? tagIds = freezed,
+    Object? taxTotals = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -201,10 +218,22 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as DisplayNameModel?,
+      teamId: freezed == teamId
+          ? _value.teamId
+          : teamId // ignore: cast_nullable_to_non_nullable
+              as DisplayNameModel?,
       orderLine: freezed == orderLine
           ? _value.orderLine
           : orderLine // ignore: cast_nullable_to_non_nullable
               as List<OrderLine>?,
+      tagIds: freezed == tagIds
+          ? _value.tagIds
+          : tagIds // ignore: cast_nullable_to_non_nullable
+              as List<TagIdModel>?,
+      taxTotals: freezed == taxTotals
+          ? _value.taxTotals
+          : taxTotals // ignore: cast_nullable_to_non_nullable
+              as TaxTotalsModel?,
     ) as $Val);
   }
 
@@ -237,6 +266,30 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
 
     return $DisplayNameModelCopyWith<$Res>(_value.userId!, (value) {
       return _then(_value.copyWith(userId: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $DisplayNameModelCopyWith<$Res>? get teamId {
+    if (_value.teamId == null) {
+      return null;
+    }
+
+    return $DisplayNameModelCopyWith<$Res>(_value.teamId!, (value) {
+      return _then(_value.copyWith(teamId: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TaxTotalsModelCopyWith<$Res>? get taxTotals {
+    if (_value.taxTotals == null) {
+      return null;
+    }
+
+    return $TaxTotalsModelCopyWith<$Res>(_value.taxTotals!, (value) {
+      return _then(_value.copyWith(taxTotals: value) as $Val);
     });
   }
 }
@@ -273,7 +326,12 @@ abstract class _$$SalesOrderImplCopyWith<$Res>
       @JsonKey(name: 'user_id')
       @BoolRefferedByConverter()
       DisplayNameModel? userId,
-      @JsonKey(name: 'order_line') List<OrderLine>? orderLine});
+      @JsonKey(name: 'team_id')
+      @BoolRefferedByConverter()
+      DisplayNameModel? teamId,
+      @JsonKey(name: 'order_line') List<OrderLine>? orderLine,
+      @JsonKey(name: 'tag_ids') List<TagIdModel>? tagIds,
+      @JsonKey(name: 'tax_totals') TaxTotalsModel? taxTotals});
 
   @override
   $PartnerIdModelCopyWith<$Res>? get partnerId;
@@ -281,6 +339,10 @@ abstract class _$$SalesOrderImplCopyWith<$Res>
   $DisplayNameModelCopyWith<$Res> get xStudioReferredBy;
   @override
   $DisplayNameModelCopyWith<$Res>? get userId;
+  @override
+  $DisplayNameModelCopyWith<$Res>? get teamId;
+  @override
+  $TaxTotalsModelCopyWith<$Res>? get taxTotals;
 }
 
 /// @nodoc
@@ -311,7 +373,10 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
     Object? internalNoteDisplay = freezed,
     Object? state = freezed,
     Object? userId = freezed,
+    Object? teamId = freezed,
     Object? orderLine = freezed,
+    Object? tagIds = freezed,
+    Object? taxTotals = freezed,
   }) {
     return _then(_$SalesOrderImpl(
       id: freezed == id
@@ -382,10 +447,22 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as DisplayNameModel?,
+      teamId: freezed == teamId
+          ? _value.teamId
+          : teamId // ignore: cast_nullable_to_non_nullable
+              as DisplayNameModel?,
       orderLine: freezed == orderLine
           ? _value._orderLine
           : orderLine // ignore: cast_nullable_to_non_nullable
               as List<OrderLine>?,
+      tagIds: freezed == tagIds
+          ? _value._tagIds
+          : tagIds // ignore: cast_nullable_to_non_nullable
+              as List<TagIdModel>?,
+      taxTotals: freezed == taxTotals
+          ? _value.taxTotals
+          : taxTotals // ignore: cast_nullable_to_non_nullable
+              as TaxTotalsModel?,
     ));
   }
 }
@@ -416,8 +493,12 @@ class _$SalesOrderImpl implements _SalesOrder {
       @JsonKey(name: 'internal_note_display') required this.internalNoteDisplay,
       required this.state,
       @JsonKey(name: 'user_id') @BoolRefferedByConverter() required this.userId,
-      @JsonKey(name: 'order_line') required final List<OrderLine>? orderLine})
-      : _orderLine = orderLine;
+      @JsonKey(name: 'team_id') @BoolRefferedByConverter() required this.teamId,
+      @JsonKey(name: 'order_line') required final List<OrderLine>? orderLine,
+      @JsonKey(name: 'tag_ids') required final List<TagIdModel>? tagIds,
+      @JsonKey(name: 'tax_totals') required this.taxTotals})
+      : _orderLine = orderLine,
+        _tagIds = tagIds;
 
   factory _$SalesOrderImpl.fromJson(Map<String, dynamic> json) =>
       _$$SalesOrderImplFromJson(json);
@@ -484,6 +565,10 @@ class _$SalesOrderImpl implements _SalesOrder {
   @JsonKey(name: 'user_id')
   @BoolRefferedByConverter()
   final DisplayNameModel? userId;
+  @override
+  @JsonKey(name: 'team_id')
+  @BoolRefferedByConverter()
+  final DisplayNameModel? teamId;
   final List<OrderLine>? _orderLine;
   @override
   @JsonKey(name: 'order_line')
@@ -495,9 +580,24 @@ class _$SalesOrderImpl implements _SalesOrder {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<TagIdModel>? _tagIds;
+  @override
+  @JsonKey(name: 'tag_ids')
+  List<TagIdModel>? get tagIds {
+    final value = _tagIds;
+    if (value == null) return null;
+    if (_tagIds is EqualUnmodifiableListView) return _tagIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  @JsonKey(name: 'tax_totals')
+  final TaxTotalsModel? taxTotals;
+
   @override
   String toString() {
-    return 'SalesOrder(id: $id, name: $name, createDate: $createDate, partnerId: $partnerId, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferredBy: $xStudioReferredBy, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, userId: $userId, orderLine: $orderLine)';
+    return 'SalesOrder(id: $id, name: $name, createDate: $createDate, partnerId: $partnerId, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferredBy: $xStudioReferredBy, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, userId: $userId, teamId: $teamId, orderLine: $orderLine, tagIds: $tagIds, taxTotals: $taxTotals)';
   }
 
   @override
@@ -537,32 +637,40 @@ class _$SalesOrderImpl implements _SalesOrder {
                 other.internalNoteDisplay == internalNoteDisplay) &&
             (identical(other.state, state) || other.state == state) &&
             (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.teamId, teamId) || other.teamId == teamId) &&
             const DeepCollectionEquality()
-                .equals(other._orderLine, _orderLine));
+                .equals(other._orderLine, _orderLine) &&
+            const DeepCollectionEquality().equals(other._tagIds, _tagIds) &&
+            (identical(other.taxTotals, taxTotals) ||
+                other.taxTotals == taxTotals));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      createDate,
-      partnerId,
-      xStudioSalesRep1,
-      xStudioSalesSource,
-      xStudioCommissionPaid,
-      xStudioReferredBy,
-      xStudioReferrerProcessed,
-      xStudioPaymentType,
-      amountTotal,
-      const DeepCollectionEquality().hash(deliveryStatus),
-      amountToInvoice,
-      const DeepCollectionEquality().hash(xStudioInvoicePaymentStatus),
-      internalNoteDisplay,
-      state,
-      userId,
-      const DeepCollectionEquality().hash(_orderLine));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        name,
+        createDate,
+        partnerId,
+        xStudioSalesRep1,
+        xStudioSalesSource,
+        xStudioCommissionPaid,
+        xStudioReferredBy,
+        xStudioReferrerProcessed,
+        xStudioPaymentType,
+        amountTotal,
+        const DeepCollectionEquality().hash(deliveryStatus),
+        amountToInvoice,
+        const DeepCollectionEquality().hash(xStudioInvoicePaymentStatus),
+        internalNoteDisplay,
+        state,
+        userId,
+        teamId,
+        const DeepCollectionEquality().hash(_orderLine),
+        const DeepCollectionEquality().hash(_tagIds),
+        taxTotals
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -609,8 +717,13 @@ abstract class _SalesOrder implements SalesOrder {
       @JsonKey(name: 'user_id')
       @BoolRefferedByConverter()
       required final DisplayNameModel? userId,
-      @JsonKey(name: 'order_line')
-      required final List<OrderLine>? orderLine}) = _$SalesOrderImpl;
+      @JsonKey(name: 'team_id')
+      @BoolRefferedByConverter()
+      required final DisplayNameModel? teamId,
+      @JsonKey(name: 'order_line') required final List<OrderLine>? orderLine,
+      @JsonKey(name: 'tag_ids') required final List<TagIdModel>? tagIds,
+      @JsonKey(name: 'tax_totals')
+      required final TaxTotalsModel? taxTotals}) = _$SalesOrderImpl;
 
   factory _SalesOrder.fromJson(Map<String, dynamic> json) =
       _$SalesOrderImpl.fromJson;
@@ -666,8 +779,18 @@ abstract class _SalesOrder implements SalesOrder {
   @BoolRefferedByConverter()
   DisplayNameModel? get userId;
   @override
+  @JsonKey(name: 'team_id')
+  @BoolRefferedByConverter()
+  DisplayNameModel? get teamId;
+  @override
   @JsonKey(name: 'order_line')
   List<OrderLine>? get orderLine;
+  @override
+  @JsonKey(name: 'tag_ids')
+  List<TagIdModel>? get tagIds;
+  @override
+  @JsonKey(name: 'tax_totals')
+  TaxTotalsModel? get taxTotals;
   @override
   @JsonKey(ignore: true)
   _$$SalesOrderImplCopyWith<_$SalesOrderImpl> get copyWith =>
@@ -1393,5 +1516,342 @@ abstract class _DisplayNameModel implements DisplayNameModel {
   @override
   @JsonKey(ignore: true)
   _$$DisplayNameModelImplCopyWith<_$DisplayNameModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+TagIdModel _$TagIdModelFromJson(Map<String, dynamic> json) {
+  return _TagIdModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TagIdModel {
+  @JsonKey(name: 'display_name')
+  String? get displayName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'color')
+  int? get color => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TagIdModelCopyWith<TagIdModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TagIdModelCopyWith<$Res> {
+  factory $TagIdModelCopyWith(
+          TagIdModel value, $Res Function(TagIdModel) then) =
+      _$TagIdModelCopyWithImpl<$Res, TagIdModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'display_name') String? displayName,
+      @JsonKey(name: 'color') int? color});
+}
+
+/// @nodoc
+class _$TagIdModelCopyWithImpl<$Res, $Val extends TagIdModel>
+    implements $TagIdModelCopyWith<$Res> {
+  _$TagIdModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? displayName = freezed,
+    Object? color = freezed,
+  }) {
+    return _then(_value.copyWith(
+      displayName: freezed == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      color: freezed == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TagIdModelImplCopyWith<$Res>
+    implements $TagIdModelCopyWith<$Res> {
+  factory _$$TagIdModelImplCopyWith(
+          _$TagIdModelImpl value, $Res Function(_$TagIdModelImpl) then) =
+      __$$TagIdModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'display_name') String? displayName,
+      @JsonKey(name: 'color') int? color});
+}
+
+/// @nodoc
+class __$$TagIdModelImplCopyWithImpl<$Res>
+    extends _$TagIdModelCopyWithImpl<$Res, _$TagIdModelImpl>
+    implements _$$TagIdModelImplCopyWith<$Res> {
+  __$$TagIdModelImplCopyWithImpl(
+      _$TagIdModelImpl _value, $Res Function(_$TagIdModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? displayName = freezed,
+    Object? color = freezed,
+  }) {
+    return _then(_$TagIdModelImpl(
+      displayName: freezed == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      color: freezed == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TagIdModelImpl implements _TagIdModel {
+  const _$TagIdModelImpl(
+      {@JsonKey(name: 'display_name') required this.displayName,
+      @JsonKey(name: 'color') required this.color});
+
+  factory _$TagIdModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TagIdModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'display_name')
+  final String? displayName;
+  @override
+  @JsonKey(name: 'color')
+  final int? color;
+
+  @override
+  String toString() {
+    return 'TagIdModel(displayName: $displayName, color: $color)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TagIdModelImpl &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.color, color) || other.color == color));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, displayName, color);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TagIdModelImplCopyWith<_$TagIdModelImpl> get copyWith =>
+      __$$TagIdModelImplCopyWithImpl<_$TagIdModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TagIdModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TagIdModel implements TagIdModel {
+  const factory _TagIdModel(
+      {@JsonKey(name: 'display_name') required final String? displayName,
+      @JsonKey(name: 'color') required final int? color}) = _$TagIdModelImpl;
+
+  factory _TagIdModel.fromJson(Map<String, dynamic> json) =
+      _$TagIdModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'display_name')
+  String? get displayName;
+  @override
+  @JsonKey(name: 'color')
+  int? get color;
+  @override
+  @JsonKey(ignore: true)
+  _$$TagIdModelImplCopyWith<_$TagIdModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+TaxTotalsModel _$TaxTotalsModelFromJson(Map<String, dynamic> json) {
+  return _TaxTotalsModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TaxTotalsModel {
+  @JsonKey(name: 'amount_untaxed')
+  double? get amountUntaxed => throw _privateConstructorUsedError;
+  @JsonKey(name: 'amount_total')
+  double? get amountTotal => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TaxTotalsModelCopyWith<TaxTotalsModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TaxTotalsModelCopyWith<$Res> {
+  factory $TaxTotalsModelCopyWith(
+          TaxTotalsModel value, $Res Function(TaxTotalsModel) then) =
+      _$TaxTotalsModelCopyWithImpl<$Res, TaxTotalsModel>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'amount_untaxed') double? amountUntaxed,
+      @JsonKey(name: 'amount_total') double? amountTotal});
+}
+
+/// @nodoc
+class _$TaxTotalsModelCopyWithImpl<$Res, $Val extends TaxTotalsModel>
+    implements $TaxTotalsModelCopyWith<$Res> {
+  _$TaxTotalsModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? amountUntaxed = freezed,
+    Object? amountTotal = freezed,
+  }) {
+    return _then(_value.copyWith(
+      amountUntaxed: freezed == amountUntaxed
+          ? _value.amountUntaxed
+          : amountUntaxed // ignore: cast_nullable_to_non_nullable
+              as double?,
+      amountTotal: freezed == amountTotal
+          ? _value.amountTotal
+          : amountTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TaxTotalsModelImplCopyWith<$Res>
+    implements $TaxTotalsModelCopyWith<$Res> {
+  factory _$$TaxTotalsModelImplCopyWith(_$TaxTotalsModelImpl value,
+          $Res Function(_$TaxTotalsModelImpl) then) =
+      __$$TaxTotalsModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'amount_untaxed') double? amountUntaxed,
+      @JsonKey(name: 'amount_total') double? amountTotal});
+}
+
+/// @nodoc
+class __$$TaxTotalsModelImplCopyWithImpl<$Res>
+    extends _$TaxTotalsModelCopyWithImpl<$Res, _$TaxTotalsModelImpl>
+    implements _$$TaxTotalsModelImplCopyWith<$Res> {
+  __$$TaxTotalsModelImplCopyWithImpl(
+      _$TaxTotalsModelImpl _value, $Res Function(_$TaxTotalsModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? amountUntaxed = freezed,
+    Object? amountTotal = freezed,
+  }) {
+    return _then(_$TaxTotalsModelImpl(
+      amountUntaxed: freezed == amountUntaxed
+          ? _value.amountUntaxed
+          : amountUntaxed // ignore: cast_nullable_to_non_nullable
+              as double?,
+      amountTotal: freezed == amountTotal
+          ? _value.amountTotal
+          : amountTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TaxTotalsModelImpl implements _TaxTotalsModel {
+  const _$TaxTotalsModelImpl(
+      {@JsonKey(name: 'amount_untaxed') required this.amountUntaxed,
+      @JsonKey(name: 'amount_total') required this.amountTotal});
+
+  factory _$TaxTotalsModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TaxTotalsModelImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'amount_untaxed')
+  final double? amountUntaxed;
+  @override
+  @JsonKey(name: 'amount_total')
+  final double? amountTotal;
+
+  @override
+  String toString() {
+    return 'TaxTotalsModel(amountUntaxed: $amountUntaxed, amountTotal: $amountTotal)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TaxTotalsModelImpl &&
+            (identical(other.amountUntaxed, amountUntaxed) ||
+                other.amountUntaxed == amountUntaxed) &&
+            (identical(other.amountTotal, amountTotal) ||
+                other.amountTotal == amountTotal));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, amountUntaxed, amountTotal);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TaxTotalsModelImplCopyWith<_$TaxTotalsModelImpl> get copyWith =>
+      __$$TaxTotalsModelImplCopyWithImpl<_$TaxTotalsModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TaxTotalsModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TaxTotalsModel implements TaxTotalsModel {
+  const factory _TaxTotalsModel(
+      {@JsonKey(name: 'amount_untaxed') required final double? amountUntaxed,
+      @JsonKey(name: 'amount_total')
+      required final double? amountTotal}) = _$TaxTotalsModelImpl;
+
+  factory _TaxTotalsModel.fromJson(Map<String, dynamic> json) =
+      _$TaxTotalsModelImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'amount_untaxed')
+  double? get amountUntaxed;
+  @override
+  @JsonKey(name: 'amount_total')
+  double? get amountTotal;
+  @override
+  @JsonKey(ignore: true)
+  _$$TaxTotalsModelImplCopyWith<_$TaxTotalsModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

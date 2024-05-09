@@ -5,6 +5,7 @@ import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales_details/view/sales_details_page.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -13,7 +14,7 @@ const String _basePath = '';
 
 final routes = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '$_basePath/${LoginPage.name}',
+  initialLocation: '$_basePath/${HomePage.name}',
   routes: [
     GoRoute(
       name: LoginPage.name,
@@ -55,4 +56,26 @@ final routes = GoRouter(
       },
     ),
   ],
+  redirect: (context, state) async {
+    // final auth = context.read<AuthCubit>();
+    // final onboarded = await auth.getOnboarded();
+    // final loggedIn = await auth.getAccessToken() != null;
+
+    // if (!onboarded) return '/onboarding-screen';
+
+    // if (!loggedIn) {
+    //   if ('/forgot-password' == state.uri.toString() ||
+    //       state.uri.toString().contains('/register')) {
+    //     return state.uri.toString();
+    //   }
+
+    //   if (state.uri.queryParameters.isEmpty) return '/login';
+    // }
+
+    final userBox = await HiveHelper.openUserBox();
+    if (userBox == null || userBox.isEmpty) {
+      return LoginPage.path;
+    }
+    return null;
+  },
 );

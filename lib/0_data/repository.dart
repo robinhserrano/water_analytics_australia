@@ -160,6 +160,16 @@ class Repository {
           'display_name': {},
         },
       },
+      'team_id': {
+        'fields': {
+          'display_name': {},
+        },
+      },
+      'tag_ids': {
+        'fields': {
+          'display_name': {},
+        },
+      },
       'order_line': {
         'fields': {
           'product_template_id': {
@@ -178,6 +188,7 @@ class Repository {
           'price_subtotal': {}, //i
         },
       },
+      'tax_totals':{},
     };
 
     try {

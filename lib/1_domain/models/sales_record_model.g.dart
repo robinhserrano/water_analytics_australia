@@ -30,9 +30,16 @@ _$SalesOrderImpl _$$SalesOrderImplFromJson(Map<String, dynamic> json) =>
       internalNoteDisplay: json['internal_note_display'] as String?,
       state: json['state'] as String?,
       userId: const BoolRefferedByConverter().fromJson(json['user_id']),
+      teamId: const BoolRefferedByConverter().fromJson(json['team_id']),
       orderLine: (json['order_line'] as List<dynamic>?)
           ?.map((e) => OrderLine.fromJson(e as Map<String, dynamic>))
           .toList(),
+      tagIds: (json['tag_ids'] as List<dynamic>?)
+          ?.map((e) => TagIdModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      taxTotals: json['tax_totals'] == null
+          ? null
+          : TaxTotalsModel.fromJson(json['tax_totals'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
@@ -56,7 +63,11 @@ Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
       'state': instance.state,
       'user_id': _$JsonConverterToJson<dynamic, DisplayNameModel>(
           instance.userId, const BoolRefferedByConverter().toJson),
+      'team_id': _$JsonConverterToJson<dynamic, DisplayNameModel>(
+          instance.teamId, const BoolRefferedByConverter().toJson),
       'order_line': instance.orderLine,
+      'tag_ids': instance.tagIds,
+      'tax_totals': instance.taxTotals,
     };
 
 Json? _$JsonConverterToJson<Json, Value>(
@@ -121,4 +132,29 @@ Map<String, dynamic> _$$DisplayNameModelImplToJson(
         _$DisplayNameModelImpl instance) =>
     <String, dynamic>{
       'display_name': instance.displayName,
+    };
+
+_$TagIdModelImpl _$$TagIdModelImplFromJson(Map<String, dynamic> json) =>
+    _$TagIdModelImpl(
+      displayName: json['display_name'] as String?,
+      color: (json['color'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$TagIdModelImplToJson(_$TagIdModelImpl instance) =>
+    <String, dynamic>{
+      'display_name': instance.displayName,
+      'color': instance.color,
+    };
+
+_$TaxTotalsModelImpl _$$TaxTotalsModelImplFromJson(Map<String, dynamic> json) =>
+    _$TaxTotalsModelImpl(
+      amountUntaxed: (json['amount_untaxed'] as num?)?.toDouble(),
+      amountTotal: (json['amount_total'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$$TaxTotalsModelImplToJson(
+        _$TaxTotalsModelImpl instance) =>
+    <String, dynamic>{
+      'amount_untaxed': instance.amountUntaxed,
+      'amount_total': instance.amountTotal,
     };

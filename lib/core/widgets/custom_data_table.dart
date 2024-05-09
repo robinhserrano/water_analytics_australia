@@ -47,6 +47,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
           sortDescending: widget.sortDescending,
           sortColumnIndex: widget.sortColumnIndex,
         ),
+        
         Expanded(
           child: Scrollbar(
             interactive: true,
@@ -148,7 +149,7 @@ class CustomTableCell extends StatelessWidget {
       return prev;
     });
 
-    final cellHeight = longestString.length * 1.3;
+    final cellHeight = longestString.length * 2.0;
 
     return Container(
       constraints: const BoxConstraints(

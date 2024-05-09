@@ -35,7 +35,12 @@ class SalesOrder with _$SalesOrder {
     @JsonKey(name: 'user_id')
     @BoolRefferedByConverter()
     required DisplayNameModel? userId,
+    @JsonKey(name: 'team_id')
+    @BoolRefferedByConverter()
+    required DisplayNameModel? teamId,
     @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
+    @JsonKey(name: 'tag_ids') required List<TagIdModel>? tagIds,
+    @JsonKey(name: 'tax_totals') required TaxTotalsModel? taxTotals,
   }) = _SalesOrder;
 
   factory SalesOrder.fromJson(Map<String, dynamic> json) =>
@@ -82,6 +87,29 @@ class DisplayNameModel with _$DisplayNameModel {
   factory DisplayNameModel.fromJson(Map<String, dynamic> json) =>
       _$DisplayNameModelFromJson(json);
 }
+
+@freezed
+class TagIdModel with _$TagIdModel {
+  const factory TagIdModel({
+    @JsonKey(name: 'display_name') required String? displayName,
+    @JsonKey(name: 'color') required int? color,
+  }) = _TagIdModel;
+
+  factory TagIdModel.fromJson(Map<String, dynamic> json) =>
+      _$TagIdModelFromJson(json);
+}
+
+@freezed
+class TaxTotalsModel with _$TaxTotalsModel {
+  const factory TaxTotalsModel({
+    @JsonKey(name: 'amount_untaxed') required double? amountUntaxed,
+    @JsonKey(name: 'amount_total') required double? amountTotal,
+  }) = _TaxTotalsModel;
+
+  factory TaxTotalsModel.fromJson(Map<String, dynamic> json) =>
+      _$TaxTotalsModelFromJson(json);
+}
+
 // @freezed
 // class DisplayNameModel with _$DisplayNameModel {
 //   const factory DisplayNameModel({

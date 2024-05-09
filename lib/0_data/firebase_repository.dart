@@ -5,6 +5,7 @@ import 'package:water_analytics_australia/1_domain/models/sales_record_model.dar
 class FirebaseFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _collectionPath = 'sales.order';
+  final String _timestampPath = 'last.upload.time';
 
   Future<bool> saveSales(SalesOrder job) async {
     try {
@@ -59,6 +60,53 @@ class FirebaseFirestoreService {
       return null;
     }
   }
+
+  Future<bool> saveLastUploadedTime(DateTime timeStamp) async {
+    try {
+      final docRef = _firestore.collection(_timestampPath).doc(
+            'lastUploadTime',
+          );
+
+      final data = <String, dynamic>{
+        'timeStamp': timeStamp,
+      };
+      await docRef.set(data);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<DateTime?> getLastUploadedTime() async {
+    try {
+      final docSnapshot = await _firestore
+          .collection(_timestampPath)
+          .doc('lastUploadTime')
+          .get();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null && data['timeStamp'] != null) {
+          return (data['timeStamp'] as Timestamp).toDate();
+        }
+      }
+      return null; // Return null if no timestamp is found
+    } catch (e) {
+      print(e);
+      return null; // Return null in case of any error
+    }
+  }
+
+  // Future<CloudSalesOrder?> getLastUploadedTime() async {
+  //   final docSnapshot =
+  //       await _firestore.collection(_timestampPath).doc('lastUploadTime').get();
+
+  //   if (docSnapshot.exists) {
+  //     return CloudSalesOrder.fromFirestore(docSnapshot);
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   // Future<bool> deleteSaleById(String saleId) async {
   //   try {

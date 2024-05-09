@@ -31,6 +31,7 @@ class SalesDetailsCubit extends Cubit<SalesDetailsCubitState> {
   Future<bool> saveSales(SalesOrder sale) async {
     try {
       await firestoreService.saveSales(sale);
+      await firestoreService.saveLastUploadedTime(DateTime.now());
 
       return true;
     } catch (e) {
