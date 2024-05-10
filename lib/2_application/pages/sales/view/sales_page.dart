@@ -42,10 +42,12 @@ class SalesPage extends StatefulWidget {
 
 class _SalesPageState extends State<SalesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final ctrlSearch = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SalesCubit>();
+
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: const EndDrawer(),
@@ -88,52 +90,116 @@ class _SalesPageState extends State<SalesPage> {
         onRefresh: () => context.read<SalesCubit>().fetchSales(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Column(
-            children: [
-              Expanded(
-                child: BlocBuilder<SalesCubit, SalesCubitState>(
-                  builder: (context, state) {
-                    if (state is SalesStateLoading) {
-                      return ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (context, index) => const Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                          child: ShimmerBox(
-                            height: 110,
-                          ),
-                        ),
-                      );
-                    } else if (state is SalesStateLoaded) {
-                      return Scaffold(
-                        backgroundColor: const Color(0xfff9fafb),
-                        body: state.records.isEmpty
-                            ? const Center(
-                                child: Text('No sales yet.'),
-                              )
-                            : Scrollbar(
+          child: BlocBuilder<SalesCubit, SalesCubitState>(
+            builder: (context, state) {
+              if (state is SalesStateLoading) {
+                return ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) => const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    child: ShimmerBox(
+                      height: 110,
+                    ),
+                  ),
+                );
+              } else if (state is SalesStateLoaded) {
+                return Scaffold(
+                  backgroundColor: const Color(0xfff9fafb),
+                  body: state.records.isEmpty
+                      ? const Center(
+                          child: Text('No sales yet.'),
+                        )
+                      : Column(
+                          children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                color: Color(0xffeeeef0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              child: TextFormField(
+                                controller: ctrlSearch,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  hintText: 'Search',
+                                  hintStyle: TextStyle(
+                                    color: Color(0xff5f5f60),
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  // if (ctrlSearch.text.trim().length > 3) {
+                                  //   cubit.fetch(
+                                  //     searchQuery: ctrlSearch.text,
+                                  //   );
+                                  // } else {
+                                  //   cubit.updateIsSearching(value: true);
+                                  // }
+                                  setState(() {});
+                                },
+                                onEditingComplete: () {
+                                  // if (ctrlSearch.text.trim().length > 3) {
+                                  //   cubit.fetch(
+                                  //     searchQuery: ctrlSearch.text,
+                                  //     isSubmitted: true,
+                                  //   );
+                                  // }
+                                },
+                                onFieldSubmitted: (value) {
+                                  // if (value.trim().length > 3) {
+                                  //   cubit.fetch(
+                                  //     searchQuery: value,
+                                  //     isSubmitted: true,
+                                  //   );
+                                  // }
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              child: Scrollbar(
                                 child: ListView.builder(
                                   itemCount: state.records.length,
                                   itemBuilder: (context, index) {
                                     final record = state.records[index];
-                                    return SalesRecordCard(
-                                      record: record,
-                                    );
+                                    if ((record.name?.toLowerCase() ?? '')
+                                            .contains(
+                                          ctrlSearch.text.toLowerCase(),
+                                        ) ||
+                                        (record.partnerId?.displayName ?? '')
+                                            .toLowerCase()
+                                            .contains(
+                                              ctrlSearch.text.toLowerCase(),
+                                            )) {
+                                      return SalesRecordCard(
+                                        record: record,
+                                      );
+                                    }
+
+                                    return const SizedBox();
                                   },
                                 ),
                               ),
-                      );
-                    } else if (state is SalesStateError) {
-                      return SalesListPageError(
-                        onRefresh: () =>
-                            context.read<SalesCubit>().fetchSales(),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-              ),
-            ],
+                            ),
+                          ],
+                        ),
+                );
+              } else if (state is SalesStateError) {
+                return SalesListPageError(
+                  onRefresh: () => context.read<SalesCubit>().fetchSales(),
+                );
+              }
+              return const SizedBox();
+            },
           ),
         ),
       ),
@@ -215,6 +281,7 @@ class EndDrawer extends StatelessWidget {
                             user.first.userLogin,
                             style: const TextStyle(color: Color(0xff7a7a7a)),
                           ),
+                          // Text(user.first.password),
                           // Text(
                           //   textAlign: TextAlign.center,
                           //   user.first.userTz,
@@ -308,7 +375,7 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'Syncing Sales Orders... (${progress.toStringAsFixed(2)}%)',
+                'Syncing Sales to Firebase... (${progress.toStringAsFixed(2)}%)',
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(
@@ -386,7 +453,7 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
                             backgroundColor: Colors.red,
                             content: Text('Failed to sync data to firebase.'),
                           );
-                          
+
                           if (context.mounted) {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);

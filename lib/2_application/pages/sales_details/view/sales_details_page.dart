@@ -7,8 +7,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:intl/intl.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/sales_details/bloc/sales_details_cubit.dart';
+import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/widgets/custom_data_table.dart';
 import 'package:water_analytics_australia/injection.dart';
 
@@ -176,10 +178,11 @@ class SalesDetailsPageLoaded extends HookWidget {
                     ),
                     const Spacer(),
                     Text(
-                      (order.createDate ?? '').toString(),
-                      style: const TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
+                      order.createDate == null
+                          ? ''
+                          : DateFormat('MM/dd/yyyy hh:mm a')
+                              .format(order.createDate!),
+                      style: const TextStyle(color: Color(0xff7a7a7a)),
                     ),
                   ],
                 ),
@@ -206,11 +209,16 @@ class SalesDetailsPageLoaded extends HookWidget {
                 Row(
                   children: [
                     const Text(
-                      'Amount Total',
+                      'Payment Status',
                     ),
                     const Spacer(),
                     Text(
-                      '\$${order.amountTotal ?? 0}',
+                      capitalizeFirstLetter(
+                        order.xStudioInvoicePaymentStatus.toString() ==
+                                'not_paid'
+                            ? 'Not Paid'
+                            : order.xStudioInvoicePaymentStatus.toString(),
+                      ),
                       style: const TextStyle(
                         color: Color(0xff7a7a7a),
                       ),
@@ -227,7 +235,26 @@ class SalesDetailsPageLoaded extends HookWidget {
                     ),
                     const Spacer(),
                     Text(
-                      (order.deliveryStatus ?? '').toString(),
+                      capitalizeFirstLetter(
+                        (order.deliveryStatus ?? '').toString(),
+                      ),
+                      style: const TextStyle(
+                        color: Color(0xff7a7a7a),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Amount Total',
+                    ),
+                    const Spacer(),
+                    Text(
+                      r'$' + (order.amountTotal ?? 0).toStringAsFixed(2),
                       style: const TextStyle(
                         color: Color(0xff7a7a7a),
                       ),
@@ -244,7 +271,7 @@ class SalesDetailsPageLoaded extends HookWidget {
                     ),
                     const Spacer(),
                     Text(
-                      '\$${order.amountToInvoice ?? 0}',
+                      r'$' + (order.amountToInvoice ?? 0).toStringAsFixed(2),
                       style: const TextStyle(
                         color: Color(0xff7a7a7a),
                       ),
@@ -257,12 +284,29 @@ class SalesDetailsPageLoaded extends HookWidget {
                 Row(
                   children: [
                     const Text(
-                      'Referred By',
+                      'Commission Amount',
                     ),
                     const Spacer(),
                     Text(
-                      order.xStudioReferredBy.displayName ?? '',
+                      r'$' + 0.toStringAsFixed(2),
                       style: const TextStyle(
+                        color: Color(0xff7a7a7a),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Row(
+                  children: [
+                    Text(
+                      'Referred By',
+                    ),
+                    Spacer(),
+                    Text(
+                      '',
+                      style: TextStyle(
                         color: Color(0xff7a7a7a),
                       ),
                     ),

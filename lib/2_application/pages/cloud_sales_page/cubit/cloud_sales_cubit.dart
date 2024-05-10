@@ -14,7 +14,6 @@ class CloudSalesCubit extends Cubit<CloudSalesCubitState> {
 
   Future<void> fetchCloudSales() async {
     final lastUploadDate = await firestoreService.getLastUploadedTime();
-    final hehe = lastUploadDate;
     emit(const CloudSalesStateLoading());
     try {
       final data = await firestoreService.getSales();

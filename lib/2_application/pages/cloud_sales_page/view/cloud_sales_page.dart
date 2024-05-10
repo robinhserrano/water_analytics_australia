@@ -41,6 +41,7 @@ class CloudSalesPage extends StatefulWidget {
 
 class _CloudSalesPageState extends State<CloudSalesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final ctrlSearch = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,50 +71,117 @@ class _CloudSalesPageState extends State<CloudSalesPage> {
         onRefresh: () => context.read<CloudSalesCubit>().fetchCloudSales(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Column(
-            children: [
-              Expanded(
-                child: BlocBuilder<CloudSalesCubit, CloudSalesCubitState>(
-                  builder: (context, state) {
-                    if (state is CloudSalesStateLoading) {
-                      return ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (context, index) => const Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                          child: ShimmerBox(
-                            height: 110,
-                          ),
-                        ),
-                      );
-                    } else if (state is CloudSalesStateLoaded) {
-                      return Scaffold(
-                        backgroundColor: const Color(0xfff9fafb),
-                        body: state.records.isEmpty
-                            ? const Center(
-                                child: Text('No sales yet.'),
-                              )
-                            : ListView.builder(
-                                itemCount: state.records.length,
-                                itemBuilder: (context, index) {
-                                  final record = state.records[index];
-                                  return CloudSalesRecordCard(
-                                    record: record,
-                                  );
+          child: BlocBuilder<CloudSalesCubit, CloudSalesCubitState>(
+            builder: (context, state) {
+              if (state is CloudSalesStateLoading) {
+                return ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) => const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    child: ShimmerBox(
+                      height: 110,
+                    ),
+                  ),
+                );
+              } else if (state is CloudSalesStateLoaded) {
+                return Scaffold(
+                  backgroundColor: const Color(0xfff9fafb),
+                  body: state.records.isEmpty
+                      ? const Center(
+                          child: Text('No sales yet.'),
+                        )
+                      : Column(
+                          children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                color: Color(0xffeeeef0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              child: TextFormField(
+                                controller: ctrlSearch,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  labelStyle: TextStyle(color: Colors.green),
+                                  hintText: 'Search',
+                                  hintStyle: TextStyle(
+                                    color: Color(0xff5f5f60),
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  // if (ctrlSearch.text.trim().length > 3) {
+                                  //   cubit.fetch(
+                                  //     searchQuery: ctrlSearch.text,
+                                  //   );
+                                  // } else {
+                                  //   cubit.updateIsSearching(value: true);
+                                  // }
+                                  setState(() {});
+                                },
+                                onEditingComplete: () {
+                                  // if (ctrlSearch.text.trim().length > 3) {
+                                  //   cubit.fetch(
+                                  //     searchQuery: ctrlSearch.text,
+                                  //     isSubmitted: true,
+                                  //   );
+                                  // }
+                                },
+                                onFieldSubmitted: (value) {
+                                  // if (value.trim().length > 3) {
+                                  //   cubit.fetch(
+                                  //     searchQuery: value,
+                                  //     isSubmitted: true,
+                                  //   );
+                                  // }
                                 },
                               ),
-                      );
-                    } else if (state is CloudSalesStateError) {
-                      return SalesListPageError(
-                        onRefresh: () =>
-                            context.read<CloudSalesCubit>().fetchCloudSales(),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-              ),
-            ],
+                            ),
+                            Expanded(
+                              child: Scrollbar(
+                                child: ListView.builder(
+                                  itemCount: state.records.length,
+                                  itemBuilder: (context, index) {
+                                    final record = state.records[index];
+                                    if ((record.name?.toLowerCase() ?? '')
+                                            .contains(
+                                          ctrlSearch.text.toLowerCase(),
+                                        ) ||
+                                        (record.partnerIdDisplayName ?? '')
+                                            .toLowerCase()
+                                            .contains(
+                                              ctrlSearch.text.toLowerCase(),
+                                            )) {
+                                      return CloudSalesRecordCard(
+                                        record: record,
+                                      );
+                                    }
+
+                                    return const SizedBox();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                );
+              } else if (state is CloudSalesStateError) {
+                return SalesListPageError(
+                  onRefresh: () =>
+                      context.read<CloudSalesCubit>().fetchCloudSales(),
+                );
+              }
+              return const SizedBox();
+            },
           ),
         ),
       ),

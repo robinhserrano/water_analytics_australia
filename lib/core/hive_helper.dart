@@ -21,4 +21,12 @@ class HiveHelper {
       return false;
     }
   }
+
+  static Future<List<UserHive>> getAllUsers() async {
+    final box = await openUserBox();
+    if (box != null) {
+      return box.values.toList();
+    }
+    return [];
+  }
 }

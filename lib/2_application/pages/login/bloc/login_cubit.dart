@@ -25,6 +25,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           data.userLogin,
           data.userName,
           data.userTz,
+          password,
         );
 
         final userBox = Hive.box<UserHive>('user');

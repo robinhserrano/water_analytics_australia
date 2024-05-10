@@ -2,6 +2,7 @@
 
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 
 class Repository {
   Repository({required this.client});
@@ -122,6 +123,16 @@ class Repository {
       final parsedData = data.map(SalesOrder.fromJson).toList();
 
       return parsedData;
+    } on OdooSessionExpiredException catch (_) {
+      final user = await HiveHelper.getAllUsers();
+      if (user.isNotEmpty) {
+        await client.authenticate(
+          user.first.dbName,
+          user.first.userLogin,
+          user.first.password,
+        );
+      }
+      return null;
     } catch (e) {
       return null;
     }
@@ -188,7 +199,7 @@ class Repository {
           'price_subtotal': {}, //i
         },
       },
-      'tax_totals':{},
+      'tax_totals': {},
     };
 
     try {

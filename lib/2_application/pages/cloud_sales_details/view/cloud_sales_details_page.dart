@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:intl/intl.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
+import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/injection.dart';
 
 class CloudSalesDetailsPageWrapperProvider extends StatelessWidget {
@@ -133,10 +135,11 @@ class CloudSalesDetailsPageLoaded extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      (order.createDate ?? '').toString(),
-                      style: const TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
+                      order.createDate == null
+                          ? ''
+                          : DateFormat('MM/dd/yyyy hh:mm a')
+                              .format(order.createDate!),
+                      style: const TextStyle(color: Color(0xff7a7a7a)),
                     ),
                   ],
                 ),
@@ -163,11 +166,16 @@ class CloudSalesDetailsPageLoaded extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      'Amount Total',
+                      'Payment Status',
                     ),
                     const Spacer(),
                     Text(
-                      '\$${order.amountTotal ?? 0}',
+                      capitalizeFirstLetter(
+                        order.xStudioInvoicePaymentStatus.toString() ==
+                                'not_paid'
+                            ? 'Not Paid'
+                            : order.xStudioInvoicePaymentStatus.toString(),
+                      ),
                       style: const TextStyle(
                         color: Color(0xff7a7a7a),
                       ),
@@ -184,7 +192,26 @@ class CloudSalesDetailsPageLoaded extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      (order.deliveryStatus ?? '').toString(),
+                      capitalizeFirstLetter(
+                        (order.deliveryStatus ?? '').toString(),
+                      ),
+                      style: const TextStyle(
+                        color: Color(0xff7a7a7a),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Amount Total',
+                    ),
+                    const Spacer(),
+                    Text(
+                      r'$' + (order.amountTotal ?? 0).toStringAsFixed(2),
                       style: const TextStyle(
                         color: Color(0xff7a7a7a),
                       ),
@@ -201,7 +228,24 @@ class CloudSalesDetailsPageLoaded extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      '\$${order.amountToInvoice ?? 0}',
+                      r'$' + (order.amountToInvoice ?? 0).toStringAsFixed(2),
+                      style: const TextStyle(
+                        color: Color(0xff7a7a7a),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Commission Amount',
+                    ),
+                    const Spacer(),
+                    Text(
+                      r'$' + 0.toStringAsFixed(2),
                       style: const TextStyle(
                         color: Color(0xff7a7a7a),
                       ),

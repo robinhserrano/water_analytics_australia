@@ -15,6 +15,7 @@ class UserHive {
     this.userLogin,
     this.userName,
     this.userTz,
+    this.password,
   );
   @HiveField(0)
   final String dbName;
@@ -39,4 +40,7 @@ class UserHive {
 
   @HiveField(7)
   final String userTz;
+
+  @HiveField(8)
+  final String password;
 }
