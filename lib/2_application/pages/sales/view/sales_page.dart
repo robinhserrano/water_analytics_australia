@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
@@ -24,26 +25,25 @@ class SalesPageWrapperProvider extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<SalesCubit>(),
       child: SalesPage(
-        client: sl<OdooClient>(),
-      ),
+          // client: sl<OdooClient>(),
+          ),
     );
   }
 }
 
-class SalesPage extends StatefulWidget {
-  
-  const SalesPage({required this.client, super.key});
+class SalesPage extends HookWidget {
+  SalesPage({super.key});
 
   static const name = 'sales';
   static const path = '/sales';
 
-  final OdooClient client;
+//   final OdooClient client;
 
-  @override
-  State<SalesPage> createState() => _SalesPageState();
-}
+//   @override
+//   State<SalesPage> createState() => _SalesPageState();
+// }
 
-class _SalesPageState extends State<SalesPage> {
+// class _SalesPageState extends State<SalesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   final ctrlSearch = TextEditingController();
 
@@ -155,7 +155,7 @@ class _SalesPageState extends State<SalesPage> {
                                         // } else {
                                         //   cubit.updateIsSearching(value: true);
                                         // }
-                                        setState(() {});
+                                        // setState(() {}); //FIX THISSSSSSSSSSSSSSSS
                                       },
                                       onEditingComplete: () {
                                         // if (ctrlSearch.text.trim().length > 3) {

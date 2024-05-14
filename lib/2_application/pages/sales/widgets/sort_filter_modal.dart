@@ -63,10 +63,12 @@ class _SortFilterModalState extends State<SortFilterModal> {
   void initState() {
     final userBox = Hive.box<SortFilterHive>('sortFilter');
     if (userBox.values.isNotEmpty) {
-      selectedCommissionStatus = userBox.values.first.selectedCommissionStatus;
+      selectedCommissionStatus = convertStringsToCommissionStatuses(
+        userBox.values.first.selectedCommissionStatus,
+      );
       selectedInvoicePaymentStatus =
-          userBox.values.first.selectedInvoicePaymentStatus;
-      selectedDeliverStatus = userBox.values.first.selectedDeliverStatus;
+          []; //userBox.values.first.selectedInvoicePaymentStatus;
+      selectedDeliverStatus = []; // userBox.values.first.selectedDeliverStatus;
     }
 
     selectedSort = CourseSortBy.newestFirst;
@@ -125,9 +127,11 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         await sortFilterBox.clear();
                         await sortFilterBox.add(
                           SortFilterHive(
-                            selectedCommissionStatus,
-                            selectedInvoicePaymentStatus,
-                            selectedDeliverStatus,
+                            convertCommissionStatusesToStrings(
+                              selectedCommissionStatus,
+                            ),
+                            [],
+                            [],
                           ),
                         );
                         // if (!cubit.isClosed) {
@@ -223,6 +227,9 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   );
                 }).toList(),
               ),
+              Text('hive 1' + selectedCommissionStatus.toString()),
+              Text('hive 2' + selectedInvoicePaymentStatus.toString()),
+              Text('hive 3' + selectedDeliverStatus.toString()),
               const Padding(
                 padding: EdgeInsets.only(
                   left: 24,
@@ -232,7 +239,20 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 child: Divider(),
               ),
 
-              CommissionStatusCheckList(),
+              CommissionStatusCheckList(
+                selectedCommissionStatus: selectedCommissionStatus,
+                onChanged: (newValue, status) {
+                  if (newValue) {
+                    setState(() {
+                      selectedCommissionStatus.add(status);
+                    });
+                  } else {
+                    setState(() {
+                      selectedCommissionStatus.remove(status);
+                    });
+                  }
+                },
+              ),
               // const CustomCheckBoxTile(
               //   title: 'Paid',
               //   value: false,
@@ -249,7 +269,20 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 child: Divider(),
               ),
 
-              InvoicePaymentStatusCheckList(),
+              InvoicePaymentStatusCheckList(
+                selectedInvoicePaymentStatus: selectedInvoicePaymentStatus,
+                onChanged: (newValue, status) {
+                  if (newValue) {
+                    setState(() {
+                      selectedInvoicePaymentStatus.add(status);
+                    });
+                  } else {
+                    setState(() {
+                      selectedInvoicePaymentStatus.remove(status);
+                    });
+                  }
+                },
+              ),
               // const CustomCheckBoxTile(
               //   title: 'Paid',
               //   value: false,
@@ -273,7 +306,20 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 ),
                 child: Divider(),
               ),
-              DeliveryStatusCheckList(),
+              DeliveryStatusCheckList(
+                selectedDeliverStatus: selectedDeliverStatus,
+                onChanged: (newValue, status) {
+                  if (newValue) {
+                    setState(() {
+                      selectedDeliverStatus.add(status);
+                    });
+                  } else {
+                    setState(() {
+                      selectedDeliverStatus.remove(status);
+                    });
+                  }
+                },
+              ),
               const SizedBox(height: 60),
               // Column(
               //   children: CourseFilterBy.values.map((filter) {
@@ -374,16 +420,16 @@ class CustomCheckBoxTile extends StatelessWidget {
   }
 }
 
-class CommissionStatusCheckList extends StatefulWidget {
-  const CommissionStatusCheckList({super.key});
+class CommissionStatusCheckList extends StatelessWidget {
+  const CommissionStatusCheckList({
+    required this.selectedCommissionStatus,
+    required this.onChanged,
+    super.key,
+  });
+  final List<CommissionStatus> selectedCommissionStatus;
+  final Function(bool, CommissionStatus status) onChanged;
 
-  @override
-  State<CommissionStatusCheckList> createState() =>
-      _CommissionStatusCheckListState();
-}
-
-class _CommissionStatusCheckListState extends State<CommissionStatusCheckList> {
-  List<CommissionStatus> selectedStatus = [];
+  // List<CommissionStatus> selectedStatus = [];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -396,23 +442,26 @@ class _CommissionStatusCheckListState extends State<CommissionStatusCheckList> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
-        Text(selectedStatus.toString()),
+        Text(selectedCommissionStatus.toString()),
         ...CommissionStatus.values.map(
           (status) => CustomCheckBoxTile(
             title: status.name,
-            value: selectedStatus
+            value: selectedCommissionStatus
                 .contains(status), // Update value based on selectedStatus
-            onChanged: (newValue) => setState(() {
-              if (newValue!) {
-                setState(() {
-                  selectedStatus.add(status);
-                });
-              } else {
-                setState(() {
-                  selectedStatus.remove(status);
-                });
-              }
-            }),
+            onChanged: (newValue) {
+              onChanged(newValue ?? false, status);
+              //setState(() {
+              // if (newValue!) {
+              //   setState(() {
+              //     selectedStatus.add(status);
+              //   });
+              // } else {
+              //   setState(() {
+              //     selectedStatus.remove(status);
+              //   });
+              // }
+            },
+            //}),
           ),
         ),
       ],
@@ -420,17 +469,14 @@ class _CommissionStatusCheckListState extends State<CommissionStatusCheckList> {
   }
 }
 
-class InvoicePaymentStatusCheckList extends StatefulWidget {
-  const InvoicePaymentStatusCheckList({super.key});
-
-  @override
-  State<InvoicePaymentStatusCheckList> createState() =>
-      _InvoicePaymentStatusCheckListState();
-}
-
-class _InvoicePaymentStatusCheckListState
-    extends State<InvoicePaymentStatusCheckList> {
-  List<InvoicePaymentStatus> selectedStatus = [];
+class InvoicePaymentStatusCheckList extends StatelessWidget {
+  const InvoicePaymentStatusCheckList({
+    required this.selectedInvoicePaymentStatus,
+    required this.onChanged,
+    super.key,
+  });
+  final List<InvoicePaymentStatus> selectedInvoicePaymentStatus;
+  final Function(bool, InvoicePaymentStatus status) onChanged;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -443,23 +489,15 @@ class _InvoicePaymentStatusCheckListState
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
-        Text(selectedStatus.toString()),
+        Text(selectedInvoicePaymentStatus.toString()),
         ...InvoicePaymentStatus.values.map(
           (status) => CustomCheckBoxTile(
             title: status.name,
-            value: selectedStatus
+            value: selectedInvoicePaymentStatus
                 .contains(status), // Update value based on selectedStatus
-            onChanged: (newValue) => setState(() {
-              if (newValue!) {
-                setState(() {
-                  selectedStatus.add(status);
-                });
-              } else {
-                setState(() {
-                  selectedStatus.remove(status);
-                });
-              }
-            }),
+            onChanged: (newValue) {
+              onChanged(newValue ?? false, status);
+            },
           ),
         ),
       ],
@@ -467,16 +505,15 @@ class _InvoicePaymentStatusCheckListState
   }
 }
 
-class DeliveryStatusCheckList extends StatefulWidget {
-  const DeliveryStatusCheckList({super.key});
+class DeliveryStatusCheckList extends StatelessWidget {
+  const DeliveryStatusCheckList({
+    required this.selectedDeliverStatus,
+    required this.onChanged,
+    super.key,
+  });
+  final List<DeliveryStatus> selectedDeliverStatus;
+  final Function(bool, DeliveryStatus status) onChanged;
 
-  @override
-  State<DeliveryStatusCheckList> createState() =>
-      _DeliveryStatusCheckListState();
-}
-
-class _DeliveryStatusCheckListState extends State<DeliveryStatusCheckList> {
-  List<DeliveryStatus> selectedStatus = [];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -489,23 +526,15 @@ class _DeliveryStatusCheckListState extends State<DeliveryStatusCheckList> {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
-        Text(selectedStatus.toString()),
+        Text(selectedDeliverStatus.toString()),
         ...DeliveryStatus.values.map(
           (status) => CustomCheckBoxTile(
             title: status.name,
-            value: selectedStatus
+            value: selectedDeliverStatus
                 .contains(status), // Update value based on selectedStatus
-            onChanged: (newValue) => setState(() {
-              if (newValue!) {
-                setState(() {
-                  selectedStatus.add(status);
-                });
-              } else {
-                setState(() {
-                  selectedStatus.remove(status);
-                });
-              }
-            }),
+            onChanged: (newValue) {
+              onChanged(newValue ?? false, status);
+            },
           ),
         ),
       ],

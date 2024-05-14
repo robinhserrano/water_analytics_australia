@@ -17,6 +17,37 @@ enum CommissionStatus {
   }
 }
 
+List<String> convertCommissionStatusesToStrings(
+  List<CommissionStatus> statuses,
+) {
+  return statuses.map((status) => status.backendName).toList();
+}
+
+List<CommissionStatus> convertStringsToCommissionStatuses(
+  List<String> statusStrings,
+) {
+  return statusStrings.map((statusString) {
+    switch (statusString) {
+      case 'paid':
+        return CommissionStatus.paid;
+      case 'not_paid':
+        return CommissionStatus.notPaid;
+      default:
+        throw Exception('Unsupported backendName: $statusString');
+    }
+  }).toList();
+}
+// CommissionStatus stringToCommissionStatus(String statusString) {
+//   switch (statusString) {
+//     case 'paid':
+//       return CommissionStatus.paid;
+//     case 'not_paid':
+//       return CommissionStatus.notPaid;
+//     default:
+//       throw Exception('Unsupported status string');
+//   }
+// }
+
 enum InvoicePaymentStatus {
   full,
   partial,

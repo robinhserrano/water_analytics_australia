@@ -17,9 +17,9 @@ class SortFilterHiveAdapter extends TypeAdapter<SortFilterHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SortFilterHive(
-      (fields[0] as List).cast<CommissionStatus>(),
-      (fields[1] as List).cast<InvoicePaymentStatus>(),
-      (fields[2] as List).cast<DeliveryStatus>(),
+      (fields[0] as List).cast<String>(),
+      (fields[1] as List).cast<String>(),
+      (fields[2] as List).cast<String>(),
     );
   }
 

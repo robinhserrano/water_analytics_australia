@@ -14,7 +14,8 @@ void main() async {
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
   Hive
     ..init(appDocumentDir.path)
-    ..registerAdapter(UserHiveAdapter());
+    ..registerAdapter(UserHiveAdapter())
+    ..registerAdapter(SortFilterHiveAdapter());
 
   await Hive.openBox<UserHive>('user');
   await Hive.openBox<SortFilterHive>('sortFilter');

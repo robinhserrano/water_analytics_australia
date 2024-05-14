@@ -13,11 +13,11 @@ class SortFilterHive {
     this.selectedDeliverStatus,
   );
   @HiveField(0)
-  final List<CommissionStatus> selectedCommissionStatus;
+  final List<String> selectedCommissionStatus;
 
   @HiveField(1)
-  final List<InvoicePaymentStatus> selectedInvoicePaymentStatus;
+  final List<String> selectedInvoicePaymentStatus;
 
   @HiveField(2)
-  final List<DeliveryStatus> selectedDeliverStatus;
+  final List<String> selectedDeliverStatus;
 }
