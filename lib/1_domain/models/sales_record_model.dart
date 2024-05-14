@@ -12,7 +12,9 @@ class SalesOrder with _$SalesOrder {
     required String? name, //A
     @JsonKey(name: 'create_date') required DateTime? createDate, //B
     @JsonKey(name: 'partner_id') required PartnerIdModel? partnerId, //C-E
-    @JsonKey(name: 'x_studio_sales_rep_1') required String xStudioSalesRep1, //F
+    @JsonKey(name: 'x_studio_sales_rep_1')
+    @BoolStringConverter()
+    required String? xStudioSalesRep1, //F
     @JsonKey(name: 'x_studio_sales_source')
     required String xStudioSalesSource, //G
     @JsonKey(name: 'x_studio_commission_paid')

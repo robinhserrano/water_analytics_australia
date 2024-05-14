@@ -111,7 +111,7 @@ class Repository {
         'model': 'sale.order',
         'method': 'web_search_read',
         'args': [
-          domain,
+          [], // domain,
           specification,
         ],
         'kwargs': {},

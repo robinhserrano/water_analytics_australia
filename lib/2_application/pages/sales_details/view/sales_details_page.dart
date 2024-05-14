@@ -462,7 +462,7 @@ class SalesDetailsPageLoaded extends HookWidget {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  order.xStudioSalesRep1,
+                                  order.xStudioSalesRep1 ?? '',
                                   style: const TextStyle(
                                     color: Color(0xff7a7a7a),
                                   ),

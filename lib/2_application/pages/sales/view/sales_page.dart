@@ -11,6 +11,7 @@ import 'package:water_analytics_australia/1_domain/models/sales_record_model.dar
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sales_record_card.dart';
+import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
@@ -51,6 +52,7 @@ class _SalesPageState extends State<SalesPage> {
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: const EndDrawer(),
+      drawer: const SortFilterModal(),
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -111,59 +113,75 @@ class _SalesPageState extends State<SalesPage> {
                         )
                       : Column(
                           children: [
-                            Container(
-                              decoration: const BoxDecoration(
-                                color: Color(0xffeeeef0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              child: TextFormField(
-                                controller: ctrlSearch,
-                                enableSuggestions: false,
-                                autocorrect: false,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  labelStyle: TextStyle(color: Colors.green),
-                                  hintText: 'Search',
-                                  hintStyle: TextStyle(
-                                    color: Color(0xff5f5f60),
-                                    fontWeight: FontWeight.w400,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffeeeef0),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    margin: const EdgeInsets.only(
+                                      left: 16,
+                                      top: 8,
+                                      bottom: 8,
+                                    ),
+                                    child: TextFormField(
+                                      controller: ctrlSearch,
+                                      enableSuggestions: false,
+                                      autocorrect: false,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        labelStyle:
+                                            TextStyle(color: Colors.green),
+                                        hintText: 'Search',
+                                        hintStyle: TextStyle(
+                                          color: Color(0xff5f5f60),
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        // if (ctrlSearch.text.trim().length > 3) {
+                                        //   cubit.fetch(
+                                        //     searchQuery: ctrlSearch.text,
+                                        //   );
+                                        // } else {
+                                        //   cubit.updateIsSearching(value: true);
+                                        // }
+                                        setState(() {});
+                                      },
+                                      onEditingComplete: () {
+                                        // if (ctrlSearch.text.trim().length > 3) {
+                                        //   cubit.fetch(
+                                        //     searchQuery: ctrlSearch.text,
+                                        //     isSubmitted: true,
+                                        //   );
+                                        // }
+                                      },
+                                      onFieldSubmitted: (value) {
+                                        // if (value.trim().length > 3) {
+                                        //   cubit.fetch(
+                                        //     searchQuery: value,
+                                        //     isSubmitted: true,
+                                        //   );
+                                        // }
+                                      },
+                                    ),
                                   ),
                                 ),
-                                onChanged: (value) {
-                                  // if (ctrlSearch.text.trim().length > 3) {
-                                  //   cubit.fetch(
-                                  //     searchQuery: ctrlSearch.text,
-                                  //   );
-                                  // } else {
-                                  //   cubit.updateIsSearching(value: true);
-                                  // }
-                                  setState(() {});
-                                },
-                                onEditingComplete: () {
-                                  // if (ctrlSearch.text.trim().length > 3) {
-                                  //   cubit.fetch(
-                                  //     searchQuery: ctrlSearch.text,
-                                  //     isSubmitted: true,
-                                  //   );
-                                  // }
-                                },
-                                onFieldSubmitted: (value) {
-                                  // if (value.trim().length > 3) {
-                                  //   cubit.fetch(
-                                  //     searchQuery: value,
-                                  //     isSubmitted: true,
-                                  //   );
-                                  // }
-                                },
-                              ),
+                                IconButton(
+                                  onPressed: () {
+                                    _scaffoldKey.currentState!.openDrawer();
+                                  },
+                                  icon: const HeroIcon(
+                                    HeroIcons.adjustmentsHorizontal,
+                                  ),
+                                ),
+                              ],
                             ),
                             Expanded(
                               child: Scrollbar(

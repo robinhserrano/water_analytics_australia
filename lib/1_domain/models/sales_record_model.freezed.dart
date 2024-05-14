@@ -27,7 +27,8 @@ mixin _$SalesOrder {
   @JsonKey(name: 'partner_id')
   PartnerIdModel? get partnerId => throw _privateConstructorUsedError; //C-E
   @JsonKey(name: 'x_studio_sales_rep_1')
-  String get xStudioSalesRep1 => throw _privateConstructorUsedError; //F
+  @BoolStringConverter()
+  String? get xStudioSalesRep1 => throw _privateConstructorUsedError; //F
   @JsonKey(name: 'x_studio_sales_source')
   String get xStudioSalesSource => throw _privateConstructorUsedError; //G
   @JsonKey(name: 'x_studio_commission_paid')
@@ -81,7 +82,9 @@ abstract class $SalesOrderCopyWith<$Res> {
       String? name,
       @JsonKey(name: 'create_date') DateTime? createDate,
       @JsonKey(name: 'partner_id') PartnerIdModel? partnerId,
-      @JsonKey(name: 'x_studio_sales_rep_1') String xStudioSalesRep1,
+      @JsonKey(name: 'x_studio_sales_rep_1')
+      @BoolStringConverter()
+      String? xStudioSalesRep1,
       @JsonKey(name: 'x_studio_sales_source') String xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid') bool xStudioCommissionPaid,
       @JsonKey(name: 'x_studio_referred_by')
@@ -131,7 +134,7 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
     Object? name = freezed,
     Object? createDate = freezed,
     Object? partnerId = freezed,
-    Object? xStudioSalesRep1 = null,
+    Object? xStudioSalesRep1 = freezed,
     Object? xStudioSalesSource = null,
     Object? xStudioCommissionPaid = null,
     Object? xStudioReferredBy = null,
@@ -166,10 +169,10 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
           ? _value.partnerId
           : partnerId // ignore: cast_nullable_to_non_nullable
               as PartnerIdModel?,
-      xStudioSalesRep1: null == xStudioSalesRep1
+      xStudioSalesRep1: freezed == xStudioSalesRep1
           ? _value.xStudioSalesRep1
           : xStudioSalesRep1 // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       xStudioSalesSource: null == xStudioSalesSource
           ? _value.xStudioSalesSource
           : xStudioSalesSource // ignore: cast_nullable_to_non_nullable
@@ -307,7 +310,9 @@ abstract class _$$SalesOrderImplCopyWith<$Res>
       String? name,
       @JsonKey(name: 'create_date') DateTime? createDate,
       @JsonKey(name: 'partner_id') PartnerIdModel? partnerId,
-      @JsonKey(name: 'x_studio_sales_rep_1') String xStudioSalesRep1,
+      @JsonKey(name: 'x_studio_sales_rep_1')
+      @BoolStringConverter()
+      String? xStudioSalesRep1,
       @JsonKey(name: 'x_studio_sales_source') String xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid') bool xStudioCommissionPaid,
       @JsonKey(name: 'x_studio_referred_by')
@@ -360,7 +365,7 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
     Object? name = freezed,
     Object? createDate = freezed,
     Object? partnerId = freezed,
-    Object? xStudioSalesRep1 = null,
+    Object? xStudioSalesRep1 = freezed,
     Object? xStudioSalesSource = null,
     Object? xStudioCommissionPaid = null,
     Object? xStudioReferredBy = null,
@@ -395,10 +400,10 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
           ? _value.partnerId
           : partnerId // ignore: cast_nullable_to_non_nullable
               as PartnerIdModel?,
-      xStudioSalesRep1: null == xStudioSalesRep1
+      xStudioSalesRep1: freezed == xStudioSalesRep1
           ? _value.xStudioSalesRep1
           : xStudioSalesRep1 // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       xStudioSalesSource: null == xStudioSalesSource
           ? _value.xStudioSalesSource
           : xStudioSalesSource // ignore: cast_nullable_to_non_nullable
@@ -475,7 +480,9 @@ class _$SalesOrderImpl implements _SalesOrder {
       required this.name,
       @JsonKey(name: 'create_date') required this.createDate,
       @JsonKey(name: 'partner_id') required this.partnerId,
-      @JsonKey(name: 'x_studio_sales_rep_1') required this.xStudioSalesRep1,
+      @JsonKey(name: 'x_studio_sales_rep_1')
+      @BoolStringConverter()
+      required this.xStudioSalesRep1,
       @JsonKey(name: 'x_studio_sales_source') required this.xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid')
       required this.xStudioCommissionPaid,
@@ -518,7 +525,8 @@ class _$SalesOrderImpl implements _SalesOrder {
 //C-E
   @override
   @JsonKey(name: 'x_studio_sales_rep_1')
-  final String xStudioSalesRep1;
+  @BoolStringConverter()
+  final String? xStudioSalesRep1;
 //F
   @override
   @JsonKey(name: 'x_studio_sales_source')
@@ -693,7 +701,8 @@ abstract class _SalesOrder implements SalesOrder {
       @JsonKey(name: 'create_date') required final DateTime? createDate,
       @JsonKey(name: 'partner_id') required final PartnerIdModel? partnerId,
       @JsonKey(name: 'x_studio_sales_rep_1')
-      required final String xStudioSalesRep1,
+      @BoolStringConverter()
+      required final String? xStudioSalesRep1,
       @JsonKey(name: 'x_studio_sales_source')
       required final String xStudioSalesSource,
       @JsonKey(name: 'x_studio_commission_paid')
@@ -740,7 +749,8 @@ abstract class _SalesOrder implements SalesOrder {
   PartnerIdModel? get partnerId;
   @override //C-E
   @JsonKey(name: 'x_studio_sales_rep_1')
-  String get xStudioSalesRep1;
+  @BoolStringConverter()
+  String? get xStudioSalesRep1;
   @override //F
   @JsonKey(name: 'x_studio_sales_source')
   String get xStudioSalesSource;

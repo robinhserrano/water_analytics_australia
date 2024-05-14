@@ -16,7 +16,8 @@ _$SalesOrderImpl _$$SalesOrderImplFromJson(Map<String, dynamic> json) =>
       partnerId: json['partner_id'] == null
           ? null
           : PartnerIdModel.fromJson(json['partner_id'] as Map<String, dynamic>),
-      xStudioSalesRep1: json['x_studio_sales_rep_1'] as String,
+      xStudioSalesRep1:
+          const BoolStringConverter().fromJson(json['x_studio_sales_rep_1']),
       xStudioSalesSource: json['x_studio_sales_source'] as String,
       xStudioCommissionPaid: json['x_studio_commission_paid'] as bool,
       xStudioReferredBy: const BoolRefferedByConverter()
@@ -48,7 +49,8 @@ Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
       'name': instance.name,
       'create_date': instance.createDate?.toIso8601String(),
       'partner_id': instance.partnerId,
-      'x_studio_sales_rep_1': instance.xStudioSalesRep1,
+      'x_studio_sales_rep_1': _$JsonConverterToJson<dynamic, String>(
+          instance.xStudioSalesRep1, const BoolStringConverter().toJson),
       'x_studio_sales_source': instance.xStudioSalesSource,
       'x_studio_commission_paid': instance.xStudioCommissionPaid,
       'x_studio_referred_by':
