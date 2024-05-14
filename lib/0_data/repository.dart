@@ -22,34 +22,6 @@ class Repository {
   }
 
   Future<List<SalesOrder>?> fetchSales() async {
-    // final specification = {
-    //   'name': {},
-    //   'partner_id': {
-    //     'fields': {
-    //       'display_name': {},
-    //     },
-    //   },
-    //   'amount_total': {},
-    //   'amount_to_invoice': {},
-    //   'date_order': {},
-    //   'state': {},
-    //   'currency_id': {
-    //     'fields': {
-    //       'display_name': {},
-    //     },
-    //   },
-    //   'activity_state': {},
-    //   'activity_ids': {'fields': {}},
-    //   'activity_exception_decoration': {},
-    //   'activity_exception_icon': {},
-    //   'activity_summary': {},
-    //   'activity_type_icon': {},
-    //   'activity_type_id': {
-    //     'fields': {
-    //       'display_name': {},
-    //     },
-    //   },
-    // };
     final specification = {
       'name': {}, //A
       'create_date': {}, //B
@@ -82,24 +54,35 @@ class Repository {
           'display_name': {},
         },
       },
-      // 'order_line': {
-      //   'fields': {
-      //     'product_template_id': {
-      //       'fields': {'display_name': {}},
-      //     }, // a
-      //     'name': {}, //b
-      //     'product_uom_qty': {}, //c
-      //     'qty_delivered': {}, //d
-      //     'qty_invoiced': {}, //e
-      //     'price_unit': {}, //f
-      //     'tax_id': {
-      //       //g
-      //       'fields': {'display_name': {}},
-      //     },
-      //     'discount': {}, //h
-      //     'price_subtotal': {}, //i
-      //   },
-      // },
+      'team_id': {
+        'fields': {
+          'display_name': {},
+        },
+      },
+      'tag_ids': {
+        'fields': {
+          'display_name': {},
+        },
+      },
+      'order_line': {
+        'fields': {
+          'product_template_id': {
+            'fields': {'display_name': {}},
+          }, // a
+          'name': {}, //b
+          'product_uom_qty': {}, //c
+          'qty_delivered': {}, //d
+          'qty_invoiced': {}, //e
+          'price_unit': {}, //f
+          'tax_id': {
+            //g
+            'fields': {'display_name': {}},
+          },
+          'discount': {}, //h
+          'price_subtotal': {}, //i
+        },
+      },
+      'tax_totals': {},
     };
 
     final domain = [
@@ -122,7 +105,16 @@ class Repository {
               .cast<Map<String, dynamic>>();
       final parsedData = data.map(SalesOrder.fromJson).toList();
 
-      return parsedData;
+      final filteredData = parsedData
+          .where(
+            (element) =>
+                element.tagIds?.any(
+                  (element) => element.displayName == 'Retail System',
+                ) ??
+                false,
+          )
+          .toList();
+      return filteredData;
     } on OdooSessionExpiredException catch (_) {
       final user = await HiveHelper.getAllUsers();
       if (user.isNotEmpty) {

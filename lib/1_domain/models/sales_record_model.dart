@@ -40,7 +40,7 @@ class SalesOrder with _$SalesOrder {
     @JsonKey(name: 'team_id')
     @BoolRefferedByConverter()
     required DisplayNameModel? teamId,
-    @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
+    // @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
     @JsonKey(name: 'tag_ids') required List<TagIdModel>? tagIds,
     @JsonKey(name: 'tax_totals') required TaxTotalsModel? taxTotals,
   }) = _SalesOrder;

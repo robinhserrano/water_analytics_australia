@@ -10,6 +10,7 @@ import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart'
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sort_filter_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
@@ -30,6 +31,7 @@ class SalesPageWrapperProvider extends StatelessWidget {
 }
 
 class SalesPage extends StatefulWidget {
+  
   const SalesPage({required this.client, super.key});
 
   static const name = 'sales';
@@ -113,6 +115,7 @@ class _SalesPageState extends State<SalesPage> {
                         )
                       : Column(
                           children: [
+                            Text(state.records.length.toString()),
                             Row(
                               children: [
                                 Expanded(

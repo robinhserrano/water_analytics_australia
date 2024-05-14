@@ -32,9 +32,6 @@ _$SalesOrderImpl _$$SalesOrderImplFromJson(Map<String, dynamic> json) =>
       state: json['state'] as String?,
       userId: const BoolRefferedByConverter().fromJson(json['user_id']),
       teamId: const BoolRefferedByConverter().fromJson(json['team_id']),
-      orderLine: (json['order_line'] as List<dynamic>?)
-          ?.map((e) => OrderLine.fromJson(e as Map<String, dynamic>))
-          .toList(),
       tagIds: (json['tag_ids'] as List<dynamic>?)
           ?.map((e) => TagIdModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -67,7 +64,6 @@ Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
           instance.userId, const BoolRefferedByConverter().toJson),
       'team_id': _$JsonConverterToJson<dynamic, DisplayNameModel>(
           instance.teamId, const BoolRefferedByConverter().toJson),
-      'order_line': instance.orderLine,
       'tag_ids': instance.tagIds,
       'tax_totals': instance.taxTotals,
     };

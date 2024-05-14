@@ -57,9 +57,8 @@ mixin _$SalesOrder {
   DisplayNameModel? get userId => throw _privateConstructorUsedError;
   @JsonKey(name: 'team_id')
   @BoolRefferedByConverter()
-  DisplayNameModel? get teamId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'order_line')
-  List<OrderLine>? get orderLine => throw _privateConstructorUsedError;
+  DisplayNameModel? get teamId =>
+      throw _privateConstructorUsedError; // @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
   @JsonKey(name: 'tag_ids')
   List<TagIdModel>? get tagIds => throw _privateConstructorUsedError;
   @JsonKey(name: 'tax_totals')
@@ -106,7 +105,6 @@ abstract class $SalesOrderCopyWith<$Res> {
       @JsonKey(name: 'team_id')
       @BoolRefferedByConverter()
       DisplayNameModel? teamId,
-      @JsonKey(name: 'order_line') List<OrderLine>? orderLine,
       @JsonKey(name: 'tag_ids') List<TagIdModel>? tagIds,
       @JsonKey(name: 'tax_totals') TaxTotalsModel? taxTotals});
 
@@ -148,7 +146,6 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
     Object? state = freezed,
     Object? userId = freezed,
     Object? teamId = freezed,
-    Object? orderLine = freezed,
     Object? tagIds = freezed,
     Object? taxTotals = freezed,
   }) {
@@ -225,10 +222,6 @@ class _$SalesOrderCopyWithImpl<$Res, $Val extends SalesOrder>
           ? _value.teamId
           : teamId // ignore: cast_nullable_to_non_nullable
               as DisplayNameModel?,
-      orderLine: freezed == orderLine
-          ? _value.orderLine
-          : orderLine // ignore: cast_nullable_to_non_nullable
-              as List<OrderLine>?,
       tagIds: freezed == tagIds
           ? _value.tagIds
           : tagIds // ignore: cast_nullable_to_non_nullable
@@ -334,7 +327,6 @@ abstract class _$$SalesOrderImplCopyWith<$Res>
       @JsonKey(name: 'team_id')
       @BoolRefferedByConverter()
       DisplayNameModel? teamId,
-      @JsonKey(name: 'order_line') List<OrderLine>? orderLine,
       @JsonKey(name: 'tag_ids') List<TagIdModel>? tagIds,
       @JsonKey(name: 'tax_totals') TaxTotalsModel? taxTotals});
 
@@ -379,7 +371,6 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
     Object? state = freezed,
     Object? userId = freezed,
     Object? teamId = freezed,
-    Object? orderLine = freezed,
     Object? tagIds = freezed,
     Object? taxTotals = freezed,
   }) {
@@ -456,10 +447,6 @@ class __$$SalesOrderImplCopyWithImpl<$Res>
           ? _value.teamId
           : teamId // ignore: cast_nullable_to_non_nullable
               as DisplayNameModel?,
-      orderLine: freezed == orderLine
-          ? _value._orderLine
-          : orderLine // ignore: cast_nullable_to_non_nullable
-              as List<OrderLine>?,
       tagIds: freezed == tagIds
           ? _value._tagIds
           : tagIds // ignore: cast_nullable_to_non_nullable
@@ -501,11 +488,9 @@ class _$SalesOrderImpl implements _SalesOrder {
       required this.state,
       @JsonKey(name: 'user_id') @BoolRefferedByConverter() required this.userId,
       @JsonKey(name: 'team_id') @BoolRefferedByConverter() required this.teamId,
-      @JsonKey(name: 'order_line') required final List<OrderLine>? orderLine,
       @JsonKey(name: 'tag_ids') required final List<TagIdModel>? tagIds,
       @JsonKey(name: 'tax_totals') required this.taxTotals})
-      : _orderLine = orderLine,
-        _tagIds = tagIds;
+      : _tagIds = tagIds;
 
   factory _$SalesOrderImpl.fromJson(Map<String, dynamic> json) =>
       _$$SalesOrderImplFromJson(json);
@@ -577,18 +562,9 @@ class _$SalesOrderImpl implements _SalesOrder {
   @JsonKey(name: 'team_id')
   @BoolRefferedByConverter()
   final DisplayNameModel? teamId;
-  final List<OrderLine>? _orderLine;
-  @override
-  @JsonKey(name: 'order_line')
-  List<OrderLine>? get orderLine {
-    final value = _orderLine;
-    if (value == null) return null;
-    if (_orderLine is EqualUnmodifiableListView) return _orderLine;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
+// @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
   final List<TagIdModel>? _tagIds;
+// @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
   @override
   @JsonKey(name: 'tag_ids')
   List<TagIdModel>? get tagIds {
@@ -605,7 +581,7 @@ class _$SalesOrderImpl implements _SalesOrder {
 
   @override
   String toString() {
-    return 'SalesOrder(id: $id, name: $name, createDate: $createDate, partnerId: $partnerId, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferredBy: $xStudioReferredBy, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, userId: $userId, teamId: $teamId, orderLine: $orderLine, tagIds: $tagIds, taxTotals: $taxTotals)';
+    return 'SalesOrder(id: $id, name: $name, createDate: $createDate, partnerId: $partnerId, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferredBy: $xStudioReferredBy, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, userId: $userId, teamId: $teamId, tagIds: $tagIds, taxTotals: $taxTotals)';
   }
 
   @override
@@ -646,8 +622,6 @@ class _$SalesOrderImpl implements _SalesOrder {
             (identical(other.state, state) || other.state == state) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.teamId, teamId) || other.teamId == teamId) &&
-            const DeepCollectionEquality()
-                .equals(other._orderLine, _orderLine) &&
             const DeepCollectionEquality().equals(other._tagIds, _tagIds) &&
             (identical(other.taxTotals, taxTotals) ||
                 other.taxTotals == taxTotals));
@@ -675,7 +649,6 @@ class _$SalesOrderImpl implements _SalesOrder {
         state,
         userId,
         teamId,
-        const DeepCollectionEquality().hash(_orderLine),
         const DeepCollectionEquality().hash(_tagIds),
         taxTotals
       ]);
@@ -729,7 +702,6 @@ abstract class _SalesOrder implements SalesOrder {
       @JsonKey(name: 'team_id')
       @BoolRefferedByConverter()
       required final DisplayNameModel? teamId,
-      @JsonKey(name: 'order_line') required final List<OrderLine>? orderLine,
       @JsonKey(name: 'tag_ids') required final List<TagIdModel>? tagIds,
       @JsonKey(name: 'tax_totals')
       required final TaxTotalsModel? taxTotals}) = _$SalesOrderImpl;
@@ -792,10 +764,7 @@ abstract class _SalesOrder implements SalesOrder {
   @JsonKey(name: 'team_id')
   @BoolRefferedByConverter()
   DisplayNameModel? get teamId;
-  @override
-  @JsonKey(name: 'order_line')
-  List<OrderLine>? get orderLine;
-  @override
+  @override // @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
   @JsonKey(name: 'tag_ids')
   List<TagIdModel>? get tagIds;
   @override

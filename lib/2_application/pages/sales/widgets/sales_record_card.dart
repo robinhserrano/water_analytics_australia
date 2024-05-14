@@ -73,6 +73,34 @@ class SalesRecordCard extends StatelessWidget {
                         ],
                       ),
                     ),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     vertical: 4,
+                    //     horizontal: 8,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(
+                    //       20,
+                    //     ),
+                    //     border: Border.all(
+                    //       color: record.state == 'sale'
+                    //           ? const Color(0xff2ca444)
+                    //           : const Color(0xffd8dadd),
+                    //     ),
+                    //     color: record.state == 'sale'
+                    //         ? const Color(0xff2ca444)
+                    //         : const Color(0xffd8dadd),
+                    //   ),
+                    //   child: Text(
+                    //     record.state == 'sale' ? 'Sales Order' : 'Cancelled',
+                    //     style: TextStyle(
+                    //       fontWeight: FontWeight.w400,
+                    //       color: record.state == 'sale'
+                    //           ? Colors.white
+                    //           : Colors.black87,
+                    //     ),
+                    //   ),
+                    // ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 4,
@@ -92,13 +120,40 @@ class SalesRecordCard extends StatelessWidget {
                             : const Color(0xffd8dadd),
                       ),
                       child: Text(
-                        record.state == 'sale' ? 'Sales Order' : 'Cancelled',
+                        record.tagIds?[0].displayName ?? 'NONE',
+                        // record.state == 'sale' ? 'Sales Order' : 'Cancelled',
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           color: record.state == 'sale'
                               ? Colors.white
                               : Colors.black87,
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Commissions Paid',
+                    ),
+                    const Spacer(),
+                    Checkbox(
+                      value: record.xStudioCommissionPaid,
+                      activeColor: Colors.blue,
+                      onChanged: (value) {},
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Delivery Status',
+                    ),
+                    const Spacer(),
+                    Text(
+                      capitalizeFirstLetter(
+                        (record.deliveryStatus ?? '').toString(),
                       ),
                     ),
                   ],
