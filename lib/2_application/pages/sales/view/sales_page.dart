@@ -152,42 +152,44 @@ class _SalesPageState extends State<SalesPage> {
                           )
                           .toList();
 
-                      // final one = state.records.where(
-                      //   (e) {
-                      //     if (commissionStatus.isNotEmpty) {
-                      //       return commissionStatus.contains(
-                      //         e.xStudioCommissionPaid.toString(),
-                      //       );
-                      //     } else {
-                      //       return true;
-                      //     }
-                      //   },
-                      // ).toList();
+                      //Z-A
 
-                      // final two = one.where(
-                      //   (e) {
-                      //     if (invoicePaymentStatus.isNotEmpty) {
-                      //       return invoicePaymentStatus.contains(
-                      //         e.xStudioInvoicePaymentStatus.toString(),
-                      //       );
-                      //     } else {
-                      //       return true;
-                      //     }
-                      //   },
-                      // ).toList();
-
-                      // final three = two.where(
-                      //   (e) {
-                      //     if (deliverStatus.isNotEmpty) {
-                      //       return deliverStatus.contains(
-                      //         e.deliveryStatus.toString(),
-                      //       );
-                      //     } else {
-                      //       return true;
-                      //     }
-                      //   },
-                      // ).toList();   
-
+//                       final sortedRecords = filteredRecords.sort((a, b) => {
+//   var nameA = a.partnerId?.displayName?.toLowerCase();
+//   var nameB = b.partnerId?.displayName?.toLowerCase();
+//   if (nameA > nameB) return -1;
+//   if (nameA < nameB) return 1;
+//   return 0;
+// });
+                      var selectedSortValue = 'Z-A';
+                      if (selectedSortValue == 'Newest') {
+                        filteredRecords.sort(
+                          (a, b) => b.createDate!.compareTo(a.createDate!),
+                        );
+                      }
+                      if (selectedSortValue == 'Oldest') {
+                        filteredRecords.sort(
+                          (a, b) => a.createDate!.compareTo(b.createDate!),
+                        );
+                      }
+                      if (selectedSortValue == 'A-Z') {
+                        filteredRecords.sort(
+                          (a, b) => (a.partnerId?.displayName ?? '')
+                              .toLowerCase()
+                              .compareTo(
+                                (b.partnerId?.displayName ?? '').toLowerCase(),
+                              ),
+                        );
+                      }
+                      if (selectedSortValue == 'Z-A') {
+                        filteredRecords.sort(
+                          (a, b) => (b.partnerId?.displayName ?? '')
+                              .toLowerCase()
+                              .compareTo(
+                                (a.partnerId?.displayName ?? '').toLowerCase(),
+                              ),
+                        );
+                      }
                       return SalesListPageLoaded(
                         records: filteredRecords,
                       );

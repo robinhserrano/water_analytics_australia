@@ -32,6 +32,9 @@ _$SalesOrderImpl _$$SalesOrderImplFromJson(Map<String, dynamic> json) =>
       state: json['state'] as String?,
       userId: const BoolRefferedByConverter().fromJson(json['user_id']),
       teamId: const BoolRefferedByConverter().fromJson(json['team_id']),
+      orderLine: (json['order_line'] as List<dynamic>?)
+          ?.map((e) => OrderLine.fromJson(e as Map<String, dynamic>))
+          .toList(),
       tagIds: (json['tag_ids'] as List<dynamic>?)
           ?.map((e) => TagIdModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -64,6 +67,7 @@ Map<String, dynamic> _$$SalesOrderImplToJson(_$SalesOrderImpl instance) =>
           instance.userId, const BoolRefferedByConverter().toJson),
       'team_id': _$JsonConverterToJson<dynamic, DisplayNameModel>(
           instance.teamId, const BoolRefferedByConverter().toJson),
+      'order_line': instance.orderLine,
       'tag_ids': instance.tagIds,
       'tax_totals': instance.taxTotals,
     };
@@ -76,17 +80,15 @@ Json? _$JsonConverterToJson<Json, Value>(
 
 _$OrderLineImpl _$$OrderLineImplFromJson(Map<String, dynamic> json) =>
     _$OrderLineImpl(
-      productTemplateId: json['product_template_id'] == null
-          ? null
-          : DisplayNameModel.fromJson(
-              json['product_template_id'] as Map<String, dynamic>),
+      productTemplateId:
+          const BoolRefferedByConverter().fromJson(json['product_template_id']),
       name: json['name'] as String?,
       productUomQty: (json['product_uom_qty'] as num?)?.toDouble(),
       qtyDelivered: (json['qty_delivered'] as num?)?.toDouble(),
       qtyInvoiced: (json['qty_invoiced'] as num?)?.toDouble(),
       priceUnit: (json['price_unit'] as num?)?.toDouble(),
       taxId: (json['tax_id'] as List<dynamic>?)
-          ?.map((e) => DisplayNameModel.fromJson(e as Map<String, dynamic>))
+          ?.map(const BoolRefferedByConverter().fromJson)
           .toList(),
       discount: (json['discount'] as num?)?.toDouble(),
       priceSubtotal: (json['price_subtotal'] as num?)?.toDouble(),
@@ -94,13 +96,15 @@ _$OrderLineImpl _$$OrderLineImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$OrderLineImplToJson(_$OrderLineImpl instance) =>
     <String, dynamic>{
-      'product_template_id': instance.productTemplateId,
+      'product_template_id': _$JsonConverterToJson<dynamic, DisplayNameModel>(
+          instance.productTemplateId, const BoolRefferedByConverter().toJson),
       'name': instance.name,
       'product_uom_qty': instance.productUomQty,
       'qty_delivered': instance.qtyDelivered,
       'qty_invoiced': instance.qtyInvoiced,
       'price_unit': instance.priceUnit,
-      'tax_id': instance.taxId,
+      'tax_id':
+          instance.taxId?.map(const BoolRefferedByConverter().toJson).toList(),
       'discount': instance.discount,
       'price_subtotal': instance.priceSubtotal,
     };

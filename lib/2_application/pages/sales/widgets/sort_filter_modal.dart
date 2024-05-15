@@ -16,7 +16,7 @@ class SortFilterModal extends StatefulWidget {
 }
 
 class _SortFilterModalState extends State<SortFilterModal> {
-  SortBy? selectedSort;
+  SortBy? selectedSortValue;
   List<CommissionStatus> selectedCommissionStatus = [];
   List<InvoicePaymentStatus> selectedInvoicePaymentStatus = [];
   List<DeliveryStatus> selectedDeliverStatus = [];
@@ -37,7 +37,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
       );
     }
 
-    selectedSort = SortBy.newestFirst;
+    selectedSortValue = SortBy.newestFirst;
     super.initState();
   }
 
@@ -119,6 +119,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                             convertDeliveryStatusesToStrings(
                               selectedDeliverStatus,
                             ),
+                            selectedSortValue?.name ?? SortBy.newestFirst.name,
                           ),
                         );
 
@@ -190,10 +191,10 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         style: const TextStyle(color: Color(0xff243242)),
                       ),
                       value: sortBy,
-                      groupValue: selectedSort,
+                      groupValue: selectedSortValue,
                       onChanged: (selected) {
                         setState(() {
-                          selectedSort = selected;
+                          selectedSortValue = selected;
                         });
                       },
                     ),

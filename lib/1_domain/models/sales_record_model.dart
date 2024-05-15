@@ -40,7 +40,7 @@ class SalesOrder with _$SalesOrder {
     @JsonKey(name: 'team_id')
     @BoolRefferedByConverter()
     required DisplayNameModel? teamId,
-    // @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
+    @JsonKey(name: 'order_line') required List<OrderLine>? orderLine,
     @JsonKey(name: 'tag_ids') required List<TagIdModel>? tagIds,
     @JsonKey(name: 'tax_totals') required TaxTotalsModel? taxTotals,
   }) = _SalesOrder;
@@ -53,13 +53,16 @@ class SalesOrder with _$SalesOrder {
 class OrderLine with _$OrderLine {
   const factory OrderLine({
     @JsonKey(name: 'product_template_id')
+    @BoolRefferedByConverter()
     required DisplayNameModel? productTemplateId, //B
     @JsonKey(name: 'name') required String? name, //C-E
     @JsonKey(name: 'product_uom_qty') required double? productUomQty, //F
     @JsonKey(name: 'qty_delivered') required double? qtyDelivered, //G
     @JsonKey(name: 'qty_invoiced') required double? qtyInvoiced, //H,
     @JsonKey(name: 'price_unit') required double? priceUnit,
-    @JsonKey(name: 'tax_id') required List<DisplayNameModel>? taxId, //J,
+    @JsonKey(name: 'tax_id')
+    @BoolRefferedByConverter()
+    required List<DisplayNameModel>? taxId, //J,
     @JsonKey(name: 'discount') required double? discount, //K
     @JsonKey(name: 'price_subtotal') required double? priceSubtotal, // L
   }) = _OrderLine;

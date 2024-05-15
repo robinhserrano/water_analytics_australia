@@ -47,7 +47,6 @@ class _CustomDataTableState extends State<CustomDataTable> {
           sortDescending: widget.sortDescending,
           sortColumnIndex: widget.sortColumnIndex,
         ),
-        
         Expanded(
           child: Scrollbar(
             interactive: true,
