@@ -148,13 +148,26 @@ class SalesRecordCard extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
+                      'Invoice Payment Status',
+                    ),
+                    const Spacer(),
+                   Text(
+                      
+                        (record.xStudioInvoicePaymentStatus ?? '').toString(),
+                      
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text(
                       'Delivery Status',
                     ),
                     const Spacer(),
                     Text(
-                      capitalizeFirstLetter(
+                     // capitalizeFirstLetter(
                         (record.deliveryStatus ?? '').toString(),
-                      ),
+                     // ),
                     ),
                   ],
                 ),

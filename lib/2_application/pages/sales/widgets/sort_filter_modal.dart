@@ -1,63 +1,26 @@
 // ignore_for_file: inference_failure_on_function_return_type, avoid_positional_boolean_parameters
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
-import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sort_filter_cubit.dart';
-import 'package:water_analytics_australia/injection.dart';
-
-enum CourseSortBy {
-  newestFirst,
-  oldestFirst,
-  aZCourseName,
-  zACourseName;
-
-  String get name {
-    return switch (this) {
-      CourseSortBy.newestFirst => 'Newest',
-      CourseSortBy.oldestFirst => 'Oldest',
-      CourseSortBy.aZCourseName => 'A-Z',
-      CourseSortBy.zACourseName => 'Z-A',
-    };
-  }
-
-  // String get backendName {
-  //   return switch (this) {
-  //     CourseSortBy.highToLowProgress => 'htl',
-  //     CourseSortBy.lowToHighProgress => 'lth',
-  //     CourseSortBy.aZCourseName => 'a-z',
-  //     CourseSortBy.zACourseName => 'z-a',
-  //   };
-  // }
-}
-
-// class SortFilterModalWrapperProvider extends StatelessWidget {
-//   const SortFilterModalWrapperProvider({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (context) => sl<SortFilterCubit>(),
-//       child: SortFilterModal(),
-//     );
-//   }
-// }
+import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 
 class SortFilterModal extends StatefulWidget {
-  const SortFilterModal({super.key});
+  const SortFilterModal({required this.onChanged, super.key});
+
+  final void Function() onChanged;
 
   @override
   State<SortFilterModal> createState() => _SortFilterModalState();
 }
 
 class _SortFilterModalState extends State<SortFilterModal> {
-  CourseSortBy? selectedSort;
+  SortBy? selectedSort;
   List<CommissionStatus> selectedCommissionStatus = [];
   List<InvoicePaymentStatus> selectedInvoicePaymentStatus = [];
   List<DeliveryStatus> selectedDeliverStatus = [];
+  bool commissionPayableActive = false;
 
   @override
   void initState() {
@@ -66,12 +29,15 @@ class _SortFilterModalState extends State<SortFilterModal> {
       selectedCommissionStatus = convertStringsToCommissionStatuses(
         userBox.values.first.selectedCommissionStatus,
       );
-      selectedInvoicePaymentStatus =
-          []; //userBox.values.first.selectedInvoicePaymentStatus;
-      selectedDeliverStatus = []; // userBox.values.first.selectedDeliverStatus;
+      selectedInvoicePaymentStatus = convertStringsToInvoicePaymentStatuses(
+        userBox.values.first.selectedInvoicePaymentStatus,
+      );
+      selectedDeliverStatus = convertStringsToDeliveryStatuses(
+        userBox.values.first.selectedDeliverStatus,
+      );
     }
 
-    selectedSort = CourseSortBy.newestFirst;
+    selectedSort = SortBy.newestFirst;
     super.initState();
   }
 
@@ -84,15 +50,32 @@ class _SortFilterModalState extends State<SortFilterModal> {
           backgroundColor: Colors.white,
           bottomSheet: ColoredBox(
             color: Colors.white,
-            //  margin: const EdgeInsets.only(right: 16, left: 16),
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        final sortFilterBox =
+                            Hive.box<SortFilterHive>('sortFilter');
+                        await sortFilterBox.clear();
+                        // await sortFilterBox.add(
+                        //   SortFilterHive(
+                        //     convertCommissionStatusesToStrings(
+                        //       selectedCommissionStatus,
+                        //     ),
+                        //     convertInvoicePaymentStatusesToStrings(
+                        //       selectedInvoicePaymentStatus,
+                        //     ),
+                        //     convertDeliveryStatusesToStrings(
+                        //       selectedDeliverStatus,
+                        //     ),
+                        //   ),
+                        // );
+
+                        widget.onChanged();
+                        SalesPage.closeDrawer();
                         // cubit
                         //   ..clearFilters()
                         //   ..fetchCourses();
@@ -130,26 +113,17 @@ class _SortFilterModalState extends State<SortFilterModal> {
                             convertCommissionStatusesToStrings(
                               selectedCommissionStatus,
                             ),
-                            [],
-                            [],
+                            convertInvoicePaymentStatusesToStrings(
+                              selectedInvoicePaymentStatus,
+                            ),
+                            convertDeliveryStatusesToStrings(
+                              selectedDeliverStatus,
+                            ),
                           ),
                         );
-                        // if (!cubit.isClosed) {
-                        //   cubit
-                        //     ..updateSort(selectedSort)
-                        //     ..updateFilter(selectedFilter)
-                        //     ..updateCourseCategories(
-                        //       categoryIds.map((id) => id.toString()).toList(),
-                        //     )
-                        //     ..toggleShowEnrolledCourses(value: enrolledCourse)
-                        //     ..toggleShowAvailableCourses(
-                        //       value: availableCourse,
-                        //     )
-                        //     ..fetchCourses();
-                        // }
-                        // if (context.mounted) {
-                        //   HomePage.closeDrawer();
-                        // }
+
+                        widget.onChanged();
+                        SalesPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -179,7 +153,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
             ),
             actions: [
               GestureDetector(
-                onTap: () {}, //HomePage.closeDrawer,
+                onTap: SalesPage.closeDrawer,
                 child: const Card(
                   elevation: 0,
                   color: Colors.transparent,
@@ -192,7 +166,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
             ],
           ),
           body: ListView(
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Padding(
                 padding: EdgeInsets.symmetric(
@@ -208,10 +181,10 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 ),
               ),
               Column(
-                children: CourseSortBy.values.map((sortBy) {
+                children: SortBy.values.map((sortBy) {
                   return SizedBox(
                     height: 35,
-                    child: RadioListTile<CourseSortBy>(
+                    child: RadioListTile<SortBy>(
                       title: Text(
                         sortBy.name,
                         style: const TextStyle(color: Color(0xff243242)),
@@ -227,9 +200,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   );
                 }).toList(),
               ),
-              Text('hive 1' + selectedCommissionStatus.toString()),
-              Text('hive 2' + selectedInvoicePaymentStatus.toString()),
-              Text('hive 3' + selectedDeliverStatus.toString()),
               const Padding(
                 padding: EdgeInsets.only(
                   left: 24,
@@ -238,7 +208,72 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 ),
                 child: Divider(),
               ),
+              const Padding(
+                padding: EdgeInsets.only(left: 24),
+                child: Text(
+                  'Quick Action (Shortcuts)',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: commissionPayableActive,
+                      onChanged: (value) {
+                        if (value == false) {
+                          setState(() {
+                            commissionPayableActive = false;
+                          });
+                        } else {
+                          setState(() {
+                            commissionPayableActive = true;
+                            selectedCommissionStatus
+                              ..clear()
+                              ..add(
+                                CommissionStatus.notPaid,
+                              );
+                            selectedInvoicePaymentStatus
+                              ..clear()
+                              ..add(
+                                InvoicePaymentStatus.full,
+                              );
 
+                            selectedDeliverStatus
+                              ..clear()
+                              ..add(
+                                DeliveryStatus.full,
+                              );
+                          });
+                        }
+                      },
+                    ),
+                    const Text(
+                      'Payable Commissions',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xff243242),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // CustomCheckBoxTile(
+              //   title: 'Payable Comission',
+              //   value: false,
+              //   onChanged: (newValue) {
+
+              //   },
+              // ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  // top: 16,
+                ),
+                child: Divider(),
+              ),
               CommissionStatusCheckList(
                 selectedCommissionStatus: selectedCommissionStatus,
                 onChanged: (newValue, status) {
@@ -253,14 +288,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   }
                 },
               ),
-              // const CustomCheckBoxTile(
-              //   title: 'Paid',
-              //   value: false,
-              // ),
-              // const CustomCheckBoxTile(
-              //   title: 'Not Paid',
-              //   value: false,
-              // ),
               const Padding(
                 padding: EdgeInsets.only(
                   left: 24,
@@ -268,7 +295,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 ),
                 child: Divider(),
               ),
-
               InvoicePaymentStatusCheckList(
                 selectedInvoicePaymentStatus: selectedInvoicePaymentStatus,
                 onChanged: (newValue, status) {
@@ -283,22 +309,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   }
                 },
               ),
-              // const CustomCheckBoxTile(
-              //   title: 'Paid',
-              //   value: false,
-              // ),
-              // const CustomCheckBoxTile(
-              //   title: 'Not Paid',
-              //   value: false,
-              // ),
-              // const CustomCheckBoxTile(
-              //   title: 'Partially Paid',
-              //   value: false,
-              // ),
-              // const CustomCheckBoxTile(
-              //   title: 'Not Set',
-              //   value: false,
-              // ),
               const Padding(
                 padding: EdgeInsets.only(
                   left: 24,
@@ -321,66 +331,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 },
               ),
               const SizedBox(height: 60),
-              // Column(
-              //   children: CourseFilterBy.values.map((filter) {
-              //     return SizedBox(
-              //       height: 35,
-              //       child: RadioListTile<CourseFilterBy>(
-              //         title: Text(
-              //           filter.name,
-              //           style: const TextStyle(color: Color(0xff243242)),
-              //         ),
-              //         value: filter,
-              //         groupValue: selectedFilter,
-              //         onChanged: (selected) {
-              //           setState(() {
-              //             selectedFilter = selected;
-              //           });
-              //         },
-              //       ),
-              //     );
-              //   }).toList(),
-              // ),
-              // if (hasEnrollment) ...[
-              //   Padding(
-              //     padding: const EdgeInsets.only(left: 12, top: 8),
-              //     child: Row(
-              //       children: [
-              //         Checkbox(
-              //           value: enrolledCourse,
-              //           onChanged: (value) {
-              //             setState(() {
-              //               enrolledCourse = !enrolledCourse;
-              //             });
-              //           },
-              //         ),
-              //         const Text(
-              //           'Show Enrolled Courses',
-              //           style: TextStyle(color: Color(0xff243242)),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              //   Padding(
-              //     padding: const EdgeInsets.only(left: 12),
-              //     child: Row(
-              //       children: [
-              //         Checkbox(
-              //           value: availableCourse,
-              //           onChanged: (value) {
-              //             setState(() {
-              //               availableCourse = !availableCourse;
-              //             });
-              //           },
-              //         ),
-              //         const Text(
-              //           'Show Available Courses',
-              //           style: TextStyle(color: Color(0xff243242)),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ],
             ],
           ),
         ),
@@ -407,7 +357,7 @@ class CustomCheckBoxTile extends StatelessWidget {
       child: Row(
         children: [
           Checkbox(
-            value: value, //enrolledCourse,
+            value: value,
             onChanged: onChanged,
           ),
           Text(
@@ -429,7 +379,6 @@ class CommissionStatusCheckList extends StatelessWidget {
   final List<CommissionStatus> selectedCommissionStatus;
   final Function(bool, CommissionStatus status) onChanged;
 
-  // List<CommissionStatus> selectedStatus = [];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -442,26 +391,13 @@ class CommissionStatusCheckList extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
-        Text(selectedCommissionStatus.toString()),
         ...CommissionStatus.values.map(
           (status) => CustomCheckBoxTile(
             title: status.name,
-            value: selectedCommissionStatus
-                .contains(status), // Update value based on selectedStatus
+            value: selectedCommissionStatus.contains(status),
             onChanged: (newValue) {
               onChanged(newValue ?? false, status);
-              //setState(() {
-              // if (newValue!) {
-              //   setState(() {
-              //     selectedStatus.add(status);
-              //   });
-              // } else {
-              //   setState(() {
-              //     selectedStatus.remove(status);
-              //   });
-              // }
             },
-            //}),
           ),
         ),
       ],
@@ -489,12 +425,10 @@ class InvoicePaymentStatusCheckList extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
-        Text(selectedInvoicePaymentStatus.toString()),
         ...InvoicePaymentStatus.values.map(
           (status) => CustomCheckBoxTile(
             title: status.name,
-            value: selectedInvoicePaymentStatus
-                .contains(status), // Update value based on selectedStatus
+            value: selectedInvoicePaymentStatus.contains(status),
             onChanged: (newValue) {
               onChanged(newValue ?? false, status);
             },
@@ -526,12 +460,10 @@ class DeliveryStatusCheckList extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
-        Text(selectedDeliverStatus.toString()),
         ...DeliveryStatus.values.map(
           (status) => CustomCheckBoxTile(
             title: status.name,
-            value: selectedDeliverStatus
-                .contains(status), // Update value based on selectedStatus
+            value: selectedDeliverStatus.contains(status),
             onChanged: (newValue) {
               onChanged(newValue ?? false, status);
             },

@@ -2,16 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
-import 'package:odoo_rpc/odoo_rpc.dart';
+import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sort_filter_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
@@ -24,37 +22,42 @@ class SalesPageWrapperProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<SalesCubit>(),
-      child: SalesPage(
-          // client: sl<OdooClient>(),
-          ),
+      child: const SalesPage(),
     );
   }
 }
 
-class SalesPage extends HookWidget {
-  SalesPage({super.key});
+class SalesPage extends StatefulWidget {
+  const SalesPage({super.key});
 
   static const name = 'sales';
   static const path = '/sales';
 
-//   final OdooClient client;
+  static final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-//   @override
-//   State<SalesPage> createState() => _SalesPageState();
-// }
+  static void closeDrawer() {
+    _scaffoldKey.currentState?.closeDrawer();
+  }
 
-// class _SalesPageState extends State<SalesPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  final ctrlSearch = TextEditingController();
+  static void openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
 
+  @override
+  State<SalesPage> createState() => _SalesPageState();
+}
+
+class _SalesPageState extends State<SalesPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SalesCubit>();
 
     return Scaffold(
-      key: _scaffoldKey,
+      key: SalesPage._scaffoldKey,
       endDrawer: const EndDrawer(),
-      drawer: const SortFilterModal(),
+      drawer: SortFilterModal(
+        onChanged: () => setState(() {}),
+      ),
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -81,7 +84,8 @@ class SalesPage extends HookWidget {
             },
           ),
           IconButton(
-            onPressed: () => _scaffoldKey.currentState!.openEndDrawer(),
+            onPressed: () =>
+                SalesPage._scaffoldKey.currentState!.openEndDrawer(),
             icon: const HeroIcon(
               HeroIcons.bars3,
               color: Colors.white,
@@ -107,112 +111,91 @@ class SalesPage extends HookWidget {
                   ),
                 );
               } else if (state is SalesStateLoaded) {
-                return Scaffold(
-                  backgroundColor: const Color(0xfff9fafb),
-                  body: state.records.isEmpty
-                      ? const Center(
-                          child: Text('No sales yet.'),
-                        )
-                      : Column(
-                          children: [
-                            Text(state.records.length.toString()),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xffeeeef0),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    margin: const EdgeInsets.only(
-                                      left: 16,
-                                      top: 8,
-                                      bottom: 8,
-                                    ),
-                                    child: TextFormField(
-                                      controller: ctrlSearch,
-                                      enableSuggestions: false,
-                                      autocorrect: false,
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        labelStyle:
-                                            TextStyle(color: Colors.green),
-                                        hintText: 'Search',
-                                        hintStyle: TextStyle(
-                                          color: Color(0xff5f5f60),
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      onChanged: (value) {
-                                        // if (ctrlSearch.text.trim().length > 3) {
-                                        //   cubit.fetch(
-                                        //     searchQuery: ctrlSearch.text,
-                                        //   );
-                                        // } else {
-                                        //   cubit.updateIsSearching(value: true);
-                                        // }
-                                        // setState(() {}); //FIX THISSSSSSSSSSSSSSSS
-                                      },
-                                      onEditingComplete: () {
-                                        // if (ctrlSearch.text.trim().length > 3) {
-                                        //   cubit.fetch(
-                                        //     searchQuery: ctrlSearch.text,
-                                        //     isSubmitted: true,
-                                        //   );
-                                        // }
-                                      },
-                                      onFieldSubmitted: (value) {
-                                        // if (value.trim().length > 3) {
-                                        //   cubit.fetch(
-                                        //     searchQuery: value,
-                                        //     isSubmitted: true,
-                                        //   );
-                                        // }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    _scaffoldKey.currentState!.openDrawer();
-                                  },
-                                  icon: const HeroIcon(
-                                    HeroIcons.adjustmentsHorizontal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: Scrollbar(
-                                child: ListView.builder(
-                                  itemCount: state.records.length,
-                                  itemBuilder: (context, index) {
-                                    final record = state.records[index];
-                                    if ((record.name?.toLowerCase() ?? '')
-                                            .contains(
-                                          ctrlSearch.text.toLowerCase(),
-                                        ) ||
-                                        (record.partnerId?.displayName ?? '')
-                                            .toLowerCase()
-                                            .contains(
-                                              ctrlSearch.text.toLowerCase(),
-                                            )) {
-                                      return SalesRecordCard(
-                                        record: record,
-                                      );
-                                    }
+                return FutureBuilder<Box<SortFilterHive>>(
+                  future: Hive.openBox<SortFilterHive>('sortFilter'),
+                  builder: (context, snapshot) {
+                    SortFilterHive? sortFilterData;
 
-                                    return const SizedBox();
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                    try {
+                      sortFilterData = snapshot.data?.values.first;
+                    } catch (e) {
+                      sortFilterData = null;
+                    }
+
+                    if (sortFilterData != null) {
+                      final commissionStatus =
+                          sortFilterData.selectedCommissionStatus;
+                      final invoicePaymentStatus =
+                          sortFilterData.selectedInvoicePaymentStatus;
+                      final deliverStatus =
+                          sortFilterData.selectedDeliverStatus;
+
+                      final filteredRecords = state.records
+                          .where(
+                            (record) =>
+                                (!commissionStatus.any(
+                                  (status) =>
+                                      status !=
+                                      record.xStudioCommissionPaid.toString(),
+                                )) &&
+                                (!invoicePaymentStatus.any(
+                                  (status) =>
+                                      status !=
+                                      record.xStudioInvoicePaymentStatus
+                                          .toString(),
+                                )) &&
+                                (!deliverStatus.any(
+                                  (status) =>
+                                      status !=
+                                      record.deliveryStatus.toString(),
+                                )),
+                          )
+                          .toList();
+
+                      // final one = state.records.where(
+                      //   (e) {
+                      //     if (commissionStatus.isNotEmpty) {
+                      //       return commissionStatus.contains(
+                      //         e.xStudioCommissionPaid.toString(),
+                      //       );
+                      //     } else {
+                      //       return true;
+                      //     }
+                      //   },
+                      // ).toList();
+
+                      // final two = one.where(
+                      //   (e) {
+                      //     if (invoicePaymentStatus.isNotEmpty) {
+                      //       return invoicePaymentStatus.contains(
+                      //         e.xStudioInvoicePaymentStatus.toString(),
+                      //       );
+                      //     } else {
+                      //       return true;
+                      //     }
+                      //   },
+                      // ).toList();
+
+                      // final three = two.where(
+                      //   (e) {
+                      //     if (deliverStatus.isNotEmpty) {
+                      //       return deliverStatus.contains(
+                      //         e.deliveryStatus.toString(),
+                      //       );
+                      //     } else {
+                      //       return true;
+                      //     }
+                      //   },
+                      // ).toList();   
+
+                      return SalesListPageLoaded(
+                        records: filteredRecords,
+                      );
+                    }
+                    return SalesListPageLoaded(
+                      records: state.records,
+                    );
+                  },
                 );
               } else if (state is SalesStateError) {
                 return SalesListPageError(
@@ -224,6 +207,125 @@ class SalesPage extends HookWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SalesListPageLoaded extends StatefulWidget {
+  const SalesListPageLoaded({required this.records, super.key});
+
+  final List<SalesOrder> records;
+
+  @override
+  State<SalesListPageLoaded> createState() => _SalesListPageLoadedState();
+}
+
+class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
+  final ctrlSearch = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xfff9fafb),
+      body: widget.records.isEmpty
+          ? const Center(
+              child: Text('No sales yet.'),
+            )
+          : Column(
+              children: [
+                Text(widget.records.length.toString()),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xffeeeef0),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
+                        margin: const EdgeInsets.only(
+                          left: 16,
+                          top: 8,
+                          bottom: 8,
+                        ),
+                        child: TextFormField(
+                          controller: ctrlSearch,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            labelStyle: TextStyle(color: Colors.green),
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                              color: Color(0xff5f5f60),
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            // if (ctrlSearch.text.trim().length > 3) {
+                            //   cubit.fetch(
+                            //     searchQuery: ctrlSearch.text,
+                            //   );
+                            // } else {
+                            //   cubit.updateIsSearching(value: true);
+                            // }
+                            setState(() {}); //FIX THISSSSSSSSSSSSSSSS
+                          },
+                          onEditingComplete: () {
+                            // if (ctrlSearch.text.trim().length > 3) {
+                            //   cubit.fetch(
+                            //     searchQuery: ctrlSearch.text,
+                            //     isSubmitted: true,
+                            //   );
+                            // }
+                          },
+                          onFieldSubmitted: (value) {
+                            // if (value.trim().length > 3) {
+                            //   cubit.fetch(
+                            //     searchQuery: value,
+                            //     isSubmitted: true,
+                            //   );
+                            // }
+                          },
+                        ),
+                      ),
+                    ),
+                    const IconButton(
+                      onPressed: SalesPage.openDrawer,
+                      icon: HeroIcon(
+                        HeroIcons.adjustmentsHorizontal,
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      itemCount: widget.records.length,
+                      itemBuilder: (context, index) {
+                        final record = widget.records[index];
+                        if ((record.name?.toLowerCase() ?? '').contains(
+                              ctrlSearch.text.toLowerCase(),
+                            ) ||
+                            (record.partnerId?.displayName ?? '')
+                                .toLowerCase()
+                                .contains(
+                                  ctrlSearch.text.toLowerCase(),
+                                )) {
+                          return SalesRecordCard(
+                            record: record,
+                          );
+                        }
+
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
