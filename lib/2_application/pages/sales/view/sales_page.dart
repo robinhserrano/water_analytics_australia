@@ -152,16 +152,8 @@ class _SalesPageState extends State<SalesPage> {
                           )
                           .toList();
 
-                      //Z-A
-
-//                       final sortedRecords = filteredRecords.sort((a, b) => {
-//   var nameA = a.partnerId?.displayName?.toLowerCase();
-//   var nameB = b.partnerId?.displayName?.toLowerCase();
-//   if (nameA > nameB) return -1;
-//   if (nameA < nameB) return 1;
-//   return 0;
-// });
-                      var selectedSortValue = 'Z-A';
+                      final selectedSortValue =
+                          sortFilterData.selectedSortValue;
                       if (selectedSortValue == 'Newest') {
                         filteredRecords.sort(
                           (a, b) => b.createDate!.compareTo(a.createDate!),
@@ -235,7 +227,6 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
             )
           : Column(
               children: [
-                Text(widget.records.length.toString()),
                 Row(
                   children: [
                     Expanded(
@@ -266,31 +257,10 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                             ),
                           ),
                           onChanged: (value) {
-                            // if (ctrlSearch.text.trim().length > 3) {
-                            //   cubit.fetch(
-                            //     searchQuery: ctrlSearch.text,
-                            //   );
-                            // } else {
-                            //   cubit.updateIsSearching(value: true);
-                            // }
-                            setState(() {}); //FIX THISSSSSSSSSSSSSSSS
+                            setState(() {});
                           },
-                          onEditingComplete: () {
-                            // if (ctrlSearch.text.trim().length > 3) {
-                            //   cubit.fetch(
-                            //     searchQuery: ctrlSearch.text,
-                            //     isSubmitted: true,
-                            //   );
-                            // }
-                          },
-                          onFieldSubmitted: (value) {
-                            // if (value.trim().length > 3) {
-                            //   cubit.fetch(
-                            //     searchQuery: value,
-                            //     isSubmitted: true,
-                            //   );
-                            // }
-                          },
+                          onEditingComplete: () {},
+                          onFieldSubmitted: (value) {},
                         ),
                       ),
                     ),
@@ -406,12 +376,6 @@ class EndDrawer extends StatelessWidget {
                             user.first.userLogin,
                             style: const TextStyle(color: Color(0xff7a7a7a)),
                           ),
-                          // Text(user.first.password),
-                          // Text(
-                          //   textAlign: TextAlign.center,
-                          //   user.first.userTz,
-                          //   style: const TextStyle(color: Color(0xff7a7a7a)),
-                          // ),
                         ],
                       );
                     }
@@ -500,7 +464,8 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'Syncing Sales to Firebase... (${progress.toStringAsFixed(2)}%)',
+                'Syncing Sales to Firebase...'
+                ' (${progress.toStringAsFixed(2)}%)',
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(

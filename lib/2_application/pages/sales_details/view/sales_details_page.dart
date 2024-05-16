@@ -1,5 +1,6 @@
-// ignore_for_file: inference_failure_on_function_return_type
+// ignore_for_file: inference_failure_on_function_return_type, prefer_int_literals, avoid_positional_boolean_parameters
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +9,11 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
+import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/sales_details/bloc/sales_details_cubit.dart';
 import 'package:water_analytics_australia/core/helper.dart';
+import 'package:water_analytics_australia/core/temp.dart';
 import 'package:water_analytics_australia/core/widgets/custom_data_table.dart';
 import 'package:water_analytics_australia/injection.dart';
 
@@ -518,7 +521,7 @@ class SalesDetailsPageLoaded extends HookWidget {
             },
           ),
           if (tabCtrl.index == 0) ...[
-           // OrderLines(order: order),
+            OrderLines(order: order),
           ],
           if (tabCtrl.index == 1) ...[
             OtherInfo(
@@ -604,115 +607,241 @@ class _TabBar extends StatelessWidget {
   }
 }
 
-// class OrderLines extends StatelessWidget {
-//   const OrderLines({required this.order, super.key});
+List<LandingPriceWithQuantity> getLandingPrice(
+  List<OrderLine> orderLines,
+  List<LandingPrice> landingPrices,
+) {
+  final matchingLandingPrices = <LandingPriceWithQuantity>{};
+  final isSupplyOnly = orderLines.any(
+    (orderLine) =>
+        orderLine.productTemplateId?.displayName?.toLowerCase() ==
+        'supply only',
+  );
+  for (final orderLine in orderLines) {
+    final displayName = orderLine.productTemplateId?.displayName;
+    final quantity = orderLine.productUomQty;
+    if (displayName != null && quantity != null) {
+      for (final landingPrice in landingPrices) {
+        if (displayName.contains(landingPrice.internalReference!)) {
+          matchingLandingPrices.add(
+            LandingPriceWithQuantity(
+              landingPrice: landingPrice,
+              quantity: quantity,
+              isSupplyOnly: isSupplyOnly,
+            ),
+          );
+          break;
+        }
+      }
+    }
+  }
+  return matchingLandingPrices.toList();
+}
 
-//   final SalesOrder order;
+double calculateCashPrice(
+  double salesOrderTotal,
+  bool isCash,
+) {
+  if (isCash) {
+    return salesOrderTotal;
+  } else {
+    return salesOrderTotal * 0.9;
+  }
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     if (order.orderLine == null) return const SizedBox(height: 16);
+double calculateCommissionBase(
+  double finalSellingPrice,
+  double landingPrice,
+  String salesSource,
+) {
+  final difference = finalSellingPrice - landingPrice;
+  final commissionBase = difference * 0.5;
 
-//     var totalDescriptionLength = 0;
-//     final totalItems = order.orderLine!.length;
+  switch (salesSource.toLowerCase()) {
+    case 'self gen':
+      return commissionBase +
+          100.0; // Replace with your base commission for self gen
+    case 'lead gen':
+      return commissionBase +
+          50.0; // Replace with your base commission for lead gen
+    default:
+      return commissionBase; // No additional base commission for other sources
+  }
+}
 
-//     for (final line in order.orderLine!) {
-//       final descriptionLength = line.name?.length ?? 0;
-//       totalDescriptionLength += descriptionLength;
-//     }
+double calculateFinalCommission(
+  List<OrderLine> orderLines,
+  double sellingPrice,
+  bool isCash,
+) {
+  final landingPrice = getLandingPrice(orderLines, landingPrices).fold(
+    0.0,
+    (prev, e) =>
+        prev +
+        (e.isSupplyOnly
+            ? (e.landingPrice.supplyOnly ?? 0.0)
+            : (e.landingPrice.installationService ?? 0.0)),
+  );
 
-//     final averageDescriptionLength = totalDescriptionLength / totalItems;
-//     return Column(
-//       children: [
-//         // Text(averageDescriptionLength.toString()),
-//         const SizedBox(
-//           height: 16,
-//         ),
-//         SizedBox(
-//           height: ((order.orderLine!.length + 1) * 80) +
-//               (averageDescriptionLength < 40 ? 0 : averageDescriptionLength),
-//           child: CustomDataTable(
-//             data: order.orderLine ?? [],
-//             total: order.orderLine?.length ?? 0,
-//             sortDescending: false,
-//           ),
-//         ),
-//         Padding(
-//           padding: const EdgeInsets.only(
-//             left: 16,
-//             right: 16,
-//             bottom: 16,
-//             top: 8,
-//           ),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.end,
-//             children: [
-//               const Column(
-//                 crossAxisAlignment: CrossAxisAlignment.end,
-//                 children: [
-//                   Text(
-//                     'Untaxed Amount:',
-//                   ),
-//                   SizedBox(
-//                     height: 4,
-//                   ),
-//                   Text(
-//                     'GST 10%:',
-//                   ),
-//                   SizedBox(
-//                     height: 4,
-//                   ),
-//                   Text(
-//                     'Total:',
-//                   ),
-//                 ],
-//               ),
-//               const SizedBox(
-//                 width: 16,
-//               ),
-//               Column(
-//                 crossAxisAlignment: CrossAxisAlignment.end,
-//                 children: [
-//                   Text(
-//                     r'$' +
-//                         (order.taxTotals?.amountUntaxed ?? 0.0)
-//                             .toStringAsFixed(2),
-//                     style: const TextStyle(
-//                       fontWeight: FontWeight.w600,
-//                     ),
-//                   ),
-//                   const SizedBox(
-//                     height: 4,
-//                   ),
-//                   Text(
-//                     r'$' +
-//                         ((order.taxTotals?.amountTotal ?? 0.0) -
-//                                 (order.taxTotals?.amountUntaxed ?? 0.0))
-//                             .toStringAsFixed(2),
-//                     style: const TextStyle(
-//                       fontWeight: FontWeight.w400,
-//                     ),
-//                   ),
-//                   const SizedBox(
-//                     height: 4,
-//                   ),
-//                   Text(
-//                     r'$' +
-//                         (order.taxTotals?.amountTotal ?? 0.0)
-//                             .toStringAsFixed(2),
-//                     style: const TextStyle(
-//                       fontWeight: FontWeight.w600,
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+  final finalSellingPrice = calculateCashPrice(
+    sellingPrice,
+    isCash,
+  );
+
+  final commissionBase =
+      calculateCommissionBase(finalSellingPrice, landingPrice, '');
+  // return commissionBase;
+  // var hehe = totalLandingPrice;
+
+  return landingPrice;
+}
+
+class OrderLines extends StatelessWidget {
+  const OrderLines({required this.order, super.key});
+
+  final SalesOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    if (order.orderLine == null) return const SizedBox(height: 16);
+
+    var totalDescriptionLength = 0;
+    final totalItems = order.orderLine!.length;
+
+    for (final line in order.orderLine!) {
+      final descriptionLength = line.name?.length ?? 0;
+      totalDescriptionLength += descriptionLength;
+    }
+
+    final averageDescriptionLength = totalDescriptionLength / totalItems;
+    return Column(
+      children: [
+        // Text(averageDescriptionLength.toString()),
+        const SizedBox(
+          height: 16,
+        ),
+        SizedBox(
+          height: ((order.orderLine!.length + 1) * 80) +
+              (averageDescriptionLength < 40 ? 0 : averageDescriptionLength),
+          child: CustomDataTable(
+            data: order.orderLine ?? [],
+            total: order.orderLine?.length ?? 0,
+            sortDescending: false,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: 16,
+            top: 8,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Untaxed Amount:',
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'GST 10%:',
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'Total:',
+                  ),
+                ],
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    r'$' +
+                        (order.taxTotals?.amountUntaxed ?? 0.0)
+                            .toStringAsFixed(2),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    r'$' +
+                        ((order.taxTotals?.amountTotal ?? 0.0) -
+                                (order.taxTotals?.amountUntaxed ?? 0.0))
+                            .toStringAsFixed(2),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    r'$' +
+                        (order.taxTotals?.amountTotal ?? 0.0)
+                            .toStringAsFixed(2),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            Column(
+              children: [
+                const Text('Selling Price'),
+                Text(
+                  calculateCashPrice(
+                    order.taxTotals?.amountTotal ?? 0,
+                    order.xStudioPaymentType.toLowerCase().contains('cash'),
+                  ).toString(),
+                ),
+              ],
+            ),
+            const Text(' - '),
+            Column(
+              children: [
+                const Text('Landing Price'),
+                Text(
+                  getLandingPrice(order.orderLine ?? [], landingPrices)
+                      .fold(
+                        0.0,
+                        (prev, e) =>
+                            prev +
+                            (e.isSupplyOnly
+                                ? (e.landingPrice.supplyOnly ?? 0.0)
+                                : (e.landingPrice.installationService ?? 0.0)),
+                      )
+                      .toString(),
+                ),
+              ],
+            ),
+          ],
+        ),
+        // calculateFinalCommission(
+        //   order.orderLine,
+
+        //   orderLine salesOrderTotal, paymentType, salesSource)
+      ],
+    );
+  }
+}
 
 class OtherInfo extends StatelessWidget {
   const OtherInfo({required this.order, super.key});

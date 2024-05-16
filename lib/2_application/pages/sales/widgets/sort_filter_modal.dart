@@ -16,7 +16,7 @@ class SortFilterModal extends StatefulWidget {
 }
 
 class _SortFilterModalState extends State<SortFilterModal> {
-  SortBy? selectedSortValue;
+  SortBy selectedSortValue = SortBy.newestFirst;
   List<CommissionStatus> selectedCommissionStatus = [];
   List<InvoicePaymentStatus> selectedInvoicePaymentStatus = [];
   List<DeliveryStatus> selectedDeliverStatus = [];
@@ -35,9 +35,11 @@ class _SortFilterModalState extends State<SortFilterModal> {
       selectedDeliverStatus = convertStringsToDeliveryStatuses(
         userBox.values.first.selectedDeliverStatus,
       );
+
+      selectedSortValue =
+          convertStringToSortBy(userBox.values.first.selectedSortValue);
     }
 
-    selectedSortValue = SortBy.newestFirst;
     super.initState();
   }
 
@@ -60,27 +62,8 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         final sortFilterBox =
                             Hive.box<SortFilterHive>('sortFilter');
                         await sortFilterBox.clear();
-                        // await sortFilterBox.add(
-                        //   SortFilterHive(
-                        //     convertCommissionStatusesToStrings(
-                        //       selectedCommissionStatus,
-                        //     ),
-                        //     convertInvoicePaymentStatusesToStrings(
-                        //       selectedInvoicePaymentStatus,
-                        //     ),
-                        //     convertDeliveryStatusesToStrings(
-                        //       selectedDeliverStatus,
-                        //     ),
-                        //   ),
-                        // );
-
                         widget.onChanged();
                         SalesPage.closeDrawer();
-                        // cubit
-                        //   ..clearFilters()
-                        //   ..fetchCourses();
-
-                        // HomePage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -119,7 +102,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                             convertDeliveryStatusesToStrings(
                               selectedDeliverStatus,
                             ),
-                            selectedSortValue?.name ?? SortBy.newestFirst.name,
+                            selectedSortValue.name,
                           ),
                         );
 
@@ -194,7 +177,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                       groupValue: selectedSortValue,
                       onChanged: (selected) {
                         setState(() {
-                          selectedSortValue = selected;
+                          selectedSortValue = selected ?? SortBy.newestFirst;
                         });
                       },
                     ),
@@ -260,18 +243,10 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   ],
                 ),
               ),
-              // CustomCheckBoxTile(
-              //   title: 'Payable Comission',
-              //   value: false,
-              //   onChanged: (newValue) {
-
-              //   },
-              // ),
               const Padding(
                 padding: EdgeInsets.only(
                   left: 24,
                   right: 24,
-                  // top: 16,
                 ),
                 child: Divider(),
               ),

@@ -28,23 +28,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: _screens[_currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: _onItemTapped,
-          items: const [
-            BottomNavigationBarItem(
-              icon: HeroIcon(HeroIcons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: HeroIcon(HeroIcons.fire),
-              label: 'Firebase',
-            ),
-          ],
-        ),
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: HeroIcon(HeroIcons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: HeroIcon(HeroIcons.fire),
+            label: 'Firebase',
+          ),
+        ],
       ),
     );
   }

@@ -14,6 +14,21 @@ enum SortBy {
   }
 }
 
+SortBy convertStringToSortBy(String statusString) {
+  switch (statusString) {
+    case 'Newest':
+      return SortBy.newestFirst;
+    case 'Oldest':
+      return SortBy.oldestFirst;
+    case 'A-Z':
+      return SortBy.aZCourseName;
+    case 'Z-A':
+      return SortBy.zACourseName;
+    default:
+      throw Exception('Unsupported statusString: $statusString');
+  }
+}
+
 List<String> convertSortByToStrings(
   List<SortBy> statuses,
 ) {
