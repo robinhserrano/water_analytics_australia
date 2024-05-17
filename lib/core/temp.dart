@@ -9,21 +9,21 @@ List<LandingPrice> landingPrices = [
     supplyOnly: 3390,
   ),
   const LandingPrice(
-    name: 'WAA Full House Healthy Water V2-B (w filters)',
+    name: 'WAA Full House Healthy Water V2-W (w filters)',
     internalReference: 'FHWR-3S1-20-W',
     productCategory: 'System',
     installationService: 4390,
     supplyOnly: 3590,
   ),
   const LandingPrice(
-    name: 'WAA Full House Healthy Water V2-B (w filters)',
+    name: 'WAA Healthy Independent Undersink 6 Stages V1 (w filters)',
     internalReference: 'USRO-6S1-2W',
     productCategory: 'System',
     installationService: 1490,
     supplyOnly: 1190,
   ),
   const LandingPrice(
-    name: 'WAA Full House Healthy Water V2-B (w filters)',
+    name: 'WAA Healthy Under Sink RO2 (w filters)',
     internalReference: 'USRO-3S1-2W',
     productCategory: 'System',
     installationService: 300,
@@ -32,7 +32,7 @@ List<LandingPrice> landingPrices = [
   const LandingPrice(
     name: '3 Way Mixer 7604B (L Circular)',
     internalReference: '3WM 7604B',
-    productCategory: 'Taps',
+    productCategory: 'System',
     installationService: 300,
     supplyOnly: 300,
   ),

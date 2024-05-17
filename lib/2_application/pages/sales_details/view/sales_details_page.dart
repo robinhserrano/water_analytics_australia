@@ -1,6 +1,5 @@
 // ignore_for_file: inference_failure_on_function_return_type, prefer_int_literals, avoid_positional_boolean_parameters
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -281,23 +280,23 @@ class SalesDetailsPageLoaded extends HookWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Commission Amount',
-                    ),
-                    const Spacer(),
-                    Text(
-                      r'$' + 0.toStringAsFixed(2),
-                      style: const TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
-                    ),
-                  ],
-                ),
+                // const SizedBox(
+                //   height: 8,
+                // ),
+                // Row(
+                //   children: [
+                //     const Text(
+                //       'Commission Amount',
+                //     ),
+                //     const Spacer(),
+                //     Text(
+                //       r'$' + 0.toStringAsFixed(2),
+                //       style: const TextStyle(
+                //         color: Color(0xff7a7a7a),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -328,191 +327,47 @@ class SalesDetailsPageLoaded extends HookWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 0,
-                ),
-                Card(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 0,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Customer Info',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Row(
-                          children: [
-                            const HeroIcon(
-                              HeroIcons.user,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                order.partnerId?.displayName ?? '',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const HeroIcon(
-                              HeroIcons.mapPin,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                (order.partnerId?.contactAddress ?? '')
-                                    .toString(),
-                                style: const TextStyle(
-                                  color: Color(0xff7a7a7a),
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          children: [
-                            const HeroIcon(
-                              HeroIcons.phone,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                (order.partnerId?.phone ?? '').toString(),
-                                style: const TextStyle(
-                                  color: Color(0xff7a7a7a),
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                CustomerInfoSection(
+                  order: order,
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                Card(
-                  color: const Color(0xfff5faff),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 0,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 8,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        const Text(
-                          'Sales Information',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: DottedLine(
-                            lineThickness: 1.5,
-                            dashColor: Color(0xffadadad),
-                            dashLength: 8,
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                const Text(
-                                  'Sales Rep',
-                                ),
-                                const Spacer(),
-                                Text(
-                                  order.xStudioSalesRep1 ?? '',
-                                  style: const TextStyle(
-                                    color: Color(0xff7a7a7a),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Sales Source',
-                                ),
-                                const Spacer(),
-                                Text(
-                                  order.xStudioSalesSource,
-                                  style: const TextStyle(
-                                    color: Color(0xff7a7a7a),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Commissions Paid',
-                                ),
-                                const Spacer(),
-                                Checkbox(
-                                  value: order.xStudioCommissionPaid,
-                                  activeColor: Colors.blue,
-                                  onChanged: (value) {},
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                SalesInformationSection(
+                  order: order,
                 ),
               ],
             ),
           ),
           const SizedBox(
             height: 8,
+          ),
+          // const Text('Landing Cost'),
+          // ...getLandingPrice(order.orderLine ?? [], landingPrices).map(
+          //   (e) => Column(
+          //     children: [
+          //       ListTile(
+          //         title: Text(e.landingPrice.name ?? ''),
+          //         subtitle: Column(
+          //           crossAxisAlignment: CrossAxisAlignment.end,
+          //           children: [
+          //             Text('x${e.quantity.toStringAsFixed(0)}'),
+          //             Text(
+          //               r'$' +
+          //                   (e.isSupplyOnly
+          //                           ? (e.landingPrice.supplyOnly ?? 0)
+          //                           : (e.landingPrice.installationService ?? 0))
+          //                       .toStringAsFixed(2),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+
+          CommissionSection(
+            order: order,
           ),
           _TabBar(
             controller: tabCtrl,
@@ -535,6 +390,30 @@ class SalesDetailsPageLoaded extends HookWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+class CustomRowTile extends StatelessWidget {
+  const CustomRowTile(this.title, this.desc, {super.key});
+  final String title;
+  final String desc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          title,
+        ),
+        const Spacer(),
+        Text(
+          desc,
+          style: const TextStyle(
+            color: Color(0xff7a7a7a),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -607,93 +486,284 @@ class _TabBar extends StatelessWidget {
   }
 }
 
-List<LandingPriceWithQuantity> getLandingPrice(
-  List<OrderLine> orderLines,
-  List<LandingPrice> landingPrices,
-) {
-  final matchingLandingPrices = <LandingPriceWithQuantity>{};
-  final isSupplyOnly = orderLines.any(
-    (orderLine) =>
-        orderLine.productTemplateId?.displayName?.toLowerCase() ==
-        'supply only',
-  );
-  for (final orderLine in orderLines) {
-    final displayName = orderLine.productTemplateId?.displayName;
-    final quantity = orderLine.productUomQty;
-    if (displayName != null && quantity != null) {
-      for (final landingPrice in landingPrices) {
-        if (displayName.contains(landingPrice.internalReference!)) {
-          matchingLandingPrices.add(
-            LandingPriceWithQuantity(
-              landingPrice: landingPrice,
-              quantity: quantity,
-              isSupplyOnly: isSupplyOnly,
+class CustomerInfoSection extends StatelessWidget {
+  const CustomerInfoSection({required this.order, super.key});
+
+  final SalesOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Customer Info',
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
-          );
-          break;
-        }
-      }
-    }
+            const SizedBox(
+              height: 12,
+            ),
+            Row(
+              children: [
+                const HeroIcon(
+                  HeroIcons.user,
+                  color: Colors.blue,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Expanded(
+                  child: Text(
+                    order.partnerId?.displayName ?? '',
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const HeroIcon(
+                  HeroIcons.mapPin,
+                  color: Colors.blue,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Expanded(
+                  child: Text(
+                    (order.partnerId?.contactAddress ?? '').toString(),
+                    style: const TextStyle(
+                      color: Color(0xff7a7a7a),
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const HeroIcon(
+                  HeroIcons.phone,
+                  color: Colors.blue,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Expanded(
+                  child: Text(
+                    (order.partnerId?.phone ?? '').toString(),
+                    style: const TextStyle(
+                      color: Color(0xff7a7a7a),
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
-  return matchingLandingPrices.toList();
 }
 
-double calculateCashPrice(
-  double salesOrderTotal,
-  bool isCash,
-) {
-  if (isCash) {
-    return salesOrderTotal;
-  } else {
-    return salesOrderTotal * 0.9;
+class SalesInformationSection extends StatelessWidget {
+  const SalesInformationSection({required this.order, super.key});
+  final SalesOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: const Color(0xfff5faff),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 16,
+          left: 16,
+          right: 16,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Sales Information',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: DottedLine(
+                lineThickness: 1.5,
+                dashColor: Color(0xffadadad),
+                dashLength: 8,
+              ),
+            ),
+            Column(
+              children: [
+                CustomRowTile(
+                  'Sales Rep',
+                  order.xStudioSalesRep1 ?? '',
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                CustomRowTile(
+                  'Sales Source',
+                  order.xStudioSalesSource,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Commissions Paid',
+                    ),
+                    const Spacer(),
+                    Checkbox(
+                      value: order.xStudioCommissionPaid,
+                      activeColor: Colors.blue,
+                      onChanged: (value) {},
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
-double calculateCommissionBase(
-  double finalSellingPrice,
-  double landingPrice,
-  String salesSource,
-) {
-  final difference = finalSellingPrice - landingPrice;
-  final commissionBase = difference * 0.5;
+class CommissionSection extends StatelessWidget {
+  const CommissionSection({required this.order, super.key});
+  final SalesOrder order;
 
-  switch (salesSource.toLowerCase()) {
-    case 'self gen':
-      return commissionBase +
-          100.0; // Replace with your base commission for self gen
-    case 'lead gen':
-      return commissionBase +
-          50.0; // Replace with your base commission for lead gen
-    default:
-      return commissionBase; // No additional base commission for other sources
+  @override
+  Widget build(BuildContext context) {
+    final sellingPrice =
+        calculateCashPrice(order.taxTotals?.amountTotal ?? 0, true);
+
+    final additionalCost =
+        getAdditionalCost(order.orderLine ?? [], landingPrices).fold(
+      0.0,
+      (prev, e) => prev + (e.priceSubtotal ?? 0),
+    );
+    final landingPrice =
+        getLandingPrice(order.orderLine ?? [], landingPrices).fold(
+      0.0,
+      (prev, e) =>
+          prev +
+          (e.isSupplyOnly
+              ? (e.landingPrice.supplyOnly ?? 0.0)
+              : (e.landingPrice.installationService ?? 0.0)),
+    );
+
+    final extraCommission = (sellingPrice - landingPrice) * 0.5;
+
+    final baseCommission = ((order.orderLine ?? []).any(
+      (element) => (element.name ?? '').contains(
+        'USRO-6S1-2W'.toLowerCase(),
+      ),
+    ))
+        ? 200
+        : order.xStudioSalesSource.toLowerCase().contains('self')
+            ? 1000
+            : 500;
+    final finalCommission = extraCommission + baseCommission;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      child: Card(
+        elevation: 0,
+        color: const Color(0xfff5faff),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Commission Breakdown',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: DottedLine(
+                  lineThickness: 1.5,
+                  dashColor: Color(0xffadadad),
+                  dashLength: 8,
+                ),
+              ),
+              CustomRowTile(
+                'Selling Price',
+                r'$' + sellingPrice.toStringAsFixed(2),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              CustomRowTile(
+                '(debug) additional_cost',
+                r'$' + additionalCost.toStringAsFixed(2),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              CustomRowTile(
+                'Landing Price',
+                r'$' + landingPrice.toStringAsFixed(2),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              CustomRowTile(
+                'Extra Commission',
+                r'$' + extraCommission.toStringAsFixed(2),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              CustomRowTile(
+                'Base Commission',
+                r'$' + baseCommission.toStringAsFixed(2),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              if (additionalCost <= 0) ...[
+                CustomRowTile(
+                  'Final Commission',
+                  r'$' + finalCommission.toStringAsFixed(2),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
   }
-}
-
-double calculateFinalCommission(
-  List<OrderLine> orderLines,
-  double sellingPrice,
-  bool isCash,
-) {
-  final landingPrice = getLandingPrice(orderLines, landingPrices).fold(
-    0.0,
-    (prev, e) =>
-        prev +
-        (e.isSupplyOnly
-            ? (e.landingPrice.supplyOnly ?? 0.0)
-            : (e.landingPrice.installationService ?? 0.0)),
-  );
-
-  final finalSellingPrice = calculateCashPrice(
-    sellingPrice,
-    isCash,
-  );
-
-  final commissionBase =
-      calculateCommissionBase(finalSellingPrice, landingPrice, '');
-  // return commissionBase;
-  // var hehe = totalLandingPrice;
-
-  return landingPrice;
 }
 
 class OrderLines extends StatelessWidget {
@@ -801,43 +871,6 @@ class OrderLines extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          children: [
-            Column(
-              children: [
-                const Text('Selling Price'),
-                Text(
-                  calculateCashPrice(
-                    order.taxTotals?.amountTotal ?? 0,
-                    order.xStudioPaymentType.toLowerCase().contains('cash'),
-                  ).toString(),
-                ),
-              ],
-            ),
-            const Text(' - '),
-            Column(
-              children: [
-                const Text('Landing Price'),
-                Text(
-                  getLandingPrice(order.orderLine ?? [], landingPrices)
-                      .fold(
-                        0.0,
-                        (prev, e) =>
-                            prev +
-                            (e.isSupplyOnly
-                                ? (e.landingPrice.supplyOnly ?? 0.0)
-                                : (e.landingPrice.installationService ?? 0.0)),
-                      )
-                      .toString(),
-                ),
-              ],
-            ),
-          ],
-        ),
-        // calculateFinalCommission(
-        //   order.orderLine,
-
-        //   orderLine salesOrderTotal, paymentType, salesSource)
       ],
     );
   }
@@ -855,7 +888,6 @@ class OtherInfo extends StatelessWidget {
       child: Column(
         children: [
           Card(
-            //    color: const Color(0xfff5faff),
             shape: RoundedRectangleBorder(
               side: BorderSide(color: Colors.grey.shade300),
               borderRadius: BorderRadius.circular(10),
@@ -1030,3 +1062,108 @@ class Notes extends StatelessWidget {
 //     );
 //   }
 // }
+
+List<LandingPriceWithQuantity> getLandingPrice(
+  List<OrderLine> orderLines,
+  List<LandingPrice> landingPrices,
+) {
+  final matchingLandingPrices = <LandingPriceWithQuantity>{};
+  final isSupplyOnly = orderLines.any(
+    (orderLine) =>
+        orderLine.productTemplateId?.displayName?.toLowerCase() ==
+        'supply only',
+  );
+
+  for (final orderLine in orderLines) {
+    final displayName = orderLine.productTemplateId?.displayName;
+    final quantity = orderLine.productUomQty;
+    if (displayName != null && quantity != null) {
+      for (final landingPrice in landingPrices) {
+        if (displayName
+            .toLowerCase()
+            .contains(landingPrice.internalReference!.toLowerCase())) {
+          matchingLandingPrices.add(
+            LandingPriceWithQuantity(
+              landingPrice: landingPrice,
+              quantity: quantity,
+              isSupplyOnly: isSupplyOnly,
+            ),
+          );
+
+          break;
+        }
+      }
+    }
+  }
+
+  return matchingLandingPrices.toList();
+}
+
+List<OrderLine> getAdditionalCost(
+  List<OrderLine> orderLines,
+  List<LandingPrice> landingPrices,
+) {
+  final matchingLandingPrices = <LandingPriceWithQuantity>{};
+  final isSupplyOnly = orderLines.any(
+    (orderLine) =>
+        orderLine.productTemplateId?.displayName?.toLowerCase() ==
+        'supply only',
+  );
+  final additionalCostSet = <OrderLine>{};
+  final tempAdditionalCostSet = <OrderLine>{};
+  for (final orderLine in orderLines) {
+    final displayName = orderLine.productTemplateId?.displayName;
+    final quantity = orderLine.productUomQty;
+    if (displayName != null && quantity != null) {
+      for (final landingPrice in landingPrices) {
+        if (displayName
+            .toLowerCase()
+            .contains(landingPrice.internalReference!.toLowerCase())) {
+          matchingLandingPrices.add(
+            LandingPriceWithQuantity(
+              landingPrice: landingPrice,
+              quantity: quantity,
+              isSupplyOnly: isSupplyOnly,
+            ),
+          );
+
+          break;
+        } else {
+          additionalCostSet.add(orderLine);
+        }
+      }
+    }
+  }
+
+  for (final item in additionalCostSet) {
+    final displayName = item.productTemplateId?.displayName ?? '';
+    for (final landingPrice in landingPrices) {
+      if (displayName
+          .toLowerCase()
+          .contains(landingPrice.internalReference!.toLowerCase())) {
+        tempAdditionalCostSet.add(
+          item,
+        );
+
+        break;
+      }
+    }
+  }
+
+  additionalCostSet
+      .retainWhere((element) => !tempAdditionalCostSet.contains(element));
+
+  final additionalCostList = additionalCostSet.toList()..removeAt(0);
+  return additionalCostList;
+}
+
+double calculateCashPrice(
+  double salesOrderTotal,
+  bool isCash,
+) {
+  if (isCash) {
+    return salesOrderTotal;
+  } else {
+    return salesOrderTotal * 0.9;
+  }
+}
