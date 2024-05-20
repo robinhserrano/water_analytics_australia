@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/bloc/login_cubit.dart';
@@ -56,9 +57,13 @@ class _LoginPageState extends State<LoginPage> {
 
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else if (state is LoginStateSuccess) {
-            context
-              ..pop()
-              ..pushReplacementNamed(HomePage.name);
+            try {
+              context
+                ..pop()
+                ..pushReplacementNamed(HomePage.name);
+            } catch (e) {
+              context.pushReplacementNamed(HomePage.name);
+            }
           }
         },
         child: Padding(
@@ -99,6 +104,26 @@ class _LoginPageState extends State<LoginPage> {
                 title: 'Password',
                 isValidating: isPasswordValidating,
                 inputType: TextInputType.visiblePassword,
+              ),
+              const Row(
+                children: [
+                  Expanded(child: Divider()),
+                  Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Text('Or'),
+                  ),
+                  Expanded(child: Divider()),
+                ],
+              ),
+              ElevatedButton.icon(
+                style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(1),
+                ),
+                onPressed: () async {
+                  await cubit.signInWithGoogle();
+                },
+                icon: const Icon(FontAwesomeIcons.google),
+                label: const Text('Sign in with Google'),
               ),
               const Spacer(),
               SizedBox(

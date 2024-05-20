@@ -8,39 +8,55 @@ part 'user_hive_model.g.dart';
 class UserHive {
   UserHive(
     this.dbName,
-    this.id,
-    this.isSystem,
-    this.partnerId,
-    this.userId,
+    // this.id,
+    // this.isSystem,
+    //this.partnerId,
+    //this.userId,
     this.userLogin,
     this.userName,
-    this.userTz,
+    // this.userTz,
     this.password,
+    this.displayName,
+    this.email,
+    this.photoUrl,
+    this.accessLevel,
   );
   @HiveField(0)
-  final String dbName;
+  final String? dbName;
+
+  // @HiveField(1)
+  // final String id;
+
+  // @HiveField(2)
+  // final bool isSystem;
+
+  // @HiveField(3)
+  // final int partnerId;
+
+  // @HiveField(4)
+  // final int userId;
 
   @HiveField(1)
-  final String id;
+  final String? userLogin;
 
   @HiveField(2)
-  final bool isSystem;
+  final String? userName;
+
+  // @HiveField(7)
+  // final String userTz;
 
   @HiveField(3)
-  final int partnerId;
+  final String? password;
 
   @HiveField(4)
-  final int userId;
+  final String? displayName;
 
   @HiveField(5)
-  final String userLogin;
+  final String? email;
 
   @HiveField(6)
-  final String userName;
+  final String? photoUrl;
 
   @HiveField(7)
-  final String userTz;
-
-  @HiveField(8)
-  final String password;
+  final int accessLevel;
 }

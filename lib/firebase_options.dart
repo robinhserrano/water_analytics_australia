@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '782193312243',
     projectId: 'wateranalytics-odoo',
     storageBucket: 'wateranalytics-odoo.appspot.com',
+    androidClientId: '782193312243-bqo007itf4tmqmd2atl7crfig474u7be.apps.googleusercontent.com',
+    iosClientId: '782193312243-ob61a664bsvgcdbe6efaoi2udoql72sd.apps.googleusercontent.com',
     iosBundleId: 'com.example.waterAnalyticsAustralia',
   );
+
 }

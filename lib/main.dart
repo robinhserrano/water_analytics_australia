@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/core/routes.dart';
+import 'package:water_analytics_australia/core/services/remote_config_service.dart';
 import 'package:water_analytics_australia/firebase_options.dart';
 import 'package:water_analytics_australia/injection.dart' as di;
 
@@ -21,6 +22,9 @@ void main() async {
   await Hive.openBox<SortFilterHive>('sortFilter');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await di.init();
+
+  // final remoteConfigService = RemoteConfigService();
+  // await remoteConfigService.initialize();
 
   runApp(const App());
 }

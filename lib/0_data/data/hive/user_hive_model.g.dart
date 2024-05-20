@@ -17,40 +17,37 @@ class UserHiveAdapter extends TypeAdapter<UserHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserHive(
-      fields[0] as String,
-      fields[1] as String,
-      fields[2] as bool,
-      fields[3] as int,
-      fields[4] as int,
-      fields[5] as String,
-      fields[6] as String,
-      fields[7] as String,
-      fields[8] as String,
+      fields[0] as String?,
+      fields[1] as String?,
+      fields[2] as String?,
+      fields[3] as String?,
+      fields[4] as String?,
+      fields[5] as String?,
+      fields[6] as String?,
+      fields[7] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserHive obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.dbName)
       ..writeByte(1)
-      ..write(obj.id)
-      ..writeByte(2)
-      ..write(obj.isSystem)
-      ..writeByte(3)
-      ..write(obj.partnerId)
-      ..writeByte(4)
-      ..write(obj.userId)
-      ..writeByte(5)
       ..write(obj.userLogin)
-      ..writeByte(6)
+      ..writeByte(2)
       ..write(obj.userName)
+      ..writeByte(3)
+      ..write(obj.password)
+      ..writeByte(4)
+      ..write(obj.displayName)
+      ..writeByte(5)
+      ..write(obj.email)
+      ..writeByte(6)
+      ..write(obj.photoUrl)
       ..writeByte(7)
-      ..write(obj.userTz)
-      ..writeByte(8)
-      ..write(obj.password);
+      ..write(obj.accessLevel);
   }
 
   @override

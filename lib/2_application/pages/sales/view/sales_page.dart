@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
@@ -91,6 +92,18 @@ class _SalesPageState extends State<SalesPage> {
               color: Colors.white,
             ),
           ),
+          // IconButton(
+          //   onPressed: () {
+              
+
+          //   final hehe =  cubit.saveLandingPrice(landingPrices);
+          //   final hihi = hehe;
+          //   },
+          //   icon: const HeroIcon(
+          //     HeroIcons.archiveBox,
+          //     color: Colors.white,
+          //   ),
+          // ),
         ],
       ),
       body: RefreshIndicator(
@@ -365,7 +378,8 @@ class EndDrawer extends StatelessWidget {
                           ),
                           Text(
                             textAlign: TextAlign.center,
-                            user.first.userName,
+                            user.first.displayName ??
+                                (user.first.userName ?? 'USER_NAME'),
                             style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(
@@ -373,7 +387,8 @@ class EndDrawer extends StatelessWidget {
                           ),
                           Text(
                             textAlign: TextAlign.center,
-                            user.first.userLogin,
+                            user.first.email ??
+                                (user.first.userLogin ?? 'USER_LOGIN'),
                             style: const TextStyle(color: Color(0xff7a7a7a)),
                           ),
                         ],
@@ -387,6 +402,7 @@ class EndDrawer extends StatelessWidget {
                 onTap: () async {
                   final box = await Hive.openBox<UserHive>('user');
                   await box.clear();
+                  await GoogleSignIn().signOut();
                   if (context.mounted) {
                     context.pushReplacementNamed(LoginPage.name);
                   }

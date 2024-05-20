@@ -119,9 +119,9 @@ class Repository {
       final user = await HiveHelper.getAllUsers();
       if (user.isNotEmpty) {
         await client.authenticate(
-          user.first.dbName,
-          user.first.userLogin,
-          user.first.password,
+          user.first.dbName!,
+          user.first.userLogin!,
+          user.first.password!,
         );
       }
       return null;

@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
+import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 
 class FirebaseFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String _collectionPath = 'sales.order';
+  final String _salesOrderPath = 'sales.order';
   final String _timestampPath = 'last.upload.time';
+  final String _landingPricePath = 'landing.price';
 
   Future<bool> saveSales(SalesOrder job) async {
     try {
-      final docRef = _firestore.collection(_collectionPath).doc(
+      final docRef = _firestore.collection(_salesOrderPath).doc(
             job.name.toString(),
           );
 
@@ -41,7 +43,7 @@ class FirebaseFirestoreService {
 
   Future<List<CloudSalesOrder>?> getSales() async {
     try {
-      final querySnapshot = await _firestore.collection(_collectionPath).get();
+      final querySnapshot = await _firestore.collection(_salesOrderPath).get();
       final order =
           querySnapshot.docs.map(CloudSalesOrder.fromFirestore).toList();
       return order;
@@ -53,7 +55,7 @@ class FirebaseFirestoreService {
 
   Future<CloudSalesOrder?> getSaleById(String id) async {
     final docSnapshot =
-        await _firestore.collection(_collectionPath).doc(id).get();
+        await _firestore.collection(_salesOrderPath).doc(id).get();
     if (docSnapshot.exists) {
       return CloudSalesOrder.fromFirestore(docSnapshot);
     } else {
@@ -97,6 +99,39 @@ class FirebaseFirestoreService {
     }
   }
 
+  Future<List<CloudSalesOrder>?> getLandingPrices() async {
+    try {
+      final querySnapshot = await _firestore.collection(_salesOrderPath).get();
+      final order =
+          querySnapshot.docs.map(CloudSalesOrder.fromFirestore).toList();
+      return order;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<bool> saveLandingPrice(LandingPrice landingPrice) async {
+    try {
+      final docRef = _firestore.collection(_landingPricePath).doc(
+            landingPrice.internalReference,
+          );
+
+      final data = <String, dynamic>{
+        'name': landingPrice.name,
+        'internalReference': landingPrice.internalReference,
+        'productCategory': landingPrice.productCategory,
+        'installationService': landingPrice.installationService,
+        'supplyOnly': landingPrice.supplyOnly,
+      };
+      await docRef.set(data);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   // Future<CloudSalesOrder?> getLastUploadedTime() async {
   //   final docSnapshot =
   //       await _firestore.collection(_timestampPath).doc('lastUploadTime').get();
@@ -110,7 +145,7 @@ class FirebaseFirestoreService {
 
   // Future<bool> deleteSaleById(String saleId) async {
   //   try {
-  //     final docRef = _firestore.collection(_collectionPath).doc(saleId);
+  //     final docRef = _firestore.collection(_salesOrderPath).doc(saleId);
   //     await docRef.delete();
   //     return true;
   //   } on FirebaseException catch (e) {

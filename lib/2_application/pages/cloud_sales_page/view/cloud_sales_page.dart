@@ -252,7 +252,8 @@ class EndDrawer extends StatelessWidget {
                           ),
                           Text(
                             textAlign: TextAlign.center,
-                            user.first.userName,
+                            user.first.displayName ??
+                                (user.first.userName ?? 'USER_NAME'),
                             style: const TextStyle(fontSize: 16),
                           ),
                           const SizedBox(
@@ -260,7 +261,8 @@ class EndDrawer extends StatelessWidget {
                           ),
                           Text(
                             textAlign: TextAlign.center,
-                            user.first.userLogin,
+                            user.first.email ??
+                                (user.first.userLogin ?? 'USER_LOGIN'),
                             style: const TextStyle(color: Color(0xff7a7a7a)),
                           ),
                         ],

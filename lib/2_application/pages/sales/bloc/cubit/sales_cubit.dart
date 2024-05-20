@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
+import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 part 'sales_state.dart';
 
@@ -46,6 +47,18 @@ class SalesCubit extends Cubit<SalesCubitState> {
         final progress = (savedCount / totalSales) * 100;
         onProgress(progress); // Update progress callback
       }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> saveLandingPrice(List<LandingPrice> landingPrices) async {
+    try {
+      for (final price in landingPrices) {
+        await firestoreService.saveLandingPrice(price);
+      }
+
       return true;
     } catch (e) {
       return false;

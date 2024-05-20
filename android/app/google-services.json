@@ -12,7 +12,20 @@
           "package_name": "com.example.water_analytics_australia"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "782193312243-bqo007itf4tmqmd2atl7crfig474u7be.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.water_analytics_australia",
+            "certificate_hash": "8a83357ece154546af0aeaf3d5402352e4966747"
+          }
+        },
+        {
+          "client_id": "782193312243-gnhh5svi6sv42ba0co3n9q4iof486v4j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD4tj-ItYM6n02OzFPs2VgHDLmFJRhrgT0"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782193312243-gnhh5svi6sv42ba0co3n9q4iof486v4j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "782193312243-ob61a664bsvgcdbe6efaoi2udoql72sd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.waterAnalyticsAustralia"
+              }
+            }
+          ]
         }
       }
     }
