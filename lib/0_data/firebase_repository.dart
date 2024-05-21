@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:water_analytics_australia/1_domain/models/cloud_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
@@ -99,11 +100,12 @@ class FirebaseFirestoreService {
     }
   }
 
-  Future<List<CloudSalesOrder>?> getLandingPrices() async {
+  Future<List<CloudLandingPrice>?> getLandingPrices() async {
     try {
-      final querySnapshot = await _firestore.collection(_salesOrderPath).get();
+      final querySnapshot =
+          await _firestore.collection(_landingPricePath).get();
       final order =
-          querySnapshot.docs.map(CloudSalesOrder.fromFirestore).toList();
+          querySnapshot.docs.map(CloudLandingPrice.fromFirestore).toList();
       return order;
     } catch (e) {
       print(e);
@@ -129,6 +131,16 @@ class FirebaseFirestoreService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<CloudLandingPrice?> getLandingPrice(String id) async {
+    final docSnapshot =
+        await _firestore.collection(_landingPricePath).doc(id).get();
+    if (docSnapshot.exists) {
+      return CloudLandingPrice.fromFirestore(docSnapshot);
+    } else {
+      return null;
     }
   }
 

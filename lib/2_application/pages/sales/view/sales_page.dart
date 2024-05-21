@@ -9,6 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
+import 'package:water_analytics_australia/2_application/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sales_record_card.dart';
@@ -94,7 +95,6 @@ class _SalesPageState extends State<SalesPage> {
           ),
           // IconButton(
           //   onPressed: () {
-              
 
           //   final hehe =  cubit.saveLandingPrice(landingPrices);
           //   final hihi = hehe;
@@ -391,6 +391,26 @@ class EndDrawer extends StatelessWidget {
                                 (user.first.userLogin ?? 'USER_LOGIN'),
                             style: const TextStyle(color: Color(0xff7a7a7a)),
                           ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            textAlign: TextAlign.center,
+                            _getTextForAccessLevel(user.first.accessLevel),
+                            style: const TextStyle(color: Color(0xff7a7a7a)),
+                          ),
+                          const SizedBox(
+                            height: 40,
+                          ),
+                          _DrawerItem(
+                            onTap: () {
+                              context.pushNamed(LandingPricePage.name);
+                            },
+                            text: 'Landing Price',
+                          ),
+                          const Divider(
+                            height: 1,
+                          ),
                         ],
                       );
                     }
@@ -583,5 +603,55 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
               ),
             ],
           );
+  }
+}
+
+class _DrawerItem extends StatelessWidget {
+  const _DrawerItem({required this.text, required this.onTap});
+
+  final String text;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        color: Colors.transparent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            const Divider(
+              height: 1,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              child: Text(
+                text,
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String _getTextForAccessLevel(int accessLevel) {
+  switch (accessLevel) {
+    case 1:
+      return 'Sales Person';
+    case 2:
+      return 'Sales Team Manager';
+    case 3:
+      return 'Sales Manager';
+    case 4:
+      return 'Admin';
+    case 5:
+      return 'Super Admin';
+    default:
+      return 'Unknown';
   }
 }

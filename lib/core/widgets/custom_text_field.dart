@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_positional_boolean_parameters, avoid_bool_literals_in_conditional_expressions, inference_failure_on_function_return_type
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:water_analytics_australia/core/helper.dart';
@@ -100,6 +101,7 @@ class CustomTextField extends HookWidget {
           height: 4,
         ),
         TextFormField(
+          maxLines: null,
           keyboardType: inputType ?? TextInputType.text,
           controller: ctrl,
           enableSuggestions: false,
@@ -112,6 +114,10 @@ class CustomTextField extends HookWidget {
               NumberTextInputFormatter(),
             ],
             if (inputType == TextInputType.number) ...[DoubleInputFormatter()],
+            if (inputType ==
+                const TextInputType.numberWithOptions(decimal: true)) ...[
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+            ],
           ],
           decoration: InputDecoration(
             prefixText: inputType == TextInputType.number ? r'$' : null,

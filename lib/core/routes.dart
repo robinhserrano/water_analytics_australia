@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:water_analytics_australia/2_application/landing_price_detail_page/view/landing_price_detail_page.dart';
+import 'package:water_analytics_australia/2_application/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
@@ -51,6 +53,22 @@ final routes = GoRouter(
       path: CloudSalesDetailsPage.path,
       builder: (context, state) {
         return CloudSalesDetailsPageWrapperProvider(
+          id: state.pathParameters['id']!,
+        );
+      },
+    ),
+    GoRoute(
+      name: LandingPricePage.name,
+      path: LandingPricePage.path,
+      builder: (context, state) {
+        return const LandingPricePageWrapperProvider();
+      },
+    ),
+    GoRoute(
+      name: LandingPriceDetailPage.name,
+      path: LandingPriceDetailPage.path,
+      builder: (context, state) {
+        return LandingPriceDetailPageWrapperProvider(
           id: state.pathParameters['id']!,
         );
       },
