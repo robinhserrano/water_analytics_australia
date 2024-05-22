@@ -9,11 +9,11 @@ part of 'cloud_landing_price_model.dart';
 _$CloudLandingPriceImpl _$$CloudLandingPriceImplFromJson(
         Map<String, dynamic> json) =>
     _$CloudLandingPriceImpl(
-      installationService: (json['installationService'] as num).toDouble(),
+      installationService: json['installationService'] as num,
       internalReference: json['internalReference'] as String,
       name: json['name'] as String,
       productCategory: json['productCategory'] as String,
-      supplyOnly: (json['supplyOnly'] as num).toDouble(),
+      supplyOnly: json['supplyOnly'] as num,
     );
 
 Map<String, dynamic> _$$CloudLandingPriceImplToJson(

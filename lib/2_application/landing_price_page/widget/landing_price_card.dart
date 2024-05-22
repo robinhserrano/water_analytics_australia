@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_landing_price_model.dart';
+import 'package:water_analytics_australia/2_application/landing_price_detail_page/view/landing_price_detail_page.dart';
 import 'package:water_analytics_australia/2_application/landing_price_page/view/landing_price_page.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 
 class LandingPriceCard extends StatelessWidget {
   const LandingPriceCard({required this.record, super.key});
@@ -13,8 +13,10 @@ class LandingPriceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => context.pushNamed(
-        CloudSalesDetailsPage.name,
-        pathParameters: {'id': record.internalReference},
+        LandingPriceDetailPage.name,
+        pathParameters: {
+          'id': record.internalReference,
+        },
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -28,26 +30,7 @@ class LandingPriceCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     Expanded(
-                //       child: Text(
-                //         record.partnerIdDisplayName ?? '',
-                //         style: const TextStyle(
-                //           fontSize: 16,
-                //         ),
-                //       ),
-                //     ),
-                //     Text(
-                //       formatCurrency(record.amountToInvoice ?? 0),
-                //       style: const TextStyle(fontSize: 16),
-                //     ),
-                //   ],
-                // ),
                 const HeroIcon(
                   HeroIcons.photo,
                   size: 50,

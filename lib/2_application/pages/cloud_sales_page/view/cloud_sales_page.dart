@@ -2,14 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:hive/hive.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
-import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/widget/cloud_sales_record_card.dart';
-import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
+import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
@@ -47,7 +44,7 @@ class _CloudSalesPageState extends State<CloudSalesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: const EndDrawer(),
+      endDrawer: const HomeEndDrawer(),
       backgroundColor: const Color(0xfff9fafb), // Colors.blueGrey.shade50,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -119,31 +116,10 @@ class _CloudSalesPageState extends State<CloudSalesPage> {
                                   ),
                                 ),
                                 onChanged: (value) {
-                                  // if (ctrlSearch.text.trim().length > 3) {
-                                  //   cubit.fetch(
-                                  //     searchQuery: ctrlSearch.text,
-                                  //   );
-                                  // } else {
-                                  //   cubit.updateIsSearching(value: true);
-                                  // }
                                   setState(() {});
                                 },
-                                onEditingComplete: () {
-                                  // if (ctrlSearch.text.trim().length > 3) {
-                                  //   cubit.fetch(
-                                  //     searchQuery: ctrlSearch.text,
-                                  //     isSubmitted: true,
-                                  //   );
-                                  // }
-                                },
-                                onFieldSubmitted: (value) {
-                                  // if (value.trim().length > 3) {
-                                  //   cubit.fetch(
-                                  //     searchQuery: value,
-                                  //     isSubmitted: true,
-                                  //   );
-                                  // }
-                                },
+                                onEditingComplete: () {},
+                                onFieldSubmitted: (value) {},
                               ),
                             ),
                             Expanded(
@@ -211,98 +187,6 @@ class SalesListPageError extends StatelessWidget {
             child: const Text('Refresh'),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class EndDrawer extends StatelessWidget {
-  const EndDrawer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          child: Column(
-            children: [
-              Expanded(
-                child: FutureBuilder<Box<UserHive>>(
-                  future: Hive.openBox<UserHive>('user'),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      final userBox = snapshot.data!;
-                      final user = userBox.values.toList();
-                      return Column(
-                        children: [
-                          const CircleAvatar(
-                            radius: 40,
-                            child: HeroIcon(
-                              HeroIcons.userCircle,
-                              size: 60,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            user.first.displayName ??
-                                (user.first.userName ?? 'USER_NAME'),
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            user.first.email ??
-                                (user.first.userLogin ?? 'USER_LOGIN'),
-                            style: const TextStyle(color: Color(0xff7a7a7a)),
-                          ),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ),
-              const Spacer(),
-              GestureDetector(
-                onTap: () async {
-                  final box = await Hive.openBox<UserHive>('user');
-                  await box.clear();
-                  if (context.mounted) {
-                    context.pushReplacementNamed(LoginPage.name);
-                  }
-                },
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: Center(
-                        child: Text(
-                          'Sign Out',
-                          style:
-                              TextStyle(color: Color(0xffda5450), fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

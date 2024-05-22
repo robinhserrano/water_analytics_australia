@@ -26,20 +26,16 @@ class LandingPriceDetailCubit extends Cubit<LandingPriceDetailCubitState> {
     }
   }
 
-  Future<void> saveLandingPriceDetails(LandingPrice landingPrice) async {
-    // final lastUploadDate = await firestoreService.getLastUploadedTime();
-    emit(const LandingPriceDetailStateLoading());
+  Future<bool> saveLandingPriceDetails(LandingPrice landingPrice) async {
     try {
-      final data = await firestoreService.saveLandingPrice(landingPrice);
-      if (data) {
-        var haha = data;
-        print('trueeeeeeeeeeeeeeeeeeeeeeee');
-        //emit(LandingPriceDetailStateLoaded(data));
+      final success = await firestoreService.saveLandingPrice(landingPrice);
+      if (success) {
+        return true;
       } else {
-      //  emit(const LandingPriceDetailStateError(message: 'Sales Failed'));
+        return false;
       }
     } catch (e) {
-    //  emit(LandingPriceDetailStateError(message: e.toString()));
+      return false;
     }
   }
 }

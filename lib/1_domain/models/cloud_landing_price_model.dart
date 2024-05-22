@@ -8,11 +8,11 @@ part 'cloud_landing_price_model.g.dart';
 @freezed
 class CloudLandingPrice with _$CloudLandingPrice {
   const factory CloudLandingPrice({
-    required double installationService,
+    required num installationService,
     required String internalReference,
     required String name,
     required String productCategory,
-    required double supplyOnly,
+    required num supplyOnly,
   }) = _CloudLandingPrice;
 
   factory CloudLandingPrice.fromJson(Map<String, dynamic> json) =>
@@ -22,11 +22,11 @@ class CloudLandingPrice with _$CloudLandingPrice {
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     return CloudLandingPrice(
-      installationService: doc.get('installationService') as double,
+      installationService: doc.get('installationService') as num,
       internalReference: doc.get('internalReference') as String,
       name: doc.get('name') as String,
       productCategory: doc.get('productCategory') as String,
-      supplyOnly: doc.get('supplyOnly') as double,
+      supplyOnly: doc.get('supplyOnly') as num,
     );
   }
 }

@@ -10,8 +10,6 @@ import 'package:water_analytics_australia/2_application/pages/login/bloc/login_c
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales_details/bloc/sales_details_cubit.dart';
 
-import '2_application/pages/sales/bloc/cubit/sort_filter_cubit.dart';
-
 final sl = GetIt.I; // sl == Service Locator
 
 Future<void> init() async {

@@ -28,42 +28,42 @@ class RemoteConfigService extends Cubit<RemoteConfigState> {
   void _setConfigValues() {
     emit(
       state.copyWith(
-        shouldShowEvents: _remoteConfig.getBool(
-          'events',
+        landingPriceLevel: _remoteConfig.getInt(
+          'landing_price_level',
         ),
-        shouldShowReminders: _remoteConfig.getBool(
-          'reminders',
-        ),
-        shouldShowTeamsProgress: _remoteConfig.getBool(
-          'teams_progress',
-        ),
-        shouldShowActiveRolePlay: _remoteConfig.getBool(
-          'active_role_play',
-        ),
-        shouldShowUserManagement: _remoteConfig.getBool(
-          'user_management',
-        ),
-        shouldShowMyComments: _remoteConfig.getBool(
-          'my_comments',
-        ),
-        shouldShowChatSupport: _remoteConfig.getBool(
-          'chat_support',
-        ),
-        shouldShowAllAvailableCourses: _remoteConfig.getBool(
-          'all_available_courses',
-        ),
-        isMaintenanceMode: _remoteConfig.getBool(
-          'maintenance_mode',
-        ),
-        maintenanceModeReason: _remoteConfig.getString(
-          'maintenance_mode_reason',
-        ),
-        shouldShowCourseEnrollment: _remoteConfig.getBool(
-          'course_enrollment',
-        ),
-        shouldShowGlobalSearch: _remoteConfig.getBool(
-          'global_search',
-        ),
+        // shouldShowReminders: _remoteConfig.getBool(
+        //   'reminders',
+        // ),
+        // shouldShowTeamsProgress: _remoteConfig.getBool(
+        //   'teams_progress',
+        // ),
+        // shouldShowActiveRolePlay: _remoteConfig.getBool(
+        //   'active_role_play',
+        // ),
+        // shouldShowUserManagement: _remoteConfig.getBool(
+        //   'user_management',
+        // ),
+        // shouldShowMyComments: _remoteConfig.getBool(
+        //   'my_comments',
+        // ),
+        // shouldShowChatSupport: _remoteConfig.getBool(
+        //   'chat_support',
+        // ),
+        // shouldShowAllAvailableCourses: _remoteConfig.getBool(
+        //   'all_available_courses',
+        // ),
+        // isMaintenanceMode: _remoteConfig.getBool(
+        //   'maintenance_mode',
+        // ),
+        // maintenanceModeReason: _remoteConfig.getString(
+        //   'maintenance_mode_reason',
+        // ),
+        // shouldShowCourseEnrollment: _remoteConfig.getBool(
+        //   'course_enrollment',
+        // ),
+        // shouldShowGlobalSearch: _remoteConfig.getBool(
+        //   'global_search',
+        // ),
       ),
     );
   }
@@ -72,17 +72,17 @@ class RemoteConfigService extends Cubit<RemoteConfigState> {
 @freezed
 class RemoteConfigState with _$RemoteConfigState {
   const factory RemoteConfigState({
-    @Default(true) bool shouldShowEvents,
-    @Default(true) bool shouldShowReminders,
-    @Default(true) bool shouldShowTeamsProgress,
-    @Default(true) bool shouldShowActiveRolePlay,
-    @Default(true) bool shouldShowUserManagement,
-    @Default(true) bool shouldShowMyComments,
-    @Default(true) bool shouldShowChatSupport,
-    @Default(false) bool shouldShowAllAvailableCourses,
-    @Default(false) bool isMaintenanceMode,
-    @Default('') String maintenanceModeReason,
-    @Default(true) bool shouldShowCourseEnrollment,
-    @Default(true) bool shouldShowGlobalSearch,
+    @Default(4) int landingPriceLevel,
+    // @Default(true) bool shouldShowReminders,
+    // @Default(true) bool shouldShowTeamsProgress,
+    // @Default(true) bool shouldShowActiveRolePlay,
+    // @Default(true) bool shouldShowUserManagement,
+    // @Default(true) bool shouldShowMyComments,
+    // @Default(true) bool shouldShowChatSupport,
+    // @Default(false) bool shouldShowAllAvailableCourses,
+    // @Default(false) bool isMaintenanceMode,
+    // @Default('') String maintenanceModeReason,
+    // @Default(true) bool shouldShowCourseEnrollment,
+    // @Default(true) bool shouldShowGlobalSearch,
   }) = _RemoteConfigState;
 }

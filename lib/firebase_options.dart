@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -66,6 +63,16 @@ class DefaultFirebaseOptions {
     androidClientId: '782193312243-bqo007itf4tmqmd2atl7crfig474u7be.apps.googleusercontent.com',
     iosClientId: '782193312243-ob61a664bsvgcdbe6efaoi2udoql72sd.apps.googleusercontent.com',
     iosBundleId: 'com.example.waterAnalyticsAustralia',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDTS6u6BNIS4StxopbXp9KZanEzBH9wdq8',
+    appId: '1:782193312243:web:d5e2cb57751415c10f5286',
+    messagingSenderId: '782193312243',
+    projectId: 'wateranalytics-odoo',
+    authDomain: 'wateranalytics-odoo.firebaseapp.com',
+    storageBucket: 'wateranalytics-odoo.appspot.com',
+    measurementId: 'G-K5CW2M0F6T',
   );
 
 }

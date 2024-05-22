@@ -280,23 +280,6 @@ class SalesDetailsPageLoaded extends HookWidget {
                     ),
                   ],
                 ),
-                // const SizedBox(
-                //   height: 8,
-                // ),
-                // Row(
-                //   children: [
-                //     const Text(
-                //       'Commission Amount',
-                //     ),
-                //     const Spacer(),
-                //     Text(
-                //       r'$' + 0.toStringAsFixed(2),
-                //       style: const TextStyle(
-                //         color: Color(0xff7a7a7a),
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -342,30 +325,6 @@ class SalesDetailsPageLoaded extends HookWidget {
           const SizedBox(
             height: 8,
           ),
-          // const Text('Landing Cost'),
-          // ...getLandingPrice(order.orderLine ?? [], landingPrices).map(
-          //   (e) => Column(
-          //     children: [
-          //       ListTile(
-          //         title: Text(e.landingPrice.name ?? ''),
-          //         subtitle: Column(
-          //           crossAxisAlignment: CrossAxisAlignment.end,
-          //           children: [
-          //             Text('x${e.quantity.toStringAsFixed(0)}'),
-          //             Text(
-          //               r'$' +
-          //                   (e.isSupplyOnly
-          //                           ? (e.landingPrice.supplyOnly ?? 0)
-          //                           : (e.landingPrice.installationService ?? 0))
-          //                       .toStringAsFixed(2),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-
           CommissionSection(
             order: order,
           ),
@@ -660,8 +619,10 @@ class CommissionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sellingPrice =
-        calculateCashPrice(order.taxTotals?.amountTotal ?? 0, true);
+    final sellingPrice = calculateCashPrice(
+      order.taxTotals?.amountTotal ?? 0,
+      order.xStudioPaymentType.toLowerCase().contains('cash'),
+    );
 
     final additionalCost =
         getAdditionalCost(order.orderLine ?? [], landingPrices).fold(
@@ -786,7 +747,6 @@ class OrderLines extends StatelessWidget {
     final averageDescriptionLength = totalDescriptionLength / totalItems;
     return Column(
       children: [
-        // Text(averageDescriptionLength.toString()),
         const SizedBox(
           height: 16,
         ),
@@ -991,7 +951,6 @@ class Notes extends StatelessWidget {
         children: [
           if (order.internalNoteDisplay != null) ...[
             Card(
-              // color: const Color(0xfff5faff),
               shape: RoundedRectangleBorder(
                 side: BorderSide(color: Colors.grey.shade300),
                 borderRadius: BorderRadius.circular(10),
@@ -1040,28 +999,6 @@ class Notes extends StatelessWidget {
     );
   }
 }
-// class _TabBarView extends StatelessWidget {
-//   const _TabBarView({required this.controller});
-
-//   final TabController controller;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//       child: TabBarView(
-//         controller: controller,
-//         children: const [
-//           Text('Order Lines'),
-//           Text('Other Info'),
-//           Text('Notes'),
-//           // _RefreshIndicator(child: _CourseGridView()),
-//           // _RefreshIndicator(child: _ModuleGridView()),
-//           // _RefreshIndicator(child: _PlaylistGridView()),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 List<LandingPriceWithQuantity> getLandingPrice(
   List<OrderLine> orderLines,
@@ -1084,7 +1021,11 @@ List<LandingPriceWithQuantity> getLandingPrice(
             .contains(landingPrice.internalReference!.toLowerCase())) {
           matchingLandingPrices.add(
             LandingPriceWithQuantity(
-              landingPrice: landingPrice,
+              landingPrice: (quantity >= 2 &&
+                      landingPrice.internalReference == 'USRO-3S1-2W' &&
+                      !isSupplyOnly)
+                  ? landingPrice.copyWith(installationService: 790)
+                  : landingPrice,
               quantity: quantity,
               isSupplyOnly: isSupplyOnly,
             ),
@@ -1096,7 +1037,9 @@ List<LandingPriceWithQuantity> getLandingPrice(
     }
   }
 
-  return matchingLandingPrices.toList();
+  var hehe = matchingLandingPrices.toList();
+  var haha = hehe;
+  return hehe;
 }
 
 List<OrderLine> getAdditionalCost(

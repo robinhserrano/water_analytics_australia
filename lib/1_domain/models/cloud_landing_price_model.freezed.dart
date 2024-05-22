@@ -20,11 +20,11 @@ CloudLandingPrice _$CloudLandingPriceFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CloudLandingPrice {
-  double get installationService => throw _privateConstructorUsedError;
+  num get installationService => throw _privateConstructorUsedError;
   String get internalReference => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get productCategory => throw _privateConstructorUsedError;
-  double get supplyOnly => throw _privateConstructorUsedError;
+  num get supplyOnly => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,11 +39,11 @@ abstract class $CloudLandingPriceCopyWith<$Res> {
       _$CloudLandingPriceCopyWithImpl<$Res, CloudLandingPrice>;
   @useResult
   $Res call(
-      {double installationService,
+      {num installationService,
       String internalReference,
       String name,
       String productCategory,
-      double supplyOnly});
+      num supplyOnly});
 }
 
 /// @nodoc
@@ -69,7 +69,7 @@ class _$CloudLandingPriceCopyWithImpl<$Res, $Val extends CloudLandingPrice>
       installationService: null == installationService
           ? _value.installationService
           : installationService // ignore: cast_nullable_to_non_nullable
-              as double,
+              as num,
       internalReference: null == internalReference
           ? _value.internalReference
           : internalReference // ignore: cast_nullable_to_non_nullable
@@ -85,7 +85,7 @@ class _$CloudLandingPriceCopyWithImpl<$Res, $Val extends CloudLandingPrice>
       supplyOnly: null == supplyOnly
           ? _value.supplyOnly
           : supplyOnly // ignore: cast_nullable_to_non_nullable
-              as double,
+              as num,
     ) as $Val);
   }
 }
@@ -99,11 +99,11 @@ abstract class _$$CloudLandingPriceImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {double installationService,
+      {num installationService,
       String internalReference,
       String name,
       String productCategory,
-      double supplyOnly});
+      num supplyOnly});
 }
 
 /// @nodoc
@@ -127,7 +127,7 @@ class __$$CloudLandingPriceImplCopyWithImpl<$Res>
       installationService: null == installationService
           ? _value.installationService
           : installationService // ignore: cast_nullable_to_non_nullable
-              as double,
+              as num,
       internalReference: null == internalReference
           ? _value.internalReference
           : internalReference // ignore: cast_nullable_to_non_nullable
@@ -143,7 +143,7 @@ class __$$CloudLandingPriceImplCopyWithImpl<$Res>
       supplyOnly: null == supplyOnly
           ? _value.supplyOnly
           : supplyOnly // ignore: cast_nullable_to_non_nullable
-              as double,
+              as num,
     ));
   }
 }
@@ -162,7 +162,7 @@ class _$CloudLandingPriceImpl implements _CloudLandingPrice {
       _$$CloudLandingPriceImplFromJson(json);
 
   @override
-  final double installationService;
+  final num installationService;
   @override
   final String internalReference;
   @override
@@ -170,7 +170,7 @@ class _$CloudLandingPriceImpl implements _CloudLandingPrice {
   @override
   final String productCategory;
   @override
-  final double supplyOnly;
+  final num supplyOnly;
 
   @override
   String toString() {
@@ -215,17 +215,17 @@ class _$CloudLandingPriceImpl implements _CloudLandingPrice {
 
 abstract class _CloudLandingPrice implements CloudLandingPrice {
   const factory _CloudLandingPrice(
-      {required final double installationService,
+      {required final num installationService,
       required final String internalReference,
       required final String name,
       required final String productCategory,
-      required final double supplyOnly}) = _$CloudLandingPriceImpl;
+      required final num supplyOnly}) = _$CloudLandingPriceImpl;
 
   factory _CloudLandingPrice.fromJson(Map<String, dynamic> json) =
       _$CloudLandingPriceImpl.fromJson;
 
   @override
-  double get installationService;
+  num get installationService;
   @override
   String get internalReference;
   @override
@@ -233,7 +233,7 @@ abstract class _CloudLandingPrice implements CloudLandingPrice {
   @override
   String get productCategory;
   @override
-  double get supplyOnly;
+  num get supplyOnly;
   @override
   @JsonKey(ignore: true)
   _$$CloudLandingPriceImplCopyWith<_$CloudLandingPriceImpl> get copyWith =>

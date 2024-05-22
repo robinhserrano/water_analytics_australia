@@ -1,7 +1,6 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, unused_import, inference_failure_on_function_return_type, avoid_positional_boolean_parameters
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
@@ -191,7 +190,6 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
               },
               title: 'Product Name',
               isValidating: isValidating,
-              //inputType: const TextInputType.numberWithOptions(decimal: true),
             ),
             CustomTextField(
               ctrl: ctrlInstallationService,
@@ -219,8 +217,8 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
         width: double.infinity,
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
         child: ElevatedButton(
-          onPressed: () {
-            cubit.saveLandingPriceDetails(
+          onPressed: () async {
+            final success = await cubit.saveLandingPriceDetails(
               LandingPrice(
                 name: ctrlProductName.text,
                 internalReference: widget.landingPrice.internalReference,
@@ -230,6 +228,25 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                 supplyOnly: double.tryParse(ctrlSupplyOnly.text) ?? 0,
               ),
             );
+            if (success) {
+              const snackBar = SnackBar(
+                backgroundColor: Colors.green,
+                content: Text('Successfully saved order.'),
+              );
+
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            } else {
+              const snackBar = SnackBar(
+                backgroundColor: Colors.red,
+                content: Text('Failed to save order.'),
+              );
+
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            }
           },
           child: const Text('Save'),
         ),
