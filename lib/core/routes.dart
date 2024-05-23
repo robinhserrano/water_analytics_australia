@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:water_analytics_australia/2_application/landing_price_detail_page/view/landing_price_detail_page.dart';
@@ -89,11 +90,13 @@ final routes = GoRouter(
 
     //   if (state.uri.queryParameters.isEmpty) return '/login';
     // }
-
+    // if (kIsWeb) {
     final userBox = await HiveHelper.openUserBox();
     if (userBox == null || userBox.isEmpty) {
       return LoginPage.path;
     }
     return null;
+    //}
+    //return null;
   },
 );

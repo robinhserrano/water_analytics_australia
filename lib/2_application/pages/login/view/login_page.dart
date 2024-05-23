@@ -43,7 +43,8 @@ class _LoginPageState extends State<LoginPage> {
     final cubit = context.read<LoginCubit>();
 
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      //appBar: AppBar(),
       body: BlocListener<LoginCubit, LoginCubitState>(
         listener: (context, state) {
           if (state is LoginStateLoading) {
@@ -66,93 +67,102 @@ class _LoginPageState extends State<LoginPage> {
             }
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              const Center(
-                child: Text(
-                  'Login',
-                  style: TextStyle(fontSize: 32),
-                ),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              CustomTextField(
-                ctrl: emailCtrl,
-                onChanged: (value) {
-                  setState(() {
-                    if (value.isEmpty) {
-                      isEmailValidating = true;
-                    }
-                  });
-                },
-                title: 'Email',
-                isValidating: isEmailValidating,
-                inputType: TextInputType.emailAddress,
-              ),
-              CustomTextField(
-                ctrl: passwordCtrl,
-                onChanged: (value) {
-                  setState(() {
-                    if (value.isEmpty) {
-                      isPasswordValidating = true;
-                    }
-                  });
-                },
-                title: 'Password',
-                isValidating: isPasswordValidating,
-                inputType: TextInputType.visiblePassword,
-              ),
-              const Row(
-                children: [
-                  Expanded(child: Divider()),
-                  Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Text('Or'),
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-              ElevatedButton.icon(
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(1),
-                ),
-                onPressed: () async {
-                  await cubit.signInWithGoogle();
-                },
-                icon: const Icon(FontAwesomeIcons.google),
-                label: const Text('Sign in with Google'),
-              ),
-              const Spacer(),
-              SizedBox(
-                height: 60,
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: isSubmitting
-                      ? null
-                      : () async {
-                          await cubit.login(
-                            'wateranalytics',
-                            emailCtrl.text,
-                            passwordCtrl.text,
-                          );
-                        },
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    backgroundColor: const Color(0xff475467),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Color(0xffFFFFFF),
-                      fontWeight: FontWeight.w600,
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 500),
+        //    padding: EdgeInsets.symmetric(vertical: 200),
+            child: Card(
+              color: Colors.white,
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    const Center(
+                      child: Text(
+                        'Login',
+                        style: TextStyle(fontSize: 32),
+                      ),
                     ),
-                  ),
+                    const SizedBox(
+                      height: 60,
+                    ),
+                    CustomTextField(
+                      ctrl: emailCtrl,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.isEmpty) {
+                            isEmailValidating = true;
+                          }
+                        });
+                      },
+                      title: 'Email',
+                      isValidating: isEmailValidating,
+                      inputType: TextInputType.emailAddress,
+                    ),
+                    CustomTextField(
+                      ctrl: passwordCtrl,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.isEmpty) {
+                            isPasswordValidating = true;
+                          }
+                        });
+                      },
+                      title: 'Password',
+                      isValidating: isPasswordValidating,
+                      inputType: TextInputType.visiblePassword,
+                    ),
+                    const Row(
+                      children: [
+                        Expanded(child: Divider()),
+                        Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Text('Or'),
+                        ),
+                        Expanded(child: Divider()),
+                      ],
+                    ),
+                    ElevatedButton.icon(
+                      style: ButtonStyle(
+                        elevation: WidgetStateProperty.all(1),
+                      ),
+                      onPressed: () async {
+                        await cubit.signInWithGoogle();
+                      },
+                      icon: const Icon(FontAwesomeIcons.google),
+                      label: const Text('Sign in with Google'),
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      height: 60,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: isSubmitting
+                            ? null
+                            : () async {
+                                await cubit.loginWithEmail(
+                                  emailCtrl.text,
+                                  passwordCtrl.text,
+                                );
+                              },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: const Color(0xff475467),
+                        ),
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                            color: Color(0xffFFFFFF),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

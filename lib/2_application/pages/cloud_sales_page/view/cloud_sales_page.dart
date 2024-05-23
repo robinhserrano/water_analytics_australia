@@ -1,9 +1,11 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls
 
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
+import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/widget/cloud_sales_record_card.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
@@ -122,6 +124,16 @@ class _CloudSalesPageState extends State<CloudSalesPage> {
                                 onFieldSubmitted: (value) {},
                               ),
                             ),
+                            // Expanded(
+                            //   child: PaginatedDataTable2(
+                            //     columns: const [
+                            //       DataColumn(label: Text('Number')),
+                            //       DataColumn(label: Text('Customer')),
+                            //       DataColumn(label: Text('Sales Source')),
+                            //     ],
+                            //     source: MyDataTableSource(state.records),
+                            //   ),
+                            // ),
                             Expanded(
                               child: Scrollbar(
                                 child: ListView.builder(
@@ -190,4 +202,37 @@ class SalesListPageError extends StatelessWidget {
       ),
     );
   }
+}
+
+class MyDataTableSource extends DataTableSource {
+  MyDataTableSource(this.data);
+  final List<CloudSalesOrder> data;
+  Set<int> selectedRows = {};
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => data.length;
+
+  @override
+  DataRow getRow(int index) {
+    if (index >= rowCount || index < 0) {
+      throw Exception('Invalid row index');
+    }
+    final item = data[index];
+
+    return DataRow.byIndex(
+      index: index,
+      cells: [
+        DataCell(Text(item.name ?? '')),
+        DataCell(Text(item.partnerIdDisplayName ?? '')),
+        DataCell(Text(item.xStudioSalesSource ?? '')),
+      ],
+    );
+  }
+
+  @override
+  // TODO: implement selectedRowCount
+  int get selectedRowCount => selectedRows.length;
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -89,7 +90,10 @@ class HomeEndDrawer extends StatelessWidget {
                 onTap: () async {
                   final box = await Hive.openBox<UserHive>('user');
                   await box.clear();
-                  await GoogleSignIn().signOut();
+                  if (!kIsWeb) {
+                    await GoogleSignIn().signOut();
+                  }
+
                   if (context.mounted) {
                     context.pushReplacementNamed(LoginPage.name);
                   }

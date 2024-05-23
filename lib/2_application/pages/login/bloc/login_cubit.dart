@@ -40,7 +40,55 @@ class LoginCubit extends Cubit<LoginCubitState> {
         emit(const LoginStateError(message: 'Login Failed'));
       }
     } catch (e) {
+      print(e);
       emit(LoginStateError(message: e.toString()));
+    }
+  }
+
+  Future<void> loginWithEmail(String emailAddress, String password) async {
+    emit(const LoginStateLoading());
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: emailAddress, password: password);
+      if (credential.user != null) {
+        final user = UserHive(
+          null, //data.dbName,
+          null, //data.userLogin,
+          null, //data.userName,
+          null, //password,
+          null,
+          emailAddress, //null,
+          null,
+          4,
+        );
+
+        final userBox = Hive.box<UserHive>('user');
+
+        await userBox.add(user);
+        emit(const LoginStateSuccess());
+      } else {
+        emit(
+          const LoginStateError(
+            message: 'Login Failed',
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        emit(const LoginStateError(message: 'No user found for that email.'));
+      } else if (e.code == 'wrong-password') {
+        emit(
+          const LoginStateError(
+            message: 'Wrong password provided for that user.',
+          ),
+        );
+      }
+    } catch (e) {
+      emit(
+        const LoginStateError(
+          message: 'Login Failed',
+        ),
+      );
     }
   }
 

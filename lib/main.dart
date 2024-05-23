@@ -1,31 +1,29 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:hive_flutter/adapters.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/core/routes.dart';
-import 'package:water_analytics_australia/core/services/remote_config_service.dart';
 import 'package:water_analytics_australia/firebase_options.dart';
 import 'package:water_analytics_australia/injection.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+
   Hive
-    ..init(appDocumentDir.path)
     ..registerAdapter(UserHiveAdapter())
     ..registerAdapter(SortFilterHiveAdapter());
 
+  await Hive.initFlutter();
+
   await Hive.openBox<UserHive>('user');
   await Hive.openBox<SortFilterHive>('sortFilter');
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await di.init();
-
-  // final remoteConfigService = RemoteConfigService();
-  // await remoteConfigService.initialize();
-
   runApp(const App());
 }
 
@@ -35,9 +33,17 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      builder: (context, child) => ResponsiveBreakpoints.builder(
+        breakpoints: [
+          const Breakpoint(start: 0, end: 450, name: MOBILE),
+          const Breakpoint(start: 451, end: 800, name: TABLET),
+          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+        ],
+        child: child!,
+      ),
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-        primaryColor: const Color(0xff0083ff),
       ),
       debugShowCheckedModeBanner: false,
       title: 'Product List App Demo',
