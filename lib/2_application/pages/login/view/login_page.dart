@@ -44,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      //appBar: AppBar(),
       body: BlocListener<LoginCubit, LoginCubitState>(
         listener: (context, state) {
           if (state is LoginStateLoading) {
@@ -70,7 +69,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 500),
-        //    padding: EdgeInsets.symmetric(vertical: 200),
             child: Card(
               color: Colors.white,
               elevation: 4,

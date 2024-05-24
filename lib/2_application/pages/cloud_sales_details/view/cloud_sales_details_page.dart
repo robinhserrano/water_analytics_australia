@@ -1,9 +1,12 @@
+// ignore_for_file: prefer_int_literals
+
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
 import 'package:water_analytics_australia/core/helper.dart';
@@ -120,10 +123,17 @@ class CloudSalesDetailsPageLoaded extends StatelessWidget {
               children: [
                 const SizedBox(height: 8),
                 Text(
-                  '#${order.name}',
-                  style: const TextStyle(
+                  '${order.name}',
+                  style: TextStyle(
                     color: Colors.black87,
-                    fontSize: 24,
+                    fontSize: ResponsiveValue(
+                      context,
+                      conditionalValues: [
+                        const Condition.smallerThan(name: TABLET, value: 24.0),
+                        const Condition.equals(name: TABLET, value: 24.0),
+                        const Condition.largerThan(name: TABLET, value: 28.0),
+                      ],
+                    ).value,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -285,181 +295,32 @@ class CloudSalesDetailsPageLoaded extends StatelessWidget {
                 const SizedBox(
                   height: 0,
                 ),
-                Card(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 0,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Customer Info',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Row(
-                          children: [
-                            const HeroIcon(
-                              HeroIcons.user,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                order.partnerIdDisplayName ?? '',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const HeroIcon(
-                              HeroIcons.mapPin,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                order.partnerIdContactAddress ?? '',
-                                style: const TextStyle(
-                                  color: Color(0xff7a7a7a),
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          children: [
-                            const HeroIcon(
-                              HeroIcons.phone,
-                              color: Colors.blue,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: Text(
-                                (order.partnerIdPhone ?? '').toString(),
-                                style: const TextStyle(
-                                  color: Color(0xff7a7a7a),
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                //    ResponsiveRowColumn(
+                //   rowMainAxisAlignment: MainAxisAlignment.center,
+                //   layout: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
+                //       ? ResponsiveRowColumnType.COLUMN
+                //       : ResponsiveRowColumnType.ROW,
+                //   children: [
+                //     ResponsiveRowColumnItem(
+                //       rowFlex: 1,
+                //       child: CustomerInfoSection(
+                //         order: order,
+                //       ),
+                //     ),
+                //     ResponsiveRowColumnItem(
+                //       rowFlex: 1,
+                //       child: SalesInformationSection(
+                //         order: order,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                CustomerInfoSection(order: order),
                 const SizedBox(
                   height: 8,
                 ),
-                Card(
-                  color: const Color(0xfff5faff),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 0,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 8,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        const Text(
-                          'Sales Information',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: DottedLine(
-                            lineThickness: 1.5,
-                            dashColor: Color(0xffadadad),
-                            dashLength: 8,
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                const Text(
-                                  'Sales Rep',
-                                ),
-                                const Spacer(),
-                                Text(
-                                  order.xStudioSalesRep1 ?? '',
-                                  style: const TextStyle(
-                                    color: Color(0xff7a7a7a),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Sales Source',
-                                ),
-                                const Spacer(),
-                                Text(
-                                  order.xStudioSalesSource ?? '',
-                                  style: const TextStyle(
-                                    color: Color(0xff7a7a7a),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Commissions Paid',
-                                ),
-                                const Spacer(),
-                                Checkbox(
-                                  value: order.xStudioCommissionPaid,
-                                  activeColor: Colors.blue,
-                                  onChanged: (value) {},
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                SalesInformationSection(
+                  order: order,
                 ),
                 const SizedBox(
                   height: 8,
@@ -542,6 +403,198 @@ class DetailPageError extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CustomerInfoSection extends StatelessWidget {
+  const CustomerInfoSection({required this.order, super.key});
+
+  final CloudSalesOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Customer Info',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Row(
+              children: [
+                const HeroIcon(
+                  HeroIcons.user,
+                  color: Colors.blue,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Expanded(
+                  child: Text(
+                    order.partnerIdDisplayName ?? '',
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const HeroIcon(
+                  HeroIcons.mapPin,
+                  color: Colors.blue,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Expanded(
+                  child: Text(
+                    order.partnerIdContactAddress ?? '',
+                    style: const TextStyle(
+                      color: Color(0xff7a7a7a),
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const HeroIcon(
+                  HeroIcons.phone,
+                  color: Colors.blue,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Expanded(
+                  child: Text(
+                    (order.partnerIdPhone ?? '').toString(),
+                    style: const TextStyle(
+                      color: Color(0xff7a7a7a),
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SalesInformationSection extends StatelessWidget {
+  const SalesInformationSection({required this.order, super.key});
+  final CloudSalesOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: const Color(0xfff5faff),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 16,
+          left: 16,
+          right: 16,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Sales Information',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: DottedLine(
+                lineThickness: 1.5,
+                dashColor: Color(0xffadadad),
+                dashLength: 8,
+              ),
+            ),
+            Column(
+              children: [
+                CustomRowTile(
+                  'Sales Rep',
+                  order.xStudioSalesRep1 ?? '',
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                CustomRowTile(
+                  'Sales Source',
+                  order.xStudioSalesSource ?? '',
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Commissions Paid',
+                    ),
+                    const Spacer(),
+                    Checkbox(
+                      value: order.xStudioCommissionPaid,
+                      activeColor: Colors.blue,
+                      onChanged: (value) {},
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomRowTile extends StatelessWidget {
+  const CustomRowTile(this.title, this.desc, {super.key});
+  final String title;
+  final String desc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          title,
+        ),
+        const Spacer(),
+        Text(
+          desc,
+          style: const TextStyle(
+            color: Color(0xff7a7a7a),
+          ),
+        ),
+      ],
     );
   }
 }

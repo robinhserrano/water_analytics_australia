@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       ),
       // secondaryBody: SlotLayout(
       //   config: <Breakpoint, SlotLayoutConfig>{
-      //     Breakpoints.mediumAndUp: SlotLayout.from(
+      //     Breakpoints.large: SlotLayout.from(
       //       key: const Key('secondary-body-medium'),
       //     builder: (_){
       //       return Text('aaaaa');

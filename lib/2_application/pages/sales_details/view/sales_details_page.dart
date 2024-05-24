@@ -163,7 +163,7 @@ class SalesDetailsPageLoaded extends HookWidget {
                 SizedBox(
                   width: double.infinity,
                   child: Text(
-                    '#${order.name}',
+                    '${order.name}',
                     style: const TextStyle(
                       color: Colors.black87,
                       fontSize: 24,
@@ -423,7 +423,7 @@ class _TabBar extends StatelessWidget {
         insets: EdgeInsets.symmetric(horizontal: 15),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 25),
-      overlayColor: MaterialStateProperty.all<Color>(
+      overlayColor: WidgetStateProperty.all<Color>(
         Colors.transparent,
       ),
       labelStyle: GoogleFonts.montserrat(

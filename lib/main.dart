@@ -43,7 +43,24 @@ class App extends StatelessWidget {
         child: child!,
       ),
       theme: ThemeData(
+        drawerTheme: const DrawerThemeData(backgroundColor: Colors.white),
+        // primaryColor: Colors.white,
+        scaffoldBackgroundColor: Colors.white,
+        // iconTheme: IconThemeData(color: Colors.white),
+        // dividerColor: Colors.white,
+        cardTheme: const CardTheme(color: Colors.white),
+        // dialogBackgroundColor: Colors.white,
+        // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+
+        //   backgroundColor: Colors.white,
+        //   selectedItemColor: Colors.white,
+        //   unselectedItemColor: Colors.white,
+        // ),
+        // scrollbarTheme: ScrollbarThemeData(
+        //   thumbColor: MaterialStateProperty.all<Color>(Colors.white),
+        // ),
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        colorScheme: lightColorScheme,
       ),
       debugShowCheckedModeBanner: false,
       title: 'Product List App Demo',
@@ -51,3 +68,20 @@ class App extends StatelessWidget {
     );
   }
 }
+
+ColorScheme lightColorScheme = ColorScheme.fromSeed(
+  seedColor: Colors.white,
+);
+
+ColorScheme darkColorScheme = ColorScheme.fromSeed(
+  seedColor: Colors.teal, // Change this to your desired primary color
+  brightness: Brightness.dark,
+);
+
+ThemeData myTheme = ThemeData(
+  // ... other theme properties
+  colorScheme: lightColorScheme, // Use lightColorScheme by default
+  brightness: Brightness
+      .light, // Can be set based on user preference or system defaults
+  // ... other theme properties
+);

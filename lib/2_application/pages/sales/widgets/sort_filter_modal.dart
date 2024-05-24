@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 
 class SortFilterModal extends StatefulWidget {
@@ -56,7 +57,11 @@ class _SortFilterModalState extends State<SortFilterModal> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      bottom: 8,
+                      top: 8,
+                    ),
                     child: ElevatedButton(
                       onPressed: () async {
                         final sortFilterBox =
@@ -64,6 +69,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         await sortFilterBox.clear();
                         widget.onChanged();
                         SalesPage.closeDrawer();
+                        CloudSalesPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -85,7 +91,11 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 16),
+                    padding: const EdgeInsets.only(
+                      right: 16,
+                      bottom: 8,
+                      top: 8,
+                    ),
                     child: ElevatedButton(
                       onPressed: () async {
                         final sortFilterBox =
@@ -108,6 +118,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
 
                         widget.onChanged();
                         SalesPage.closeDrawer();
+                        CloudSalesPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -137,7 +148,10 @@ class _SortFilterModalState extends State<SortFilterModal> {
             ),
             actions: [
               GestureDetector(
-                onTap: SalesPage.closeDrawer,
+                onTap: () {
+                  SalesPage.closeDrawer();
+                  CloudSalesPage.closeDrawer();
+                },
                 child: const Card(
                   elevation: 0,
                   color: Colors.transparent,
