@@ -14,9 +14,10 @@ class CloudSalesDetailsCubit extends Cubit<CloudSalesDetailsCubitState> {
   Future<void> fetchCloudSalesDetails(String id) async {
     emit(const CloudSalesDetailsStateLoading());
     try {
-      final data = await firestoreService.getSaleById(id);
-      if (data != null) {
-        emit(CloudSalesDetailsStateLoaded(data));
+      final saleOrder = await firestoreService.getSaleById(id);
+      final orderLine = await firestoreService.getOrderLinesById(id);
+      if (saleOrder != null) {
+        emit(CloudSalesDetailsStateLoaded(saleOrder, orderLine ?? []));
       } else {
         emit(const CloudSalesDetailsStateError(message: 'CloudSales Failed'));
       }

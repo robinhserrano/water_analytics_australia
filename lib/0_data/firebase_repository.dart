@@ -28,6 +28,7 @@ class FirebaseFirestoreService {
         'x_studio_referrer_processed': job.xStudioReferrerProcessed,
         'x_studio_payment_type': job.xStudioPaymentType,
         'amount_total': job.amountTotal,
+        'amount_untaxed': job.taxTotals?.amountUntaxed,
         'delivery_status': job.deliveryStatus,
         'amount_to_invoice': job.amountToInvoice,
         'x_studio_invoice_payment_status': job.xStudioInvoicePaymentStatus,
@@ -35,6 +36,13 @@ class FirebaseFirestoreService {
         'state': job.state,
       };
       await docRef.set(data);
+
+      if (job.orderLine != null) {
+        for (final order in job.orderLine!) {
+          await saveOrderLine(job.name!, order);
+        }
+      }
+
       return true;
     } catch (e) {
       print(e);
@@ -57,9 +65,32 @@ class FirebaseFirestoreService {
   Future<CloudSalesOrder?> getSaleById(String id) async {
     final docSnapshot =
         await _firestore.collection(_salesOrderPath).doc(id).get();
+
+    var hehe = docSnapshot;
+    var hihi = hehe;
     if (docSnapshot.exists) {
       return CloudSalesOrder.fromFirestore(docSnapshot);
     } else {
+      return null;
+    }
+  }
+
+  Future<List<CloudOrderLines>?> getOrderLinesById(String id) async {
+    try {
+      final docSnapshot = await _firestore
+          .collection(_salesOrderPath)
+          .doc(id)
+          .collection('order_line')
+          .get();
+
+      final lala = docSnapshot;
+
+      final order =
+          docSnapshot.docs.map(CloudOrderLines.fromFirestore).toList();
+      var hehe = order;
+      var hihi = hehe;
+      return order;
+    } catch (e) {
       return null;
     }
   }
@@ -141,6 +172,36 @@ class FirebaseFirestoreService {
       return CloudLandingPrice.fromFirestore(docSnapshot);
     } else {
       return null;
+    }
+  }
+
+  Future<bool> saveOrderLine(String jobName, OrderLine item) async {
+    try {
+      final docRef = _firestore
+          .collection(_salesOrderPath)
+          .doc(
+            jobName,
+          )
+          .collection('order_line')
+          .doc(item.productTemplateId?.displayName);
+
+      final data = <String, dynamic>{
+        'product': item.productTemplateId?.displayName ?? '',
+        'description': item.name,
+        'quantity': item.productUomQty,
+        'delivered': item.qtyDelivered,
+        'invoiced': item.qtyInvoiced,
+        'unit_price': item.priceUnit,
+        'taxes': item.taxId?[0].displayName ?? '',
+        'disc': item.discount,
+        'taxExcl': item.priceSubtotal,
+      };
+      await docRef.set(data);
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 

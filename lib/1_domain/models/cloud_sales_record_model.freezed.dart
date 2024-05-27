@@ -54,6 +54,8 @@ mixin _$CloudSalesOrder {
   @JsonKey(name: 'internal_note_display')
   String? get internalNoteDisplay => throw _privateConstructorUsedError;
   String? get state => throw _privateConstructorUsedError;
+  @JsonKey(name: 'amount_untaxed')
+  double? get amountUntaxed => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -87,7 +89,8 @@ abstract class $CloudSalesOrderCopyWith<$Res> {
       @JsonKey(name: 'x_studio_invoice_payment_status')
       dynamic xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display') String? internalNoteDisplay,
-      String? state});
+      String? state,
+      @JsonKey(name: 'amount_untaxed') double? amountUntaxed});
 }
 
 /// @nodoc
@@ -120,6 +123,7 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
     Object? xStudioInvoicePaymentStatus = freezed,
     Object? internalNoteDisplay = freezed,
     Object? state = freezed,
+    Object? amountUntaxed = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -190,6 +194,10 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as String?,
+      amountUntaxed: freezed == amountUntaxed
+          ? _value.amountUntaxed
+          : amountUntaxed // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -222,7 +230,8 @@ abstract class _$$CloudSalesOrderImplCopyWith<$Res>
       @JsonKey(name: 'x_studio_invoice_payment_status')
       dynamic xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display') String? internalNoteDisplay,
-      String? state});
+      String? state,
+      @JsonKey(name: 'amount_untaxed') double? amountUntaxed});
 }
 
 /// @nodoc
@@ -253,6 +262,7 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
     Object? xStudioInvoicePaymentStatus = freezed,
     Object? internalNoteDisplay = freezed,
     Object? state = freezed,
+    Object? amountUntaxed = freezed,
   }) {
     return _then(_$CloudSalesOrderImpl(
       id: freezed == id
@@ -323,6 +333,10 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as String?,
+      amountUntaxed: freezed == amountUntaxed
+          ? _value.amountUntaxed
+          : amountUntaxed // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -352,7 +366,8 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
       @JsonKey(name: 'x_studio_invoice_payment_status')
       required this.xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display') required this.internalNoteDisplay,
-      required this.state});
+      required this.state,
+      @JsonKey(name: 'amount_untaxed') required this.amountUntaxed});
 
   factory _$CloudSalesOrderImpl.fromJson(Map<String, dynamic> json) =>
       _$$CloudSalesOrderImplFromJson(json);
@@ -421,10 +436,13 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
   final String? internalNoteDisplay;
   @override
   final String? state;
+  @override
+  @JsonKey(name: 'amount_untaxed')
+  final double? amountUntaxed;
 
   @override
   String toString() {
-    return 'CloudSalesOrder(id: $id, name: $name, createDate: $createDate, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state)';
+    return 'CloudSalesOrder(id: $id, name: $name, createDate: $createDate, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed)';
   }
 
   @override
@@ -465,7 +483,9 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
                 xStudioInvoicePaymentStatus) &&
             (identical(other.internalNoteDisplay, internalNoteDisplay) ||
                 other.internalNoteDisplay == internalNoteDisplay) &&
-            (identical(other.state, state) || other.state == state));
+            (identical(other.state, state) || other.state == state) &&
+            (identical(other.amountUntaxed, amountUntaxed) ||
+                other.amountUntaxed == amountUntaxed));
   }
 
   @JsonKey(ignore: true)
@@ -488,7 +508,8 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
       amountToInvoice,
       const DeepCollectionEquality().hash(xStudioInvoicePaymentStatus),
       internalNoteDisplay,
-      state);
+      state,
+      amountUntaxed);
 
   @JsonKey(ignore: true)
   @override
@@ -533,7 +554,9 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
       required final dynamic xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display')
       required final String? internalNoteDisplay,
-      required final String? state}) = _$CloudSalesOrderImpl;
+      required final String? state,
+      @JsonKey(name: 'amount_untaxed')
+      required final double? amountUntaxed}) = _$CloudSalesOrderImpl;
 
   factory _CloudSalesOrder.fromJson(Map<String, dynamic> json) =
       _$CloudSalesOrderImpl.fromJson;
@@ -589,7 +612,317 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
   @override
   String? get state;
   @override
+  @JsonKey(name: 'amount_untaxed')
+  double? get amountUntaxed;
+  @override
   @JsonKey(ignore: true)
   _$$CloudSalesOrderImplCopyWith<_$CloudSalesOrderImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+CloudOrderLines _$CloudOrderLinesFromJson(Map<String, dynamic> json) {
+  return _CloudOrderLines.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CloudOrderLines {
+  String? get product => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+  num? get quantity => throw _privateConstructorUsedError;
+  num? get delivered => throw _privateConstructorUsedError;
+  num? get invoiced => throw _privateConstructorUsedError;
+  num? get unitPrice => throw _privateConstructorUsedError;
+  String? get taxes => throw _privateConstructorUsedError;
+  num? get disc => throw _privateConstructorUsedError;
+  num? get taxExcl => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CloudOrderLinesCopyWith<CloudOrderLines> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CloudOrderLinesCopyWith<$Res> {
+  factory $CloudOrderLinesCopyWith(
+          CloudOrderLines value, $Res Function(CloudOrderLines) then) =
+      _$CloudOrderLinesCopyWithImpl<$Res, CloudOrderLines>;
+  @useResult
+  $Res call(
+      {String? product,
+      String? description,
+      num? quantity,
+      num? delivered,
+      num? invoiced,
+      num? unitPrice,
+      String? taxes,
+      num? disc,
+      num? taxExcl});
+}
+
+/// @nodoc
+class _$CloudOrderLinesCopyWithImpl<$Res, $Val extends CloudOrderLines>
+    implements $CloudOrderLinesCopyWith<$Res> {
+  _$CloudOrderLinesCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? product = freezed,
+    Object? description = freezed,
+    Object? quantity = freezed,
+    Object? delivered = freezed,
+    Object? invoiced = freezed,
+    Object? unitPrice = freezed,
+    Object? taxes = freezed,
+    Object? disc = freezed,
+    Object? taxExcl = freezed,
+  }) {
+    return _then(_value.copyWith(
+      product: freezed == product
+          ? _value.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as String?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      quantity: freezed == quantity
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as num?,
+      delivered: freezed == delivered
+          ? _value.delivered
+          : delivered // ignore: cast_nullable_to_non_nullable
+              as num?,
+      invoiced: freezed == invoiced
+          ? _value.invoiced
+          : invoiced // ignore: cast_nullable_to_non_nullable
+              as num?,
+      unitPrice: freezed == unitPrice
+          ? _value.unitPrice
+          : unitPrice // ignore: cast_nullable_to_non_nullable
+              as num?,
+      taxes: freezed == taxes
+          ? _value.taxes
+          : taxes // ignore: cast_nullable_to_non_nullable
+              as String?,
+      disc: freezed == disc
+          ? _value.disc
+          : disc // ignore: cast_nullable_to_non_nullable
+              as num?,
+      taxExcl: freezed == taxExcl
+          ? _value.taxExcl
+          : taxExcl // ignore: cast_nullable_to_non_nullable
+              as num?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$CloudOrderLinesImplCopyWith<$Res>
+    implements $CloudOrderLinesCopyWith<$Res> {
+  factory _$$CloudOrderLinesImplCopyWith(_$CloudOrderLinesImpl value,
+          $Res Function(_$CloudOrderLinesImpl) then) =
+      __$$CloudOrderLinesImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String? product,
+      String? description,
+      num? quantity,
+      num? delivered,
+      num? invoiced,
+      num? unitPrice,
+      String? taxes,
+      num? disc,
+      num? taxExcl});
+}
+
+/// @nodoc
+class __$$CloudOrderLinesImplCopyWithImpl<$Res>
+    extends _$CloudOrderLinesCopyWithImpl<$Res, _$CloudOrderLinesImpl>
+    implements _$$CloudOrderLinesImplCopyWith<$Res> {
+  __$$CloudOrderLinesImplCopyWithImpl(
+      _$CloudOrderLinesImpl _value, $Res Function(_$CloudOrderLinesImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? product = freezed,
+    Object? description = freezed,
+    Object? quantity = freezed,
+    Object? delivered = freezed,
+    Object? invoiced = freezed,
+    Object? unitPrice = freezed,
+    Object? taxes = freezed,
+    Object? disc = freezed,
+    Object? taxExcl = freezed,
+  }) {
+    return _then(_$CloudOrderLinesImpl(
+      product: freezed == product
+          ? _value.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as String?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      quantity: freezed == quantity
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as num?,
+      delivered: freezed == delivered
+          ? _value.delivered
+          : delivered // ignore: cast_nullable_to_non_nullable
+              as num?,
+      invoiced: freezed == invoiced
+          ? _value.invoiced
+          : invoiced // ignore: cast_nullable_to_non_nullable
+              as num?,
+      unitPrice: freezed == unitPrice
+          ? _value.unitPrice
+          : unitPrice // ignore: cast_nullable_to_non_nullable
+              as num?,
+      taxes: freezed == taxes
+          ? _value.taxes
+          : taxes // ignore: cast_nullable_to_non_nullable
+              as String?,
+      disc: freezed == disc
+          ? _value.disc
+          : disc // ignore: cast_nullable_to_non_nullable
+              as num?,
+      taxExcl: freezed == taxExcl
+          ? _value.taxExcl
+          : taxExcl // ignore: cast_nullable_to_non_nullable
+              as num?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$CloudOrderLinesImpl implements _CloudOrderLines {
+  const _$CloudOrderLinesImpl(
+      {required this.product,
+      required this.description,
+      required this.quantity,
+      required this.delivered,
+      required this.invoiced,
+      required this.unitPrice,
+      required this.taxes,
+      required this.disc,
+      required this.taxExcl});
+
+  factory _$CloudOrderLinesImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CloudOrderLinesImplFromJson(json);
+
+  @override
+  final String? product;
+  @override
+  final String? description;
+  @override
+  final num? quantity;
+  @override
+  final num? delivered;
+  @override
+  final num? invoiced;
+  @override
+  final num? unitPrice;
+  @override
+  final String? taxes;
+  @override
+  final num? disc;
+  @override
+  final num? taxExcl;
+
+  @override
+  String toString() {
+    return 'CloudOrderLines(product: $product, description: $description, quantity: $quantity, delivered: $delivered, invoiced: $invoiced, unitPrice: $unitPrice, taxes: $taxes, disc: $disc, taxExcl: $taxExcl)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CloudOrderLinesImpl &&
+            (identical(other.product, product) || other.product == product) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.quantity, quantity) ||
+                other.quantity == quantity) &&
+            (identical(other.delivered, delivered) ||
+                other.delivered == delivered) &&
+            (identical(other.invoiced, invoiced) ||
+                other.invoiced == invoiced) &&
+            (identical(other.unitPrice, unitPrice) ||
+                other.unitPrice == unitPrice) &&
+            (identical(other.taxes, taxes) || other.taxes == taxes) &&
+            (identical(other.disc, disc) || other.disc == disc) &&
+            (identical(other.taxExcl, taxExcl) || other.taxExcl == taxExcl));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, product, description, quantity,
+      delivered, invoiced, unitPrice, taxes, disc, taxExcl);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CloudOrderLinesImplCopyWith<_$CloudOrderLinesImpl> get copyWith =>
+      __$$CloudOrderLinesImplCopyWithImpl<_$CloudOrderLinesImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CloudOrderLinesImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CloudOrderLines implements CloudOrderLines {
+  const factory _CloudOrderLines(
+      {required final String? product,
+      required final String? description,
+      required final num? quantity,
+      required final num? delivered,
+      required final num? invoiced,
+      required final num? unitPrice,
+      required final String? taxes,
+      required final num? disc,
+      required final num? taxExcl}) = _$CloudOrderLinesImpl;
+
+  factory _CloudOrderLines.fromJson(Map<String, dynamic> json) =
+      _$CloudOrderLinesImpl.fromJson;
+
+  @override
+  String? get product;
+  @override
+  String? get description;
+  @override
+  num? get quantity;
+  @override
+  num? get delivered;
+  @override
+  num? get invoiced;
+  @override
+  num? get unitPrice;
+  @override
+  String? get taxes;
+  @override
+  num? get disc;
+  @override
+  num? get taxExcl;
+  @override
+  @JsonKey(ignore: true)
+  _$$CloudOrderLinesImplCopyWith<_$CloudOrderLinesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -163,7 +163,7 @@ class SalesDetailsPageLoaded extends HookWidget {
                 SizedBox(
                   width: double.infinity,
                   child: Text(
-                    '${order.name}',
+                    '#${order.name}',
                     style: const TextStyle(
                       color: Colors.black87,
                       fontSize: 24,
@@ -173,142 +173,8 @@ class SalesDetailsPageLoaded extends HookWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    const Text(
-                      'Order Date',
-                    ),
-                    const Spacer(),
-                    Text(
-                      order.createDate == null
-                          ? ''
-                          : DateFormat('MM/dd/yyyy hh:mm a')
-                              .format(order.createDate!),
-                      style: const TextStyle(color: Color(0xff7a7a7a)),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Payment Type',
-                    ),
-                    const Spacer(),
-                    Text(
-                      order.xStudioPaymentType,
-                      style: const TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Payment Status',
-                    ),
-                    const Spacer(),
-                    Text(
-                      capitalizeFirstLetter(
-                        order.xStudioInvoicePaymentStatus.toString() ==
-                                'not_paid'
-                            ? 'Not Paid'
-                            : order.xStudioInvoicePaymentStatus.toString(),
-                      ),
-                      style: const TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Delivery Status',
-                    ),
-                    const Spacer(),
-                    Text(
-                      capitalizeFirstLetter(
-                        (order.deliveryStatus ?? '').toString(),
-                      ),
-                      style: const TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Amount Total',
-                    ),
-                    const Spacer(),
-                    Text(
-                      r'$' + (order.amountTotal ?? 0).toStringAsFixed(2),
-                      style: const TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Amount Invoiced',
-                    ),
-                    const Spacer(),
-                    Text(
-                      r'$' + (order.amountToInvoice ?? 0).toStringAsFixed(2),
-                      style: const TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                const Row(
-                  children: [
-                    Text(
-                      'Referred By',
-                    ),
-                    Spacer(),
-                    Text(
-                      '',
-                      style: TextStyle(
-                        color: Color(0xff7a7a7a),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Referrer Processed',
-                    ),
-                    const Spacer(),
-                    Checkbox(
-                      value: order.xStudioReferrerProcessed,
-                      activeColor: Colors.blue,
-                      onChanged: (value) {},
-                    ),
-                  ],
+                OrderInfos(
+                  order: order,
                 ),
                 CustomerInfoSection(
                   order: order,
@@ -349,6 +215,155 @@ class SalesDetailsPageLoaded extends HookWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+class OrderInfos extends StatelessWidget {
+  const OrderInfos({required this.order, super.key});
+
+  final SalesOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Text(
+              'Order Date',
+            ),
+            const Spacer(),
+            Text(
+              order.createDate == null
+                  ? ''
+                  : DateFormat('MM/dd/yyyy hh:mm a').format(order.createDate!),
+              style: const TextStyle(color: Color(0xff7a7a7a)),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            const Text(
+              'Payment Type',
+            ),
+            const Spacer(),
+            Text(
+              order.xStudioPaymentType,
+              style: const TextStyle(
+                color: Color(0xff7a7a7a),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            const Text(
+              'Payment Status',
+            ),
+            const Spacer(),
+            Text(
+              capitalizeFirstLetter(
+                order.xStudioInvoicePaymentStatus.toString() == 'not_paid'
+                    ? 'Not Paid'
+                    : order.xStudioInvoicePaymentStatus.toString(),
+              ),
+              style: const TextStyle(
+                color: Color(0xff7a7a7a),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            const Text(
+              'Delivery Status',
+            ),
+            const Spacer(),
+            Text(
+              capitalizeFirstLetter(
+                (order.deliveryStatus ?? '').toString(),
+              ),
+              style: const TextStyle(
+                color: Color(0xff7a7a7a),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            const Text(
+              'Amount Total',
+            ),
+            const Spacer(),
+            Text(
+              r'$' + (order.amountTotal ?? 0).toStringAsFixed(2),
+              style: const TextStyle(
+                color: Color(0xff7a7a7a),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            const Text(
+              'Amount Invoiced',
+            ),
+            const Spacer(),
+            Text(
+              r'$' + (order.amountToInvoice ?? 0).toStringAsFixed(2),
+              style: const TextStyle(
+                color: Color(0xff7a7a7a),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        const Row(
+          children: [
+            Text(
+              'Referred By',
+            ),
+            Spacer(),
+            Text(
+              '',
+              style: TextStyle(
+                color: Color(0xff7a7a7a),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            const Text(
+              'Referrer Processed',
+            ),
+            const Spacer(),
+            Checkbox(
+              value: order.xStudioReferrerProcessed,
+              activeColor: Colors.blue,
+              onChanged: (value) {},
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -1096,7 +1111,18 @@ List<OrderLine> getAdditionalCost(
   additionalCostSet
       .retainWhere((element) => !tempAdditionalCostSet.contains(element));
 
-  final additionalCostList = additionalCostSet.toList()..removeAt(0);
+  //final additionalCostList = additionalCostSet.toList()..removeAt(0);
+
+  final additionalCostList = additionalCostSet.toList()
+    ..removeWhere(
+      (item) =>
+          ((item.productTemplateId?.displayName ?? '')
+              .toLowerCase()
+              .contains('installation service')) ||
+          (item.productTemplateId?.displayName ?? '')
+              .toLowerCase()
+              .contains('supply only'),
+    );
   return additionalCostList;
 }
 

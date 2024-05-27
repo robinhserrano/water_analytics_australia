@@ -16,8 +16,9 @@ class CloudSalesDetailsStateLoading extends CloudSalesDetailsCubitState {
 }
 
 class CloudSalesDetailsStateLoaded extends CloudSalesDetailsCubitState {
-  const CloudSalesDetailsStateLoaded(this.order);
+  const CloudSalesDetailsStateLoaded(this.order, this.orderLine);
   final CloudSalesOrder order;
+  final List<CloudOrderLines> orderLine;
 
   @override
   List<Object> get props => [];

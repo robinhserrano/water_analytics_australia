@@ -36,6 +36,7 @@ class CloudSalesOrder with _$CloudSalesOrder {
     @JsonKey(name: 'internal_note_display') //P
     required String? internalNoteDisplay,
     required String? state,
+    @JsonKey(name: 'amount_untaxed') required double? amountUntaxed,
   }) = _CloudSalesOrder;
 
   factory CloudSalesOrder.fromJson(Map<String, dynamic> json) =>
@@ -63,6 +64,41 @@ class CloudSalesOrder with _$CloudSalesOrder {
           doc.get('x_studio_invoice_payment_status') as dynamic,
       internalNoteDisplay: doc.get('internal_note_display') as String,
       state: doc.get('state') as String,
+      amountUntaxed: doc.get('amount_untaxed') as double,
+    );
+  }
+}
+
+@freezed
+class CloudOrderLines with _$CloudOrderLines {
+  const factory CloudOrderLines({
+    required String? product,
+    required String? description,
+    required num? quantity,
+    required num? delivered,
+    required num? invoiced,
+    required num? unitPrice,
+    required String? taxes,
+    required num? disc,
+    required num? taxExcl,
+  }) = _CloudOrderLines;
+
+  factory CloudOrderLines.fromJson(Map<String, dynamic> json) =>
+      _$CloudOrderLinesFromJson(json);
+
+  factory CloudOrderLines.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    return CloudOrderLines(
+      product: doc.get('product') as String,
+      description: doc.get('description') as String,
+      quantity: doc.get('quantity') as num,
+      delivered: doc.get('delivered') as num,
+      invoiced: doc.get('invoiced') as num,
+      unitPrice: doc.get('unit_price') as num,
+      taxes: doc.get('taxes') as String,
+      disc: doc.get('disc') as num,
+      taxExcl: doc.get('taxExcl') as num,
     );
   }
 }

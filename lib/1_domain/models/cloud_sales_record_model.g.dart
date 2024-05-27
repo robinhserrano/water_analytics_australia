@@ -28,6 +28,7 @@ _$CloudSalesOrderImpl _$$CloudSalesOrderImplFromJson(
       xStudioInvoicePaymentStatus: json['x_studio_invoice_payment_status'],
       internalNoteDisplay: json['internal_note_display'] as String?,
       state: json['state'] as String?,
+      amountUntaxed: (json['amount_untaxed'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$CloudSalesOrderImplToJson(
@@ -50,4 +51,33 @@ Map<String, dynamic> _$$CloudSalesOrderImplToJson(
       'x_studio_invoice_payment_status': instance.xStudioInvoicePaymentStatus,
       'internal_note_display': instance.internalNoteDisplay,
       'state': instance.state,
+      'amount_untaxed': instance.amountUntaxed,
+    };
+
+_$CloudOrderLinesImpl _$$CloudOrderLinesImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CloudOrderLinesImpl(
+      product: json['product'] as String?,
+      description: json['description'] as String?,
+      quantity: json['quantity'] as num?,
+      delivered: json['delivered'] as num?,
+      invoiced: json['invoiced'] as num?,
+      unitPrice: json['unitPrice'] as num?,
+      taxes: json['taxes'] as String?,
+      disc: json['disc'] as num?,
+      taxExcl: json['taxExcl'] as num?,
+    );
+
+Map<String, dynamic> _$$CloudOrderLinesImplToJson(
+        _$CloudOrderLinesImpl instance) =>
+    <String, dynamic>{
+      'product': instance.product,
+      'description': instance.description,
+      'quantity': instance.quantity,
+      'delivered': instance.delivered,
+      'invoiced': instance.invoiced,
+      'unitPrice': instance.unitPrice,
+      'taxes': instance.taxes,
+      'disc': instance.disc,
+      'taxExcl': instance.taxExcl,
     };

@@ -226,7 +226,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
       ),
       margin: const EdgeInsets.symmetric(
         horizontal: 16,
-        vertical: 8,
+        vertical: 16,
       ),
       child: TextFormField(
         controller: ctrlSearch,
