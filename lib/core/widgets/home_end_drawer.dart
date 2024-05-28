@@ -5,7 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
-import 'package:water_analytics_australia/2_application/landing_price_page/view/landing_price_page.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 
 class HomeEndDrawer extends StatelessWidget {
@@ -42,15 +42,15 @@ class HomeEndDrawer extends StatelessWidget {
                           const SizedBox(
                             height: 8,
                           ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            user.first.displayName ??
-                                (user.first.userName ?? 'USER_NAME'),
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
+                          // Text(
+                          //   textAlign: TextAlign.center,
+                          //   user.first.displayName ??
+                          //       (user.first.userName ?? 'USER_NAME'),
+                          //   style: const TextStyle(fontSize: 16),
+                          // ),
+                          // const SizedBox(
+                          //   height: 4,
+                          // ),
                           Text(
                             textAlign: TextAlign.center,
                             user.first.email ??

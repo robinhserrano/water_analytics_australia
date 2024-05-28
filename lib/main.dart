@@ -48,7 +48,10 @@ class App extends StatelessWidget {
         drawerTheme: const DrawerThemeData(backgroundColor: Colors.white),
         // primaryColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
-        // iconTheme: IconThemeData(color: Colors.white),
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+
         // dividerColor: Colors.white,
         cardTheme: const CardTheme(color: Colors.white),
         // dialogBackgroundColor: Colors.white,
@@ -65,7 +68,7 @@ class App extends StatelessWidget {
         colorScheme: lightColorScheme,
       ),
       debugShowCheckedModeBanner: false,
-      title: 'Product List App Demo',
+      title: 'WA Commission App',
       routerConfig: routes,
     );
   }

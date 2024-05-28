@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
-import 'package:water_analytics_australia/2_application/landing_price_detail_page/view/landing_price_detail_page.dart';
-import 'package:water_analytics_australia/2_application/landing_price_page/cubit/landing_price_cubit.dart';
-import 'package:water_analytics_australia/2_application/landing_price_page/widget/landing_price_card.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/view/landing_price_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_page/cubit/landing_price_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_page/widget/landing_price_card.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
@@ -48,9 +48,9 @@ class _LandingPricePageState extends State<LandingPricePage> {
       key: _scaffoldKey,
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
-        backgroundColor: const Color(0xff0083ff),
+        backgroundColor: Colors.black, // const Color(0xff0083ff),
         title: const Text(
-          'Landing Price - Firebase',
+          'Landing Price',
           style: TextStyle(color: Colors.white),
         ),
       ),

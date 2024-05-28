@@ -1,5 +1,7 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, unused_import, inference_failure_on_function_return_type, avoid_positional_boolean_parameters
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,9 +11,9 @@ import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
-import 'package:water_analytics_australia/2_application/landing_price_detail_page/cubit/landing_price_detail_cubit.dart';
-import 'package:water_analytics_australia/2_application/landing_price_page/cubit/landing_price_cubit.dart';
-import 'package:water_analytics_australia/2_application/landing_price_page/widget/landing_price_card.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/cubit/landing_price_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_page/cubit/landing_price_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_page/widget/landing_price_card.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/widget/cloud_sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
@@ -62,7 +64,7 @@ class _LandingPriceDetailPageState extends State<LandingPriceDetailPage> {
       key: _scaffoldKey,
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
-        backgroundColor: const Color(0xff0083ff),
+        backgroundColor: Colors.black, //const Color(0xff0083ff),
         title: const Text(
           'Edit Landing Price',
           style: TextStyle(color: Colors.white),
@@ -169,88 +171,158 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
     final cubit = context.read<LandingPriceDetailCubit>();
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Text(
-                widget.landingPrice.internalReference,
-                style: const TextStyle(fontSize: 16),
-              ),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    widget.landingPrice.internalReference,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                CustomTextField(
+                  ctrl: ctrlProductName,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  title: 'Product Name',
+                  isValidating: isValidating,
+                ),
+                CustomTextField(
+                  ctrl: ctrlInstallationService,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  title: 'Installation Service',
+                  isValidating: isValidating,
+                  inputType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+                CustomTextField(
+                  ctrl: ctrlSupplyOnly,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  title: 'Supply Only',
+                  isValidating: isValidating,
+                  inputType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 16,
-            ),
-            CustomTextField(
-              ctrl: ctrlProductName,
-              onChanged: (value) {
-                setState(() {});
-              },
-              title: 'Product Name',
-              isValidating: isValidating,
-            ),
-            CustomTextField(
-              ctrl: ctrlInstallationService,
-              onChanged: (value) {
-                setState(() {});
-              },
-              title: 'Installation Service',
-              isValidating: isValidating,
-              inputType: const TextInputType.numberWithOptions(decimal: true),
-            ),
-            CustomTextField(
-              ctrl: ctrlSupplyOnly,
-              onChanged: (value) {
-                setState(() {});
-              },
-              title: 'Supply Only',
-              isValidating: isValidating,
-              inputType: const TextInputType.numberWithOptions(decimal: true),
-            ),
-          ],
+          ),
         ),
       ),
       bottomSheet: Container(
+        height: 60,
         color: Colors.white,
         width: double.infinity,
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            backgroundColor: const Color(0xff475467),
+          ),
           onPressed: () async {
-            final success = await cubit.saveLandingPriceDetails(
-              LandingPrice(
-                name: ctrlProductName.text,
-                internalReference: widget.landingPrice.internalReference,
-                productCategory: widget.landingPrice.productCategory,
-                installationService:
-                    double.tryParse(ctrlInstallationService.text) ?? 0,
-                supplyOnly: double.tryParse(ctrlSupplyOnly.text) ?? 0,
-              ),
-            );
-            if (success) {
-              const snackBar = SnackBar(
-                backgroundColor: Colors.green,
-                content: Text('Successfully saved order.'),
-              );
-
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
+            if (ctrlInstallationService.text.isEmpty ||
+                ctrlProductName.text.isEmpty ||
+                ctrlSupplyOnly.text.isEmpty) {
+              setState(() {
+                isValidating = true;
+              });
             } else {
-              const snackBar = SnackBar(
-                backgroundColor: Colors.red,
-                content: Text('Failed to save order.'),
+              setState(() {
+                isValidating = false;
+              });
+            }
+
+            if (isValidating == false) {
+              unawaited(showSavingModal(context));
+              final success = await cubit.saveLandingPriceDetails(
+                LandingPrice(
+                  name: ctrlProductName.text,
+                  internalReference: widget.landingPrice.internalReference,
+                  productCategory: widget.landingPrice.productCategory,
+                  installationService:
+                      double.tryParse(ctrlInstallationService.text) ?? 0,
+                  supplyOnly: double.tryParse(ctrlSupplyOnly.text) ?? 0,
+                ),
               );
 
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              if (success) {
+                if (context.mounted) {
+                  context.pop();
+                }
+                const snackBar = SnackBar(
+                  backgroundColor: Colors.green,
+                  content: Text('Successfully saved order.'),
+                );
+
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              } else {
+                if (context.mounted) {
+                  context.pop();
+                }
+                const snackBar = SnackBar(
+                  backgroundColor: Colors.red,
+                  content: Text('Failed to save order.'),
+                );
+
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
               }
             }
           },
-          child: const Text('Save'),
+          child: const Text(
+            'Save',
+            style: TextStyle(
+              color: Color(0xffFFFFFF),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ),
     );
   }
+}
+
+Future<void> showSavingModal(
+  BuildContext context,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            'Updating User Details...',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
 }

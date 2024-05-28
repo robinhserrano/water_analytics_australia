@@ -72,7 +72,7 @@ class _CloudSalesPageState extends State<CloudSalesPage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black, //(0xff0083ff),
         title: const Text(
-          'Sales Quotation - Firebase',
+          'Sales Quotation',
           style: TextStyle(color: Colors.white),
         ),
         actions: [

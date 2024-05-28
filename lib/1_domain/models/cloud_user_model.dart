@@ -8,7 +8,8 @@ part 'cloud_user_model.g.dart';
 @freezed
 class CloudUser with _$CloudUser {
   const factory CloudUser({
-    required int accessLevel,
+    required num accessLevel,
+    required num commissionSplit,
     required String displayName,
     required String email,
     required String? photoUrl,
@@ -21,7 +22,8 @@ class CloudUser with _$CloudUser {
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     return CloudUser(
-      accessLevel: doc.get('accessLevel') as int,
+      accessLevel: doc.get('accessLevel') as num,
+      commissionSplit: doc.get('commissionSplit') as num,
       displayName: doc.get('displayName') as String,
       email: doc.get('email') as String,
       photoUrl: doc.get('photoUrl') as String?,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:water_analytics_australia/2_application/pages/admin_users/cloud_sales_details/view/admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 
@@ -17,8 +18,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _pageIndex = 0;
   final List<Widget> _screens = [
-    const SalesPageWrapperProvider(),
     const CloudSalesPageWrapperProvider(),
+    const AdminUsersPageWrapperProvider(),
+    const SalesPageWrapperProvider(),
   ];
 
   final destinations = [
@@ -27,8 +29,12 @@ class _HomePageState extends State<HomePage> {
       label: 'Home',
     ),
     const NavigationDestination(
-      icon: HeroIcon(HeroIcons.fire),
-      label: 'Firebase',
+      icon: HeroIcon(HeroIcons.users),
+      label: 'Users',
+    ),
+    const NavigationDestination(
+      icon: HeroIcon(HeroIcons.circleStack),
+      label: 'Odoo',
     ),
   ];
 

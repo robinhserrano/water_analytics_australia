@@ -20,7 +20,8 @@ CloudUser _$CloudUserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CloudUser {
-  int get accessLevel => throw _privateConstructorUsedError;
+  num get accessLevel => throw _privateConstructorUsedError;
+  num get commissionSplit => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
@@ -37,7 +38,11 @@ abstract class $CloudUserCopyWith<$Res> {
       _$CloudUserCopyWithImpl<$Res, CloudUser>;
   @useResult
   $Res call(
-      {int accessLevel, String displayName, String email, String? photoUrl});
+      {num accessLevel,
+      num commissionSplit,
+      String displayName,
+      String email,
+      String? photoUrl});
 }
 
 /// @nodoc
@@ -54,6 +59,7 @@ class _$CloudUserCopyWithImpl<$Res, $Val extends CloudUser>
   @override
   $Res call({
     Object? accessLevel = null,
+    Object? commissionSplit = null,
     Object? displayName = null,
     Object? email = null,
     Object? photoUrl = freezed,
@@ -62,7 +68,11 @@ class _$CloudUserCopyWithImpl<$Res, $Val extends CloudUser>
       accessLevel: null == accessLevel
           ? _value.accessLevel
           : accessLevel // ignore: cast_nullable_to_non_nullable
-              as int,
+              as num,
+      commissionSplit: null == commissionSplit
+          ? _value.commissionSplit
+          : commissionSplit // ignore: cast_nullable_to_non_nullable
+              as num,
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -88,7 +98,11 @@ abstract class _$$CloudUserImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int accessLevel, String displayName, String email, String? photoUrl});
+      {num accessLevel,
+      num commissionSplit,
+      String displayName,
+      String email,
+      String? photoUrl});
 }
 
 /// @nodoc
@@ -103,6 +117,7 @@ class __$$CloudUserImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? accessLevel = null,
+    Object? commissionSplit = null,
     Object? displayName = null,
     Object? email = null,
     Object? photoUrl = freezed,
@@ -111,7 +126,11 @@ class __$$CloudUserImplCopyWithImpl<$Res>
       accessLevel: null == accessLevel
           ? _value.accessLevel
           : accessLevel // ignore: cast_nullable_to_non_nullable
-              as int,
+              as num,
+      commissionSplit: null == commissionSplit
+          ? _value.commissionSplit
+          : commissionSplit // ignore: cast_nullable_to_non_nullable
+              as num,
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -133,6 +152,7 @@ class __$$CloudUserImplCopyWithImpl<$Res>
 class _$CloudUserImpl implements _CloudUser {
   const _$CloudUserImpl(
       {required this.accessLevel,
+      required this.commissionSplit,
       required this.displayName,
       required this.email,
       required this.photoUrl});
@@ -141,7 +161,9 @@ class _$CloudUserImpl implements _CloudUser {
       _$$CloudUserImplFromJson(json);
 
   @override
-  final int accessLevel;
+  final num accessLevel;
+  @override
+  final num commissionSplit;
   @override
   final String displayName;
   @override
@@ -151,7 +173,7 @@ class _$CloudUserImpl implements _CloudUser {
 
   @override
   String toString() {
-    return 'CloudUser(accessLevel: $accessLevel, displayName: $displayName, email: $email, photoUrl: $photoUrl)';
+    return 'CloudUser(accessLevel: $accessLevel, commissionSplit: $commissionSplit, displayName: $displayName, email: $email, photoUrl: $photoUrl)';
   }
 
   @override
@@ -161,6 +183,8 @@ class _$CloudUserImpl implements _CloudUser {
             other is _$CloudUserImpl &&
             (identical(other.accessLevel, accessLevel) ||
                 other.accessLevel == accessLevel) &&
+            (identical(other.commissionSplit, commissionSplit) ||
+                other.commissionSplit == commissionSplit) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.email, email) || other.email == email) &&
@@ -170,8 +194,8 @@ class _$CloudUserImpl implements _CloudUser {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, accessLevel, displayName, email, photoUrl);
+  int get hashCode => Object.hash(
+      runtimeType, accessLevel, commissionSplit, displayName, email, photoUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -189,7 +213,8 @@ class _$CloudUserImpl implements _CloudUser {
 
 abstract class _CloudUser implements CloudUser {
   const factory _CloudUser(
-      {required final int accessLevel,
+      {required final num accessLevel,
+      required final num commissionSplit,
       required final String displayName,
       required final String email,
       required final String? photoUrl}) = _$CloudUserImpl;
@@ -198,7 +223,9 @@ abstract class _CloudUser implements CloudUser {
       _$CloudUserImpl.fromJson;
 
   @override
-  int get accessLevel;
+  num get accessLevel;
+  @override
+  num get commissionSplit;
   @override
   String get displayName;
   @override

@@ -2,8 +2,10 @@ import 'package:get_it/get_it.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
-import 'package:water_analytics_australia/2_application/landing_price_detail_page/cubit/landing_price_detail_cubit.dart';
-import 'package:water_analytics_australia/2_application/landing_price_page/cubit/landing_price_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/cubit/landing_price_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_page/cubit/landing_price_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/admin_users/cloud_sales_details/bloc/admin_users_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/bloc/admin_users_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/login/bloc/login_cubit.dart';
@@ -46,6 +48,16 @@ Future<void> init() async {
     )
     ..registerFactory(
       () => LandingPriceDetailCubit(
+        firestoreService: sl(),
+      ),
+    )
+    ..registerFactory(
+      () => AdminUsersCubit(
+        firestoreService: sl(),
+      ),
+    )
+    ..registerFactory(
+      () => AdminUsersDetailCubit(
         firestoreService: sl(),
       ),
     )

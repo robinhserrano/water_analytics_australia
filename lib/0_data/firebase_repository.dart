@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
+import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 
 class FirebaseFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final String _usersPath = 'users';
   final String _salesOrderPath = 'sales.order';
   final String _timestampPath = 'last.upload.time';
   final String _landingPricePath = 'landing.price';
@@ -198,6 +200,47 @@ class FirebaseFirestoreService {
       };
       await docRef.set(data);
 
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<List<CloudUser>?> getUsers() async {
+    try {
+      final querySnapshot = await _firestore.collection(_usersPath).get();
+      final users = querySnapshot.docs.map(CloudUser.fromFirestore).toList();
+      return users;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<CloudUser?> getUserById(String id) async {
+    final docSnapshot = await _firestore.collection(_usersPath).doc(id).get();
+    if (docSnapshot.exists) {
+      return CloudUser.fromFirestore(docSnapshot);
+    } else {
+      return null;
+    }
+  }
+
+  Future<bool> updateUserById(CloudUser user) async {
+    try {
+      final docRef = _firestore.collection(_usersPath).doc(
+            user.email,
+          );
+
+      final data = <String, dynamic>{
+        'displayName': user.displayName,
+        'email': user.email,
+        'photoUrl': user.photoUrl,
+        'accessLevel': user.accessLevel,
+        'commissionSplit': user.commissionSplit,
+      };
+      await docRef.set(data);
       return true;
     } catch (e) {
       print(e);

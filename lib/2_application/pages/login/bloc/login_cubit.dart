@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
@@ -50,16 +51,27 @@ class LoginCubit extends Cubit<LoginCubitState> {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailAddress, password: password);
-      if (credential.user != null) {
+
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(emailAddress)
+          .get();
+
+      final cloudUser =
+          docSnapshot.exists ? CloudUser.fromFirestore(docSnapshot) : null;
+
+      var hehe = cloudUser;
+
+      if (cloudUser != null && credential.user != null) {
         final user = UserHive(
           null, //data.dbName,
           null, //data.userLogin,
           null, //data.userName,
           null, //password,
-          null,
+          credential.user?.displayName,
           emailAddress, //null,
-          null,
-          4,
+          credential.user?.photoURL,
+          cloudUser.accessLevel.toInt(),
         );
 
         final userBox = Hive.box<UserHive>('user');
@@ -83,6 +95,11 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ),
         );
       }
+      emit(
+        const LoginStateError(
+          message: 'Login Failed',
+        ),
+      );
     } catch (e) {
       emit(
         const LoginStateError(
@@ -123,6 +140,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
             'email': googleUser.email,
             'photoUrl': googleUser.photoUrl,
             'accessLevel': accessLevel,
+            'commissionSplit': 50,
             // Add other relevant user profile fields as needed (e.g., photoURL)
             // ...
           };
@@ -141,7 +159,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           print("New user document created in 'users' collection");
         } else {
           final user = CloudUser.fromFirestore(userDocSnapshot);
-          accessLevel = user.accessLevel;
+          accessLevel = user.accessLevel.toInt();
           print("Existing user signed in using Google");
         }
         // Sign in with Firebase using the credential (if applicable)

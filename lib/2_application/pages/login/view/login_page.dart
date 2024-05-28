@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -111,26 +112,28 @@ class _LoginPageState extends State<LoginPage> {
                       isValidating: isPasswordValidating,
                       inputType: TextInputType.visiblePassword,
                     ),
-                    const Row(
-                      children: [
-                        Expanded(child: Divider()),
-                        Padding(
-                          padding: EdgeInsets.all(12),
-                          child: Text('Or'),
-                        ),
-                        Expanded(child: Divider()),
-                      ],
-                    ),
-                    ElevatedButton.icon(
-                      style: ButtonStyle(
-                        elevation: WidgetStateProperty.all(1),
+                    if (!kIsWeb) ...[
+                      const Row(
+                        children: [
+                          Expanded(child: Divider()),
+                          Padding(
+                            padding: EdgeInsets.all(12),
+                            child: Text('Or'),
+                          ),
+                          Expanded(child: Divider()),
+                        ],
                       ),
-                      onPressed: () async {
-                        await cubit.signInWithGoogle();
-                      },
-                      icon: const Icon(FontAwesomeIcons.google),
-                      label: const Text('Sign in with Google'),
-                    ),
+                      ElevatedButton.icon(
+                        style: ButtonStyle(
+                          elevation: WidgetStateProperty.all(1),
+                        ),
+                        onPressed: () async {
+                          await cubit.signInWithGoogle();
+                        },
+                        icon: const Icon(FontAwesomeIcons.google),
+                        label: const Text('Sign in with Google'),
+                      ),
+                    ],
                     const Spacer(),
                     SizedBox(
                       height: 60,

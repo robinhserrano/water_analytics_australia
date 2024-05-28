@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_landing_price_model.dart';
-import 'package:water_analytics_australia/2_application/landing_price_detail_page/view/landing_price_detail_page.dart';
-import 'package:water_analytics_australia/2_application/landing_price_page/view/landing_price_page.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/view/landing_price_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_page/view/landing_price_page.dart';
 
 class LandingPriceCard extends StatelessWidget {
   const LandingPriceCard({required this.record, super.key});
