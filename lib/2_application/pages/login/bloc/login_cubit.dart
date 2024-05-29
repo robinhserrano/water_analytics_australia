@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
@@ -30,6 +29,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           null,
           null,
           4,
+          50,
         );
 
         final userBox = Hive.box<UserHive>('user');
@@ -72,6 +72,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           emailAddress, //null,
           credential.user?.photoURL,
           cloudUser.accessLevel.toInt(),
+          cloudUser.commissionSplit.toInt(),
         );
 
         final userBox = Hive.box<UserHive>('user');
@@ -181,6 +182,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           googleUser.email,
           googleUser.photoUrl,
           accessLevel,
+          50,
         );
 
         final userBox = Hive.box<UserHive>('user');

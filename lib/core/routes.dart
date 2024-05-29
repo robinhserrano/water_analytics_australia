@@ -91,6 +91,15 @@ final routes = GoRouter(
         );
       },
     ),
+    //  GoRoute(
+    //   name: AdminUsersDetailPage.name,
+    //   path: AdminUsersDetailPage.path,
+    //   builder: (context, state) {
+    //     return AdminUsersDetailPageWrapperProvider(
+    //       id: state.pathParameters['id']!,
+    //     );
+    //   },
+    // ),
   ],
   redirect: (context, state) async {
     // final auth = context.read<AuthCubit>();

@@ -311,6 +311,8 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       DataColumn(label: Text('Commission Paid')),
                       DataColumn(label: Text('Total')),
                       DataColumn(label: Text('Delivery Status')),
+                      DataColumn(label: Text('Final Commission')),
+                      DataColumn(label: Text('Confirmed by Manager')),
                     ],
                     source: MyDataTableSource(widget.records, context),
                   ),
@@ -442,6 +444,23 @@ class MyDataTableSource extends DataTableSource {
                     : '',
           ),
         ),
+        DataCell(
+          onTap: () => onTap(item),
+          const Text(r'$0'),
+        ),
+        DataCell(
+          onTap: () => onTap(item),
+          Checkbox(
+            onChanged: null, //(value) {},
+            value: item.xStudioCommissionPaid,
+          ),
+        ),
+        // DataCell(
+        //   onTap: () => onTap(item),
+        //   Text(
+        //     formatCurrency(item.amountTotal ?? 0),
+        //   ),
+        // ),
       ],
     );
   }

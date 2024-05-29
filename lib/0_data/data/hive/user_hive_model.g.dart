@@ -25,13 +25,14 @@ class UserHiveAdapter extends TypeAdapter<UserHive> {
       fields[5] as String?,
       fields[6] as String?,
       fields[7] as int,
+      fields[8] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserHive obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.dbName)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class UserHiveAdapter extends TypeAdapter<UserHive> {
       ..writeByte(6)
       ..write(obj.photoUrl)
       ..writeByte(7)
-      ..write(obj.accessLevel);
+      ..write(obj.accessLevel)
+      ..writeByte(8)
+      ..write(obj.commissionStatus);
   }
 
   @override

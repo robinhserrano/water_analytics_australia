@@ -700,9 +700,21 @@ class CommissionSection extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              CustomRowTile(
-                '(debug) additional_cost',
-                r'$' + additionalCost.toStringAsFixed(2),
+              Row(
+                children: [
+                  const Text(
+                    '(debug) additional_deduction',
+                  ),
+                  const Spacer(),
+                  Text(
+                    r'$' + additionalCost.toStringAsFixed(2),
+                    style: TextStyle(
+                      color: additionalCost > 0
+                          ? Colors.red
+                          : const Color(0xff7a7a7a),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 8,

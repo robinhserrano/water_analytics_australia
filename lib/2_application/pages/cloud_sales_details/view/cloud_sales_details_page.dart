@@ -773,7 +773,7 @@ class CommissionSection extends StatelessWidget {
 
     final additionalCost = getAdditionalCost(orderLine, landingPrices).fold(
       0.0,
-      (prev, e) => prev + (e.taxExcl ?? 0),
+      (prev, e) => prev + (e.unitPrice ?? 0),
     );
     final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
       0.0,
@@ -783,8 +783,8 @@ class CommissionSection extends StatelessWidget {
               ? (e.landingPrice.supplyOnly ?? 0.0)
               : (e.landingPrice.installationService ?? 0.0)),
     );
-
-    final extraCommission = (sellingPrice - landingPrice) * 0.5;
+    final temp = (sellingPrice - additionalCost) - landingPrice;
+    final extraCommission = temp <= 0 ? temp : temp * 0.5;
 
     final baseCommission = (orderLine.any(
       (element) => (element.product ?? '').contains(
@@ -828,9 +828,21 @@ class CommissionSection extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            CustomRowTile(
-              '(debug) additional_cost',
-              r'$' + additionalCost.toStringAsFixed(2),
+            Row(
+              children: [
+                const Text(
+                  '(debug) additional_deduction',
+                ),
+                const Spacer(),
+                Text(
+                  r'$' + additionalCost.toStringAsFixed(2),
+                  style: TextStyle(
+                    color: additionalCost > 0
+                        ? Colors.red
+                        : const Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 8,
@@ -856,12 +868,12 @@ class CommissionSection extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            if (additionalCost <= 0) ...[
-              CustomRowTile(
-                'Final Commission',
-                r'$' + finalCommission.toStringAsFixed(2),
-              ),
-            ],
+            //  if (additionalCost <= 0) ...[
+            CustomRowTile(
+              'Final Commission',
+              r'$' + finalCommission.toStringAsFixed(2),
+            ),
+            //  ],
           ],
         ),
       ),
@@ -1165,3 +1177,36 @@ String getInvoicePaymentStatusMessage(String invoicePaymentStatus) {
       return '';
   }
 }
+
+// calculateFinalCommission( CloudSalesOrder order) {
+//   final sellingPrice = calculateCashPrice(
+//     order.amountTotal ?? 0,
+//     (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
+//   );
+
+//   final additionalCost = getAdditionalCost(orderLine, landingPrices).fold(
+//     0.0,
+//     (prev, e) => prev + (e.unitPrice ?? 0),
+//   );
+//   final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
+//     0.0,
+//     (prev, e) =>
+//         prev +
+//         (e.isSupplyOnly
+//             ? (e.landingPrice.supplyOnly ?? 0.0)
+//             : (e.landingPrice.installationService ?? 0.0)),
+//   );
+//   final temp = (sellingPrice - additionalCost) - landingPrice;
+//   final extraCommission = temp <= 0 ? temp : temp * 0.5;
+
+//   final baseCommission = (orderLine.any(
+//     (element) => (element.product ?? '').contains(
+//       'USRO-6S1-2W'.toLowerCase(),
+//     ),
+//   ))
+//       ? 200
+//       : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
+//           ? 1000
+//           : 500;
+//   final finalCommission = extraCommission + baseCommission;
+// }

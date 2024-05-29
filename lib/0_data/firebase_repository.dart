@@ -4,6 +4,7 @@ import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_mod
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
+import 'package:water_analytics_australia/core/helper.dart';
 
 class FirebaseFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -185,7 +186,10 @@ class FirebaseFirestoreService {
             jobName,
           )
           .collection('order_line')
-          .doc(item.productTemplateId?.displayName);
+          .doc(
+            generateMd5('${item.productTemplateId?.displayName ?? ''}'
+                '_${item.name ?? ''}'),
+          );
 
       final data = <String, dynamic>{
         'product': item.productTemplateId?.displayName ?? '',

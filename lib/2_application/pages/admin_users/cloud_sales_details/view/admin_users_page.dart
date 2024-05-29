@@ -58,6 +58,14 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+         // context.push(location);
+        },
+        label: const Row(
+          children: [HeroIcon(HeroIcons.plus), Text(' Create User')],
+        ),
+      ),
       key: AdminUsersPage._scaffoldKey,
       drawer: SortFilterModal(
         onChanged: () => setState(() {}),
