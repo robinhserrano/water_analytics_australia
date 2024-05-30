@@ -16,6 +16,7 @@ dependencies:
   data_table_2: ^2.5.12
   dotted_line: ^3.2.2
   equatable: ^2.0.5
+  excel: ^4.0.3
   firebase_auth: ^4.19.5
   firebase_core: ^2.30.1
   firebase_remote_config: ^4.4.5

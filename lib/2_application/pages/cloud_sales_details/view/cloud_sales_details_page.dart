@@ -771,7 +771,8 @@ class CommissionSection extends StatelessWidget {
       (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
     );
 
-    final additionalCost = getAdditionalCost(orderLine, landingPrices).fold(
+    final additionalCost =
+        getCloudAdditionalCost(orderLine, landingPrices).fold(
       0.0,
       (prev, e) => prev + (e.unitPrice ?? 0),
     );
@@ -919,7 +920,7 @@ List<LandingPriceWithQuantity> getLandingPrice(
   return matchingLandingPrices.toList();
 }
 
-List<CloudOrderLines> getAdditionalCost(
+List<CloudOrderLines> getCloudAdditionalCost(
   List<CloudOrderLines> orderLines,
   List<LandingPrice> landingPrices,
 ) {
@@ -1178,35 +1179,40 @@ String getInvoicePaymentStatusMessage(String invoicePaymentStatus) {
   }
 }
 
-// calculateFinalCommission( CloudSalesOrder order) {
-//   final sellingPrice = calculateCashPrice(
-//     order.amountTotal ?? 0,
-//     (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
-//   );
+double calculateFinalCommission(
+  CloudSalesOrder order,
+  List<CloudOrderLines> orderLine,
+) {
+  final sellingPrice = calculateCashPrice(
+    order.amountTotal ?? 0,
+    (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
+  );
 
-//   final additionalCost = getAdditionalCost(orderLine, landingPrices).fold(
-//     0.0,
-//     (prev, e) => prev + (e.unitPrice ?? 0),
-//   );
-//   final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
-//     0.0,
-//     (prev, e) =>
-//         prev +
-//         (e.isSupplyOnly
-//             ? (e.landingPrice.supplyOnly ?? 0.0)
-//             : (e.landingPrice.installationService ?? 0.0)),
-//   );
-//   final temp = (sellingPrice - additionalCost) - landingPrice;
-//   final extraCommission = temp <= 0 ? temp : temp * 0.5;
+  final additionalCost = getCloudAdditionalCost(orderLine, landingPrices).fold(
+    0.0,
+    (prev, e) => prev + (e.unitPrice ?? 0),
+  );
+  final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
+    0.0,
+    (prev, e) =>
+        prev +
+        (e.isSupplyOnly
+            ? (e.landingPrice.supplyOnly ?? 0.0)
+            : (e.landingPrice.installationService ?? 0.0)),
+  );
+  final temp = (sellingPrice - additionalCost) - landingPrice;
+  final extraCommission = temp <= 0 ? temp : temp * 0.5;
 
-//   final baseCommission = (orderLine.any(
-//     (element) => (element.product ?? '').contains(
-//       'USRO-6S1-2W'.toLowerCase(),
-//     ),
-//   ))
-//       ? 200
-//       : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
-//           ? 1000
-//           : 500;
-//   final finalCommission = extraCommission + baseCommission;
-// }
+  final baseCommission = (orderLine.any(
+    (element) => (element.product ?? '').contains(
+      'USRO-6S1-2W'.toLowerCase(),
+    ),
+  ))
+      ? 200
+      : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
+          ? 1000
+          : 500;
+  final finalCommission = extraCommission + baseCommission;
+
+  return finalCommission;
+}

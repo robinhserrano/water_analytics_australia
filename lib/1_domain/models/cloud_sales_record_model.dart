@@ -37,6 +37,8 @@ class CloudSalesOrder with _$CloudSalesOrder {
     required String? internalNoteDisplay,
     required String? state,
     @JsonKey(name: 'amount_untaxed') required double? amountUntaxed,
+    required List<CloudOrderLines>? orderLines,
+    required CloudConfirmedByManager? confirmedByManager,
   }) = _CloudSalesOrder;
 
   factory CloudSalesOrder.fromJson(Map<String, dynamic> json) =>
@@ -65,6 +67,8 @@ class CloudSalesOrder with _$CloudSalesOrder {
       internalNoteDisplay: doc.get('internal_note_display') as String,
       state: doc.get('state') as String,
       amountUntaxed: doc.get('amount_untaxed') as double,
+      orderLines: null,
+      confirmedByManager: null,
     );
   }
 }
@@ -99,6 +103,28 @@ class CloudOrderLines with _$CloudOrderLines {
       taxes: doc.get('taxes') as String,
       disc: doc.get('disc') as num,
       taxExcl: doc.get('taxExcl') as num,
+    );
+  }
+}
+
+@freezed
+class CloudConfirmedByManager with _$CloudConfirmedByManager {
+  const factory CloudConfirmedByManager({
+    @JsonKey(name: 'create_date') required DateTime? createDate,
+    @JsonKey(name: 'last_updated_by') required String? lastUpdatedBy,
+    @JsonKey(name: 'is_confirmed') required bool? isConfirmed,
+  }) = _CloudConfirmedByManager;
+
+  factory CloudConfirmedByManager.fromJson(Map<String, dynamic> json) =>
+      _$CloudConfirmedByManagerFromJson(json);
+
+  factory CloudConfirmedByManager.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    return CloudConfirmedByManager(
+      createDate: (doc.get('create_date') as Timestamp).toDate(),
+      lastUpdatedBy: doc.get('last_updated_by') as String,
+      isConfirmed: doc.get('is_confirmed') as bool,
     );
   }
 }

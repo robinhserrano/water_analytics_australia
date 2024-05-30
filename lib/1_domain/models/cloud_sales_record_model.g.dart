@@ -29,6 +29,13 @@ _$CloudSalesOrderImpl _$$CloudSalesOrderImplFromJson(
       internalNoteDisplay: json['internal_note_display'] as String?,
       state: json['state'] as String?,
       amountUntaxed: (json['amount_untaxed'] as num?)?.toDouble(),
+      orderLines: (json['orderLines'] as List<dynamic>?)
+          ?.map((e) => CloudOrderLines.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      confirmedByManager: json['confirmedByManager'] == null
+          ? null
+          : CloudConfirmedByManager.fromJson(
+              json['confirmedByManager'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$CloudSalesOrderImplToJson(
@@ -52,6 +59,8 @@ Map<String, dynamic> _$$CloudSalesOrderImplToJson(
       'internal_note_display': instance.internalNoteDisplay,
       'state': instance.state,
       'amount_untaxed': instance.amountUntaxed,
+      'orderLines': instance.orderLines,
+      'confirmedByManager': instance.confirmedByManager,
     };
 
 _$CloudOrderLinesImpl _$$CloudOrderLinesImplFromJson(
@@ -80,4 +89,22 @@ Map<String, dynamic> _$$CloudOrderLinesImplToJson(
       'taxes': instance.taxes,
       'disc': instance.disc,
       'taxExcl': instance.taxExcl,
+    };
+
+_$CloudConfirmedByManagerImpl _$$CloudConfirmedByManagerImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CloudConfirmedByManagerImpl(
+      createDate: json['create_date'] == null
+          ? null
+          : DateTime.parse(json['create_date'] as String),
+      lastUpdatedBy: json['last_updated_by'] as String?,
+      isConfirmed: json['is_confirmed'] as bool?,
+    );
+
+Map<String, dynamic> _$$CloudConfirmedByManagerImplToJson(
+        _$CloudConfirmedByManagerImpl instance) =>
+    <String, dynamic>{
+      'create_date': instance.createDate?.toIso8601String(),
+      'last_updated_by': instance.lastUpdatedBy,
+      'is_confirmed': instance.isConfirmed,
     };

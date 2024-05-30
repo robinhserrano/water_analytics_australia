@@ -1,10 +1,17 @@
+// ignore_for_file: prefer_int_literals, avoid_positional_boolean_parameters
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
+import 'package:water_analytics_australia/2_application/pages/sales_details/view/sales_details_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
+import 'package:water_analytics_australia/core/temp.dart';
+
+import '../2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 
 class FirebaseFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -13,7 +20,10 @@ class FirebaseFirestoreService {
   final String _timestampPath = 'last.upload.time';
   final String _landingPricePath = 'landing.price';
 
-  Future<bool> saveSales(SalesOrder job) async {
+  Future<bool> saveSales(
+    SalesOrder job, {
+    bool isConfirmedByManager = false,
+  }) async {
     try {
       final docRef = _firestore.collection(_salesOrderPath).doc(
             job.name.toString(),
@@ -54,6 +64,34 @@ class FirebaseFirestoreService {
   }
 
   Future<List<CloudSalesOrder>?> getSales() async {
+    try {
+      final querySnapshot = await _firestore.collection(_salesOrderPath).get();
+      final order =
+          querySnapshot.docs.map(CloudSalesOrder.fromFirestore).toList();
+
+      final orders = <CloudSalesOrder>[];
+
+      for (final item in order) {
+        final orderLines = await getOrderLinesById(item.name!);
+
+        final confirmedByManager = await getConfirmedByManagerById(item.name!);
+
+        final order = item.copyWith(
+          orderLines: orderLines,
+          confirmedByManager: confirmedByManager,
+        );
+
+        orders.add(order);
+      }
+
+      return orders;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<List<CloudSalesOrder>?> getSalesWithOrderLines() async {
     try {
       final querySnapshot = await _firestore.collection(_salesOrderPath).get();
       final order =
@@ -249,6 +287,53 @@ class FirebaseFirestoreService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<bool> saveConfirmedByManager(
+    String jobName,
+    OrderLine item,
+    bool isConfirmed,
+  ) async {
+    try {
+      final docRef = _firestore
+          .collection(_salesOrderPath)
+          .doc(
+            jobName,
+          )
+          .collection('confirmed_by_manager')
+          .doc(generateMd5(jobName));
+
+      final user = await HiveHelper.getAllUsers();
+
+      final data = <String, dynamic>{
+        'is_confirmed': isConfirmed,
+        'last_updated_by': user.first.email,
+        'updated_at': DateTime.now(),
+      };
+      await docRef.set(data);
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<CloudConfirmedByManager?> getConfirmedByManagerById(
+    String jobName,
+  ) async {
+    final docSnapshot = await _firestore
+        .collection(_salesOrderPath)
+        .doc(jobName)
+        .collection('confirmed_by_manager')
+        .doc(generateMd5(jobName))
+        .get();
+
+    if (docSnapshot.exists) {
+      return CloudConfirmedByManager.fromFirestore(docSnapshot);
+    } else {
+      return null;
     }
   }
 

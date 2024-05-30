@@ -56,6 +56,9 @@ mixin _$CloudSalesOrder {
   String? get state => throw _privateConstructorUsedError;
   @JsonKey(name: 'amount_untaxed')
   double? get amountUntaxed => throw _privateConstructorUsedError;
+  List<CloudOrderLines>? get orderLines => throw _privateConstructorUsedError;
+  CloudConfirmedByManager? get confirmedByManager =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -90,7 +93,11 @@ abstract class $CloudSalesOrderCopyWith<$Res> {
       dynamic xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display') String? internalNoteDisplay,
       String? state,
-      @JsonKey(name: 'amount_untaxed') double? amountUntaxed});
+      @JsonKey(name: 'amount_untaxed') double? amountUntaxed,
+      List<CloudOrderLines>? orderLines,
+      CloudConfirmedByManager? confirmedByManager});
+
+  $CloudConfirmedByManagerCopyWith<$Res>? get confirmedByManager;
 }
 
 /// @nodoc
@@ -124,6 +131,8 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
     Object? internalNoteDisplay = freezed,
     Object? state = freezed,
     Object? amountUntaxed = freezed,
+    Object? orderLines = freezed,
+    Object? confirmedByManager = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -198,7 +207,28 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
           ? _value.amountUntaxed
           : amountUntaxed // ignore: cast_nullable_to_non_nullable
               as double?,
+      orderLines: freezed == orderLines
+          ? _value.orderLines
+          : orderLines // ignore: cast_nullable_to_non_nullable
+              as List<CloudOrderLines>?,
+      confirmedByManager: freezed == confirmedByManager
+          ? _value.confirmedByManager
+          : confirmedByManager // ignore: cast_nullable_to_non_nullable
+              as CloudConfirmedByManager?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CloudConfirmedByManagerCopyWith<$Res>? get confirmedByManager {
+    if (_value.confirmedByManager == null) {
+      return null;
+    }
+
+    return $CloudConfirmedByManagerCopyWith<$Res>(_value.confirmedByManager!,
+        (value) {
+      return _then(_value.copyWith(confirmedByManager: value) as $Val);
+    });
   }
 }
 
@@ -231,7 +261,12 @@ abstract class _$$CloudSalesOrderImplCopyWith<$Res>
       dynamic xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display') String? internalNoteDisplay,
       String? state,
-      @JsonKey(name: 'amount_untaxed') double? amountUntaxed});
+      @JsonKey(name: 'amount_untaxed') double? amountUntaxed,
+      List<CloudOrderLines>? orderLines,
+      CloudConfirmedByManager? confirmedByManager});
+
+  @override
+  $CloudConfirmedByManagerCopyWith<$Res>? get confirmedByManager;
 }
 
 /// @nodoc
@@ -263,6 +298,8 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
     Object? internalNoteDisplay = freezed,
     Object? state = freezed,
     Object? amountUntaxed = freezed,
+    Object? orderLines = freezed,
+    Object? confirmedByManager = freezed,
   }) {
     return _then(_$CloudSalesOrderImpl(
       id: freezed == id
@@ -337,6 +374,14 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
           ? _value.amountUntaxed
           : amountUntaxed // ignore: cast_nullable_to_non_nullable
               as double?,
+      orderLines: freezed == orderLines
+          ? _value._orderLines
+          : orderLines // ignore: cast_nullable_to_non_nullable
+              as List<CloudOrderLines>?,
+      confirmedByManager: freezed == confirmedByManager
+          ? _value.confirmedByManager
+          : confirmedByManager // ignore: cast_nullable_to_non_nullable
+              as CloudConfirmedByManager?,
     ));
   }
 }
@@ -367,7 +412,10 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
       required this.xStudioInvoicePaymentStatus,
       @JsonKey(name: 'internal_note_display') required this.internalNoteDisplay,
       required this.state,
-      @JsonKey(name: 'amount_untaxed') required this.amountUntaxed});
+      @JsonKey(name: 'amount_untaxed') required this.amountUntaxed,
+      required final List<CloudOrderLines>? orderLines,
+      required this.confirmedByManager})
+      : _orderLines = orderLines;
 
   factory _$CloudSalesOrderImpl.fromJson(Map<String, dynamic> json) =>
       _$$CloudSalesOrderImplFromJson(json);
@@ -439,10 +487,22 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
   @override
   @JsonKey(name: 'amount_untaxed')
   final double? amountUntaxed;
+  final List<CloudOrderLines>? _orderLines;
+  @override
+  List<CloudOrderLines>? get orderLines {
+    final value = _orderLines;
+    if (value == null) return null;
+    if (_orderLines is EqualUnmodifiableListView) return _orderLines;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final CloudConfirmedByManager? confirmedByManager;
 
   @override
   String toString() {
-    return 'CloudSalesOrder(id: $id, name: $name, createDate: $createDate, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed)';
+    return 'CloudSalesOrder(id: $id, name: $name, createDate: $createDate, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed, orderLines: $orderLines, confirmedByManager: $confirmedByManager)';
   }
 
   @override
@@ -485,31 +545,38 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
                 other.internalNoteDisplay == internalNoteDisplay) &&
             (identical(other.state, state) || other.state == state) &&
             (identical(other.amountUntaxed, amountUntaxed) ||
-                other.amountUntaxed == amountUntaxed));
+                other.amountUntaxed == amountUntaxed) &&
+            const DeepCollectionEquality()
+                .equals(other._orderLines, _orderLines) &&
+            (identical(other.confirmedByManager, confirmedByManager) ||
+                other.confirmedByManager == confirmedByManager));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      createDate,
-      partnerIdDisplayName,
-      partnerIdContactAddress,
-      const DeepCollectionEquality().hash(partnerIdPhone),
-      xStudioSalesRep1,
-      xStudioSalesSource,
-      xStudioCommissionPaid,
-      xStudioReferrerProcessed,
-      xStudioPaymentType,
-      amountTotal,
-      const DeepCollectionEquality().hash(deliveryStatus),
-      amountToInvoice,
-      const DeepCollectionEquality().hash(xStudioInvoicePaymentStatus),
-      internalNoteDisplay,
-      state,
-      amountUntaxed);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        name,
+        createDate,
+        partnerIdDisplayName,
+        partnerIdContactAddress,
+        const DeepCollectionEquality().hash(partnerIdPhone),
+        xStudioSalesRep1,
+        xStudioSalesSource,
+        xStudioCommissionPaid,
+        xStudioReferrerProcessed,
+        xStudioPaymentType,
+        amountTotal,
+        const DeepCollectionEquality().hash(deliveryStatus),
+        amountToInvoice,
+        const DeepCollectionEquality().hash(xStudioInvoicePaymentStatus),
+        internalNoteDisplay,
+        state,
+        amountUntaxed,
+        const DeepCollectionEquality().hash(_orderLines),
+        confirmedByManager
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -555,8 +622,10 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
       @JsonKey(name: 'internal_note_display')
       required final String? internalNoteDisplay,
       required final String? state,
-      @JsonKey(name: 'amount_untaxed')
-      required final double? amountUntaxed}) = _$CloudSalesOrderImpl;
+      @JsonKey(name: 'amount_untaxed') required final double? amountUntaxed,
+      required final List<CloudOrderLines>? orderLines,
+      required final CloudConfirmedByManager?
+          confirmedByManager}) = _$CloudSalesOrderImpl;
 
   factory _CloudSalesOrder.fromJson(Map<String, dynamic> json) =
       _$CloudSalesOrderImpl.fromJson;
@@ -614,6 +683,10 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
   @override
   @JsonKey(name: 'amount_untaxed')
   double? get amountUntaxed;
+  @override
+  List<CloudOrderLines>? get orderLines;
+  @override
+  CloudConfirmedByManager? get confirmedByManager;
   @override
   @JsonKey(ignore: true)
   _$$CloudSalesOrderImplCopyWith<_$CloudSalesOrderImpl> get copyWith =>
@@ -925,4 +998,204 @@ abstract class _CloudOrderLines implements CloudOrderLines {
   @JsonKey(ignore: true)
   _$$CloudOrderLinesImplCopyWith<_$CloudOrderLinesImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+CloudConfirmedByManager _$CloudConfirmedByManagerFromJson(
+    Map<String, dynamic> json) {
+  return _CloudConfirmedByManager.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CloudConfirmedByManager {
+  @JsonKey(name: 'create_date')
+  DateTime? get createDate => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_updated_by')
+  String? get lastUpdatedBy => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_confirmed')
+  bool? get isConfirmed => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CloudConfirmedByManagerCopyWith<CloudConfirmedByManager> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CloudConfirmedByManagerCopyWith<$Res> {
+  factory $CloudConfirmedByManagerCopyWith(CloudConfirmedByManager value,
+          $Res Function(CloudConfirmedByManager) then) =
+      _$CloudConfirmedByManagerCopyWithImpl<$Res, CloudConfirmedByManager>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'create_date') DateTime? createDate,
+      @JsonKey(name: 'last_updated_by') String? lastUpdatedBy,
+      @JsonKey(name: 'is_confirmed') bool? isConfirmed});
+}
+
+/// @nodoc
+class _$CloudConfirmedByManagerCopyWithImpl<$Res,
+        $Val extends CloudConfirmedByManager>
+    implements $CloudConfirmedByManagerCopyWith<$Res> {
+  _$CloudConfirmedByManagerCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? createDate = freezed,
+    Object? lastUpdatedBy = freezed,
+    Object? isConfirmed = freezed,
+  }) {
+    return _then(_value.copyWith(
+      createDate: freezed == createDate
+          ? _value.createDate
+          : createDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      lastUpdatedBy: freezed == lastUpdatedBy
+          ? _value.lastUpdatedBy
+          : lastUpdatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isConfirmed: freezed == isConfirmed
+          ? _value.isConfirmed
+          : isConfirmed // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$CloudConfirmedByManagerImplCopyWith<$Res>
+    implements $CloudConfirmedByManagerCopyWith<$Res> {
+  factory _$$CloudConfirmedByManagerImplCopyWith(
+          _$CloudConfirmedByManagerImpl value,
+          $Res Function(_$CloudConfirmedByManagerImpl) then) =
+      __$$CloudConfirmedByManagerImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'create_date') DateTime? createDate,
+      @JsonKey(name: 'last_updated_by') String? lastUpdatedBy,
+      @JsonKey(name: 'is_confirmed') bool? isConfirmed});
+}
+
+/// @nodoc
+class __$$CloudConfirmedByManagerImplCopyWithImpl<$Res>
+    extends _$CloudConfirmedByManagerCopyWithImpl<$Res,
+        _$CloudConfirmedByManagerImpl>
+    implements _$$CloudConfirmedByManagerImplCopyWith<$Res> {
+  __$$CloudConfirmedByManagerImplCopyWithImpl(
+      _$CloudConfirmedByManagerImpl _value,
+      $Res Function(_$CloudConfirmedByManagerImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? createDate = freezed,
+    Object? lastUpdatedBy = freezed,
+    Object? isConfirmed = freezed,
+  }) {
+    return _then(_$CloudConfirmedByManagerImpl(
+      createDate: freezed == createDate
+          ? _value.createDate
+          : createDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      lastUpdatedBy: freezed == lastUpdatedBy
+          ? _value.lastUpdatedBy
+          : lastUpdatedBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isConfirmed: freezed == isConfirmed
+          ? _value.isConfirmed
+          : isConfirmed // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$CloudConfirmedByManagerImpl implements _CloudConfirmedByManager {
+  const _$CloudConfirmedByManagerImpl(
+      {@JsonKey(name: 'create_date') required this.createDate,
+      @JsonKey(name: 'last_updated_by') required this.lastUpdatedBy,
+      @JsonKey(name: 'is_confirmed') required this.isConfirmed});
+
+  factory _$CloudConfirmedByManagerImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CloudConfirmedByManagerImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'create_date')
+  final DateTime? createDate;
+  @override
+  @JsonKey(name: 'last_updated_by')
+  final String? lastUpdatedBy;
+  @override
+  @JsonKey(name: 'is_confirmed')
+  final bool? isConfirmed;
+
+  @override
+  String toString() {
+    return 'CloudConfirmedByManager(createDate: $createDate, lastUpdatedBy: $lastUpdatedBy, isConfirmed: $isConfirmed)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CloudConfirmedByManagerImpl &&
+            (identical(other.createDate, createDate) ||
+                other.createDate == createDate) &&
+            (identical(other.lastUpdatedBy, lastUpdatedBy) ||
+                other.lastUpdatedBy == lastUpdatedBy) &&
+            (identical(other.isConfirmed, isConfirmed) ||
+                other.isConfirmed == isConfirmed));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, createDate, lastUpdatedBy, isConfirmed);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CloudConfirmedByManagerImplCopyWith<_$CloudConfirmedByManagerImpl>
+      get copyWith => __$$CloudConfirmedByManagerImplCopyWithImpl<
+          _$CloudConfirmedByManagerImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CloudConfirmedByManagerImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CloudConfirmedByManager implements CloudConfirmedByManager {
+  const factory _CloudConfirmedByManager(
+      {@JsonKey(name: 'create_date') required final DateTime? createDate,
+      @JsonKey(name: 'last_updated_by') required final String? lastUpdatedBy,
+      @JsonKey(name: 'is_confirmed')
+      required final bool? isConfirmed}) = _$CloudConfirmedByManagerImpl;
+
+  factory _CloudConfirmedByManager.fromJson(Map<String, dynamic> json) =
+      _$CloudConfirmedByManagerImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'create_date')
+  DateTime? get createDate;
+  @override
+  @JsonKey(name: 'last_updated_by')
+  String? get lastUpdatedBy;
+  @override
+  @JsonKey(name: 'is_confirmed')
+  bool? get isConfirmed;
+  @override
+  @JsonKey(ignore: true)
+  _$$CloudConfirmedByManagerImplCopyWith<_$CloudConfirmedByManagerImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

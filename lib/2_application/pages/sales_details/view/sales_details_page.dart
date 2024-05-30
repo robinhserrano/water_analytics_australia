@@ -642,7 +642,7 @@ class CommissionSection extends StatelessWidget {
     final additionalCost =
         getAdditionalCost(order.orderLine ?? [], landingPrices).fold(
       0.0,
-      (prev, e) => prev + (e.priceSubtotal ?? 0),
+      (prev, e) => prev + (e.priceUnit ?? 0),
     );
     final landingPrice =
         getLandingPrice(order.orderLine ?? [], landingPrices).fold(
@@ -654,7 +654,8 @@ class CommissionSection extends StatelessWidget {
               : (e.landingPrice.installationService ?? 0.0)),
     );
 
-    final extraCommission = (sellingPrice - landingPrice) * 0.5;
+    final temp = (sellingPrice - additionalCost) - landingPrice;
+    final extraCommission = temp <= 0 ? temp : temp * 0.5;
 
     final baseCommission = ((order.orderLine ?? []).any(
       (element) => (element.name ?? '').contains(
@@ -740,12 +741,12 @@ class CommissionSection extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              if (additionalCost <= 0) ...[
-                CustomRowTile(
-                  'Final Commission',
-                  r'$' + finalCommission.toStringAsFixed(2),
-                ),
-              ],
+              //  if (additionalCost <= 0) ...[
+              CustomRowTile(
+                'Final Commission',
+                r'$' + finalCommission.toStringAsFixed(2),
+              ),
+              //   ],
             ],
           ),
         ),
