@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _screens = [
     const CloudSalesPageWrapperProvider(),
     const AdminUsersPageWrapperProvider(),
-    const SalesPageWrapperProvider(),
+    //const SalesPageWrapperProvider(),
   ];
 
   final destinations = [
@@ -32,10 +32,10 @@ class _HomePageState extends State<HomePage> {
       icon: HeroIcon(HeroIcons.users),
       label: 'Users',
     ),
-    const NavigationDestination(
-      icon: HeroIcon(HeroIcons.circleStack),
-      label: 'Odoo',
-    ),
+    // const NavigationDestination(
+    //   icon: HeroIcon(HeroIcons.circleStack),
+    //   label: 'Odoo',
+    // ),
   ];
 
   void _tapOnNavigationDestination(BuildContext context, int index) {

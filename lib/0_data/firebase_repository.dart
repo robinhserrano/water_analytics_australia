@@ -75,10 +75,12 @@ class FirebaseFirestoreService {
         final orderLines = await getOrderLinesById(item.name!);
 
         final confirmedByManager = await getConfirmedByManagerById(item.name!);
+        final additionalDeduction = await getAdditionalDeduction(item.name!);
 
         final order = item.copyWith(
           orderLines: orderLines,
           confirmedByManager: confirmedByManager,
+          additionalDeduction: additionalDeduction,
         );
 
         orders.add(order);
@@ -107,10 +109,16 @@ class FirebaseFirestoreService {
     final docSnapshot =
         await _firestore.collection(_salesOrderPath).doc(id).get();
 
-    var hehe = docSnapshot;
-    var hihi = hehe;
+    final confirmedByManager = await getConfirmedByManagerById(id);
+    final additionalDeduction = await getAdditionalDeduction(id);
+
     if (docSnapshot.exists) {
-      return CloudSalesOrder.fromFirestore(docSnapshot);
+      final sale = CloudSalesOrder.fromFirestore(docSnapshot);
+
+      return sale.copyWith(
+        confirmedByManager: confirmedByManager,
+        additionalDeduction: additionalDeduction,
+      );
     } else {
       return null;
     }
@@ -292,7 +300,6 @@ class FirebaseFirestoreService {
 
   Future<bool> saveConfirmedByManager(
     String jobName,
-    OrderLine item,
     bool isConfirmed,
   ) async {
     try {
@@ -332,6 +339,52 @@ class FirebaseFirestoreService {
 
     if (docSnapshot.exists) {
       return CloudConfirmedByManager.fromFirestore(docSnapshot);
+    } else {
+      return null;
+    }
+  }
+
+  Future<bool> saveAdditionalDeduction(
+    String jobName,
+    double additionalDeduction,
+  ) async {
+    try {
+      final docRef = _firestore
+          .collection(_salesOrderPath)
+          .doc(
+            jobName,
+          )
+          .collection('additional_deduction')
+          .doc(generateMd5(jobName));
+
+      final user = await HiveHelper.getAllUsers();
+
+      final data = <String, dynamic>{
+        'additional_deduction': additionalDeduction,
+        'last_updated_by': user.first.email,
+        'updated_at': DateTime.now(),
+      };
+      await docRef.set(data);
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<CloudAdditionalDeduction?> getAdditionalDeduction(
+    String jobName,
+  ) async {
+    final docSnapshot = await _firestore
+        .collection(_salesOrderPath)
+        .doc(jobName)
+        .collection('additional_deduction')
+        .doc(generateMd5(jobName))
+        .get();
+
+    if (docSnapshot.exists) {
+      return CloudAdditionalDeduction.fromFirestore(docSnapshot);
     } else {
       return null;
     }

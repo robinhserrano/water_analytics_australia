@@ -36,6 +36,10 @@ _$CloudSalesOrderImpl _$$CloudSalesOrderImplFromJson(
           ? null
           : CloudConfirmedByManager.fromJson(
               json['confirmedByManager'] as Map<String, dynamic>),
+      additionalDeduction: json['additionalDeduction'] == null
+          ? null
+          : CloudAdditionalDeduction.fromJson(
+              json['additionalDeduction'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$CloudSalesOrderImplToJson(
@@ -61,6 +65,7 @@ Map<String, dynamic> _$$CloudSalesOrderImplToJson(
       'amount_untaxed': instance.amountUntaxed,
       'orderLines': instance.orderLines,
       'confirmedByManager': instance.confirmedByManager,
+      'additionalDeduction': instance.additionalDeduction,
     };
 
 _$CloudOrderLinesImpl _$$CloudOrderLinesImplFromJson(
@@ -91,12 +96,30 @@ Map<String, dynamic> _$$CloudOrderLinesImplToJson(
       'taxExcl': instance.taxExcl,
     };
 
+_$CloudAdditionalDeductionImpl _$$CloudAdditionalDeductionImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CloudAdditionalDeductionImpl(
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
+      lastUpdatedBy: json['last_updated_by'] as String?,
+      additionalDeduction: (json['additional_deduction'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$$CloudAdditionalDeductionImplToJson(
+        _$CloudAdditionalDeductionImpl instance) =>
+    <String, dynamic>{
+      'updated_at': instance.updatedAt?.toIso8601String(),
+      'last_updated_by': instance.lastUpdatedBy,
+      'additional_deduction': instance.additionalDeduction,
+    };
+
 _$CloudConfirmedByManagerImpl _$$CloudConfirmedByManagerImplFromJson(
         Map<String, dynamic> json) =>
     _$CloudConfirmedByManagerImpl(
-      createDate: json['create_date'] == null
+      updatedAt: json['updated_at'] == null
           ? null
-          : DateTime.parse(json['create_date'] as String),
+          : DateTime.parse(json['updated_at'] as String),
       lastUpdatedBy: json['last_updated_by'] as String?,
       isConfirmed: json['is_confirmed'] as bool?,
     );
@@ -104,7 +127,7 @@ _$CloudConfirmedByManagerImpl _$$CloudConfirmedByManagerImplFromJson(
 Map<String, dynamic> _$$CloudConfirmedByManagerImplToJson(
         _$CloudConfirmedByManagerImpl instance) =>
     <String, dynamic>{
-      'create_date': instance.createDate?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
       'last_updated_by': instance.lastUpdatedBy,
       'is_confirmed': instance.isConfirmed,
     };

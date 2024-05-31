@@ -39,6 +39,7 @@ class CloudSalesOrder with _$CloudSalesOrder {
     @JsonKey(name: 'amount_untaxed') required double? amountUntaxed,
     required List<CloudOrderLines>? orderLines,
     required CloudConfirmedByManager? confirmedByManager,
+    required CloudAdditionalDeduction? additionalDeduction,
   }) = _CloudSalesOrder;
 
   factory CloudSalesOrder.fromJson(Map<String, dynamic> json) =>
@@ -69,6 +70,7 @@ class CloudSalesOrder with _$CloudSalesOrder {
       amountUntaxed: doc.get('amount_untaxed') as double,
       orderLines: null,
       confirmedByManager: null,
+      additionalDeduction: null,
     );
   }
 }
@@ -108,9 +110,31 @@ class CloudOrderLines with _$CloudOrderLines {
 }
 
 @freezed
+class CloudAdditionalDeduction with _$CloudAdditionalDeduction {
+  const factory CloudAdditionalDeduction({
+    @JsonKey(name: 'updated_at') required DateTime? updatedAt,
+    @JsonKey(name: 'last_updated_by') required String? lastUpdatedBy,
+    @JsonKey(name: 'additional_deduction') required double? additionalDeduction,
+  }) = _CloudAdditionalDeduction;
+
+  factory CloudAdditionalDeduction.fromJson(Map<String, dynamic> json) =>
+      _$CloudAdditionalDeductionFromJson(json);
+
+  factory CloudAdditionalDeduction.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    return CloudAdditionalDeduction(
+      updatedAt: (doc.get('updated_at') as Timestamp).toDate(),
+      lastUpdatedBy: doc.get('last_updated_by') as String,
+      additionalDeduction: doc.get('additional_deduction') as double,
+    );
+  }
+}
+
+@freezed
 class CloudConfirmedByManager with _$CloudConfirmedByManager {
   const factory CloudConfirmedByManager({
-    @JsonKey(name: 'create_date') required DateTime? createDate,
+    @JsonKey(name: 'updated_at') required DateTime? updatedAt,
     @JsonKey(name: 'last_updated_by') required String? lastUpdatedBy,
     @JsonKey(name: 'is_confirmed') required bool? isConfirmed,
   }) = _CloudConfirmedByManager;
@@ -122,7 +146,7 @@ class CloudConfirmedByManager with _$CloudConfirmedByManager {
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
     return CloudConfirmedByManager(
-      createDate: (doc.get('create_date') as Timestamp).toDate(),
+      updatedAt: (doc.get('updated_at') as Timestamp).toDate(),
       lastUpdatedBy: doc.get('last_updated_by') as String,
       isConfirmed: doc.get('is_confirmed') as bool,
     );

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_positional_boolean_parameters
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
@@ -26,13 +28,43 @@ class CloudSalesDetailsCubit extends Cubit<CloudSalesDetailsCubitState> {
     }
   }
 
-  // Future<bool> saveCloudSales(CloudSalesOrder sale) async {
-  //   try {
-  //     await firestoreService.saveCloudSales(sale);
+  Future<bool> saveConfirmedByManager(
+    String jobName,
+    bool isConfirmed,
+  ) async {
+    //  emit(const CloudSalesDetailsStateLoading());
+    try {
+      final success = await firestoreService.saveConfirmedByManager(
+        jobName,
+        isConfirmed,
+      );
 
-  //     return true;
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
+      if (success) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> saveAdditionalDeduction(
+    String jobName,
+    double additionalDeduction,
+  ) async {
+    //  emit(const CloudSalesDetailsStateLoading());
+    try {
+      final success = await firestoreService.saveAdditionalDeduction(
+        jobName,
+        additionalDeduction,
+      );
+
+      if (success) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 }

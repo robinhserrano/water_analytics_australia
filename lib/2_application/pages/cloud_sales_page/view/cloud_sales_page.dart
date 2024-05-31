@@ -270,9 +270,23 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    var records = widget.records;
+
+    if (ctrlSearch.text.trim().isNotEmpty) {
+      records = records
+          .where(
+            (e) =>
+                (e.name?.toLowerCase() ?? '')
+                    .contains(ctrlSearch.text.toLowerCase()) ||
+                (e.partnerIdDisplayName?.toLowerCase() ?? '')
+                    .contains(ctrlSearch.text.toLowerCase()),
+          )
+          .toList();
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: widget.records.isEmpty
+      body: records.isEmpty
           ? Column(
               children: [
                 Row(
@@ -312,7 +326,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                         onPressed: () {
                           _downloadExcel(
                             selectedSalesNo,
-                            widget.records,
+                            records,
                           );
                         },
                         label: const Text('Export as Excel File'),
@@ -345,7 +359,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       DataColumn(label: Text('Confirmed by Manager')),
                     ],
                     source: MyDataTableSource(
-                      widget.records,
+                      records,
                       context,
                       updateSelectedSaleNo,
                       selectedSalesNo,
@@ -390,6 +404,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                 //     ),
                 //   ),
                 // ),
+                // {
               ],
             ),
     );
@@ -499,7 +514,7 @@ class MyDataTableSource extends DataTableSource {
                 ? 'Fully Delivered'
                 : (item.deliveryStatus ?? '').toString() == 'partial'
                     ? 'Partially Delivered'
-                    : '',
+                    : 'Not Delivered',
           ),
         ),
         DataCell(
@@ -514,7 +529,8 @@ class MyDataTableSource extends DataTableSource {
           onTap: () => onTap(item),
           Checkbox(
             onChanged: null, //(value) {},
-            value: item.xStudioCommissionPaid,
+            value: item.confirmedByManager != null &&
+                !(item.confirmedByManager?.isConfirmed == false),
           ),
         ),
         // DataCell(
@@ -580,7 +596,7 @@ void _downloadExcel(
             ? 'Fully Delivered'
             : (item.deliveryStatus ?? '').toString() == 'partial'
                 ? 'Partially Delivered'
-                : '',
+                : 'Not Delivered',
       ),
       DoubleCellValue(
         calculateFinalCommission(item, item.orderLines ?? []),

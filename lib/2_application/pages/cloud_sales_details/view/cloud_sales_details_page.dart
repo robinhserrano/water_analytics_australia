@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_int_literals, inference_failure_on_function_return_type, avoid_positional_boolean_parameters
 
+import 'dart:async';
+
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +18,7 @@ import 'package:water_analytics_australia/1_domain/models/sales_record_model.dar
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
 import 'package:water_analytics_australia/core/temp.dart';
 import 'package:water_analytics_australia/core/widgets/cloud_custom_data_table.dart';
+import 'package:water_analytics_australia/core/widgets/custom_text_field.dart';
 import 'package:water_analytics_australia/injection.dart';
 
 class CloudSalesDetailsPageWrapperProvider extends StatelessWidget {
@@ -766,16 +770,18 @@ class CommissionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<CloudSalesDetailsCubit>();
     final sellingPrice = calculateCashPrice(
       order.amountTotal ?? 0,
       (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
     );
 
-    final additionalCost =
-        getCloudAdditionalCost(orderLine, landingPrices).fold(
-      0.0,
-      (prev, e) => prev + (e.unitPrice ?? 0),
-    );
+    final additionalCost = order.additionalDeduction != null
+        ? order.additionalDeduction?.additionalDeduction ?? 0
+        : getCloudAdditionalCost(orderLine, landingPrices).fold(
+            0.0,
+            (prev, e) => prev + (e.unitPrice ?? 0),
+          );
     final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
       0.0,
       (prev, e) =>
@@ -832,11 +838,15 @@ class CommissionSection extends StatelessWidget {
             Row(
               children: [
                 const Text(
-                  '(debug) additional_deduction',
+                  'Additional Deduction',
                 ),
                 const Spacer(),
                 Text(
-                  r'$' + additionalCost.toStringAsFixed(2),
+                  order.additionalDeduction != null
+                      ? r'$' +
+                          (order.additionalDeduction?.additionalDeduction ?? 0)
+                              .toStringAsFixed(2)
+                      : r'$' + additionalCost.toStringAsFixed(2),
                   style: TextStyle(
                     color: additionalCost > 0
                         ? Colors.red
@@ -875,6 +885,184 @@ class CommissionSection extends StatelessWidget {
               r'$' + finalCommission.toStringAsFixed(2),
             ),
             //  ],
+            Row(
+              children: [
+                const Text(
+                  'Confirmed By Manager',
+                ),
+                const Spacer(),
+                Checkbox(
+                  value: order.confirmedByManager != null &&
+                      (order.confirmedByManager?.isConfirmed ?? false),
+                  activeColor: Colors.blue,
+                  onChanged: (value) {},
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Center(
+              child: ResponsiveRowColumn(
+                rowMainAxisAlignment: MainAxisAlignment.center,
+                layout: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
+                    ? ResponsiveRowColumnType.COLUMN
+                    : ResponsiveRowColumnType.ROW,
+                rowSpacing: 16,
+                columnSpacing: 16,
+                children: [
+                  ResponsiveRowColumnItem(
+                    rowFlex: 1,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        unawaited(
+                          showModifyDeductionModal(
+                            context,
+                            order.name!,
+                            cubit,
+                          ),
+                        );
+                      },
+                      child: const Text('Modify Additional Deduction'),
+                    ),
+                  ),
+                  if (order.confirmedByManager == null ||
+                      (order.confirmedByManager?.isConfirmed == false)) ...[
+                    ResponsiveRowColumnItem(
+                      rowFlex: 1,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          unawaited(
+                            showConfirmingCommissionBreakdownModal(context),
+                          );
+                          final success = await cubit.saveConfirmedByManager(
+                            order.name ?? '',
+                            true,
+                          );
+                          if (success) {
+                            if (context.mounted) {
+                              context.pop();
+                            }
+
+                            const snackBar = SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text(
+                                'Successfully confirmed commission breakdown.',
+                              ),
+                            );
+
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          } else {
+                            if (context.mounted) {
+                              context.pop();
+                            }
+
+                            const snackBar = SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                'Failed to confirm commission breakdown.',
+                              ),
+                            );
+
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          }
+
+                          if (context.mounted) {
+                            unawaited(
+                              context
+                                  .read<CloudSalesDetailsCubit>()
+                                  .fetchCloudSalesDetails(order.name!),
+                            );
+                          }
+                        },
+                        child: const Text('Confirm Commission Breakdown'),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            // Center(
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //     children: [
+            //       ElevatedButton(
+            //         onPressed: () async {
+            //           unawaited(
+            //             showModifyDeductionModal(
+            //               context,
+            //               order.name!,
+            //               cubit,
+            //             ),
+            //           );
+            //         },
+            //         child: const Text('Modify Additional Deduction'),
+            //       ),
+            //       if (order.confirmedByManager == null ||
+            //           (order.confirmedByManager?.isConfirmed == false)) ...[
+            //         ElevatedButton(
+            //           onPressed: () async {
+            //             unawaited(
+            //               showConfirmingCommissionBreakdownModal(context),
+            //             );
+            //             final success = await cubit.saveConfirmedByManager(
+            //               order.name ?? '',
+            //               true,
+            //             );
+            //             if (success) {
+            //               if (context.mounted) {
+            //                 context.pop();
+            //               }
+
+            //               const snackBar = SnackBar(
+            //                 backgroundColor: Colors.green,
+            //                 content: Text(
+            //                   'Successfully confirmed commission breakdown.',
+            //                 ),
+            //               );
+
+            //               if (context.mounted) {
+            //                 ScaffoldMessenger.of(context)
+            //                     .showSnackBar(snackBar);
+            //               }
+            //             } else {
+            //               if (context.mounted) {
+            //                 context.pop();
+            //               }
+
+            //               const snackBar = SnackBar(
+            //                 backgroundColor: Colors.red,
+            //                 content: Text(
+            //                   'Failed to confirm commission breakdown.',
+            //                 ),
+            //               );
+
+            //               if (context.mounted) {
+            //                 ScaffoldMessenger.of(context)
+            //                     .showSnackBar(snackBar);
+            //               }
+            //             }
+
+            //             if (context.mounted) {
+            //               unawaited(
+            //                 context
+            //                     .read<CloudSalesDetailsCubit>()
+            //                     .fetchCloudSalesDetails(order.name!),
+            //               );
+            //             }
+            //           },
+            //           child: const Text('Confirm Commission Breakdown'),
+            //         ),
+            //       ],
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -1188,10 +1376,12 @@ double calculateFinalCommission(
     (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
   );
 
-  final additionalCost = getCloudAdditionalCost(orderLine, landingPrices).fold(
-    0.0,
-    (prev, e) => prev + (e.unitPrice ?? 0),
-  );
+  final additionalCost = order.additionalDeduction != null
+      ? order.additionalDeduction?.additionalDeduction ?? 0
+      : getCloudAdditionalCost(orderLine, landingPrices).fold(
+          0.0,
+          (prev, e) => prev + (e.unitPrice ?? 0),
+        );
   final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
     0.0,
     (prev, e) =>
@@ -1215,4 +1405,226 @@ double calculateFinalCommission(
   final finalCommission = extraCommission + baseCommission;
 
   return finalCommission;
+}
+
+Future<void> showConfirmingCommissionBreakdownModal(
+  BuildContext context,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            'Confirming Commission Breakdown...',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<void> showSavingAdditionalDecution(
+  BuildContext context,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            'Updating Additional Deduction...',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<void> showModifyDeductionModal(
+  BuildContext context,
+  String jobName,
+  CloudSalesDetailsCubit cubit,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: ModifyDeductionModal(
+        jobName: jobName,
+        cubit: cubit,
+        context: context,
+      ),
+      //  const Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: [
+      //     CircularProgressIndicator(
+      //       color: Color(0xff0083ff),
+      //     ),
+      //     SizedBox(
+      //       width: 16,
+      //     ),
+      //     Text(
+      //       'Updating User Details...',
+      //       style: TextStyle(fontSize: 16),
+      //     ),
+      //   ],
+      // ),
+    ),
+  );
+}
+
+class ModifyDeductionModal extends StatefulWidget {
+  const ModifyDeductionModal({
+    required this.jobName,
+    required this.cubit,
+    required this.context,
+    super.key,
+  });
+  final BuildContext context;
+  final String jobName;
+  final CloudSalesDetailsCubit cubit;
+
+  @override
+  State<ModifyDeductionModal> createState() => _ModifyDeductionModalState();
+}
+
+class _ModifyDeductionModalState extends State<ModifyDeductionModal> {
+  TextEditingController ctrlSupplyOnly = TextEditingController();
+  bool isValidating = false;
+
+  @override
+  Widget build(BuildContext _) {
+    final context = widget.context;
+    return Column(
+      children: [
+        const Text('Modify Deduction'),
+        const SizedBox(
+          height: 8,
+        ),
+        CustomTextField(
+          ctrl: ctrlSupplyOnly,
+          onChanged: (value) {
+            setState(() {});
+          },
+          title: 'Additional Deduction',
+          isValidating: isValidating,
+          inputType: const TextInputType.numberWithOptions(decimal: true),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: context.pop,
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xffB3B7C2),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Color(0xffFFFFFF),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              ElevatedButton(
+                onPressed: () async {
+                  context.pop();
+                  unawaited(
+                    showSavingAdditionalDecution(
+                      context,
+                      //  widget.jobName,
+                      // widget.cubit,
+                    ),
+                  );
+                  final isSaved = await widget.cubit.saveAdditionalDeduction(
+                    widget.jobName,
+                    double.parse(ctrlSupplyOnly.text),
+                  );
+
+                  if (isSaved) {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.green,
+                      content:
+                          Text('Successfully updated ' 'additional deduction.'),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
+                    unawaited(
+                      widget.cubit.fetchCloudSalesDetails(widget.jobName),
+                    );
+                  } else {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text('Failed to update additional deduction.'),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xff0083ff),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
