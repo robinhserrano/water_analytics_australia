@@ -1,8 +1,6 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, prefer_int_literals, avoid_positional_boolean_parameters, avoid_web_libraries_in_flutter
-
 import 'dart:html' as html;
 import 'dart:typed_data';
-
 import 'package:data_table_2/data_table_2.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';

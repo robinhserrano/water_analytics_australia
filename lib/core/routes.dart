@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/view/landing_price_detail_page.dart';
-import 'package:water_analytics_australia/2_application/pages/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/cloud_sales_details/view/admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/view/admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
+import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/home_page.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/view/landing_price_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales_details/view/sales_details_page.dart';
@@ -89,6 +90,13 @@ final routes = GoRouter(
         return AdminUsersDetailPageWrapperProvider(
           id: state.pathParameters['id']!,
         );
+      },
+    ),
+    GoRoute(
+      name: CreateUsersPage.name,
+      path: CreateUsersPage.path,
+      builder: (context, state) {
+        return const CreateUsersPageWrapperProvider();
       },
     ),
     //  GoRoute(

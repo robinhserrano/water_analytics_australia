@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -26,26 +27,24 @@ import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
 class CreateUsersPageWrapperProvider extends StatelessWidget {
-  const CreateUsersPageWrapperProvider({required this.id, super.key});
-  final String id;
+  const CreateUsersPageWrapperProvider({super.key});
+  // final String id;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<CreateUsersCubit>(),
-      child: CreateUsersPage(
-        id: id,
-      ),
+      child: const CreateUsersPage(),
     );
   }
 }
 
 class CreateUsersPage extends StatefulWidget {
-  const CreateUsersPage({required this.id, super.key});
+  const CreateUsersPage({super.key});
 
   static const name = 'createUsers';
   static const path = '/createUsers';
 
-  final String id;
+  // final String id;
 
   @override
   State<CreateUsersPage> createState() => _CreateUsersPageState();
@@ -59,7 +58,7 @@ class _CreateUsersPageState extends State<CreateUsersPage> {
   @override
   void initState() {
     super.initState();
-    context.read<CreateUsersCubit>().fetchUserById(widget.id);
+    // context.read<CreateUsersCubit>().fetchUserById(widget.id);
   }
 
   @override
@@ -70,46 +69,42 @@ class _CreateUsersPageState extends State<CreateUsersPage> {
       appBar: AppBar(
         backgroundColor: Colors.black, //const Color(0xff0083ff),
         title: const Text(
-          'Edit User',
+          'Create User',
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: RefreshIndicator(
-        color: const Color(0xff0083ff),
-        onRefresh: () => context.read<CreateUsersCubit>().fetchUserById(
-              widget.id,
-            ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: BlocBuilder<CreateUsersCubit, CreateUsersCubitState>(
-            builder: (context, state) {
-              if (state is CreateUsersStateLoading) {
-                return ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (context, index) => const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    child: ShimmerBox(
-                      height: 110,
-                    ),
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: BlocBuilder<CreateUsersCubit, CreateUsersCubitState>(
+          builder: (context, state) {
+            // if (state is CreateUsersStateLoading) {
+            //   return ListView.builder(
+            //     itemCount: 10,
+            //     itemBuilder: (context, index) => const Padding(
+            //       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            //       child: ShimmerBox(
+            //         height: 110,
+            //       ),
+            //     ),
+            //   );
+            // } else if (state is CreateUsersStateLoaded) {
+            return const CreateUserPage(
+                //     user: state.user,
                 );
-              } else if (state is CreateUsersStateLoaded) {
-                return EditLandingPricePage(
-                  user: state.user,
-                );
-              } else if (state is CreateUsersStateError) {
-                return SalesListPageError(
-                  onRefresh: () =>
-                      context.read<CreateUsersCubit>().fetchUserById(
-                            widget.id,
-                          ),
-                );
-              }
-              return const SizedBox(
-                child: Text('unknown'),
-              );
-            },
-          ),
+            // } else if (state is CreateUsersStateError) {
+            //   return SalesListPageError(
+            //     onRefresh: () {},
+
+            //     //  =>
+            //     //     context.read<CreateUsersCubit>().fetchUserById(
+            //     //           widget.id,
+            //     //         ),
+            //   );
+            // }
+            // return const SizedBox(
+            //   child: Text('unknown'),
+            // );
+          },
         ),
       ),
     );
@@ -143,16 +138,18 @@ class SalesListPageError extends StatelessWidget {
   }
 }
 
-class EditLandingPricePage extends StatefulWidget {
-  const EditLandingPricePage({required this.user, super.key});
+class CreateUserPage extends StatefulWidget {
+  const CreateUserPage({super.key});
 
-  final CloudUser user;
+  //final CloudUser user;
 
   @override
-  State<EditLandingPricePage> createState() => _EditLandingPricePageState();
+  State<CreateUserPage> createState() => _CreateUserPageState();
 }
 
-class _EditLandingPricePageState extends State<EditLandingPricePage> {
+class _CreateUserPageState extends State<CreateUserPage> {
+  TextEditingController ctrlName = TextEditingController();
+  TextEditingController ctrlEmail = TextEditingController();
   TextEditingController ctrlCommissionSplit = TextEditingController();
   // TextEditingController ctrlInstallationService = TextEditingController();
   // TextEditingController ctrlSupplyOnly = TextEditingController();
@@ -160,12 +157,22 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
 
   @override
   void initState() {
-    ctrlCommissionSplit.text = widget.user.commissionSplit.toString();
+    ctrlCommissionSplit.text = 50.toString();
     // ctrlInstallationService.text =
     //     widget.landingPrice.installationService.toString();
     // ctrlSupplyOnly.text = widget.landingPrice.supplyOnly.toString();
     super.initState();
   }
+
+  int? accessLevel;
+
+  final List<String> leadSource = [
+    'Sales Person',
+    'Sales Team Manager',
+    'Sales Manager',
+    'Admin',
+    'Super Admin',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -180,15 +187,33 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
+                const Center(
                   child: Text(
-                    widget.user
-                        .displayName, //widget.landingPrice.internalReference,
-                    style: const TextStyle(fontSize: 16),
+                    '',
+                    // widget.user
+                    //     .displayName, //widget.landingPrice.internalReference,
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
                 const SizedBox(
                   height: 16,
+                ),
+                CustomTextField(
+                  ctrl: ctrlName,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  title: 'Name',
+                  isValidating: isValidating,
+                ),
+                CustomTextField(
+                  ctrl: ctrlEmail,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  title: 'Email',
+                  isValidating: isValidating,
+                  inputType: TextInputType.emailAddress,
                 ),
                 CustomTextField(
                   ctrl: ctrlCommissionSplit,
@@ -199,6 +224,72 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                   isValidating: isValidating,
                   inputType:
                       const TextInputType.numberWithOptions(decimal: true),
+                ),
+                // CustomTextField(
+                //   ctrl: ctrlCommissionSplit,
+                //   onChanged: (value) {
+                //     setState(() {});
+                //   },
+                //   title: 'Commission Split (%)',
+                //   isValidating: isValidating,
+                //   inputType:
+                //       const TextInputType.numberWithOptions(decimal: true),
+                // ),
+                const Text(
+                  'User Role',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                DropdownButtonFormField2(
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  isExpanded: true,
+                  hint: const Text('Select Role'),
+                  value: accessLevel == null
+                      ? null
+                      : accessLevelToString(accessLevel!),
+                  items: leadSource
+                      .map(
+                        (item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      accessLevel = stringToAccessLevel(value ?? '');
+                    });
+                  },
+                  buttonStyleData: const ButtonStyleData(
+                    height: 60,
+                    padding: EdgeInsets.only(left: 20, right: 10),
+                  ),
+                  iconStyleData: const IconStyleData(
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.black45,
+                    ),
+                    iconSize: 30,
+                  ),
+                  dropdownStyleData: DropdownStyleData(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -228,12 +319,12 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
 
             if (isValidating == false) {
               unawaited(showSavingModal(context));
-              final success = await cubit.updateUser(
+              final success = await cubit.createUser(
                 CloudUser(
-                  displayName: widget.user.displayName,
-                  email: widget.user.email,
-                  photoUrl: widget.user.photoUrl,
-                  accessLevel: widget.user.accessLevel,
+                  displayName: ctrlName.text,
+                  email: ctrlEmail.text,
+                  photoUrl: null,
+                  accessLevel: accessLevel ?? 1,
                   commissionSplit:
                       double.tryParse(ctrlCommissionSplit.text) ?? 0,
                 ),
@@ -246,7 +337,7 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
 
                 const snackBar = SnackBar(
                   backgroundColor: Colors.green,
-                  content: Text('Successfully updated user details.'),
+                  content: Text('Successfully created user.'),
                 );
 
                 if (context.mounted) {
@@ -259,7 +350,7 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
 
                 const snackBar = SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text('Failed to update user details.'),
+                  content: Text('Failed to create user.'),
                 );
 
                 if (context.mounted) {
@@ -302,11 +393,45 @@ Future<void> showSavingModal(
             width: 16,
           ),
           Text(
-            'Updating User Details...',
+            'Creating User...',
             style: TextStyle(fontSize: 16),
           ),
         ],
       ),
     ),
   );
+}
+
+String accessLevelToString(int accessLevel) {
+  switch (accessLevel) {
+    case 1:
+      return 'Sales Person';
+    case 2:
+      return 'Sales Team Manager';
+    case 3:
+      return 'Sales Manager';
+    case 4:
+      return 'Admin';
+    case 5:
+      return 'Super Admin';
+    default:
+      return '';
+  }
+}
+
+int stringToAccessLevel(String accessLevel) {
+  switch (accessLevel) {
+    case 'Sales Person':
+      return 1;
+    case 'Sales Team Manager':
+      return 2;
+    case 'Sales Manager':
+      return 3;
+    case 'Admin':
+      return 4;
+    case 'Super Admin':
+      return 5;
+    default:
+      return 0;
+  }
 }

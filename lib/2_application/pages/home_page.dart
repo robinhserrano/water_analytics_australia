@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:heroicons/heroicons.dart';
@@ -20,7 +21,9 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _screens = [
     const CloudSalesPageWrapperProvider(),
     const AdminUsersPageWrapperProvider(),
-    //const SalesPageWrapperProvider(),
+    if (!kIsWeb) ...[
+      const SalesPageWrapperProvider(),
+    ]
   ];
 
   final destinations = [
@@ -32,10 +35,12 @@ class _HomePageState extends State<HomePage> {
       icon: HeroIcon(HeroIcons.users),
       label: 'Users',
     ),
-    // const NavigationDestination(
-    //   icon: HeroIcon(HeroIcons.circleStack),
-    //   label: 'Odoo',
-    // ),
+    if (!kIsWeb) ...[
+      const NavigationDestination(
+        icon: HeroIcon(HeroIcons.circleStack),
+        label: 'Odoo',
+      ),
+    ]
   ];
 
   void _tapOnNavigationDestination(BuildContext context, int index) {

@@ -390,6 +390,19 @@ class FirebaseFirestoreService {
     }
   }
 
+  // Future<bool> createUser(){
+  //     final userData = {
+  //           'displayName': googleUser.displayName,
+  //           'email': googleUser.email,
+  //           'photoUrl': googleUser.photoUrl,
+  //           'accessLevel': accessLevel,
+  //           'commissionSplit': 50,
+  //           // Add other relevant user profile fields as needed (e.g., photoURL)
+  //           // ...
+  //         };
+  //         await userRef.set(userData);
+  // }
+
   // Future<CloudSalesOrder?> getLastUploadedTime() async {
   //   final docSnapshot =
   //       await _firestore.collection(_timestampPath).doc('lastUploadTime').get();
