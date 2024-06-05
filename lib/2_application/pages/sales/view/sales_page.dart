@@ -1,18 +1,27 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
+import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
+import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
+import 'package:water_analytics_australia/core/temp.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
+import 'package:excel/excel.dart';
 
 class SalesPageWrapperProvider extends StatelessWidget {
   const SalesPageWrapperProvider({super.key});
@@ -269,8 +278,17 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                         HeroIcons.adjustmentsHorizontal,
                       ),
                     ),
+                    IconButton(
+                      onPressed: () {
+                        _downloadExcel(widget.records);
+                      },
+                      icon: HeroIcon(
+                        HeroIcons.arrowDown,
+                      ),
+                    ),
                   ],
                 ),
+                Text(widget.records.length.toString()),
                 Expanded(
                   child: Scrollbar(
                     child: ListView.builder(
@@ -477,4 +495,159 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
             ],
           );
   }
+}
+
+// Future<void> saveExcel() async {
+//   var fileName = 'my_data.xlsx';
+//   var bytes = excel.save(fileName: fileName);
+
+//   // Get the appropriate directory based on platform
+//   var directory = await getApplicationDocumentsDirectory();
+//   var filePath = join(directory.path, fileName);
+
+//   // Write the file bytes to the chosen location
+//   await File(filePath).writeAsBytes(bytes);
+
+//   // Optionally, trigger a download prompt using a platform-specific method (if desired)
+// }
+
+Future<void> _downloadExcel(
+  // Set<String> selectedSalesNo,
+  List<SalesOrder> records,
+) async {
+  final excel = Excel.createExcel();
+  final filteredRecords = records;
+  //records.where((e) => selectedSalesNo.contains(e.name)).toList();
+
+  final sheetObject = excel['Sheet1']
+    ..appendRow([
+      const TextCellValue('Number'),
+      const TextCellValue('Order Date'),
+      const TextCellValue('Customer'),
+      const TextCellValue('Sales Rep'),
+      const TextCellValue('Sales Source'),
+      const TextCellValue('Commission Paid'),
+      const TextCellValue('Total'),
+      const TextCellValue('Delivery Status'),
+      const TextCellValue('Final Commission'),
+      const TextCellValue('Confirmed by Manager'),
+    ]);
+
+  for (final item in filteredRecords) {
+    sheetObject.appendRow([
+      TextCellValue(
+        item.name ?? '',
+      ),
+      TextCellValue(
+        item.createDate == null
+            ? ''
+            : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+      ),
+      TextCellValue(item.partnerId?.displayName ?? ''),
+      TextCellValue(item.xStudioSalesRep1 ?? ''),
+      TextCellValue(item.xStudioSalesSource ?? ''),
+      TextCellValue(item.xStudioCommissionPaid.toString()),
+      DoubleCellValue(item.amountTotal ?? 0),
+      TextCellValue(
+        (item.deliveryStatus ?? '').toString() == 'full'
+            ? 'Fully Delivered'
+            : (item.deliveryStatus ?? '').toString() == 'partial'
+                ? 'Partially Delivered'
+                : 'Not Delivered',
+      ),
+      DoubleCellValue(
+        calculateFinalCommission(
+          CloudSalesOrder(
+            id: null,
+            name: item.name,
+            createDate: item.createDate,
+            partnerIdDisplayName: item.partnerId?.displayName,
+            partnerIdContactAddress: item.partnerId?.contactAddress.toString(),
+            partnerIdPhone: item.partnerId?.phone,
+            xStudioSalesRep1: item.xStudioSalesRep1,
+            xStudioSalesSource: item.xStudioSalesSource,
+            xStudioCommissionPaid: item.xStudioCommissionPaid,
+            xStudioReferrerProcessed: item.xStudioReferrerProcessed,
+            xStudioPaymentType: item.xStudioPaymentType,
+            amountTotal: item.amountTotal,
+            deliveryStatus: item.deliveryStatus,
+            amountToInvoice: item.amountToInvoice,
+            xStudioInvoicePaymentStatus: item.xStudioInvoicePaymentStatus,
+            internalNoteDisplay: item.internalNoteDisplay,
+            state: item.state,
+            amountUntaxed: item.taxTotals?.amountUntaxed,
+            orderLines: null,
+            confirmedByManager: null,
+            additionalDeduction: null,
+          ),
+          item.orderLine != null
+              ? item.orderLine!
+                  .map(
+                    (e) => CloudOrderLines(
+                      product: e.productTemplateId?.displayName ?? '',
+                      description: e.name,
+                      quantity: e.productUomQty,
+                      delivered: e.qtyDelivered,
+                      invoiced: e.qtyInvoiced,
+                      unitPrice: e.priceUnit,
+                      taxes: (e.taxId?.isNotEmpty ?? false)
+                          ? e.taxId![0].displayName
+                          : '',
+                      disc: e.discount,
+                      taxExcl: e.priceSubtotal,
+                    ),
+                  )
+                  .toList()
+              : [],
+        ),
+      ),
+      TextCellValue(false.toString()),
+    ]);
+  }
+
+  // // Append data rows
+  // sheetObject.appendRow([
+  //   CellValue.string('John Doe'),
+  //   CellValue.int(30),
+  //   CellValue.string('USA'),
+  // ]);
+  // sheetObject.appendRow([
+  //   CellValue.string('Alice Smith'),
+  //   CellValue.int(25),
+  //   CellValue.string('Canada'),
+  // ]);
+
+  var fileName = 'my_data.xlsx';
+  var bytes = excel.save(fileName: fileName);
+
+  // Get the appropriate directory based on platform
+  // var directory = await getExternalStorageDirectory();
+  var directory2 = await getExternalStorageDirectory();
+  var filePath = join(directory2!.path, fileName);
+
+  // Write the file bytes to the chosen location
+  try {
+    print(filePath);
+    await File(filePath).writeAsBytes(bytes!);
+    print('success');
+  } catch (e) {
+    print(e);
+  }
+
+  // // Save the Excel file
+  // final excelBytes = excel.encode() ?? [];
+  // final blob = html.Blob([Uint8List.fromList(excelBytes)]);
+  // final url = html.Url.createObjectUrlFromBlob(blob);
+
+  // // Create a link element and click it to download the file
+  // final anchor = html.AnchorElement(href: url)
+  //   ..setAttribute(
+  //     'download',
+  //     '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+  //         ' Sales Commission.xlsx',
+  //   )
+  //   ..click();
+
+  // // Revoke the object URL to free up resources
+  // html.Url.revokeObjectUrl(url);
 }

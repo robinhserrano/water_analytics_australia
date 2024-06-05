@@ -47,6 +47,7 @@ class SalesCubit extends Cubit<SalesCubitState> {
         final progress = (savedCount / totalSales) * 100;
         onProgress(progress); // Update progress callback
       }
+      await firestoreService.saveLastUploadedTime(DateTime.now());
       return true;
     } catch (e) {
       return false;

@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? null
                             : () async {
                                 await cubit.loginWithEmail(
-                                  // 'wateranalytics',
+                                 //'wateranalytics',
                                   emailCtrl.text,
                                   passwordCtrl.text,
                                 );

@@ -134,7 +134,7 @@ class CustomTableCell extends StatelessWidget {
       item.qtyDelivered,
       item.qtyInvoiced,
       item.priceUnit,
-      item.taxId?[0].displayName ?? '',
+      if (item.taxId?.isNotEmpty ?? false) item.taxId![0].displayName else '',
       item.discount,
       item.priceSubtotal,
     ];

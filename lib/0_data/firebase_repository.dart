@@ -71,22 +71,24 @@ class FirebaseFirestoreService {
 
       final orders = <CloudSalesOrder>[];
 
-      for (final item in order) {
-        final orderLines = await getOrderLinesById(item.name!);
+      // for (final item in order) {
+      //   //final orderLines = await getOrderLinesById(item.name!);
 
-        final confirmedByManager = await getConfirmedByManagerById(item.name!);
-        final additionalDeduction = await getAdditionalDeduction(item.name!);
+      //   final confirmedByManager = await getConfirmedByManagerById(item.name!);
+      //   final additionalDeduction = await getAdditionalDeduction(item.name!);
 
-        final order = item.copyWith(
-          orderLines: orderLines,
-          confirmedByManager: confirmedByManager,
-          additionalDeduction: additionalDeduction,
-        );
+      //   final order = item.copyWith(
+      //     // orderLines: orderLines,
+      //     confirmedByManager: confirmedByManager,
+      //     additionalDeduction: additionalDeduction,
+      //   );
 
-        orders.add(order);
-      }
+      //   orders.add(order);
+      //   print('a');
+      //   //    print('A ')
+      // }
 
-      return orders;
+      return order;
     } catch (e) {
       print(e);
       return null;
@@ -244,7 +246,8 @@ class FirebaseFirestoreService {
         'delivered': item.qtyDelivered,
         'invoiced': item.qtyInvoiced,
         'unit_price': item.priceUnit,
-        'taxes': item.taxId?[0].displayName ?? '',
+        'taxes':
+            (item.taxId?.isNotEmpty ?? false) ? item.taxId![0].displayName : '',
         'disc': item.discount,
         'taxExcl': item.priceSubtotal,
       };
