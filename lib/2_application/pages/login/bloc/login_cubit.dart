@@ -5,14 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
-import 'package:water_analytics_australia/0_data/repository.dart';
+import 'package:water_analytics_australia/0_data/odoo_repository.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginCubitState> {
   LoginCubit({required this.repo}) : super(const LoginStateLoading());
 
-  final Repository repo;
+  final OdooRepository repo;
 
   Future<void> login(String dbName, String username, String password) async {
     emit(const LoginStateLoading());

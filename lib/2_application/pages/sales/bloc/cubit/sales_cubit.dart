@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
-import 'package:water_analytics_australia/0_data/repository.dart';
+import 'package:water_analytics_australia/0_data/odoo_repository.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 part 'sales_state.dart';
@@ -16,7 +16,7 @@ class SalesCubit extends Cubit<SalesCubitState> {
     fetchSales();
   }
 
-  final Repository repo;
+  final OdooRepository repo;
   final FirebaseFirestoreService firestoreService;
 
   Future<void> fetchSales() async {
@@ -24,7 +24,11 @@ class SalesCubit extends Cubit<SalesCubitState> {
     try {
       final data = await repo.fetchSales();
       if (data != null) {
-        emit(SalesStateLoaded(data));
+        print('totalllll ' + data.length.toString());
+        var filteredData = data.where((e) => e.state == 'sale').toList();
+        print('sales only :  ' + filteredData.toString());
+
+        emit(SalesStateLoaded(filteredData));
       } else {
         emit(const SalesStateError(message: 'Sales Failed'));
       }

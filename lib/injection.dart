@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
+import 'package:water_analytics_australia/0_data/odoo_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/cloud_sales_details/bloc/admin_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/bloc/admin_users_detail_cubit.dart';
@@ -19,17 +21,18 @@ Future<void> init() async {
 // ! application Layer
   // Factory = every time a new/fresh instance of that class
   sl
-    ..registerFactory(() => LoginCubit(repo: sl<Repository>()))
+    ..registerFactory(() => LoginCubit(repo: sl<OdooRepository>()))
     ..registerFactory(
       () => SalesCubit(
-        repo: sl<Repository>(),
+        repo: sl<OdooRepository>(),
         firestoreService: sl(),
       ),
     )
     ..registerFactory(
       () => SalesDetailsCubit(
-        repo: sl<Repository>(),
+        oodoRepo: sl<OdooRepository>(),
         firestoreService: sl(),
+        repo: sl(),
       ),
     )
     ..registerFactory(
@@ -82,11 +85,18 @@ Future<void> init() async {
 //     ..registerFactory<ProductRemoteDatasource>(
 //       () => ProductRemoteDatasourceImpl(client: sl()),
 //     )
-    ..registerFactory<Repository>(() => Repository(client: sl<OdooClient>()))
+    ..registerFactory<Repository>(
+      () => Repository(client: sl()),
+    )
+    ..registerFactory<OdooRepository>(
+      () => OdooRepository(client: sl<OdooClient>()),
+    )
     ..registerFactory(FirebaseFirestoreService.new)
 
 // ! externs
+    ..registerFactory(Dio.new)
     ..registerSingleton(OdooClient('https://wateranalytics.odoo.com'));
+
   // ..registerSingleton(
   //   SortFilterCubit.new, // Factory function to create the cubit
   // );

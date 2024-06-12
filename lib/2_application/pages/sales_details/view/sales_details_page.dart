@@ -65,34 +65,71 @@ class _SalesDetailsPageState extends State<SalesDetailsPage> {
           BlocBuilder<SalesDetailsCubit, SalesDetailsCubitState>(
             builder: (context, state) {
               if (state is SalesDetailsStateLoaded) {
-                return IconButton(
-                  onPressed: () async {
-                    final success = await context
-                        .read<SalesDetailsCubit>()
-                        .saveSales(state.order);
-                    if (success) {
-                      const snackBar = SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text('Successfully saved order.'),
-                      );
+                return Row(
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        final success = await context
+                            .read<SalesDetailsCubit>()
+                            .saveSales(state.order);
+                        if (success) {
+                          const snackBar = SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text('Successfully saved order.'),
+                          );
 
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    } else {
-                      const snackBar = SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('Failed to save order.'),
-                      );
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        } else {
+                          const snackBar = SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Failed to save order.'),
+                          );
 
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    }
-                  },
-                  icon: const HeroIcon(
-                    HeroIcons.arrowUpTray,
-                  ),
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        }
+                      },
+                      icon: const HeroIcon(
+                        HeroIcons.arrowUpTray,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        final success = await context
+                            .read<SalesDetailsCubit>()
+                            .saveSales(state.order);
+                        if (success) {
+                          const snackBar = SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text('Successfully saved order.'),
+                          );
+
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        } else {
+                          const snackBar = SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Failed to save order.'),
+                          );
+
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        }
+                      },
+                      icon: const HeroIcon(
+                        HeroIcons.arrowUpOnSquareStack,
+                      ),
+                    ),
+                  ],
                 );
               }
               return const SizedBox();
