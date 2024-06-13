@@ -24,15 +24,16 @@ Future<void> init() async {
     ..registerFactory(() => LoginCubit(repo: sl<OdooRepository>()))
     ..registerFactory(
       () => SalesCubit(
-        repo: sl<OdooRepository>(),
+        odooRepo: sl<OdooRepository>(),
         firestoreService: sl(),
+        repo: sl<Repository>(),
       ),
     )
     ..registerFactory(
       () => SalesDetailsCubit(
-        oodoRepo: sl<OdooRepository>(),
+        odooRepo: sl<OdooRepository>(),
         firestoreService: sl(),
-        repo: sl(),
+        repo: sl<Repository>(),
       ),
     )
     ..registerFactory(

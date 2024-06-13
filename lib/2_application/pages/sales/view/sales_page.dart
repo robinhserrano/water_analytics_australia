@@ -440,7 +440,7 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
                         });
 
                         final isSaved = await widget.cubit
-                            .saveAllSales(widget.sales, (progress) {
+                            .saveAllSalesAws(widget.sales, (progress) {
                           setState(() {
                             this.progress = progress;
                           });

@@ -1,5 +1,6 @@
 // ignore_for_file: inference_failure_on_function_return_type, prefer_int_literals, avoid_positional_boolean_parameters
 
+import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,7 +103,7 @@ class _SalesDetailsPageState extends State<SalesDetailsPage> {
                       onPressed: () async {
                         final success = await context
                             .read<SalesDetailsCubit>()
-                            .saveSales(state.order);
+                            .saveSalesAws(state.order);
                         if (success) {
                           const snackBar = SnackBar(
                             backgroundColor: Colors.green,

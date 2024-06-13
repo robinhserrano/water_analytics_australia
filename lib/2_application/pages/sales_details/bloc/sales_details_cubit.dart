@@ -8,19 +8,19 @@ part 'sales_details_state.dart';
 
 class SalesDetailsCubit extends Cubit<SalesDetailsCubitState> {
   SalesDetailsCubit({
-    required this.oodoRepo,
+    required this.odooRepo,
     required this.firestoreService,
     required this.repo,
   }) : super(const SalesDetailsStateLoading());
 
-  final OdooRepository oodoRepo;
+  final OdooRepository odooRepo;
   final FirebaseFirestoreService firestoreService;
   final Repository repo;
 
   Future<void> fetchSalesDetails(String id) async {
     emit(const SalesDetailsStateLoading());
     try {
-      final data = await oodoRepo.fetchSalesById(id);
+      final data = await odooRepo.fetchSalesById(id);
       if (data != null) {
         emit(SalesDetailsStateLoaded(data));
       } else {
@@ -44,10 +44,10 @@ class SalesDetailsCubit extends Cubit<SalesDetailsCubitState> {
 
   Future<bool> saveSalesAws(SalesOrder sale) async {
     try {
-      await repo.saveSales(sale);
+      final success = await repo.saveSales(sale);
       //await firestoreService.saveLastUploadedTime(DateTime.now());
 
-      return true;
+      return success;
     } catch (e) {
       return false;
     }
