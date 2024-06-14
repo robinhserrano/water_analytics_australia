@@ -5,16 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/odoo_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
-part 'sales_state.dart';
+part 'aws_sales_state.dart';
 
-class SalesCubit extends Cubit<SalesCubitState> {
-  SalesCubit({
+class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
+  AwsSalesCubit({
     required this.odooRepo,
     required this.firestoreService,
     required this.repo,
-  }) : super(const SalesStateLoading()) {
+  }) : super(const AwsSalesStateLoading()) {
     fetchSales();
   }
 
@@ -23,20 +24,20 @@ class SalesCubit extends Cubit<SalesCubitState> {
   final Repository repo;
 
   Future<void> fetchSales() async {
-    emit(const SalesStateLoading());
+    emit(const AwsSalesStateLoading());
     try {
-      final data = await odooRepo.fetchSales();
+      final data = await repo.fetchSales();
       if (data != null) {
         print('totalllll ' + data.length.toString());
         var filteredData = data.where((e) => e.state == 'sale').toList();
         print('sales only :  ' + filteredData.toString());
 
-        emit(SalesStateLoaded(filteredData));
+        emit(AwsSalesStateLoaded(filteredData));
       } else {
-        emit(const SalesStateError(message: 'Sales Failed'));
+        emit(const AwsSalesStateError(message: 'Sales Failed'));
       }
     } catch (e) {
-      emit(SalesStateError(message: e.toString()));
+      emit(AwsSalesStateError(message: e.toString()));
     }
   }
 

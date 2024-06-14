@@ -6,6 +6,8 @@ import 'package:water_analytics_australia/0_data/odoo_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/cloud_sales_details/bloc/admin_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/bloc/admin_users_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/bloc/aws_sales_details_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/bloc/create_users_cubit.dart';
@@ -21,7 +23,12 @@ Future<void> init() async {
 // ! application Layer
   // Factory = every time a new/fresh instance of that class
   sl
-    ..registerFactory(() => LoginCubit(repo: sl<OdooRepository>()))
+    ..registerFactory(
+      () => LoginCubit(
+        odooRepo: sl<OdooRepository>(),
+        repo: sl<Repository>(),
+      ),
+    )
     ..registerFactory(
       () => SalesCubit(
         odooRepo: sl<OdooRepository>(),
@@ -69,6 +76,20 @@ Future<void> init() async {
     ..registerFactory(
       () => CreateUsersCubit(
         firestoreService: sl(),
+      ),
+    )
+    ..registerFactory(
+      () => AwsSalesCubit(
+        odooRepo: sl<OdooRepository>(),
+        firestoreService: sl(),
+        repo: sl<Repository>(),
+      ),
+    )
+    ..registerFactory(
+      () => AwsSalesDetailsCubit(
+        odooRepo: sl<OdooRepository>(),
+        firestoreService: sl(),
+        repo: sl<Repository>(),
       ),
     )
     // ..registerFactory(

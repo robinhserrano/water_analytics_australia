@@ -6,18 +6,23 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/0_data/odoo_repository.dart';
+import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginCubitState> {
-  LoginCubit({required this.repo}) : super(const LoginStateLoading());
+  LoginCubit({
+    required this.odooRepo,
+    required this.repo,
+  }) : super(const LoginStateLoading());
 
-  final OdooRepository repo;
+  final OdooRepository odooRepo;
+  final Repository repo;
 
   Future<void> login(String dbName, String username, String password) async {
     emit(const LoginStateLoading());
     try {
-      final data = await repo.login(dbName, username, password);
+      final data = await odooRepo.login(dbName, username, password);
 
       if (data != null) {
         final user = UserHive(
@@ -30,6 +35,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           null,
           4,
           50,
+          null,
         );
 
         final userBox = Hive.box<UserHive>('user');
@@ -62,6 +68,8 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
       var hehe = cloudUser;
 
+      final accessToken = await repo.fetchAccessToken(emailAddress, password);
+
       if (cloudUser != null && credential.user != null) {
         final user = UserHive(
           null, //data.dbName,
@@ -73,6 +81,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           credential.user?.photoURL,
           cloudUser.accessLevel.toInt(),
           cloudUser.commissionSplit.toInt(),
+          accessToken,
         );
 
         final userBox = Hive.box<UserHive>('user');
@@ -183,6 +192,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           googleUser.photoUrl,
           accessLevel,
           50,
+          null,
         );
 
         final userBox = Hive.box<UserHive>('user');

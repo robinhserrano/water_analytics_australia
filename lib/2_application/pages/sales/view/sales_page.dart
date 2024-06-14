@@ -407,7 +407,7 @@ class _SaveAllSalesModalState extends State<SaveAllSalesModal> {
         : Column(
             children: [
               const Text(
-                'Sync oodo data now to Firebase?',
+                'Sync oodo data now to AWS?',
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 16),

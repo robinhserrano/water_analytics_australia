@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/cloud_sales_details/view/admin_users_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 
@@ -19,17 +21,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _pageIndex = 0;
   final List<Widget> _screens = [
+    const AwsSalesPageWrapperProvider(),
     const CloudSalesPageWrapperProvider(),
     const AdminUsersPageWrapperProvider(),
     if (!kIsWeb) ...[
       const SalesPageWrapperProvider(),
-    ]
+    ],
   ];
 
   final destinations = [
     const NavigationDestination(
       icon: HeroIcon(HeroIcons.home),
       label: 'Home',
+    ),
+    const NavigationDestination(
+      icon: HeroIcon(HeroIcons.fire),
+      label: 'Firebase',
     ),
     const NavigationDestination(
       icon: HeroIcon(HeroIcons.users),
