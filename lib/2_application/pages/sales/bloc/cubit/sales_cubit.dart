@@ -134,26 +134,29 @@ class SalesCubit extends Cubit<SalesCubitState> {
     var savedCount = 0;
 
     try {
-      for (var i = 0; i < sales.length; i += 10) {
-        final endIndex = i + 10;
-        final currentBatch = sales.sublist(
-            i,
-            endIndex < sales.length
-                ? endIndex
-                : sales.length); // Handle end-of-list case
+  //repo.saveAllSalesBulk(currentBatch);
+   
+  await repo.saveAllSalesBulk(sales.sublist(0,10));
+      // for (var i = 0; i < sales.length; i += 10) {
+      //   final endIndex = i + 10;
+      //   final currentBatch = sales.sublist(
+      //       i,
+      //       endIndex < sales.length
+      //           ? endIndex
+      //           : sales.length); // Handle end-of-list case
 
-        final batchSuccess = await repo.saveAllSalesBulk(currentBatch);
+      //   final batchSuccess = await repo.saveAllSalesBulk(currentBatch);
 
-        final processedSales = currentBatch.length;
-        savedCount += processedSales;
-        final progress = (savedCount / totalSales) * 100;
-        onProgress(progress); // Update progress callback
+      //   final processedSales = currentBatch.length;
+      //   savedCount += processedSales;
+      //   final progress = (savedCount / totalSales) * 100;
+      //   onProgress(progress); // Update progress callback
 
-        if (!batchSuccess) {
-          print('Failed to save batch of SalesOrders.');
-          return false; // Handle error for the entire batch (optional)
-        }
-      }
+      //   if (!batchSuccess) {
+      //     print('Failed to save batch of SalesOrders.');
+      //     return false; // Handle error for the entire batch (optional)
+      //   }
+      // }
 
       return true;
     } catch (e) {

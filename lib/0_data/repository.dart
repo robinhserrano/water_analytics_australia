@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
-import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
@@ -13,7 +12,6 @@ class Repository {
   Repository({required this.client});
   final Dio client;
   static String url = 'http://3.27.69.251';
-  static String token1 = '1|uNKKybwei0tpPyD5hj9yvnEM6xwQhp7GOskCcHocd9171b40';
 
   Future<String?> fetchAccessToken(String email, String password) async {
     try {
@@ -93,37 +91,6 @@ class Repository {
     try {
       final user = await HiveHelper.getAllUsers();
       client.interceptors.add(ChuckerDioInterceptor());
-      // final docRef = _firestore.collection(_salesOrderPath).doc(
-      //       job.name.toString(),
-      //     );
-      //staging
-      //const url = 'http://54.227.19.30'; //prod
-
-      // Replace 'YOUR_BEARER_TOKEN' with your actual bearer token
-
-      //const token = '1|zilDDO1XsRL2qnsws8d9L1xRDKO1ZQ3PejBNt5NW248c3000';
-
-      // final data = <String, dynamic>{
-      //   'name': job.name,
-      //   'create_date': job.createDate?.toIso8601String(),
-      //   'partner_id_display_name': job.partnerId?.displayName,
-      //   'partner_id_contact_address': job.partnerId?.contactAddress,
-      //   'partner_id_phone': job.partnerId?.phone,
-      //   'x_studio_sales_rep_1': job.xStudioSalesRep1,
-      //   'x_studio_sales_source': job.xStudioSalesSource,
-      //   'x_studio_commission_paid': job.xStudioCommissionPaid,
-      //   'x_studio_referrer_processed': job.xStudioReferrerProcessed,
-      //   'x_studio_payment_type': job.xStudioPaymentType,
-      //   'amount_total': job.amountTotal,
-      //   'amount_untaxed': job.taxTotals?.amountUntaxed,
-      //   'delivery_status': job.deliveryStatus,
-      //   'amount_to_invoice': job.amountToInvoice,
-      //   'x_studio_invoice_payment_status': job.xStudioInvoicePaymentStatus,
-      //   'internal_note_display': job.internalNoteDisplay,
-      //   'state': job.state,
-      //   // 'order_line': [],
-      // };
-
       final response = await client.post<dynamic>(
         '$url/api/salesOrder',
         options: Options(
@@ -191,7 +158,7 @@ class Repository {
     try {
       client.interceptors.add(ChuckerDioInterceptor());
       const url = 'http://3.27.69.251';
-      const token = '1|uNKKybwei0tpPyD5hj9yvnEM6xwQhp7GOskCcHocd9171b40';
+      const token = '1|BXZhSdF9naVcOnIub829wTkn2NVszRvMxgoIBHhk88f61dd1';
 
       final dataList = <Map<String, dynamic>>[];
       for (final salesOrder in salesOrders) {
@@ -238,7 +205,7 @@ class Repository {
       }
 
       final response = await client.post<dynamic>(
-        '$url/api/salesOrder',
+        '$url/api/bulkStore',
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: 'Bearer $token',
