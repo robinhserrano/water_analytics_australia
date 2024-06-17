@@ -549,144 +549,144 @@ class SalesListPageError extends StatelessWidget {
   }
 }
 
-Future<void> _downloadExcel(
-  // Set<String> selectedSalesNo,
-  List<AwsSalesOrder> records,
-) async {
-  final excel = Excel.createExcel();
-  final filteredRecords = records;
-  //records.where((e) => selectedSalesNo.contains(e.name)).toList();
+// Future<void> _downloadExcel(
+//   // Set<String> selectedSalesNo,
+//   List<AwsSalesOrder> records,
+// ) async {
+//   final excel = Excel.createExcel();
+//   final filteredRecords = records;
+//   //records.where((e) => selectedSalesNo.contains(e.name)).toList();
 
-  final sheetObject = excel['Sheet1']
-    ..appendRow([
-      const TextCellValue('Number'),
-      const TextCellValue('Order Date'),
-      const TextCellValue('Customer'),
-      const TextCellValue('Sales Rep'),
-      const TextCellValue('Sales Source'),
-      const TextCellValue('Commission Paid'),
-      const TextCellValue('Total'),
-      const TextCellValue('Delivery Status'),
-      const TextCellValue('Final Commission'),
-      const TextCellValue('Confirmed by Manager'),
-    ]);
+//   final sheetObject = excel['Sheet1']
+//     ..appendRow([
+//       const TextCellValue('Number'),
+//       const TextCellValue('Order Date'),
+//       const TextCellValue('Customer'),
+//       const TextCellValue('Sales Rep'),
+//       const TextCellValue('Sales Source'),
+//       const TextCellValue('Commission Paid'),
+//       const TextCellValue('Total'),
+//       const TextCellValue('Delivery Status'),
+//       const TextCellValue('Final Commission'),
+//       const TextCellValue('Confirmed by Manager'),
+//     ]);
 
-  for (final item in filteredRecords) {
-    sheetObject.appendRow([
-      TextCellValue(
-        item.name ?? '',
-      ),
-      TextCellValue(
-        item.createDate == null
-            ? ''
-            : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
-      ),
-      TextCellValue(item.partnerIdDisplayName ?? ''),
-      TextCellValue(item.xStudioSalesRep1 ?? ''),
-      TextCellValue(item.xStudioSalesSource ?? ''),
-      TextCellValue(item.xStudioCommissionPaid.toString()),
-      DoubleCellValue(item.amountTotal ?? 0),
-      TextCellValue(
-        (item.deliveryStatus ?? '').toString() == 'full'
-            ? 'Fully Delivered'
-            : (item.deliveryStatus ?? '').toString() == 'partial'
-                ? 'Partially Delivered'
-                : 'Not Delivered',
-      ),
-      DoubleCellValue(
-        calculateFinalCommission(
-          CloudSalesOrder(
-            id: null,
-            name: item.name,
-            createDate: item.createDate,
-            partnerIdDisplayName: item.partnerIdDisplayName,
-            partnerIdContactAddress: item.partnerIdContactAddress,
-            partnerIdPhone: item.partnerIdPhone,
-            xStudioSalesRep1: item.xStudioSalesRep1,
-            xStudioSalesSource: item.xStudioSalesSource,
-            xStudioCommissionPaid: item.xStudioCommissionPaid,
-            xStudioReferrerProcessed: item.xStudioReferrerProcessed,
-            xStudioPaymentType: item.xStudioPaymentType,
-            amountTotal: item.amountTotal,
-            deliveryStatus: item.deliveryStatus,
-            amountToInvoice: item.amountToInvoice,
-            xStudioInvoicePaymentStatus: item.xStudioInvoicePaymentStatus,
-            internalNoteDisplay: item.internalNoteDisplay,
-            state: item.state,
-            amountUntaxed: item.amountUntaxed,
-            orderLines: null,
-            confirmedByManager: null,
-            additionalDeduction: null,
-          ),
-          item.orderLine != null
-              ? item.orderLine!
-                  .map(
-                    (e) => CloudOrderLines(
-                      product: e.product,
-                      description: e.description,
-                      quantity: e.quantity,
-                      delivered: e.delivered,
-                      invoiced: e.invoiced,
-                      unitPrice: e.unitPrice,
-                      taxes: e.taxes,
-                      disc: e.disc,
-                      taxExcl: e.taxExcl,
-                    ),
-                  )
-                  .toList()
-              : [],
-        ),
-      ),
-      TextCellValue(false.toString()),
-    ]);
-  }
+//   for (final item in filteredRecords) {
+//     sheetObject.appendRow([
+//       TextCellValue(
+//         item.name ?? '',
+//       ),
+//       TextCellValue(
+//         item.createDate == null
+//             ? ''
+//             : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+//       ),
+//       TextCellValue(item.partnerIdDisplayName ?? ''),
+//       TextCellValue(item.xStudioSalesRep1 ?? ''),
+//       TextCellValue(item.xStudioSalesSource ?? ''),
+//       TextCellValue(item.xStudioCommissionPaid.toString()),
+//       DoubleCellValue(item.amountTotal ?? 0),
+//       TextCellValue(
+//         (item.deliveryStatus ?? '').toString() == 'full'
+//             ? 'Fully Delivered'
+//             : (item.deliveryStatus ?? '').toString() == 'partial'
+//                 ? 'Partially Delivered'
+//                 : 'Not Delivered',
+//       ),
+//       DoubleCellValue(
+//         calculateFinalCommission(
+//           CloudSalesOrder(
+//             id: null,
+//             name: item.name,
+//             createDate: item.createDate,
+//             partnerIdDisplayName: item.partnerIdDisplayName,
+//             partnerIdContactAddress: item.partnerIdContactAddress,
+//             partnerIdPhone: item.partnerIdPhone,
+//             xStudioSalesRep1: item.xStudioSalesRep1,
+//             xStudioSalesSource: item.xStudioSalesSource,
+//             xStudioCommissionPaid: item.xStudioCommissionPaid,
+//             xStudioReferrerProcessed: item.xStudioReferrerProcessed,
+//             xStudioPaymentType: item.xStudioPaymentType,
+//             amountTotal: item.amountTotal,
+//             deliveryStatus: item.deliveryStatus,
+//             amountToInvoice: item.amountToInvoice,
+//             xStudioInvoicePaymentStatus: item.xStudioInvoicePaymentStatus,
+//             internalNoteDisplay: item.internalNoteDisplay,
+//             state: item.state,
+//             amountUntaxed: item.amountUntaxed,
+//             orderLines: null,
+//             confirmedByManager: null,
+//             additionalDeduction: null,
+//           ),
+//           item.orderLine != null
+//               ? item.orderLine!
+//                   .map(
+//                     (e) => CloudOrderLines(
+//                       product: e.product,
+//                       description: e.description,
+//                       quantity: e.quantity,
+//                       delivered: e.delivered,
+//                       invoiced: e.invoiced,
+//                       unitPrice: e.unitPrice,
+//                       taxes: e.taxes,
+//                       disc: e.disc,
+//                       taxExcl: e.taxExcl,
+//                     ),
+//                   )
+//                   .toList()
+//               : [],
+//         ),
+//       ),
+//       TextCellValue(false.toString()),
+//     ]);
+//   }
 
-  // // Append data rows
-  // sheetObject.appendRow([
-  //   CellValue.string('John Doe'),
-  //   CellValue.int(30),
-  //   CellValue.string('USA'),
-  // ]);
-  // sheetObject.appendRow([
-  //   CellValue.string('Alice Smith'),
-  //   CellValue.int(25),
-  //   CellValue.string('Canada'),
-  // ]);
+//   // // Append data rows
+//   // sheetObject.appendRow([
+//   //   CellValue.string('John Doe'),
+//   //   CellValue.int(30),
+//   //   CellValue.string('USA'),
+//   // ]);
+//   // sheetObject.appendRow([
+//   //   CellValue.string('Alice Smith'),
+//   //   CellValue.int(25),
+//   //   CellValue.string('Canada'),
+//   // ]);
 
-  var fileName = 'my_data.xlsx';
-  var bytes = excel.save(fileName: fileName);
+//   var fileName = 'my_data.xlsx';
+//   var bytes = excel.save(fileName: fileName);
 
-  // Get the appropriate directory based on platform
-  // var directory = await getExternalStorageDirectory();
-  var directory2 = await getExternalStorageDirectory();
-  var filePath = join(directory2!.path, fileName);
+//   // Get the appropriate directory based on platform
+//   // var directory = await getExternalStorageDirectory();
+//   var directory2 = await getExternalStorageDirectory();
+//   var filePath = join(directory2!.path, fileName);
 
-  // Write the file bytes to the chosen location
-  try {
-    print(filePath);
-    await File(filePath).writeAsBytes(bytes!);
-    print('success');
-  } catch (e) {
-    print(e);
-  }
+//   // Write the file bytes to the chosen location
+//   try {
+//     print(filePath);
+//     await File(filePath).writeAsBytes(bytes!);
+//     print('success');
+//   } catch (e) {
+//     print(e);
+//   }
 
-  // // Save the Excel file
-  // final excelBytes = excel.encode() ?? [];
-  // final blob = html.Blob([Uint8List.fromList(excelBytes)]);
-  // final url = html.Url.createObjectUrlFromBlob(blob);
+//   // // Save the Excel file
+//   // final excelBytes = excel.encode() ?? [];
+//   // final blob = html.Blob([Uint8List.fromList(excelBytes)]);
+//   // final url = html.Url.createObjectUrlFromBlob(blob);
 
-  // // Create a link element and click it to download the file
-  // final anchor = html.AnchorElement(href: url)
-  //   ..setAttribute(
-  //     'download',
-  //     '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
-  //         ' Sales Commission.xlsx',
-  //   )
-  //   ..click();
+//   // // Create a link element and click it to download the file
+//   // final anchor = html.AnchorElement(href: url)
+//   //   ..setAttribute(
+//   //     'download',
+//   //     '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+//   //         ' Sales Commission.xlsx',
+//   //   )
+//   //   ..click();
 
-  // // Revoke the object URL to free up resources
-  // html.Url.revokeObjectUrl(url);
-}
+//   // // Revoke the object URL to free up resources
+//   // html.Url.revokeObjectUrl(url);
+// }
 
 class MyDataTableSource extends DataTableSource {
   MyDataTableSource(
