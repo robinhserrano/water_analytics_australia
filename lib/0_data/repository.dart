@@ -11,12 +11,12 @@ import 'package:water_analytics_australia/core/hive_helper.dart';
 class Repository {
   Repository({required this.client});
   final Dio client;
-  static String url = 'http://3.27.69.251';
+  static String url = 'http://54.227.19.30/api';
 
   Future<String?> fetchAccessToken(String email, String password) async {
     try {
       final response = await client.post<String>(
-        '$url/api/sanctum/token',
+        '$url/sanctum/token',
         queryParameters: {
           'email': email,
           'password': password,
@@ -39,7 +39,7 @@ class Repository {
     final user = await HiveHelper.getAllUsers();
     try {
       final response = await client.get<List<dynamic>>(
-        '$url/api/salesOrder',
+        '$url/salesOrder',
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
@@ -63,7 +63,7 @@ class Repository {
     final user = await HiveHelper.getAllUsers();
     try {
       final response = await client.get<Map<String, dynamic>>(
-        '$url/api/salesOrder/$id',
+        '$url/salesOrder/$id',
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
@@ -92,7 +92,7 @@ class Repository {
       final user = await HiveHelper.getAllUsers();
       client.interceptors.add(ChuckerDioInterceptor());
       final response = await client.post<dynamic>(
-        '$url/api/salesOrder',
+        '$url/salesOrder',
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
@@ -156,9 +156,9 @@ class Repository {
     List<SalesOrder> salesOrders,
   ) async {
     try {
+      final user = await HiveHelper.getAllUsers();
+
       client.interceptors.add(ChuckerDioInterceptor());
-      const url = 'http://3.27.69.251';
-      const token = '1|BXZhSdF9naVcOnIub829wTkn2NVszRvMxgoIBHhk88f61dd1';
 
       final dataList = <Map<String, dynamic>>[];
       for (final salesOrder in salesOrders) {
@@ -205,10 +205,10 @@ class Repository {
       }
 
       final response = await client.post<dynamic>(
-        '$url/api/bulkStore',
+        '$url/bulkStore',
         options: Options(
           headers: {
-            HttpHeaders.authorizationHeader: 'Bearer $token',
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
             HttpHeaders.contentTypeHeader: 'application/json',
             HttpHeaders.acceptHeader: 'application/json',
           },
@@ -216,7 +216,6 @@ class Repository {
         data: dataList,
       );
 
-      var lala = response;
       if (response.statusCode == 200 || response.statusCode == 201) {
         return true;
       }
