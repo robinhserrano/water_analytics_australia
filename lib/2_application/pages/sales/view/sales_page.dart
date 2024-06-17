@@ -3,8 +3,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
@@ -19,11 +19,9 @@ import 'package:water_analytics_australia/2_application/pages/cloud_sales_detail
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
-import 'package:water_analytics_australia/core/temp.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
-import 'package:excel/excel.dart';
 
 class SalesPageWrapperProvider extends StatelessWidget {
   const SalesPageWrapperProvider({super.key});
@@ -631,7 +629,7 @@ Future<void> _downloadExcel(
       ),
       TextCellValue(item.partnerId?.displayName ?? ''),
       TextCellValue(item.xStudioSalesRep1 ?? ''),
-      TextCellValue(item.xStudioSalesSource ?? ''),
+      TextCellValue(item.xStudioSalesSource),
       TextCellValue(item.xStudioCommissionPaid.toString()),
       DoubleCellValue(item.amountTotal ?? 0),
       TextCellValue(
