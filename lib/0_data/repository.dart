@@ -11,8 +11,8 @@ import 'package:water_analytics_australia/core/hive_helper.dart';
 class Repository {
   Repository({required this.client});
   final Dio client;
-  static String url = 'http://54.227.19.30/api';
-  static String accessToken = '4|z69CydNH6KEshKdKz83m0bbFiYXywU69puknFigf47720c26';
+  static String url = 'https://commission.wateranalytics.com.au/api';
+  //static String {user.first.accessToken} = '4|z69CydNH6KEshKdKz83m0bbFiYXywU69puknFigf47720c26';
 
   Future<String?> fetchAccessToken(String email, String password) async {
     try {
@@ -43,7 +43,7 @@ class Repository {
         '$url/salesOrder',
         options: Options(
           headers: {
-            HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
             HttpHeaders.contentTypeHeader: 'application/json',
             HttpHeaders.acceptHeader: 'application/json',
           },
@@ -67,7 +67,7 @@ class Repository {
         '$url/salesOrder/$id',
         options: Options(
           headers: {
-            HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
             HttpHeaders.contentTypeHeader: 'application/json',
             HttpHeaders.acceptHeader: 'application/json',
           },
@@ -96,7 +96,7 @@ class Repository {
         '$url/salesOrder',
         options: Options(
           headers: {
-            HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
             HttpHeaders.contentTypeHeader: 'application/json',
             HttpHeaders.acceptHeader: 'application/json',
           },
@@ -209,7 +209,7 @@ class Repository {
         '$url/bulkStore',
         options: Options(
           headers: {
-            HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
             HttpHeaders.contentTypeHeader: 'application/json',
             HttpHeaders.acceptHeader: 'application/json',
           },
