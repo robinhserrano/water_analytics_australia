@@ -1,9 +1,11 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, unused_import, prefer_int_literals
 
+import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:data_table_2/data_table_2.dart';
 import 'package:excel/excel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,6 +19,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
+import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
@@ -325,14 +328,14 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                         HeroIcons.adjustmentsHorizontal,
                       ),
                     ),
-                    if (selectedSalesNo.isNotEmpty) ...[
+                    if (kIsWeb) ...[
                       ElevatedButton.icon(
                         icon: const Icon(FontAwesomeIcons.fileExcel),
                         onPressed: () {
-                          // _downloadExcel(
-                          //   selectedSalesNo,
-                          //   records,
-                          // );
+                          _downloadExcelWeb(
+                            selectedSalesNo,
+                            records,
+                          );
                         },
                         label: const Text('Export as Excel File'),
                       ),
@@ -360,8 +363,8 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       DataColumn(label: Text('Commission Paid')),
                       DataColumn(label: Text('Total')),
                       DataColumn(label: Text('Delivery Status')),
-                      // DataColumn(label: Text('Final Commission')),
-                      // DataColumn(label: Text('Confirmed by Manager')),
+                      DataColumn(label: Text('Final Commission')),
+                      DataColumn(label: Text('Confirmed by Manager')),
                     ],
                     source: MyDataTableSource(
                       records,
@@ -399,7 +402,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                 //                 .contains(
                 //                   ctrlSearch.text.toLowerCase(),
                 //                 )) {
-                //           return CloudSalesRecordCard(
+                //           return AwsSalesRecordCard(
                 //             record: record,
                 //           );
                 //         }
@@ -483,7 +486,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
 //                     ),
 //                     IconButton(
 //                       onPressed: () {
-//                         _downloadExcel(widget.records);
+//                         _downloadExcelWeb(widget.records);
 //                       },
 //                       icon: HeroIcon(
 //                         HeroIcons.arrowDown,
@@ -549,7 +552,7 @@ class SalesListPageError extends StatelessWidget {
   }
 }
 
-// Future<void> _downloadExcel(
+// Future<void> _downloadExcelWeb(
 //   // Set<String> selectedSalesNo,
 //   List<AwsSalesOrder> records,
 // ) async {
@@ -595,7 +598,7 @@ class SalesListPageError extends StatelessWidget {
 //       ),
 //       DoubleCellValue(
 //         calculateFinalCommission(
-//           CloudSalesOrder(
+//           AwsSalesOrder(
 //             id: null,
 //             name: item.name,
 //             createDate: item.createDate,
@@ -621,7 +624,7 @@ class SalesListPageError extends StatelessWidget {
 //           item.orderLine != null
 //               ? item.orderLine!
 //                   .map(
-//                     (e) => CloudOrderLines(
+//                     (e) => AwsOrderLine(
 //                       product: e.product,
 //                       description: e.description,
 //                       quantity: e.quantity,
@@ -767,22 +770,23 @@ class MyDataTableSource extends DataTableSource {
                     : 'Not Delivered',
           ),
         ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     r'$' +
-        //         calculateFinalCommission(item, item.orderLines ?? [])
-        //             .toStringAsFixed(2),
-        //   ),
-        // ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Checkbox(
-        //     onChanged: null, //(value) {},
-        //     value: item.confirmedByManager != null &&
-        //         !(item.confirmedByManager?.isConfirmed == false),
-        //   ),
-        // ),
+        DataCell(
+          onTap: () => onTap(item),
+          Text(
+            r'$' +
+                calculateFinalCommission(item, item.orderLine ?? [])
+                    .toStringAsFixed(2),
+          ),
+        ),
+        DataCell(
+          onTap: () => onTap(item),
+          Checkbox(
+            onChanged: null, //(value) {},
+            value: false,
+            // value: item.confirmedByManager != null &&
+            //     !(item.confirmedByManager?.isConfirmed == false),
+          ),
+        ),
         // DataCell(
         //   onTap: () => onTap(item),
         //   Text(
@@ -804,83 +808,234 @@ class MyDataTableSource extends DataTableSource {
   int get selectedRowCount => selectedSalesNo.length;
 }
 
-// void _downloadExcel(
-//   Set<String> selectedSalesNo,
-//   List<CloudSalesOrder> records,
-// ) {
-//   final excel = Excel.createExcel();
-//   final filteredRecords =
-//       records.where((e) => selectedSalesNo.contains(e.name)).toList();
+void _downloadExcelWeb(
+  Set<String> selectedSalesNo,
+  List<AwsSalesOrder> records,
+) {
+  final excel = Excel.createExcel();
+  final filteredRecords =
+      records.where((e) => selectedSalesNo.contains(e.name)).toList();
 
-//   final sheetObject = excel['Sheet1']
-//     ..appendRow([
-//       const TextCellValue('Number'),
-//       const TextCellValue('Order Date'),
-//       const TextCellValue('Customer'),
-//       const TextCellValue('Sales Rep'),
-//       const TextCellValue('Sales Source'),
-//       const TextCellValue('Commission Paid'),
-//       const TextCellValue('Total'),
-//       const TextCellValue('Delivery Status'),
-//       const TextCellValue('Final Commission'),
-//       const TextCellValue('Confirmed by Manager'),
-//     ]);
+  final sheetObject = excel['Sheet1']
+    ..appendRow([
+      const TextCellValue('Number'),
+      const TextCellValue('Order Date'),
+      const TextCellValue('Customer'),
+      const TextCellValue('Sales Rep'),
+      const TextCellValue('Sales Source'),
+      const TextCellValue('Commission Paid'),
+      const TextCellValue('Total'),
+      const TextCellValue('Delivery Status'),
+      const TextCellValue('Final Commission'),
+      const TextCellValue('Confirmed by Manager'),
+    ]);
 
-//   for (final item in filteredRecords) {
-//     sheetObject.appendRow([
-//       TextCellValue(
-//         item.name ?? '',
-//       ),
-//       TextCellValue(
-//         item.createDate == null
-//             ? ''
-//             : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
-//       ),
-//       TextCellValue(item.partnerIdDisplayName ?? ''),
-//       TextCellValue(item.xStudioSalesRep1 ?? ''),
-//       TextCellValue(item.xStudioSalesSource ?? ''),
-//       TextCellValue(item.xStudioCommissionPaid.toString()),
-//       DoubleCellValue(item.amountTotal ?? 0),
-//       TextCellValue(
-//         (item.deliveryStatus ?? '').toString() == 'full'
-//             ? 'Fully Delivered'
-//             : (item.deliveryStatus ?? '').toString() == 'partial'
-//                 ? 'Partially Delivered'
-//                 : 'Not Delivered',
-//       ),
-//       DoubleCellValue(
-//         calculateFinalCommission(item, item.orderLines ?? []),
-//       ),
-//       TextCellValue(false.toString()),
-//     ]);
-//   }
+  for (final item in filteredRecords) {
+    sheetObject.appendRow([
+      TextCellValue(
+        item.name ?? '',
+      ),
+      TextCellValue(
+        item.createDate == null
+            ? ''
+            : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+      ),
+      TextCellValue(item.partnerIdDisplayName ?? ''),
+      TextCellValue(item.xStudioSalesRep1 ?? ''),
+      TextCellValue(item.xStudioSalesSource ?? ''),
+      TextCellValue(item.xStudioCommissionPaid.toString()),
+      DoubleCellValue(item.amountTotal ?? 0),
+      TextCellValue(
+        (item.deliveryStatus ?? '').toString() == 'full'
+            ? 'Fully Delivered'
+            : (item.deliveryStatus ?? '').toString() == 'partial'
+                ? 'Partially Delivered'
+                : 'Not Delivered',
+      ),
+      DoubleCellValue(
+        calculateFinalCommission(item, item.orderLine ?? []),
+      ),
+      TextCellValue(false.toString()),
+    ]);
+  }
 
-//   // // Append data rows
-//   // sheetObject.appendRow([
-//   //   CellValue.string('John Doe'),
-//   //   CellValue.int(30),
-//   //   CellValue.string('USA'),
-//   // ]);
-//   // sheetObject.appendRow([
-//   //   CellValue.string('Alice Smith'),
-//   //   CellValue.int(25),
-//   //   CellValue.string('Canada'),
-//   // ]);
+  // // Append data rows
+  // sheetObject.appendRow([
+  //   CellValue.string('John Doe'),
+  //   CellValue.int(30),
+  //   CellValue.string('USA'),
+  // ]);
+  // sheetObject.appendRow([
+  //   CellValue.string('Alice Smith'),
+  //   CellValue.int(25),
+  //   CellValue.string('Canada'),
+  // ]);
 
-//   // Save the Excel file
-//   final excelBytes = excel.encode() ?? [];
-//   final blob = html.Blob([Uint8List.fromList(excelBytes)]);
-//   final url = html.Url.createObjectUrlFromBlob(blob);
+  // Save the Excel file
+  final excelBytes = excel.encode() ?? [];
+  final blob = html.Blob([Uint8List.fromList(excelBytes)]);
+  final url = html.Url.createObjectUrlFromBlob(blob);
 
-//   // Create a link element and click it to download the file
-//   final anchor = html.AnchorElement(href: url)
-//     ..setAttribute(
-//       'download',
-//       '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
-//           ' Sales Commission.xlsx',
-//     )
-//     ..click();
+  // Create a link element and click it to download the file
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute(
+      'download',
+      '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+          ' Sales Commission.xlsx',
+    )
+    ..click();
 
-//   // Revoke the object URL to free up resources
-//   html.Url.revokeObjectUrl(url);
-// }
+  // Revoke the object URL to free up resources
+  html.Url.revokeObjectUrl(url);
+  print('hjerkjrklewjrklwejrl');
+}
+
+double calculateFinalCommission(
+  AwsSalesOrder order,
+  List<AwsOrderLine> orderLine,
+) {
+  final sellingPrice = calculateCashPrice(
+    order.amountTotal ?? 0,
+    (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
+  );
+
+  final additionalCost = getAwsAdditionalCost(orderLine, landingPrices).fold(
+    0.0,
+    (prev, e) => prev + (e.unitPrice ?? 0),
+  );
+  final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
+    0.0,
+    (prev, e) =>
+        prev +
+        (e.isSupplyOnly
+            ? (e.landingPrice.supplyOnly ?? 0.0)
+            : (e.landingPrice.installationService ?? 0.0)),
+  );
+  final temp = (sellingPrice - additionalCost) - landingPrice;
+  final extraCommission = temp <= 0 ? temp : temp * 0.5;
+
+  final baseCommission = (orderLine.any(
+    (element) => (element.product ?? '').contains(
+      'USRO-6S1-2W'.toLowerCase(),
+    ),
+  ))
+      ? 200
+      : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
+          ? 1000
+          : 500;
+  final finalCommission = extraCommission + baseCommission;
+
+  return finalCommission;
+}
+
+List<AwsOrderLine> getAwsAdditionalCost(
+  List<AwsOrderLine> orderLines,
+  List<LandingPrice> landingPrices,
+) {
+  final matchingLandingPrices = <LandingPriceWithQuantity>{};
+  final isSupplyOnly = orderLines.any(
+    (orderLine) => orderLine.product?.toLowerCase() == 'supply only',
+  );
+  final additionalCostSet = <AwsOrderLine>{};
+  final tempAdditionalCostSet = <AwsOrderLine>{};
+  for (final orderLine in orderLines) {
+    final displayName = orderLine.product;
+    final quantity = orderLine.quantity ?? 0;
+    if (displayName != null) {
+      for (final landingPrice in landingPrices) {
+        if (displayName
+            .toLowerCase()
+            .contains(landingPrice.internalReference!.toLowerCase())) {
+          matchingLandingPrices.add(
+            LandingPriceWithQuantity(
+              landingPrice: landingPrice,
+              quantity: quantity.toDouble(),
+              isSupplyOnly: isSupplyOnly,
+            ),
+          );
+
+          break;
+        } else {
+          additionalCostSet.add(orderLine);
+        }
+      }
+    }
+  }
+
+  for (final item in additionalCostSet) {
+    final displayName = item.product ?? '';
+    for (final landingPrice in landingPrices) {
+      if (displayName
+          .toLowerCase()
+          .contains(landingPrice.internalReference!.toLowerCase())) {
+        tempAdditionalCostSet.add(
+          item,
+        );
+
+        break;
+      }
+    }
+  }
+
+  additionalCostSet
+      .retainWhere((element) => !tempAdditionalCostSet.contains(element));
+
+  final additionalCostList = additionalCostSet.toList()
+    ..removeWhere(
+      (item) =>
+          ((item.product ?? '')
+              .toLowerCase()
+              .contains('installation service')) ||
+          (item.product ?? '').toLowerCase().contains('supply only'),
+    );
+  return additionalCostList;
+}
+
+double calculateCashPrice(
+  double salesOrderTotal,
+  bool isCash,
+) {
+  if (isCash) {
+    return salesOrderTotal;
+  } else {
+    return salesOrderTotal * 0.9;
+  }
+}
+
+List<LandingPriceWithQuantity> getLandingPrice(
+  List<AwsOrderLine> orderLines,
+  List<LandingPrice> landingPrices,
+) {
+  final matchingLandingPrices = <LandingPriceWithQuantity>{};
+  final isSupplyOnly = orderLines.any(
+    (orderLine) => orderLine.product?.toLowerCase() == 'supply only',
+  );
+
+  for (final orderLine in orderLines) {
+    final displayName = orderLine.product;
+    final quantity = orderLine.quantity;
+    if (displayName != null && quantity != null) {
+      for (final landingPrice in landingPrices) {
+        if (displayName
+            .toLowerCase()
+            .contains(landingPrice.internalReference!.toLowerCase())) {
+          matchingLandingPrices.add(
+            LandingPriceWithQuantity(
+              landingPrice: (quantity >= 2 &&
+                      landingPrice.internalReference == 'USRO-3S1-2W' &&
+                      !isSupplyOnly)
+                  ? landingPrice.copyWith(installationService: 790)
+                  : landingPrice,
+              quantity: quantity.toDouble(),
+              isSupplyOnly: isSupplyOnly,
+            ),
+          );
+
+          break;
+        }
+      }
+    }
+  }
+
+  return matchingLandingPrices.toList();
+}

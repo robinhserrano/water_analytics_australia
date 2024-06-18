@@ -238,7 +238,7 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
             },
           ),
           if (tabCtrl.index == 0) ...[
-            AwsOrderLines(order: order),
+            AwsOrderLinesSection(order: order),
           ],
           if (tabCtrl.index == 1) ...[
             Notes(
@@ -787,8 +787,8 @@ class CommissionSection extends StatelessWidget {
   }
 }
 
-class AwsOrderLines extends StatelessWidget {
-  const AwsOrderLines({required this.order, super.key});
+class AwsOrderLinesSection extends StatelessWidget {
+  const AwsOrderLinesSection({required this.order, super.key});
 
   final AwsSalesOrder order;
 
