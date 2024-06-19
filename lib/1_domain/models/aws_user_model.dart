@@ -3,31 +3,31 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-part 'cloud_user_model.freezed.dart';
-part 'cloud_user_model.g.dart';
+part 'aws_user_model.freezed.dart';
+part 'aws_user_model.g.dart';
 
 @freezed
-class CloudUser with _$CloudUser {
-  const factory CloudUser({
+class AwsUser with _$AwsUser {
+  const factory AwsUser({
     required num accessLevel,
     required num commissionSplit,
     required String displayName,
     required String email,
-    required String? photoUrl,
-  }) = _CloudUser;
+    required num? salesManagerId,
+  }) = _AwsUser;
 
-  factory CloudUser.fromJson(Map<String, dynamic> json) =>
-      _$CloudUserFromJson(json);
+  factory AwsUser.fromJson(Map<String, dynamic> json) =>
+      _$AwsUserFromJson(json);
 
-  factory CloudUser.fromFirestore(
+  factory AwsUser.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
-    return CloudUser(
-      accessLevel: doc.get('accessLevel') as num,
-      commissionSplit: doc.get('commissionSplit') as num,
-      displayName: doc.get('displayName') as String,
+    return AwsUser(
+      accessLevel: doc.get('access_level') as num,
+      commissionSplit: doc.get('commission__split') as num,
+      displayName: doc.get('name') as String,
       email: doc.get('email') as String,
-      photoUrl: doc.get('photoUrl') as String?,
+      salesManagerId: doc.get('sales_manager_id') as num,
     );
   }
 }

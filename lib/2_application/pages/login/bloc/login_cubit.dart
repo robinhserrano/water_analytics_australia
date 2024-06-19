@@ -23,6 +23,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
     emit(const LoginStateLoading());
     try {
       final data = await odooRepo.login(dbName, username, password);
+      final accessToken = await repo.fetchAccessToken(username, password);
 
       if (data != null) {
         final user = UserHive(
@@ -35,7 +36,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           null,
           4,
           50,
-          null,
+          accessToken,
         );
 
         final userBox = Hive.box<UserHive>('user');

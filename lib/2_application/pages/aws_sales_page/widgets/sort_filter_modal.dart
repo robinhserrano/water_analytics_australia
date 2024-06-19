@@ -3,13 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/pick_users_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 
 class SortFilterModal extends StatefulWidget {
-  const SortFilterModal({required this.onChanged, super.key});
+  const SortFilterModal({
+    required this.onChanged,
+    super.key,
+  });
 
   final void Function() onChanged;
 
@@ -261,6 +266,22 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   ],
                 ),
               ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                ),
+                child: Divider(),
+              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     showPickUsers(
+              //       context,
+              //       [],
+              //     );
+              //   },
+              //   child: const Text('Show Sales Rep'),
+              // ),
               const Padding(
                 padding: EdgeInsets.only(
                   left: 24,

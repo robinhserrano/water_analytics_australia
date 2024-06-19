@@ -1,6 +1,6 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, unused_import, prefer_int_literals
 
-import 'dart:html' as html;
+// import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:data_table_2/data_table_2.dart';
@@ -333,10 +333,10 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       ElevatedButton.icon(
                         icon: const Icon(FontAwesomeIcons.fileExcel),
                         onPressed: () {
-                          _downloadExcelWeb(
-                            selectedSalesNo,
-                            records,
-                          );
+                          // _downloadExcelWeb(
+                          //   selectedSalesNo,
+                          //   records,
+                          // );
                         },
                         label: const Text('Export as Excel File'),
                       ),
@@ -809,87 +809,87 @@ class MyDataTableSource extends DataTableSource {
   int get selectedRowCount => selectedSalesNo.length;
 }
 
-void _downloadExcelWeb(
-  Set<String> selectedSalesNo,
-  List<AwsSalesOrder> records,
-) {
-  final excel = Excel.createExcel();
-  final filteredRecords =
-      records.where((e) => selectedSalesNo.contains(e.name)).toList();
+// void _downloadExcelWeb(
+//   Set<String> selectedSalesNo,
+//   List<AwsSalesOrder> records,
+// ) {
+//   final excel = Excel.createExcel();
+//   final filteredRecords =
+//       records.where((e) => selectedSalesNo.contains(e.name)).toList();
 
-  final sheetObject = excel['Sheet1']
-    ..appendRow([
-      const TextCellValue('Number'),
-      const TextCellValue('Order Date'),
-      const TextCellValue('Customer'),
-      const TextCellValue('Sales Rep'),
-      const TextCellValue('Sales Source'),
-      const TextCellValue('Commission Paid'),
-      const TextCellValue('Total'),
-      const TextCellValue('Delivery Status'),
-      const TextCellValue('Final Commission'),
-      const TextCellValue('Confirmed by Manager'),
-    ]);
+//   final sheetObject = excel['Sheet1']
+//     ..appendRow([
+//       const TextCellValue('Number'),
+//       const TextCellValue('Order Date'),
+//       const TextCellValue('Customer'),
+//       const TextCellValue('Sales Rep'),
+//       const TextCellValue('Sales Source'),
+//       const TextCellValue('Commission Paid'),
+//       const TextCellValue('Total'),
+//       const TextCellValue('Delivery Status'),
+//       const TextCellValue('Final Commission'),
+//       const TextCellValue('Confirmed by Manager'),
+//     ]);
 
-  for (final item in filteredRecords) {
-    sheetObject.appendRow([
-      TextCellValue(
-        item.name ?? '',
-      ),
-      TextCellValue(
-        item.createDate == null
-            ? ''
-            : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
-      ),
-      TextCellValue(item.partnerIdDisplayName ?? ''),
-      TextCellValue(item.xStudioSalesRep1 ?? ''),
-      TextCellValue(item.xStudioSalesSource ?? ''),
-      TextCellValue(item.xStudioCommissionPaid.toString()),
-      DoubleCellValue(item.amountTotal ?? 0),
-      TextCellValue(
-        (item.deliveryStatus ?? '').toString() == 'full'
-            ? 'Fully Delivered'
-            : (item.deliveryStatus ?? '').toString() == 'partial'
-                ? 'Partially Delivered'
-                : 'Not Delivered',
-      ),
-      DoubleCellValue(
-        calculateFinalCommission(item, item.orderLine ?? []),
-      ),
-      TextCellValue(false.toString()),
-    ]);
-  }
+//   for (final item in filteredRecords) {
+//     sheetObject.appendRow([
+//       TextCellValue(
+//         item.name ?? '',
+//       ),
+//       TextCellValue(
+//         item.createDate == null
+//             ? ''
+//             : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+//       ),
+//       TextCellValue(item.partnerIdDisplayName ?? ''),
+//       TextCellValue(item.xStudioSalesRep1 ?? ''),
+//       TextCellValue(item.xStudioSalesSource ?? ''),
+//       TextCellValue(item.xStudioCommissionPaid.toString()),
+//       DoubleCellValue(item.amountTotal ?? 0),
+//       TextCellValue(
+//         (item.deliveryStatus ?? '').toString() == 'full'
+//             ? 'Fully Delivered'
+//             : (item.deliveryStatus ?? '').toString() == 'partial'
+//                 ? 'Partially Delivered'
+//                 : 'Not Delivered',
+//       ),
+//       DoubleCellValue(
+//         calculateFinalCommission(item, item.orderLine ?? []),
+//       ),
+//       TextCellValue(false.toString()),
+//     ]);
+//   }
 
-  // // Append data rows
-  // sheetObject.appendRow([
-  //   CellValue.string('John Doe'),
-  //   CellValue.int(30),
-  //   CellValue.string('USA'),
-  // ]);
-  // sheetObject.appendRow([
-  //   CellValue.string('Alice Smith'),
-  //   CellValue.int(25),
-  //   CellValue.string('Canada'),
-  // ]);
+//   // // Append data rows
+//   // sheetObject.appendRow([
+//   //   CellValue.string('John Doe'),
+//   //   CellValue.int(30),
+//   //   CellValue.string('USA'),
+//   // ]);
+//   // sheetObject.appendRow([
+//   //   CellValue.string('Alice Smith'),
+//   //   CellValue.int(25),
+//   //   CellValue.string('Canada'),
+//   // ]);
 
-  // Save the Excel file
-  final excelBytes = excel.encode() ?? [];
-  final blob = html.Blob([Uint8List.fromList(excelBytes)]);
-  final url = html.Url.createObjectUrlFromBlob(blob);
+//   // Save the Excel file
+//   final excelBytes = excel.encode() ?? [];
+//   final blob = html.Blob([Uint8List.fromList(excelBytes)]);
+//   final url = html.Url.createObjectUrlFromBlob(blob);
 
-  // Create a link element and click it to download the file
-  final anchor = html.AnchorElement(href: url)
-    ..setAttribute(
-      'download',
-      '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
-          ' Sales Commission.xlsx',
-    )
-    ..click();
+//   // Create a link element and click it to download the file
+//   final anchor = html.AnchorElement(href: url)
+//     ..setAttribute(
+//       'download',
+//       '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+//           ' Sales Commission.xlsx',
+//     )
+//     ..click();
 
-  // Revoke the object URL to free up resources
-  html.Url.revokeObjectUrl(url);
-  print('hjerkjrklewjrklwejrl');
-}
+//   // Revoke the object URL to free up resources
+//   html.Url.revokeObjectUrl(url);
+//   print('hjerkjrklewjrklwejrl');
+// }
 
 double calculateFinalCommission(
   AwsSalesOrder order,

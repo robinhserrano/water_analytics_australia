@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 
@@ -224,6 +225,30 @@ class Repository {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<List<AwsUser>?> fetchUsers() async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.get<List<dynamic>>(
+        '$url/user',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final data = response.data!.cast<Map<String, dynamic>>();
+      final parsedData = data.map(AwsUser.fromJson).toList();
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }
