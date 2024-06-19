@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 
@@ -70,6 +71,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         widget.onChanged();
                         SalesPage.closeDrawer();
                         CloudSalesPage.closeDrawer();
+                        AwsSalesPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -119,6 +121,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         widget.onChanged();
                         SalesPage.closeDrawer();
                         CloudSalesPage.closeDrawer();
+                        AwsSalesPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -151,6 +154,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 onTap: () {
                   SalesPage.closeDrawer();
                   CloudSalesPage.closeDrawer();
+                  AwsSalesPage.closeDrawer();
                 },
                 child: const Card(
                   elevation: 0,

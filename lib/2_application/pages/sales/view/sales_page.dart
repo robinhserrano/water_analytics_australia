@@ -62,7 +62,7 @@ class _SalesPageState extends State<SalesPage> {
     return Scaffold(
       key: SalesPage._scaffoldKey,
       endDrawer: const HomeEndDrawer(),
-      drawer: SortFilterModal(
+      drawer: OdooSortFilterModal(
         onChanged: () => setState(() {}),
       ),
       backgroundColor: const Color(0xfff9fafb),

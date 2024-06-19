@@ -7,16 +7,16 @@ import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 
-class SortFilterModal extends StatefulWidget {
-  const SortFilterModal({required this.onChanged, super.key});
+class OdooSortFilterModal extends StatefulWidget {
+  const OdooSortFilterModal({required this.onChanged, super.key});
 
   final void Function() onChanged;
 
   @override
-  State<SortFilterModal> createState() => _SortFilterModalState();
+  State<OdooSortFilterModal> createState() => _OdooSortFilterModalState();
 }
 
-class _SortFilterModalState extends State<SortFilterModal> {
+class _OdooSortFilterModalState extends State<OdooSortFilterModal> {
   SortBy selectedSortValue = SortBy.newestFirst;
   List<CommissionStatus> selectedCommissionStatus = [];
   List<InvoicePaymentStatus> selectedInvoicePaymentStatus = [];

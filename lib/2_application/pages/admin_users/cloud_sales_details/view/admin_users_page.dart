@@ -10,6 +10,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/cloud_sales_details/bloc/admin_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/view/admin_users_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
@@ -68,9 +69,9 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
         ),
       ),
       key: AdminUsersPage._scaffoldKey,
-      drawer: SortFilterModal(
-        onChanged: () => setState(() {}),
-      ),
+      // drawer: SortFilterModal(
+      //   onChanged: () => setState(() {}),
+      // ),
       endDrawer: const HomeEndDrawer(),
       backgroundColor: const Color(0xfff9fafb), // Colors.blueGrey.shade50,
       appBar: AppBar(
