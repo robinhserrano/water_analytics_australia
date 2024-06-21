@@ -53,3 +53,13 @@ class DoubleInputFormatter extends TextInputFormatter {
 String generateMd5(String input) {
   return md5.convert(utf8.encode(input)).toString();
 }
+
+String formatDisplayNameToEmail(String text) {
+  final regex =
+      RegExp('[^a-zA-Z0-9_]'); // Matches special characters except underscore
+  final formattedText = text
+      .toLowerCase() // Convert to lowercase first
+      .replaceAll(regex, '')
+      .replaceAll(' ', '_');
+  return '$formattedText@wa.com';
+}

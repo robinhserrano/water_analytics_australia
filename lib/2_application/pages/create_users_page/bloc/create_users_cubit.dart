@@ -2,17 +2,21 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
+import 'package:water_analytics_australia/0_data/repository.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 part 'create_users_state.dart';
 
 class CreateUsersCubit extends Cubit<CreateUsersCubitState> {
   CreateUsersCubit({
     required this.firestoreService,
+    required this.repo, 
   }) : super(const CreateUsersStateLoading()) {
     // fetchUsers();
   }
 
   final FirebaseFirestoreService firestoreService;
+  final Repository repo;
 
   // Future<void> fetchUserById(String id) async {
   //   emit(const CreateUsersStateLoading());
@@ -49,6 +53,16 @@ class CreateUsersCubit extends Cubit<CreateUsersCubitState> {
       await firestoreService.updateUserById(user);
 
       return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> createAwsUser(AwsUser user) async {
+    try {
+      final success = await repo.createUser(user);
+
+      return success;
     } catch (e) {
       return false;
     }

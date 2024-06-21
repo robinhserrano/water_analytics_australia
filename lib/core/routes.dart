@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/view/admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/view/admin_users_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
@@ -117,15 +118,15 @@ final routes = GoRouter(
         );
       },
     ),
-    //  GoRoute(
-    //   name: AdminUsersDetailPage.name,
-    //   path: AdminUsersDetailPage.path,
-    //   builder: (context, state) {
-    //     return AdminUsersDetailPageWrapperProvider(
-    //       id: state.pathParameters['id']!,
-    //     );
-    //   },
-    // ),
+    GoRoute(
+      name: AwsAdminUsersDetailPage.name,
+      path: AwsAdminUsersDetailPage.path,
+      builder: (context, state) {
+        return AwsAdminUsersDetailPageWrapperProvider(
+          id: state.pathParameters['id']!,
+        );
+      },
+    ),
   ],
   redirect: (context, state) async {
     // final auth = context.read<AuthCubit>();

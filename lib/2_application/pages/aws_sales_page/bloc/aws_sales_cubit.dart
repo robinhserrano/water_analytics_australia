@@ -6,6 +6,7 @@ import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/odoo_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 part 'aws_sales_state.dart';
@@ -203,6 +204,16 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
       }
 
       return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> createAwsUser(AwsUser user) async {
+    try {
+      final success = await repo.createUser(user);
+
+      return success;
     } catch (e) {
       return false;
     }

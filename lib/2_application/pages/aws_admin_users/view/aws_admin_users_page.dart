@@ -9,7 +9,7 @@ import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
-import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page%20copy/view/admin_users_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/bloc/aws_admin_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
@@ -59,14 +59,14 @@ class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          context.pushNamed(CreateUsersPage.name);
-        },
-        label: const Row(
-          children: [HeroIcon(HeroIcons.plus), Text(' Create User')],
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () {
+      //     context.pushNamed(CreateUsersPage.name);
+      //   },
+      //   label: const Row(
+      //     children: [HeroIcon(HeroIcons.plus), Text(' Create User')],
+      //   ),
+      // ),
       key: AwsAdminUsersPage._scaffoldKey,
       // drawer: SortFilterModal(
       //   onChanged: () => setState(() {}),
@@ -445,7 +445,7 @@ class MyDataTableSource extends DataTableSource {
           onTap: () {
             context.pushNamed(
               AwsAdminUsersDetailPage.name,
-              pathParameters: {'id': item.email},
+              pathParameters: {'id': item.id.toString()},
             );
           },
           const HeroIcon(

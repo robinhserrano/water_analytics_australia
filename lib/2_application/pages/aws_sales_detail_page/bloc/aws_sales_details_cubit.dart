@@ -53,4 +53,38 @@ class AwsSalesDetailsCubit extends Cubit<AwsSalesDetailsCubitState> {
       return false;
     }
   }
+
+  Future<bool> updateSalesOrder(AwsSalesOrder order) async {
+    try {
+      final success =
+          await repo.updateSalesOrder(order);
+
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Future<bool> saveAdditionalDeduction(AwsSalesOrder order) async {
+  //   try {
+  //     final success = true; //await repo.saveSales(sale);
+  //     //await firestoreService.saveLastUploadedTime(DateTime.now());
+
+  //     return success;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
+  // Future<bool> saveConfirmedByManager(AwsSalesOrder order) async {
+  //   try {
+  //     final success =
+  //         await repo.saveConfirmedByManager(id, additionalDeduction);
+  //     //await firestoreService.saveLastUploadedTime(DateTime.now());
+
+  //     return success;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
 }

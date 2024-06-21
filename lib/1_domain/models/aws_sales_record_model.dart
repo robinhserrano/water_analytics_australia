@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_annotation_target, always_put_required_named_parameters_first
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/int_to_boolean_converter.dart';
 import 'package:water_analytics_australia/core/bool_string_converter.dart';
 part 'aws_sales_record_model.freezed.dart';
@@ -42,6 +43,11 @@ class AwsSalesOrder with _$AwsSalesOrder {
     required String? state,
     @JsonKey(name: 'amount_untaxed') required double? amountUntaxed,
     @JsonKey(name: 'order_line') required List<AwsOrderLine>? orderLine,
+    @JsonKey(name: 'additional_deduction') required double? additionalDeduction,
+    @JsonKey(name: 'confirmed_by_manager')
+    @IntToBooleanConverter()
+    required bool confirmedByManager,
+    required AwsUser? user,
   }) = _AwsSalesOrder;
 
   factory AwsSalesOrder.fromJson(Map<String, dynamic> json) =>

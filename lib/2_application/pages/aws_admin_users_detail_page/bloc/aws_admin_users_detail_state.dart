@@ -17,7 +17,7 @@ class AwsAdminUsersDetailStateLoading extends AwsAdminUsersDetailCubitState {
 
 class AwsAdminUsersDetailStateLoaded extends AwsAdminUsersDetailCubitState {
   const AwsAdminUsersDetailStateLoaded(this.user);
-  final CloudUser user;
+  final AwsUser user;
 
   @override
   List<Object> get props => [];

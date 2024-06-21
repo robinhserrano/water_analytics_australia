@@ -33,6 +33,12 @@ _$AwsSalesOrderImpl _$$AwsSalesOrderImplFromJson(Map<String, dynamic> json) =>
       orderLine: (json['order_line'] as List<dynamic>?)
           ?.map((e) => AwsOrderLine.fromJson(e as Map<String, dynamic>))
           .toList(),
+      additionalDeduction: (json['additional_deduction'] as num?)?.toDouble(),
+      confirmedByManager: const IntToBooleanConverter()
+          .fromJson((json['confirmed_by_manager'] as num?)?.toInt()),
+      user: json['user'] == null
+          ? null
+          : AwsUser.fromJson(json['user'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
@@ -58,6 +64,10 @@ Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
       'state': instance.state,
       'amount_untaxed': instance.amountUntaxed,
       'order_line': instance.orderLine,
+      'additional_deduction': instance.additionalDeduction,
+      'confirmed_by_manager':
+          const IntToBooleanConverter().toJson(instance.confirmedByManager),
+      'user': instance.user,
     };
 
 _$AwsOrderLineImpl _$$AwsOrderLineImplFromJson(Map<String, dynamic> json) =>

@@ -10,6 +10,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
@@ -319,14 +320,15 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
             if (isValidating == false) {
               unawaited(showSavingModal(context));
-              final success = await cubit.createUser(
-                CloudUser(
+              final success = await cubit.createAwsUser(
+                AwsUser(
+                  id: 0,
                   displayName: ctrlName.text,
                   email: ctrlEmail.text,
-                  photoUrl: null,
                   accessLevel: accessLevel ?? 1,
                   commissionSplit:
                       double.tryParse(ctrlCommissionSplit.text) ?? 0,
+                  salesManagerId: null,
                 ),
               );
 

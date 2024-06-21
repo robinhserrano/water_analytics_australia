@@ -232,7 +232,7 @@ class Repository {
     final user = await HiveHelper.getAllUsers();
     try {
       final response = await client.get<List<dynamic>>(
-        '$url/user',
+        '$url/users',
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
@@ -249,6 +249,162 @@ class Repository {
     } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  Future<AwsUser?> fetchUserById(String id) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.get<Map<String, dynamic>>(
+        '$url/users/$id',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final parsedData = AwsUser.fromJson(response.data!);
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<AwsUser?> fetchUser(
+    String email,
+    String password,
+    String accessToken,
+  ) async {
+    try {
+      final response = await client.get<Map<String, dynamic>>(
+        '$url/user',
+        queryParameters: {
+          'email': email,
+          'password': password,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+            HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+          },
+        ),
+      );
+      final parsedData = AwsUser.fromJson(response.data!);
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<bool> updateUser(AwsUser awsUser) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final data = <String, dynamic>{
+        'name': awsUser.displayName,
+        'email': awsUser.email,
+        'access_level': awsUser.accessLevel,
+        'commission_split': awsUser.commissionSplit,
+        'sales_manager_id': awsUser.salesManagerId,
+      };
+
+      final response = await client.patch<Map<String, dynamic>>(
+        '$url/users/${awsUser.id}',
+        data: awsUser.toJson(),
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      // final parsedData = AwsUser.fromJson(response.data!);
+
+      // return parsedData;
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> createUser(AwsUser awsUser) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final data = <String, dynamic>{
+        'name': awsUser.displayName,
+        'email': awsUser.email,
+        'access_level': awsUser.accessLevel,
+        'commission_split': awsUser.commissionSplit,
+        'sales_manager_id': awsUser.salesManagerId,
+        'password': 'p455w0rd',
+      };
+
+      final response = await client.post<Map<String, dynamic>>(
+        '$url/users',
+        data: data,
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      // final parsedData = AwsUser.fromJson(response.data!);
+
+      // return parsedData;
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateSalesOrder(AwsSalesOrder awsUser) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.patch<Map<String, dynamic>>(
+        '$url/salesOrder/${awsUser.id}',
+        data: awsUser.toJson(),
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      // final parsedData = AwsUser.fromJson(response.data!);
+
+      // return parsedData;
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }

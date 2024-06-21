@@ -8,18 +8,20 @@ part of 'aws_user_model.dart';
 
 _$AwsUserImpl _$$AwsUserImplFromJson(Map<String, dynamic> json) =>
     _$AwsUserImpl(
-      accessLevel: json['accessLevel'] as num,
-      commissionSplit: json['commissionSplit'] as num,
-      displayName: json['displayName'] as String,
+      id: (json['id'] as num).toInt(),
+      accessLevel: (json['access_level'] as num).toInt(),
+      commissionSplit: json['commission_split'] as num?,
+      displayName: json['name'] as String,
       email: json['email'] as String,
-      salesManagerId: json['salesManagerId'] as num?,
+      salesManagerId: (json['sales_manager_id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$AwsUserImplToJson(_$AwsUserImpl instance) =>
     <String, dynamic>{
-      'accessLevel': instance.accessLevel,
-      'commissionSplit': instance.commissionSplit,
-      'displayName': instance.displayName,
+      'id': instance.id,
+      'access_level': instance.accessLevel,
+      'commission_split': instance.commissionSplit,
+      'name': instance.displayName,
       'email': instance.email,
-      'salesManagerId': instance.salesManagerId,
+      'sales_manager_id': instance.salesManagerId,
     };

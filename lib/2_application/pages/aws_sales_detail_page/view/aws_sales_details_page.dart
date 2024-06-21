@@ -1,19 +1,25 @@
-// ignore_for_file: inference_failure_on_function_return_type, prefer_int_literals, avoid_positional_boolean_parameters
+// ignore_for_file: prefer_int_literals, inference_failure_on_function_return_type, avoid_positional_boolean_parameters
+
+import 'dart:async';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
+import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/bloc/aws_sales_details_cubit.dart';
-import 'package:water_analytics_australia/core/helper.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/temp.dart';
 import 'package:water_analytics_australia/core/widgets/aws_custom_data_table.dart';
+import 'package:water_analytics_australia/core/widgets/custom_text_field.dart';
 import 'package:water_analytics_australia/injection.dart';
 
 class AwsSalesDetailsPageWrapperProvider extends StatelessWidget {
@@ -33,8 +39,8 @@ class AwsSalesDetailsPageWrapperProvider extends StatelessWidget {
 class AwsSalesDetailsPage extends StatefulWidget {
   const AwsSalesDetailsPage({required this.id, super.key});
 
-  static const name = 'awsSalesDetail';
-  static const path = '/awsSalesDetail/:id';
+  static const name = 'AwsSalesDetail';
+  static const path = '/AwsSalesDetail/:id';
 
   final String id;
 
@@ -43,10 +49,18 @@ class AwsSalesDetailsPage extends StatefulWidget {
 }
 
 class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
+  int accessLevel = 0;
   @override
   void initState() {
     super.initState();
+    _getUserFromHive();
     context.read<AwsSalesDetailsCubit>().fetchAwsSalesDetails(widget.id);
+  }
+
+  Future<void> _getUserFromHive() async {
+    final user = await HiveHelper.getCurrentUser();
+    accessLevel = user?.accessLevel ?? 1;
+    setState(() {});
   }
 
   @override
@@ -55,87 +69,12 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text(
-          'Detail - AWS',
+          'Detail',
           style: TextStyle(color: Colors.white),
         ),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        actions: [
-          //   BlocBuilder<AwsSalesDetailsCubit, AwsSalesDetailsCubitState>(
-          //     builder: (context, state) {
-          //       if (state is AwsSalesDetailsStateLoaded) {
-          //         return Row(
-          //           children: [
-          //             IconButton(
-          //               onPressed: () async {
-          //                 final success = await context
-          //                     .read<AwsSalesDetailsCubit>()
-          //                     .saveSales(state.order);
-          //                 if (success) {
-          //                   const snackBar = SnackBar(
-          //                     backgroundColor: Colors.green,
-          //                     content: Text('Successfully saved order.'),
-          //                   );
-
-          //                   if (context.mounted) {
-          //                     ScaffoldMessenger.of(context)
-          //                         .showSnackBar(snackBar);
-          //                   }
-          //                 } else {
-          //                   const snackBar = SnackBar(
-          //                     backgroundColor: Colors.red,
-          //                     content: Text('Failed to save order.'),
-          //                   );
-
-          //                   if (context.mounted) {
-          //                     ScaffoldMessenger.of(context)
-          //                         .showSnackBar(snackBar);
-          //                   }
-          //                 }
-          //               },
-          //               icon: const HeroIcon(
-          //                 HeroIcons.arrowUpTray,
-          //               ),
-          //             ),
-          //             IconButton(
-          //               onPressed: () async {
-          //                 final success = await context
-          //                     .read<AwsSalesDetailsCubit>()
-          //                     .saveSalesAws(state.order);
-          //                 if (success) {
-          //                   const snackBar = SnackBar(
-          //                     backgroundColor: Colors.green,
-          //                     content: Text('Successfully saved order.'),
-          //                   );
-
-          //                   if (context.mounted) {
-          //                     ScaffoldMessenger.of(context)
-          //                         .showSnackBar(snackBar);
-          //                   }
-          //                 } else {
-          //                   const snackBar = SnackBar(
-          //                     backgroundColor: Colors.red,
-          //                     content: Text('Failed to save order.'),
-          //                   );
-
-          //                   if (context.mounted) {
-          //                     ScaffoldMessenger.of(context)
-          //                         .showSnackBar(snackBar);
-          //                   }
-          //                 }
-          //               },
-          //               icon: const HeroIcon(
-          //                 HeroIcons.arrowUpOnSquareStack,
-          //               ),
-          //             ),
-          //           ],
-          //         );
-          //       }
-          //       return const SizedBox();
-          //     },
-          //   ),
-        ],
       ),
       body: BlocBuilder<AwsSalesDetailsCubit, AwsSalesDetailsCubitState>(
         builder: (context, state) {
@@ -155,6 +94,7 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
             return SingleChildScrollView(
               child: AwsSalesDetailsPageLoaded(
                 order: state.order,
+                accessLevel: accessLevel,
               ),
             );
           } else if (state is AwsSalesDetailsStateError) {
@@ -162,10 +102,11 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
               children: [
                 Expanded(
                   child: DetailPageError(
-                    onRefresh: () => context.read<AwsSalesDetailsCubit>()
-                      ..fetchAwsSalesDetails(
-                        widget.id,
-                      ),
+                    onRefresh: () {
+                      context
+                          .read<AwsSalesDetailsCubit>()
+                          .fetchAwsSalesDetails(widget.id);
+                    },
                   ),
                 ),
               ],
@@ -179,9 +120,14 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
 }
 
 class AwsSalesDetailsPageLoaded extends HookWidget {
-  const AwsSalesDetailsPageLoaded({required this.order, super.key});
+  const AwsSalesDetailsPageLoaded({
+    required this.order,
+    required this.accessLevel,
+    super.key,
+  });
 
   final AwsSalesOrder order;
+  final int accessLevel;
 
   @override
   Widget build(BuildContext context) {
@@ -190,236 +136,108 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
 
     return BlocListener<AwsSalesDetailsCubit, AwsSalesDetailsCubitState>(
       listener: (context, state) {},
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    '#${order.name}',
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w500,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Card(
+          color: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '#${order.name}',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: ResponsiveValue(
+                    context,
+                    conditionalValues: [
+                      const Condition.smallerThan(name: TABLET, value: 24.0),
+                      const Condition.equals(name: TABLET, value: 24.0),
+                      const Condition.largerThan(name: TABLET, value: 28.0),
+                    ],
+                  ).value,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              ResponsiveRowColumn(
+                rowCrossAxisAlignment: CrossAxisAlignment.start,
+                rowMainAxisAlignment: MainAxisAlignment.center,
+                layout: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
+                    ? ResponsiveRowColumnType.COLUMN
+                    : ResponsiveRowColumnType.ROW,
+                rowSpacing: 16,
+                columnSpacing: 16,
+                children: [
+                  ResponsiveRowColumnItem(
+                    rowFlex: 1,
+                    child: CloudOrderInfos(
+                      order: order,
                     ),
-                    textAlign: TextAlign.left,
                   ),
-                ),
-                const SizedBox(height: 12),
-                OrderInfos(
+                  ResponsiveRowColumnItem(
+                    rowFlex: 1,
+                    child: CustomerInfoSection(
+                      order: order,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              ResponsiveRowColumn(
+                rowCrossAxisAlignment: CrossAxisAlignment.start,
+                rowMainAxisAlignment: MainAxisAlignment.center,
+                rowSpacing: 16,
+                columnSpacing: 16,
+                layout: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
+                    ? ResponsiveRowColumnType.COLUMN
+                    : ResponsiveRowColumnType.ROW,
+                children: [
+                  ResponsiveRowColumnItem(
+                    rowFlex: 1,
+                    child: SalesInformationSection(
+                      order: order,
+                    ),
+                  ),
+                  ResponsiveRowColumnItem(
+                    rowFlex: 1,
+                    child: CommissionSection(
+                      order: order,
+                      orderLine: order.orderLine ?? [],
+                      accessLevel: accessLevel,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              _TabBar(
+                controller: tabCtrl,
+                onTabChanged: (value) {
+                  tabIndex.value = value;
+                },
+              ),
+              if (tabCtrl.index == 0) ...[
+                OrderLines(
                   order: order,
+                  orderLine: order.orderLine ?? [],
                 ),
-                CustomerInfoSection(
-                  order: order,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                SalesInformationSection(
+              ],
+              if (tabCtrl.index == 1) ...[
+                Notes(
                   order: order,
                 ),
               ],
-            ),
+            ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          CommissionSection(
-            order: order,
-          ),
-          _TabBar(
-            controller: tabCtrl,
-            onTabChanged: (value) {
-              tabIndex.value = value;
-            },
-          ),
-          if (tabCtrl.index == 0) ...[
-            AwsOrderLinesSection(order: order),
-          ],
-          if (tabCtrl.index == 1) ...[
-            Notes(
-              order: order,
-            ),
-          ],
-        ],
+        ),
       ),
-    );
-  }
-}
-
-class OrderInfos extends StatelessWidget {
-  const OrderInfos({required this.order, super.key});
-
-  final AwsSalesOrder order;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            const Text(
-              'Order Date',
-            ),
-            const Spacer(),
-            Text(
-              order.createDate == null
-                  ? ''
-                  : DateFormat('MM/dd/yyyy hh:mm a').format(order.createDate!),
-              style: const TextStyle(color: Color(0xff7a7a7a)),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Row(
-          children: [
-            const Text(
-              'Payment Type',
-            ),
-            const Spacer(),
-            Text(
-              order.xStudioPaymentType ?? '',
-              style: const TextStyle(
-                color: Color(0xff7a7a7a),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Row(
-          children: [
-            const Text(
-              'Payment Status',
-            ),
-            const Spacer(),
-            Text(
-              capitalizeFirstLetter(
-                order.xStudioInvoicePaymentStatus.toString() == 'not_paid'
-                    ? 'Not Paid'
-                    : order.xStudioInvoicePaymentStatus.toString(),
-              ),
-              style: const TextStyle(
-                color: Color(0xff7a7a7a),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Row(
-          children: [
-            const Text(
-              'Delivery Status',
-            ),
-            const Spacer(),
-            Text(
-              capitalizeFirstLetter(
-                (order.deliveryStatus ?? '').toString(),
-              ),
-              style: const TextStyle(
-                color: Color(0xff7a7a7a),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Row(
-          children: [
-            const Text(
-              'Amount Total',
-            ),
-            const Spacer(),
-            Text(
-              r'$' + (order.amountTotal ?? 0).toStringAsFixed(2),
-              style: const TextStyle(
-                color: Color(0xff7a7a7a),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Row(
-          children: [
-            const Text(
-              'Amount Invoiced',
-            ),
-            const Spacer(),
-            Text(
-              r'$' + (order.amountToInvoice ?? 0).toStringAsFixed(2),
-              style: const TextStyle(
-                color: Color(0xff7a7a7a),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        const Row(
-          children: [
-            Text(
-              'Referred By',
-            ),
-            Spacer(),
-            Text(
-              '',
-              style: TextStyle(
-                color: Color(0xff7a7a7a),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            const Text(
-              'Referrer Processed',
-            ),
-            const Spacer(),
-            Checkbox(
-              value: order.xStudioReferrerProcessed,
-              activeColor: Colors.blue,
-              onChanged: (value) {},
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class CustomRowTile extends StatelessWidget {
-  const CustomRowTile(this.title, this.desc, {super.key});
-  final String title;
-  final String desc;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          title,
-        ),
-        const Spacer(),
-        Text(
-          desc,
-          style: const TextStyle(
-            color: Color(0xff7a7a7a),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -447,47 +265,6 @@ class DetailPageError extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _TabBar extends StatelessWidget {
-  const _TabBar({
-    required this.controller,
-    required this.onTabChanged,
-  });
-
-  final TabController controller;
-  final Function(int) onTabChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return TabBar(
-      onTap: onTabChanged,
-      controller: controller,
-      indicator: const UnderlineTabIndicator(
-        borderSide: BorderSide(),
-        insets: EdgeInsets.symmetric(horizontal: 15),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 25),
-      overlayColor: WidgetStateProperty.all<Color>(
-        Colors.transparent,
-      ),
-      labelStyle: GoogleFonts.montserrat(
-        fontWeight: FontWeight.w500,
-        fontSize: 14,
-      ),
-      labelColor: const Color(0xFF000000),
-      unselectedLabelStyle: GoogleFonts.montserrat(
-        fontWeight: FontWeight.w400,
-        fontSize: 14,
-      ),
-      unselectedLabelColor: const Color(0xFF667085),
-      tabs: const [
-        Tab(text: 'Order Lines'),
-        Tab(text: 'Other Info'),
-        // Tab(text: 'Notes'),
-      ],
     );
   }
 }
@@ -609,6 +386,7 @@ class SalesInformationSection extends StatelessWidget {
           top: 16,
           left: 16,
           right: 16,
+          bottom: 16,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -660,148 +438,60 @@ class SalesInformationSection extends StatelessWidget {
   }
 }
 
-class CommissionSection extends StatelessWidget {
-  const CommissionSection({required this.order, super.key});
-  final AwsSalesOrder order;
+class _TabBar extends StatelessWidget {
+  const _TabBar({
+    required this.controller,
+    required this.onTabChanged,
+  });
+
+  final TabController controller;
+  final Function(int) onTabChanged;
 
   @override
   Widget build(BuildContext context) {
-    final sellingPrice = calculateCashPrice(
-      order.amountTotal ?? 0,
-      (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
-    );
-
-    final additionalCost =
-        getAdditionalCost(order.orderLine ?? [], landingPrices).fold(
-      0.0,
-      (prev, e) => prev + (e.unitPrice ?? 0),
-    );
-    final landingPrice =
-        getLandingPrice(order.orderLine ?? [], landingPrices).fold(
-      0.0,
-      (prev, e) =>
-          prev +
-          (e.isSupplyOnly
-              ? (e.landingPrice.supplyOnly ?? 0.0)
-              : (e.landingPrice.installationService ?? 0.0)),
-    );
-
-    final temp = (sellingPrice - additionalCost) - landingPrice;
-    final extraCommission = temp <= 0 ? temp : temp * 0.5;
-
-    final baseCommission = ((order.orderLine ?? []).any(
-      (element) => (element.description ?? '').contains(
-        'USRO-6S1-2W'.toLowerCase(),
+    return TabBar(
+      onTap: onTabChanged,
+      controller: controller,
+      indicator: const UnderlineTabIndicator(
+        borderSide: BorderSide(),
+        insets: EdgeInsets.symmetric(horizontal: 15),
       ),
-    ))
-        ? 200
-        : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
-            ? 1000
-            : 500;
-    final finalCommission = extraCommission + baseCommission;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      child: Card(
-        elevation: 0,
-        color: const Color(0xfff5faff),
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Commission Breakdown',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: DottedLine(
-                  lineThickness: 1.5,
-                  dashColor: Color(0xffadadad),
-                  dashLength: 8,
-                ),
-              ),
-              CustomRowTile(
-                'Selling Price',
-                r'$' + sellingPrice.toStringAsFixed(2),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
-                children: [
-                  const Text(
-                    '(debug) additional_deduction',
-                  ),
-                  const Spacer(),
-                  Text(
-                    r'$' + additionalCost.toStringAsFixed(2),
-                    style: TextStyle(
-                      color: additionalCost > 0
-                          ? Colors.red
-                          : const Color(0xff7a7a7a),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              CustomRowTile(
-                'Landing Price',
-                r'$' + landingPrice.toStringAsFixed(2),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              CustomRowTile(
-                'Extra Commission',
-                r'$' + extraCommission.toStringAsFixed(2),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              CustomRowTile(
-                'Base Commission',
-                r'$' + baseCommission.toStringAsFixed(2),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              //  if (additionalCost <= 0) ...[
-              CustomRowTile(
-                'Final Commission',
-                r'$' + finalCommission.toStringAsFixed(2),
-              ),
-              //   ],
-            ],
-          ),
-        ),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      overlayColor: WidgetStateProperty.all<Color>(
+        Colors.transparent,
       ),
+      labelStyle: GoogleFonts.montserrat(
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+      ),
+      labelColor: const Color(0xFF000000),
+      unselectedLabelStyle: GoogleFonts.montserrat(
+        fontWeight: FontWeight.w400,
+        fontSize: 14,
+      ),
+      unselectedLabelColor: const Color(0xFF667085),
+      tabs: const [
+        Tab(text: 'Order Lines'),
+        Tab(text: 'Notes'),
+      ],
     );
   }
 }
 
-class AwsOrderLinesSection extends StatelessWidget {
-  const AwsOrderLinesSection({required this.order, super.key});
+class OrderLines extends StatelessWidget {
+  const OrderLines({required this.order, required this.orderLine, super.key});
 
   final AwsSalesOrder order;
+  final List<AwsOrderLine> orderLine;
 
   @override
   Widget build(BuildContext context) {
-    if (order.orderLine == null || order.orderLine!.isEmpty) {
-      return const SizedBox(height: 16);
-    }
+    if (orderLine.isEmpty) return const SizedBox(height: 16);
 
     var totalDescriptionLength = 0;
-    final totalItems = order.orderLine!.length;
+    final totalItems = orderLine.length;
 
-    for (final line in order.orderLine!) {
+    for (final line in orderLine) {
       final descriptionLength = line.description?.length ?? 0;
       totalDescriptionLength += descriptionLength;
     }
@@ -813,11 +503,11 @@ class AwsOrderLinesSection extends StatelessWidget {
           height: 16,
         ),
         SizedBox(
-          height: ((order.orderLine!.length + 1) * 80) +
+          height: ((orderLine.length + 1) * 80) +
               (averageDescriptionLength < 40 ? 0 : averageDescriptionLength),
           child: AwsCustomDataTable(
-            data: order.orderLine ?? [],
-            total: order.orderLine?.length ?? 0,
+            data: orderLine,
+            total: orderLine.length,
             sortDescending: false,
           ),
         ),
@@ -894,6 +584,109 @@ class AwsOrderLinesSection extends StatelessWidget {
   }
 }
 
+class OtherInfo extends StatelessWidget {
+  const OtherInfo({required this.order, super.key});
+
+  final SalesOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Card(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 0,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 8,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  const Text(
+                    'Sales',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: DottedLine(
+                      lineThickness: 1.5,
+                      dashColor: Color(0xffadadad),
+                      dashLength: 8,
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Text(
+                            'Salesperson',
+                          ),
+                          const Spacer(),
+                          Text(
+                            order.userId?.displayName ?? '',
+                            style: const TextStyle(
+                              color: Color(0xff7a7a7a),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          const Text(
+                            'Sales Team',
+                          ),
+                          const Spacer(),
+                          Text(
+                            order.teamId?.displayName ?? '',
+                            style: const TextStyle(
+                              color: Color(0xff7a7a7a),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          const Text(
+                            'Tags',
+                          ),
+                          const Spacer(),
+                          Text(
+                            order.tagIds?[0].displayName ?? '',
+                            style: const TextStyle(
+                              color: Color(0xff7a7a7a),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class Notes extends StatelessWidget {
   const Notes({required this.order, super.key});
   final AwsSalesOrder order;
@@ -901,7 +694,7 @@ class Notes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         children: [
           if (order.internalNoteDisplay != null) ...[
@@ -914,15 +707,12 @@ class Notes extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 8,
+                  horizontal: 16,
+                  vertical: 16,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 12,
-                    ),
                     const Text(
                       'Notes',
                       style: TextStyle(fontWeight: FontWeight.w600),
@@ -950,6 +740,277 @@ class Notes extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class CustomRowTile extends StatelessWidget {
+  const CustomRowTile(this.title, this.desc, {super.key});
+  final String title;
+  final String desc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          title,
+        ),
+        const Spacer(),
+        Text(
+          desc,
+          style: const TextStyle(
+            color: Color(0xff7a7a7a),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CommissionSection extends StatelessWidget {
+  const CommissionSection({
+    required this.order,
+    required this.orderLine,
+    required this.accessLevel,
+    super.key,
+  });
+  final AwsSalesOrder order;
+  final List<AwsOrderLine> orderLine;
+  final int accessLevel;
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<AwsSalesDetailsCubit>();
+    final sellingPrice = calculateCashPrice(
+      order.amountTotal ?? 0,
+      (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
+    );
+
+    final additionalCost = order.additionalDeduction != null
+        ? order.additionalDeduction ?? 0
+        : getCloudAdditionalCost(orderLine, landingPrices).fold(
+            0.0,
+            (prev, e) => prev + (e.unitPrice ?? 0),
+          );
+    final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
+      0.0,
+      (prev, e) =>
+          prev +
+          (e.isSupplyOnly
+              ? (e.landingPrice.supplyOnly ?? 0.0)
+              : (e.landingPrice.installationService ?? 0.0)),
+    );
+    final temp = (sellingPrice - additionalCost) - landingPrice;
+    final extraCommission = temp <= 0
+        ? temp
+        : temp * ((order.user?.commissionSplit?.toDouble() ?? 50) / 100);
+
+    final baseCommission = (orderLine.any(
+      (element) => (element.product ?? '').contains(
+        'USRO-6S1-2W'.toLowerCase(),
+      ),
+    ))
+        ? 200
+        : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
+            ? 1000
+            : 500;
+    final finalCommission = extraCommission + baseCommission;
+
+    return Card(
+      elevation: 0,
+      color: const Color(0xfff5faff),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Commission Breakdown',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: DottedLine(
+                lineThickness: 1.5,
+                dashColor: Color(0xffadadad),
+                dashLength: 8,
+              ),
+            ),
+            CustomRowTile(
+              'Selling Price',
+              r'$' + sellingPrice.toStringAsFixed(2),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Additional Deduction',
+                ),
+                const Spacer(),
+                Text(
+                  order.additionalDeduction != null
+                      ? r'$' +
+                          (order.additionalDeduction ?? 0).toStringAsFixed(2)
+                      : r'$' + additionalCost.toStringAsFixed(2),
+                  style: TextStyle(
+                    color: additionalCost > 0
+                        ? Colors.red
+                        : const Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            CustomRowTile(
+              'Landing Price',
+              r'$' + landingPrice.toStringAsFixed(2),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            CustomRowTile(
+              'Extra Commission',
+              r'$' + extraCommission.toStringAsFixed(2),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            CustomRowTile(
+              'Base Commission',
+              r'$' + baseCommission.toStringAsFixed(2),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            //  if (additionalCost <= 0) ...[
+            CustomRowTile(
+              'Final Commission',
+              r'$' + finalCommission.toStringAsFixed(2),
+            ),
+            //  ],
+
+            Row(
+              children: [
+                const Text(
+                  'Confirmed By Manager',
+                ),
+                const Spacer(),
+                Checkbox(
+                  value: order.confirmedByManager,
+                  activeColor: Colors.blue,
+                  onChanged: (value) {},
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            if (accessLevel > 2 && !order.xStudioCommissionPaid) ...[
+              Center(
+                child: ResponsiveRowColumn(
+                  rowMainAxisAlignment: MainAxisAlignment.center,
+                  layout: ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)
+                      ? ResponsiveRowColumnType.COLUMN
+                      : ResponsiveRowColumnType.ROW,
+                  rowSpacing: 16,
+                  columnSpacing: 16,
+                  children: [
+                    ResponsiveRowColumnItem(
+                      rowFlex: 1,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          unawaited(
+                            showModifyDeductionModal(
+                              context,
+                              order,
+                              cubit,
+                            ),
+                          );
+                        },
+                        child: const Text('Modify Additional Deduction'),
+                      ),
+                    ),
+                    ResponsiveRowColumnItem(
+                      rowFlex: 1,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          unawaited(
+                            showConfirmingCommissionBreakdownModal(
+                              context,
+                              order.confirmedByManager,
+                            ),
+                          );
+                          final success = await cubit.updateSalesOrder(
+                            order.copyWith(
+                              confirmedByManager: !order.confirmedByManager,
+                            ),
+                          );
+                          if (success) {
+                            if (context.mounted) {
+                              context.pop();
+                            }
+
+                            const snackBar = SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text(
+                                'Successfully updated commission breakdown.',
+                              ),
+                            );
+
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          } else {
+                            if (context.mounted) {
+                              context.pop();
+                            }
+
+                            const snackBar = SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                'Failed to update commission breakdown.',
+                              ),
+                            );
+
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          }
+
+                          if (context.mounted) {
+                            unawaited(
+                              context
+                                  .read<AwsSalesDetailsCubit>()
+                                  .fetchAwsSalesDetails(order.id!.toString()),
+                            );
+                          }
+                        },
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          order.confirmedByManager == false
+                              ? 'Confirm Commission Breakdown'
+                              : 'Reject Commission Breakdown',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -990,12 +1051,10 @@ List<LandingPriceWithQuantity> getLandingPrice(
     }
   }
 
-  var hehe = matchingLandingPrices.toList();
-  var haha = hehe;
-  return hehe;
+  return matchingLandingPrices.toList();
 }
 
-List<AwsOrderLine> getAdditionalCost(
+List<AwsOrderLine> getCloudAdditionalCost(
   List<AwsOrderLine> orderLines,
   List<LandingPrice> landingPrices,
 ) {
@@ -1007,8 +1066,8 @@ List<AwsOrderLine> getAdditionalCost(
   final tempAdditionalCostSet = <AwsOrderLine>{};
   for (final orderLine in orderLines) {
     final displayName = orderLine.product;
-    final quantity = orderLine.quantity;
-    if (displayName != null && quantity != null) {
+    final quantity = orderLine.quantity ?? 0;
+    if (displayName != null) {
       for (final landingPrice in landingPrices) {
         if (displayName
             .toLowerCase()
@@ -1047,8 +1106,6 @@ List<AwsOrderLine> getAdditionalCost(
   additionalCostSet
       .retainWhere((element) => !tempAdditionalCostSet.contains(element));
 
-  //final additionalCostList = additionalCostSet.toList()..removeAt(0);
-
   final additionalCostList = additionalCostSet.toList()
     ..removeWhere(
       (item) =>
@@ -1068,5 +1125,464 @@ double calculateCashPrice(
     return salesOrderTotal;
   } else {
     return salesOrderTotal * 0.9;
+  }
+}
+
+class CloudOrderInfos extends StatelessWidget {
+  const CloudOrderInfos({required this.order, super.key});
+
+  final AwsSalesOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Text(
+                  'Order Date',
+                ),
+                const Spacer(),
+                Text(
+                  order.createDate == null
+                      ? ''
+                      : DateFormat('MM/dd/yyyy hh:mm a')
+                          .format(order.createDate!),
+                  style: const TextStyle(color: Color(0xff7a7a7a)),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Payment Type',
+                ),
+                const Spacer(),
+                Text(
+                  order.xStudioPaymentType ?? '',
+                  style: const TextStyle(
+                    color: Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Payment Status',
+                ),
+                const Spacer(),
+                Text(
+                  getInvoicePaymentStatusMessage(
+                    order.xStudioInvoicePaymentStatus.toString(),
+                  ),
+                  style: const TextStyle(
+                    color: Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Delivery Status',
+                ),
+                const Spacer(),
+                Text(
+                  getDeliveryStatusMessage(
+                    (order.deliveryStatus ?? '').toString(),
+                  ),
+                  style: const TextStyle(
+                    color: Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Amount Total',
+                ),
+                const Spacer(),
+                Text(
+                  r'$' + (order.amountTotal ?? 0).toStringAsFixed(2),
+                  style: const TextStyle(
+                    color: Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Amount Invoiced',
+                ),
+                const Spacer(),
+                Text(
+                  r'$' + (order.amountToInvoice ?? 0).toStringAsFixed(2),
+                  style: const TextStyle(
+                    color: Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            const Row(
+              children: [
+                Text(
+                  'Referred By',
+                ),
+                Spacer(),
+                Text(
+                  '',
+                  style: TextStyle(
+                    color: Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Referrer Processed',
+                ),
+                const Spacer(),
+                Checkbox(
+                  value: order.xStudioReferrerProcessed,
+                  activeColor: Colors.blue,
+                  onChanged: (value) {},
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String getDeliveryStatusMessage(String deliveryStatus) {
+  switch (deliveryStatus) {
+    case 'full':
+      return 'Fully Delivered';
+    case 'partial':
+      return 'Partially Delivered';
+    default:
+      return '';
+  }
+}
+
+String getInvoicePaymentStatusMessage(String invoicePaymentStatus) {
+  switch (invoicePaymentStatus) {
+    case 'paid':
+      return 'Paid';
+    case 'partial':
+      return 'Partial';
+    case 'not_paid':
+      return 'Not Paid';
+    case 'false':
+      return 'Not Set';
+    default:
+      return '';
+  }
+}
+
+double calculateFinalCommission(
+  AwsSalesOrder order,
+  List<AwsOrderLine> orderLine,
+) {
+  final sellingPrice = calculateCashPrice(
+    order.amountTotal ?? 0,
+    (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
+  );
+
+  final additionalCost = order.additionalDeduction != null
+      ? order.additionalDeduction ?? 0
+      : getCloudAdditionalCost(orderLine, landingPrices).fold(
+          0.0,
+          (prev, e) => prev + (e.unitPrice ?? 0),
+        );
+  final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
+    0.0,
+    (prev, e) =>
+        prev +
+        (e.isSupplyOnly
+            ? (e.landingPrice.supplyOnly ?? 0.0)
+            : (e.landingPrice.installationService ?? 0.0)),
+  );
+  final temp = (sellingPrice - additionalCost) - landingPrice;
+  final extraCommission = temp <= 0
+      ? temp
+      : temp *
+          ((order.user?.commissionSplit?.toDouble() ?? 50) / 100); //FIX THIS
+
+  final baseCommission = (orderLine.any(
+    (element) => (element.product ?? '').contains(
+      'USRO-6S1-2W'.toLowerCase(),
+    ),
+  ))
+      ? 200
+      : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
+          ? 1000
+          : 500;
+  final finalCommission = extraCommission + baseCommission;
+
+  return finalCommission;
+}
+
+Future<void> showConfirmingCommissionBreakdownModal(
+  BuildContext context,
+  bool confirmedByManager,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          const SizedBox(
+            width: 16,
+          ),
+          Text(
+            '${confirmedByManager ? 'Rejecting' : 'Confirming'} '
+            'Commission Breakdown...',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<void> showSavingAdditionalDecution(
+  BuildContext context,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            'Updating Additional Deduction...',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<void> showModifyDeductionModal(
+  BuildContext context,
+  AwsSalesOrder order,
+  AwsSalesDetailsCubit cubit,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: ModifyDeductionModal(
+        order: order,
+        cubit: cubit,
+        context: context,
+      ),
+      //  const Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: [
+      //     CircularProgressIndicator(
+      //       color: Color(0xff0083ff),
+      //     ),
+      //     SizedBox(
+      //       width: 16,
+      //     ),
+      //     Text(
+      //       'Updating User Details...',
+      //       style: TextStyle(fontSize: 16),
+      //     ),
+      //   ],
+      // ),
+    ),
+  );
+}
+
+class ModifyDeductionModal extends StatefulWidget {
+  const ModifyDeductionModal({
+    required this.order,
+    required this.cubit,
+    required this.context,
+    super.key,
+  });
+  final BuildContext context;
+  final AwsSalesOrder order;
+  final AwsSalesDetailsCubit cubit;
+
+  @override
+  State<ModifyDeductionModal> createState() => _ModifyDeductionModalState();
+}
+
+class _ModifyDeductionModalState extends State<ModifyDeductionModal> {
+  TextEditingController ctrlSupplyOnly = TextEditingController();
+  bool isValidating = false;
+
+  @override
+  Widget build(BuildContext _) {
+    final context = widget.context;
+    return Column(
+      children: [
+        const Text('Modify Deduction'),
+        const SizedBox(
+          height: 8,
+        ),
+        CustomTextField(
+          ctrl: ctrlSupplyOnly,
+          onChanged: (value) {
+            setState(() {});
+          },
+          title: 'Additional Deduction',
+          isValidating: isValidating,
+          inputType: const TextInputType.numberWithOptions(decimal: true),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: context.pop,
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xffB3B7C2),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Color(0xffFFFFFF),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              ElevatedButton(
+                onPressed: () async {
+                  context.pop();
+                  unawaited(
+                    showSavingAdditionalDecution(
+                      context,
+                      //  widget.jobName,
+                      // widget.cubit,
+                    ),
+                  );
+                  final isSaved = await widget.cubit.updateSalesOrder(
+                    widget.order.copyWith(
+                      additionalDeduction: double.parse(ctrlSupplyOnly.text),
+                    ),
+                  );
+
+                  if (isSaved) {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.green,
+                      content:
+                          Text('Successfully updated ' 'additional deduction.'),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
+                    var hehe = widget.order;
+
+                    var hihi = widget.order;
+
+                    unawaited(
+                      widget.cubit.fetchAwsSalesDetails(
+                        widget.order.id!.toString(),
+                      ),
+                    );
+                  } else {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text('Failed to update additional deduction.'),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xff0083ff),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

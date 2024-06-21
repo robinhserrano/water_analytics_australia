@@ -20,11 +20,16 @@ AwsUser _$AwsUserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AwsUser {
-  num get accessLevel => throw _privateConstructorUsedError;
-  num get commissionSplit => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'access_level')
+  int get accessLevel => throw _privateConstructorUsedError;
+  @JsonKey(name: 'commission_split')
+  num? get commissionSplit => throw _privateConstructorUsedError;
+  @JsonKey(name: 'name')
   String get displayName => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  num? get salesManagerId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sales_manager_id')
+  int? get salesManagerId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,11 +42,12 @@ abstract class $AwsUserCopyWith<$Res> {
       _$AwsUserCopyWithImpl<$Res, AwsUser>;
   @useResult
   $Res call(
-      {num accessLevel,
-      num commissionSplit,
-      String displayName,
+      {int id,
+      @JsonKey(name: 'access_level') int accessLevel,
+      @JsonKey(name: 'commission_split') num? commissionSplit,
+      @JsonKey(name: 'name') String displayName,
       String email,
-      num? salesManagerId});
+      @JsonKey(name: 'sales_manager_id') int? salesManagerId});
 }
 
 /// @nodoc
@@ -57,21 +63,26 @@ class _$AwsUserCopyWithImpl<$Res, $Val extends AwsUser>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? accessLevel = null,
-    Object? commissionSplit = null,
+    Object? commissionSplit = freezed,
     Object? displayName = null,
     Object? email = null,
     Object? salesManagerId = freezed,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       accessLevel: null == accessLevel
           ? _value.accessLevel
           : accessLevel // ignore: cast_nullable_to_non_nullable
-              as num,
-      commissionSplit: null == commissionSplit
+              as int,
+      commissionSplit: freezed == commissionSplit
           ? _value.commissionSplit
           : commissionSplit // ignore: cast_nullable_to_non_nullable
-              as num,
+              as num?,
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -83,7 +94,7 @@ class _$AwsUserCopyWithImpl<$Res, $Val extends AwsUser>
       salesManagerId: freezed == salesManagerId
           ? _value.salesManagerId
           : salesManagerId // ignore: cast_nullable_to_non_nullable
-              as num?,
+              as int?,
     ) as $Val);
   }
 }
@@ -96,11 +107,12 @@ abstract class _$$AwsUserImplCopyWith<$Res> implements $AwsUserCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {num accessLevel,
-      num commissionSplit,
-      String displayName,
+      {int id,
+      @JsonKey(name: 'access_level') int accessLevel,
+      @JsonKey(name: 'commission_split') num? commissionSplit,
+      @JsonKey(name: 'name') String displayName,
       String email,
-      num? salesManagerId});
+      @JsonKey(name: 'sales_manager_id') int? salesManagerId});
 }
 
 /// @nodoc
@@ -114,21 +126,26 @@ class __$$AwsUserImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? accessLevel = null,
-    Object? commissionSplit = null,
+    Object? commissionSplit = freezed,
     Object? displayName = null,
     Object? email = null,
     Object? salesManagerId = freezed,
   }) {
     return _then(_$AwsUserImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       accessLevel: null == accessLevel
           ? _value.accessLevel
           : accessLevel // ignore: cast_nullable_to_non_nullable
-              as num,
-      commissionSplit: null == commissionSplit
+              as int,
+      commissionSplit: freezed == commissionSplit
           ? _value.commissionSplit
           : commissionSplit // ignore: cast_nullable_to_non_nullable
-              as num,
+              as num?,
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -140,7 +157,7 @@ class __$$AwsUserImplCopyWithImpl<$Res>
       salesManagerId: freezed == salesManagerId
           ? _value.salesManagerId
           : salesManagerId // ignore: cast_nullable_to_non_nullable
-              as num?,
+              as int?,
     ));
   }
 }
@@ -149,29 +166,36 @@ class __$$AwsUserImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AwsUserImpl implements _AwsUser {
   const _$AwsUserImpl(
-      {required this.accessLevel,
-      required this.commissionSplit,
-      required this.displayName,
+      {required this.id,
+      @JsonKey(name: 'access_level') required this.accessLevel,
+      @JsonKey(name: 'commission_split') required this.commissionSplit,
+      @JsonKey(name: 'name') required this.displayName,
       required this.email,
-      required this.salesManagerId});
+      @JsonKey(name: 'sales_manager_id') required this.salesManagerId});
 
   factory _$AwsUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$AwsUserImplFromJson(json);
 
   @override
-  final num accessLevel;
+  final int id;
   @override
-  final num commissionSplit;
+  @JsonKey(name: 'access_level')
+  final int accessLevel;
   @override
+  @JsonKey(name: 'commission_split')
+  final num? commissionSplit;
+  @override
+  @JsonKey(name: 'name')
   final String displayName;
   @override
   final String email;
   @override
-  final num? salesManagerId;
+  @JsonKey(name: 'sales_manager_id')
+  final int? salesManagerId;
 
   @override
   String toString() {
-    return 'AwsUser(accessLevel: $accessLevel, commissionSplit: $commissionSplit, displayName: $displayName, email: $email, salesManagerId: $salesManagerId)';
+    return 'AwsUser(id: $id, accessLevel: $accessLevel, commissionSplit: $commissionSplit, displayName: $displayName, email: $email, salesManagerId: $salesManagerId)';
   }
 
   @override
@@ -179,6 +203,7 @@ class _$AwsUserImpl implements _AwsUser {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AwsUserImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.accessLevel, accessLevel) ||
                 other.accessLevel == accessLevel) &&
             (identical(other.commissionSplit, commissionSplit) ||
@@ -192,7 +217,7 @@ class _$AwsUserImpl implements _AwsUser {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, accessLevel, commissionSplit,
+  int get hashCode => Object.hash(runtimeType, id, accessLevel, commissionSplit,
       displayName, email, salesManagerId);
 
   @JsonKey(ignore: true)
@@ -211,24 +236,32 @@ class _$AwsUserImpl implements _AwsUser {
 
 abstract class _AwsUser implements AwsUser {
   const factory _AwsUser(
-      {required final num accessLevel,
-      required final num commissionSplit,
-      required final String displayName,
+      {required final int id,
+      @JsonKey(name: 'access_level') required final int accessLevel,
+      @JsonKey(name: 'commission_split') required final num? commissionSplit,
+      @JsonKey(name: 'name') required final String displayName,
       required final String email,
-      required final num? salesManagerId}) = _$AwsUserImpl;
+      @JsonKey(name: 'sales_manager_id')
+      required final int? salesManagerId}) = _$AwsUserImpl;
 
   factory _AwsUser.fromJson(Map<String, dynamic> json) = _$AwsUserImpl.fromJson;
 
   @override
-  num get accessLevel;
+  int get id;
   @override
-  num get commissionSplit;
+  @JsonKey(name: 'access_level')
+  int get accessLevel;
   @override
+  @JsonKey(name: 'commission_split')
+  num? get commissionSplit;
+  @override
+  @JsonKey(name: 'name')
   String get displayName;
   @override
   String get email;
   @override
-  num? get salesManagerId;
+  @JsonKey(name: 'sales_manager_id')
+  int? get salesManagerId;
   @override
   @JsonKey(ignore: true)
   _$$AwsUserImplCopyWith<_$AwsUserImpl> get copyWith =>

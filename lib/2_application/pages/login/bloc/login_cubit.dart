@@ -212,4 +212,45 @@ class LoginCubit extends Cubit<LoginCubitState> {
       // Handle errors appropriately
     }
   }
+
+  Future<void> loginWithAws(String emailAddress, String password) async {
+    emit(const LoginStateLoading());
+    try {
+      final accessToken = await repo.fetchAccessToken(emailAddress, password);
+      final awsUser =
+          await repo.fetchUser(emailAddress, password, accessToken ?? '');
+
+      if (awsUser != null) {
+        final user = UserHive(
+          null, //data.dbName,
+          null, //data.userLogin,
+          null, //data.userName,
+          null, //password,
+          awsUser.displayName,
+          emailAddress, //null,
+          null,
+          awsUser.accessLevel,
+          (awsUser.commissionSplit ?? 50).toInt(),
+          accessToken,
+        );
+
+        final userBox = Hive.box<UserHive>('user');
+
+        await userBox.add(user);
+        emit(const LoginStateSuccess());
+      } else {
+        emit(
+          const LoginStateError(
+            message: 'Login Failed',
+          ),
+        );
+      }
+    } catch (e) {
+      emit(
+        const LoginStateError(
+          message: 'Login Failed',
+        ),
+      );
+    }
+  }
 }

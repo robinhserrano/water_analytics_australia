@@ -29,4 +29,12 @@ class HiveHelper {
     }
     return [];
   }
+
+  static Future<UserHive?> getCurrentUser() async {
+    final box = await openUserBox();
+    if (box != null) {
+      return box.values.first;
+    }
+    return null;
+  }
 }

@@ -5,7 +5,7 @@ import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/odoo_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/bloc/admin_users_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page%20copy/bloc/aws_admin_users_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/bloc/aws_admin_users_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/bloc/admin_users_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/bloc/aws_admin_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/bloc/aws_sales_details_cubit.dart';
@@ -84,11 +84,13 @@ Future<void> init() async {
     ..registerFactory(
       () => AwsAdminUsersDetailCubit(
         firestoreService: sl(),
+        repo: sl<Repository>(),
       ),
     )
     ..registerFactory(
       () => CreateUsersCubit(
         firestoreService: sl(),
+        repo: sl<Repository>(),
       ),
     )
     ..registerFactory(

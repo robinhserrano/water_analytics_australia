@@ -9,10 +9,11 @@ import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
-import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page%20copy/bloc/aws_admin_users_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/bloc/aws_admin_users_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/bloc/admin_users_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/widget/cloud_sales_record_card.dart';
@@ -148,7 +149,7 @@ class SalesListPageError extends StatelessWidget {
 class EditLandingPricePage extends StatefulWidget {
   const EditLandingPricePage({required this.user, super.key});
 
-  final CloudUser user;
+  final AwsUser user;
 
   @override
   State<EditLandingPricePage> createState() => _EditLandingPricePageState();
@@ -231,10 +232,11 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
             if (isValidating == false) {
               unawaited(showSavingModal(context));
               final success = await cubit.updateUser(
-                CloudUser(
+                AwsUser(
+                  id: widget.user.id,
                   displayName: widget.user.displayName,
                   email: widget.user.email,
-                  photoUrl: widget.user.photoUrl,
+                  salesManagerId: widget.user.salesManagerId,
                   accessLevel: widget.user.accessLevel,
                   commissionSplit:
                       double.tryParse(ctrlCommissionSplit.text) ?? 0,
@@ -271,7 +273,7 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
             }
           },
           child: const Text(
-            'Save',
+            'Update',
             style: TextStyle(
               color: Color(0xffFFFFFF),
               fontWeight: FontWeight.w600,
