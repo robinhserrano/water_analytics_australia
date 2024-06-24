@@ -915,7 +915,8 @@ class CommissionSection extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            if (accessLevel > 2 && !order.xStudioCommissionPaid) ...[
+            //ACCESS RESTRICTION
+            if (accessLevel >= 3 && !order.xStudioCommissionPaid) ...[
               Center(
                 child: ResponsiveRowColumn(
                   rowMainAxisAlignment: MainAxisAlignment.center,

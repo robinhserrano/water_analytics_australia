@@ -72,7 +72,6 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -84,11 +83,8 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
     setState(() {}); // Update the widget once data is loaded
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AwsSalesCubit>();
-
     return Scaffold(
       key: AwsSalesPage._scaffoldKey,
       endDrawer: const HomeEndDrawer(),
@@ -150,8 +146,9 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                           sortFilterData.selectedInvoicePaymentStatus;
                       final deliverStatus =
                           sortFilterData.selectedDeliverStatus;
+                      final selectedNames = sortFilterData.selectedNames;
 
-                      final filteredRecords = state.records
+                      final temp = state.records
                           .where(
                             (record) =>
                                 (!commissionStatus.any(
@@ -172,6 +169,22 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                                 )),
                           )
                           .toList();
+
+                      var filteredRecords = <AwsSalesOrder>[];
+
+                      if (selectedNames.isNotEmpty) {
+                        filteredRecords = temp
+                            .where(
+                              (e) => selectedNames.any(
+                                (name) =>
+                                    name.toLowerCase() ==
+                                    e.xStudioSalesRep1?.toLowerCase(),
+                              ),
+                            )
+                            .toList();
+                      } else {
+                        filteredRecords = temp;
+                      }
 
                       final selectedSortValue =
                           sortFilterData.selectedSortValue;
@@ -203,6 +216,7 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                               ),
                         );
                       }
+
                       return SalesListPageLoaded(
                         records: filteredRecords,
                       );

@@ -167,6 +167,7 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
     // ctrlInstallationService.text =
     //     widget.landingPrice.installationService.toString();
     // ctrlSupplyOnly.text = widget.landingPrice.supplyOnly.toString();
+
     super.initState();
   }
 

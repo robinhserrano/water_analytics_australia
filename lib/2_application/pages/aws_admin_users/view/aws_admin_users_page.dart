@@ -270,12 +270,12 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     searchBox(),
-                    // const IconButton(
-                    //   onPressed: AwsAdminUsersPage.openDrawer,
-                    //   icon: HeroIcon(
-                    //     HeroIcons.adjustmentsHorizontal,
-                    //   ),
-                    // ),
+                    IconButton(
+                      onPressed: () => context.pushNamed(CreateUsersPage.name),
+                      icon: const HeroIcon(
+                        HeroIcons.userPlus,
+                      ),
+                    ),
                   ],
                 ),
                 const Expanded(
@@ -291,12 +291,12 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     searchBox(),
-                    // const IconButton(
-                    //   onPressed: AwsAdminUsersPage.openDrawer,
-                    //   icon: HeroIcon(
-                    //     HeroIcons.adjustmentsHorizontal,
-                    //   ),
-                    // ),
+                    IconButton(
+                      onPressed: () => context.pushNamed(CreateUsersPage.name),
+                      icon: const HeroIcon(
+                        HeroIcons.userPlus,
+                      ),
+                    ),
                   ],
                 ),
                 Expanded(

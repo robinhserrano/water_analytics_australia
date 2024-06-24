@@ -21,13 +21,14 @@ class SortFilterHiveAdapter extends TypeAdapter<SortFilterHive> {
       (fields[1] as List).cast<String>(),
       (fields[2] as List).cast<String>(),
       fields[3] as String,
+      (fields[4] as List).cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, SortFilterHive obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.selectedCommissionStatus)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class SortFilterHiveAdapter extends TypeAdapter<SortFilterHive> {
       ..writeByte(2)
       ..write(obj.selectedDeliverStatus)
       ..writeByte(3)
-      ..write(obj.selectedSortValue);
+      ..write(obj.selectedSortValue)
+      ..writeByte(4)
+      ..write(obj.selectedNames);
   }
 
   @override

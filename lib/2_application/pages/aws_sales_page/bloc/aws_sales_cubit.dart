@@ -9,6 +9,7 @@ import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 part 'aws_sales_state.dart';
 
 class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
@@ -24,10 +25,21 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
   final FirebaseFirestoreService firestoreService;
   final Repository repo;
 
-  Future<void> fetchSales() async {
+  Future<void> fetchSales(//List<String> seletectedNames
+      ) async {
     emit(const AwsSalesStateLoading());
     try {
-      final data = await repo.fetchSales();
+      final user = await HiveHelper.getCurrentUser();
+   
+      List<AwsSalesOrder>? data;
+
+      // //ACCESS RESTRICTION
+      if (user?.accessLevel == 1) {
+        data = await repo.fetchSalesByReps([user?.displayName ?? '']);
+      } else {
+        data = await repo.fetchSales();
+     }
+
       if (data != null) {
         print('totalllll ' + data.length.toString());
         var filteredData = data.where((e) => e.state == 'sale').toList();
@@ -216,6 +228,16 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
       return success;
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<List<AwsUser>> fetchAwsUsers() async {
+    try {
+      final users = await repo.fetchUsers();
+
+      return users ?? [];
+    } catch (e) {
+      return [];
     }
   }
 

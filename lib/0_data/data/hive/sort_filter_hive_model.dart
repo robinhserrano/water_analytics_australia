@@ -10,6 +10,7 @@ class SortFilterHive {
     this.selectedInvoicePaymentStatus,
     this.selectedDeliverStatus,
     this.selectedSortValue,
+    this.selectedNames,
   );
   @HiveField(0)
   final List<String> selectedCommissionStatus;
@@ -22,4 +23,7 @@ class SortFilterHive {
 
   @HiveField(3)
   final String selectedSortValue;
+
+  @HiveField(4)
+  final List<String> selectedNames;
 }

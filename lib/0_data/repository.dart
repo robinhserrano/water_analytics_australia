@@ -61,6 +61,37 @@ class Repository {
     }
   }
 
+  Future<List<AwsSalesOrder>?> fetchSalesByReps(
+    List<String> selectedNames,
+  ) async {
+    final user = await HiveHelper.getAllUsers();
+
+    final encodedReps = selectedNames
+        .map((rep) => 'reps[]=${Uri.encodeComponent(rep)}')
+        .toList();
+    final queryString = encodedReps.join('&');
+    try {
+      final response = await client.get<List<dynamic>>(
+        '$url/getSalesByReps?$queryString',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final data = response.data!.cast<Map<String, dynamic>>();
+      final parsedData = data.map(AwsSalesOrder.fromJson).toList();
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<AwsSalesOrder?> fetchSalesById(String id) async {
     final user = await HiveHelper.getAllUsers();
     try {

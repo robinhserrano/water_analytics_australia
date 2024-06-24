@@ -9,6 +9,7 @@ import 'package:water_analytics_australia/2_application/pages/aws_sales_page/vie
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/pick_users_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 
 class SortFilterModal extends StatefulWidget {
   const SortFilterModal({
@@ -28,6 +29,8 @@ class _SortFilterModalState extends State<SortFilterModal> {
   List<InvoicePaymentStatus> selectedInvoicePaymentStatus = [];
   List<DeliveryStatus> selectedDeliverStatus = [];
   bool commissionPayableActive = false;
+  List<String> selectedNames = [];
+  int accessLevel = 0;
 
   @override
   void initState() {
@@ -45,9 +48,17 @@ class _SortFilterModalState extends State<SortFilterModal> {
 
       selectedSortValue =
           convertStringToSortBy(userBox.values.first.selectedSortValue);
+      selectedNames = userBox.values.first.selectedNames;
     }
+    _getUserFromHive();
 
     super.initState();
+  }
+
+  Future<void> _getUserFromHive() async {
+    final user = await HiveHelper.getCurrentUser();
+    accessLevel = user?.accessLevel ?? 1;
+    setState(() {});
   }
 
   @override
@@ -120,6 +131,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                               selectedDeliverStatus,
                             ),
                             selectedSortValue.name,
+                            selectedNames,
                           ),
                         );
 
@@ -273,22 +285,52 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 ),
                 child: Divider(),
               ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     showPickUsers(
-              //       context,
-              //       [],
-              //     );
-              //   },
-              //   child: const Text('Show Sales Rep'),
-              // ),
-              const Padding(
-                padding: EdgeInsets.only(
-                  left: 24,
-                  right: 24,
+              //ACCESS RESTRICTION
+              if (accessLevel >= 2) ...[
+                //FIX THIS 6/24
+                const Padding(
+                  padding: EdgeInsets.only(left: 24),
+                  child: Text(
+                    'Filter By Users',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ),
-                child: Divider(),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 24, right: 24),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Users ' '(${selectedNames.length})',
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final data = await showPickUsers(
+                                context,
+                                selectedNames,
+                              ) ??
+                              [];
+                          setState(() {
+                            selectedNames = data;
+                          });
+                        },
+                        child: const Text('Select'),
+                      ),
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    left: 24,
+                    right: 24,
+                  ),
+                  child: Divider(),
+                ),
+              ],
               CommissionStatusCheckList(
                 selectedCommissionStatus: selectedCommissionStatus,
                 onChanged: (newValue, status) {
