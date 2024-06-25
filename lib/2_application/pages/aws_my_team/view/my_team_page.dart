@@ -10,8 +10,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/bloc/my_team_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
+import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
@@ -53,29 +53,15 @@ class MyTeamPage extends StatefulWidget {
 }
 
 class _MyTeamPageState extends State<MyTeamPage> {
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-//  final ctrlSearch = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     context.pushNamed(CreateUsersPage.name);
-      //   },
-      //   label: const Row(
-      //     children: [HeroIcon(HeroIcons.plus), Text(' Create User')],
-      //   ),
-      // ),
       key: MyTeamPage._scaffoldKey,
-      // drawer: SortFilterModal(
-      //   onChanged: () => setState(() {}),
-      // ),
       endDrawer: const HomeEndDrawer(),
-      backgroundColor: const Color(0xfff9fafb), // Colors.blueGrey.shade50,
+      backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.black, //(0xff0083ff),
+        backgroundColor: Colors.black,
         title: const Text(
           'My Team',
           style: TextStyle(color: Colors.white),
@@ -110,84 +96,6 @@ class _MyTeamPageState extends State<MyTeamPage> {
               return MyTeamPageLoaded(
                 users: state.users,
               );
-              // return FutureBuilder<Box<SortFilterHive>>(
-              //   future: Hive.openBox<SortFilterHive>('sortFilter'),
-              //   builder: (context, snapshot) {
-              //     SortFilterHive? sortFilterData;
-
-              //     try {
-              //       sortFilterData = snapshot.data?.values.first;
-              //     } catch (e) {
-              //       sortFilterData = null;
-              //     }
-
-              //     if (sortFilterData != null) {
-              //       final commissionStatus =
-              //           sortFilterData.selectedCommissionStatus;
-              //       final invoicePaymentStatus =
-              //           sortFilterData.selectedInvoicePaymentStatus;
-              //       final deliverStatus = sortFilterData.selectedDeliverStatus;
-
-              //       final filteredRecords = state.users;
-              //       //     .where(
-              //       //       (record) =>
-              //       //           (!commissionStatus.any(
-              //       //             (status) =>
-              //       //                 status !=
-              //       //                 record.xStudioCommissionPaid.toString(),
-              //       //           )) &&
-              //       //           (!invoicePaymentStatus.any(
-              //       //             (status) =>
-              //       //                 status !=
-              //       //                 record.xStudioInvoicePaymentStatus
-              //       //                     .toString(),
-              //       //           )) &&
-              //       //           (!deliverStatus.any(
-              //       //             (status) =>
-              //       //                 status != record.deliveryStatus.toString(),
-              //       //           )),
-              //       //     )
-              //       //     .toList();
-
-              //       // final selectedSortValue = sortFilterData.selectedSortValue;
-              //       // if (selectedSortValue == 'Newest') {
-              //       //   filteredRecords.sort(
-              //       //     (a, b) => b.createDate!.compareTo(a.createDate!),
-              //       //   );
-              //       // }
-              //       // if (selectedSortValue == 'Oldest') {
-              //       //   filteredRecords.sort(
-              //       //     (a, b) => a.createDate!.compareTo(b.createDate!),
-              //       //   );
-              //       // }
-              //       // if (selectedSortValue == 'A-Z') {
-              //       //   filteredRecords.sort(
-              //       //     (a, b) => (a.partnerIdDisplayName ?? '')
-              //       //         .toLowerCase()
-              //       //         .compareTo(
-              //       //           (b.partnerIdDisplayName ?? '').toLowerCase(),
-              //       //         ),
-              //       //   );
-              //       // }
-              //       // if (selectedSortValue == 'Z-A') {
-              //       //   filteredRecords.sort(
-              //       //     (a, b) => (b.partnerIdDisplayName ?? '')
-              //       //         .toLowerCase()
-              //       //         .compareTo(
-              //       //           (a.partnerIdDisplayName ?? '').toLowerCase(),
-              //       //         ),
-              //       //   );
-              //       // }
-              //       return MyTeamPageLoaded(
-              //         users: filteredRecords,
-              //       );
-              //     }
-              //     return MyTeamPageLoaded(
-              //       users: state.users,
-              //     );
-              //   },
-              // );
-              //return MyTeamPageLoaded(records: state.records);
             } else if (state is MyTeamStateError) {
               return MyTeamPageError(
                 onRefresh: () => context.read<MyTeamCubit>().fetchUsers(),
@@ -268,12 +176,6 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     searchBox(),
-                    IconButton(
-                      onPressed: () => context.pushNamed(CreateUsersPage.name),
-                      icon: const HeroIcon(
-                        HeroIcons.userPlus,
-                      ),
-                    ),
                   ],
                 ),
                 const Expanded(
@@ -289,12 +191,6 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     searchBox(),
-                    IconButton(
-                      onPressed: () => context.pushNamed(CreateUsersPage.name),
-                      icon: const HeroIcon(
-                        HeroIcons.userPlus,
-                      ),
-                    ),
                   ],
                 ),
                 Expanded(
@@ -319,31 +215,6 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
                     source: MyDataTableSource(widget.users, context),
                   ),
                 ),
-                // Expanded(
-                //   child: Scrollbar(
-                //     child: ListView.builder(
-                //       itemCount: state.records.length,
-                //       itemBuilder: (context, index) {
-                //         final record = state.records[index];
-                //         if ((record.name?.toLowerCase() ?? '')
-                //                 .contains(
-                //               ctrlSearch.text.toLowerCase(),
-                //             ) ||
-                //             (record.partnerIdDisplayName ?? '')
-                //                 .toLowerCase()
-                //                 .contains(
-                //                   ctrlSearch.text.toLowerCase(),
-                //                 )) {
-                //           return AwsAdminUsersRecordCard(
-                //             record: record,
-                //           );
-                //         }
-
-                //         return const SizedBox();
-                //       },
-                //     ),
-                //   ),
-                // ),
               ],
             ),
     );
@@ -399,24 +270,6 @@ class MyDataTableSource extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: [
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     item.name ?? '',
-        //     style: const TextStyle(
-        //       fontWeight: FontWeight.w600,
-        //       color: Color(0xff374151),
-        //     ),
-        //   ),
-        // ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     item.createDate == null
-        //         ? ''
-        //         : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
-        //   ),
-        // ),
         DataCell(
           onTap: () {
             context.pushNamed(
@@ -431,11 +284,11 @@ class MyDataTableSource extends DataTableSource {
           onTap: () {},
           Card(
             elevation: 0,
-            color: accessLevelToColor(item.accessLevel.toInt()),
+            color: accessLevelToColor(item.accessLevel),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                accessLevelToString(item.accessLevel.toInt()),
+                accessLevelToString(item.accessLevel),
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -455,74 +308,10 @@ class MyDataTableSource extends DataTableSource {
             HeroIcons.pencilSquare,
           ),
         ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Checkbox(
-        //     onChanged: null, //(value) {},
-        //     value: item.xStudioCommissionPaid,
-        //   ),
-        // ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     formatCurrency(item.amountTotal ?? 0),
-        //   ),
-        // ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     (item.deliveryStatus ?? '').toString() == 'full'
-        //         ? 'Fully Delivered'
-        //         : (item.deliveryStatus ?? '').toString() == 'partial'
-        //             ? 'Partially Delivered'
-        //             : '',
-        //   ),
-        // ),
       ],
     );
   }
 
-  // void onTap(AwsAdminUsersOrder item) {
-  //   context.pushNamed(
-  //     AwsAdminUsersDetailsPage.name,
-  //     pathParameters: {'id': item.id.toString()},
-  //   );
-  // }
-
   @override
   int get selectedRowCount => selectedRows.length;
-}
-
-String accessLevelToString(int accessLevel) {
-  switch (accessLevel) {
-    case 1:
-      return 'Sales Person';
-    case 2:
-      return 'Sales Team Manager';
-    case 3:
-      return 'Sales Manager';
-    case 4:
-      return 'Admin';
-    case 5:
-      return 'Super Admin';
-    default:
-      return '';
-  }
-}
-
-MaterialColor accessLevelToColor(int accessLevel) {
-  switch (accessLevel) {
-    case 1:
-      return Colors.lightGreen;
-    case 2:
-      return Colors.teal;
-    case 3:
-      return Colors.orange;
-    case 4:
-      return Colors.lightBlue;
-    case 5:
-      return Colors.blue;
-    default:
-      return Colors.lightGreen;
-  }
 }

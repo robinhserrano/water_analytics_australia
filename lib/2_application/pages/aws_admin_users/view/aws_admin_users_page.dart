@@ -12,6 +12,7 @@ import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart'
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/bloc/aws_admin_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
+import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
@@ -428,11 +429,11 @@ class MyDataTableSource extends DataTableSource {
           onTap: () {},
           Card(
             elevation: 0,
-            color: accessLevelToColor(item.accessLevel.toInt()),
+            color: accessLevelToColor(item.accessLevel),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                accessLevelToString(item.accessLevel.toInt()),
+                accessLevelToString(item.accessLevel),
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -488,38 +489,4 @@ class MyDataTableSource extends DataTableSource {
 
   @override
   int get selectedRowCount => selectedRows.length;
-}
-
-String accessLevelToString(int accessLevel) {
-  switch (accessLevel) {
-    case 1:
-      return 'Sales Person';
-    case 2:
-      return 'Sales Team Manager';
-    case 3:
-      return 'Sales Manager';
-    case 4:
-      return 'Admin';
-    case 5:
-      return 'Super Admin';
-    default:
-      return '';
-  }
-}
-
-MaterialColor accessLevelToColor(int accessLevel) {
-  switch (accessLevel) {
-    case 1:
-      return Colors.lightGreen;
-    case 2:
-      return Colors.teal;
-    case 3:
-      return Colors.orange;
-    case 4:
-      return Colors.lightBlue;
-    case 5:
-      return Colors.blue;
-    default:
-      return Colors.lightGreen;
-  }
 }

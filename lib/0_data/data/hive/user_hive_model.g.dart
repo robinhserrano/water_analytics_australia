@@ -27,6 +27,7 @@ class UserHiveAdapter extends TypeAdapter<UserHive> {
       fields[7] as int,
       fields[8] as int,
       fields[9] as String?,
+      fields[10] as int,
     );
   }
 

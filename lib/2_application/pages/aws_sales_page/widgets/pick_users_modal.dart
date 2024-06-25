@@ -174,7 +174,8 @@ class _PickUsersState extends State<PickUsers> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context, rootNavigator: true).pop();
+                       //   Navigator.of(context, rootNavigator: true).pop();
+                           Navigator.pop(context, selectedNames);
                         },
                         style: btnLight,
                         child: const Text(

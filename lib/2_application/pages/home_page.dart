@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/view/aws_admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/my_team_page.dart';
@@ -65,13 +66,12 @@ class _HomePageState extends State<HomePage> {
       // ),
       if (accessLevel >= 4) ...[
         const NavigationDestination(
-          icon: HeroIcon(HeroIcons.users),
+          icon: Icon(FontAwesomeIcons.addressBook),
           label: 'Users',
         ),
       ],
-
       const NavigationDestination(
-        icon: HeroIcon(HeroIcons.users),
+        icon: HeroIcon(HeroIcons.userGroup),
         label: 'Team',
       ),
       if (!kIsWeb) ...[

@@ -403,37 +403,3 @@ Future<void> showSavingModal(
     ),
   );
 }
-
-String accessLevelToString(int accessLevel) {
-  switch (accessLevel) {
-    case 1:
-      return 'Sales Person';
-    case 2:
-      return 'Sales Team Manager';
-    case 3:
-      return 'Sales Manager';
-    case 4:
-      return 'Admin';
-    case 5:
-      return 'Super Admin';
-    default:
-      return '';
-  }
-}
-
-int stringToAccessLevel(String accessLevel) {
-  switch (accessLevel) {
-    case 'Sales Person':
-      return 1;
-    case 'Sales Team Manager':
-      return 2;
-    case 'Sales Manager':
-      return 3;
-    case 'Admin':
-      return 4;
-    case 'Super Admin':
-      return 5;
-    default:
-      return 0;
-  }
-}

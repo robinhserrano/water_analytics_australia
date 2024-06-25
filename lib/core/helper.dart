@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
@@ -62,4 +63,55 @@ String formatDisplayNameToEmail(String text) {
       .replaceAll(regex, '')
       .replaceAll(' ', '_');
   return '$formattedText@wa.com';
+}
+
+String accessLevelToString(int accessLevel) {
+  switch (accessLevel) {
+    case 1:
+      return 'Sales Person';
+    case 2:
+      return 'Sales Team Manager';
+    case 3:
+      return 'Sales Manager';
+    case 4:
+      return 'Admin';
+    case 5:
+      return 'Super Admin';
+    default:
+      return '';
+  }
+}
+
+MaterialColor accessLevelToColor(int accessLevel) {
+  switch (accessLevel) {
+    case 1:
+      return Colors.lightGreen;
+    case 2:
+      return Colors.teal;
+    case 3:
+      return Colors.orange;
+    case 4:
+      return Colors.lightBlue;
+    case 5:
+      return Colors.blue;
+    default:
+      return Colors.lightGreen;
+  }
+}
+
+int stringToAccessLevel(String accessLevel) {
+  switch (accessLevel) {
+    case 'Sales Person':
+      return 1;
+    case 'Sales Team Manager':
+      return 2;
+    case 'Sales Manager':
+      return 3;
+    case 'Admin':
+      return 4;
+    case 'Super Admin':
+      return 5;
+    default:
+      return 0;
+  }
 }
