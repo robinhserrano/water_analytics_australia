@@ -21,7 +21,8 @@ class UserHive {
     this.photoUrl,
     this.accessLevel,
     this.commissionStatus,
-    this.accessToken, 
+    this.accessToken,
+    this.userId,
   );
   @HiveField(0)
   final String? dbName;
@@ -67,4 +68,7 @@ class UserHive {
 
   @HiveField(9)
   final String? accessToken;
+
+  @HiveField(10)
+  final int userId;
 }

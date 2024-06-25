@@ -37,6 +37,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           4,
           50,
           accessToken,
+          0,
         );
 
         final userBox = Hive.box<UserHive>('user');
@@ -83,6 +84,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           cloudUser.accessLevel.toInt(),
           cloudUser.commissionSplit.toInt(),
           accessToken,
+          0,
         );
 
         final userBox = Hive.box<UserHive>('user');
@@ -194,6 +196,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           accessLevel,
           50,
           null,
+          0,
         );
 
         final userBox = Hive.box<UserHive>('user');
@@ -232,6 +235,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           awsUser.accessLevel,
           (awsUser.commissionSplit ?? 50).toInt(),
           accessToken,
+          awsUser.id,
         );
 
         final userBox = Hive.box<UserHive>('user');

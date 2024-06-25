@@ -33,7 +33,7 @@ class UserHiveAdapter extends TypeAdapter<UserHive> {
   @override
   void write(BinaryWriter writer, UserHive obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.dbName)
       ..writeByte(1)
@@ -53,7 +53,9 @@ class UserHiveAdapter extends TypeAdapter<UserHive> {
       ..writeByte(8)
       ..write(obj.commissionStatus)
       ..writeByte(9)
-      ..write(obj.accessToken);
+      ..write(obj.accessToken)
+      ..writeByte(10)
+      ..write(obj.userId);
   }
 
   @override

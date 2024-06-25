@@ -275,6 +275,8 @@ class Repository {
 
       final data = response.data!.cast<Map<String, dynamic>>();
       final parsedData = data.map(AwsUser.fromJson).toList();
+      // var hehe = parsedData.where((e) => e.salesManagerId == user.first.userId);
+      // var hihi = hehe ;
 
       return parsedData;
     } catch (e) {

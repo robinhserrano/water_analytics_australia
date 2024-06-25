@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/view/admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/view/admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/my_team_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
@@ -11,6 +12,7 @@ import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/view/landing_price_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
+import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales_details/view/sales_details_page.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
@@ -124,6 +126,22 @@ final routes = GoRouter(
       builder: (context, state) {
         return AwsAdminUsersDetailPageWrapperProvider(
           id: state.pathParameters['id']!,
+        );
+      },
+    ),
+    GoRoute(
+      name: MyTeamPage.name,
+      path: MyTeamPage.path,
+      builder: (context, state) {
+        return const MyTeamPageWrapperProvider();
+      },
+    ),
+    GoRoute(
+      name: MemberDetailPage.name,
+      path: MemberDetailPage.path,
+      builder: (context, state) {
+        return MemberDetailPageWrapperProvider(
+          rep: state.pathParameters['rep']!,
         );
       },
     ),
