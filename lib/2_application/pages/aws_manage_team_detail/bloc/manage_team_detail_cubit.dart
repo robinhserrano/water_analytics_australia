@@ -5,26 +5,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
-part 'manage_team_state.dart';
+part 'manage_team_detail_state.dart';
 
-class ManageTeamsCubit extends Cubit<ManageTeamsCubitState> {
-  ManageTeamsCubit({
+class ManageTeamDetailCubit extends Cubit<ManageTeamDetailCubitState> {
+  ManageTeamDetailCubit({
     required this.repo,
-  }) : super(const ManageTeamsStateLoading()) {
+    required this.managerId,
+  }) : super(const ManageTeamDetailStateLoading()) {
     fetchUsers();
   }
 
   final Repository repo;
+  final String managerId;
 
   Future<void> fetchUsers() async {
-    emit(const ManageTeamsStateLoading());
+    emit(const ManageTeamDetailStateLoading());
     try {
       final user = await HiveHelper.getCurrentUser();
 
       final users = await repo.fetchUsers();
       if (users != null) {
         // var filteredUsers = <AwsUser>[];
-        final managers = users.where((e) => e.accessLevel == 3).toList();
+        final managers = users
+            .where((e) => e.accessLevel == 3 && e.id == int.parse(managerId))
+            .toList();
         final filteredTeams = <List<AwsUser>>[];
         for (final manager in managers) {
           final salesTeamManager = users
@@ -45,15 +49,16 @@ class ManageTeamsCubit extends Cubit<ManageTeamsCubitState> {
               .toList();
 
           filteredTeams.add(
-              [manager, ...salesTeamManager, ...salesPerson].toSet().toList());
+            [manager, ...salesTeamManager, ...salesPerson].toSet().toList(),
+          );
         }
 
-        emit(ManageTeamsStateLoaded(filteredTeams));
+        emit(ManageTeamDetailStateLoaded(filteredTeams.first));
       } else {
-        emit(const ManageTeamsStateError(message: 'CloudSales Failed'));
+        emit(const ManageTeamDetailStateError(message: 'CloudSales Failed'));
       }
     } catch (e) {
-      emit(ManageTeamsStateError(message: e.toString()));
+      emit(ManageTeamDetailStateError(message: e.toString()));
     }
   }
 }

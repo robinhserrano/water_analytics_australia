@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/view/admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/view/admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/bloc/manage_team_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/view/manage_teams_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/view/manage_teams_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/my_team_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
@@ -145,6 +148,29 @@ final routes = GoRouter(
         );
       },
     ),
+    GoRoute(
+      name: ManageTeams.name,
+      path: ManageTeams.path,
+      builder: (context, state) {
+        return const ManageTeamsWrapperProvider();
+      },
+    ),
+    GoRoute(
+      name: ManageTeamDetail.name,
+      path: ManageTeamDetail.path,
+      builder: (context, state) {
+        return ManageTeamDetailWrapperProvider(
+          id: state.pathParameters['id']!,
+        );
+      },
+    ),
+    // GoRoute(
+    //   name: ManageTeamDetail.name,
+    //   path: ManageTeamDetail.path,
+    //   builder: (context, state) {
+    //     return const ManageTeamDetailWrapperProvider();
+    //   },
+    // ),
   ],
   redirect: (context, state) async {
     // final auth = context.read<AuthCubit>();
@@ -162,11 +188,16 @@ final routes = GoRouter(
     //   if (state.uri.queryParameters.isEmpty) return '/login';
     // }
     // if (kIsWeb) {
-    final userBox = await HiveHelper.openUserBox();
-    if (userBox == null || userBox.isEmpty) {
-      return LoginPage.path;
+    try {
+      final userBox = await HiveHelper.openUserBox();
+      if (userBox == null || userBox.isEmpty) {
+        return LoginPage.path;
+      }
+      return null;
+    } catch (e) {
+      print(e);
     }
-    return null;
+
     //}
     //return null;
   },

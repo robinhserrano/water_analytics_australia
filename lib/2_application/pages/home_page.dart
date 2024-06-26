@@ -4,6 +4,7 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/view/aws_admin_users_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/view/manage_teams_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/my_team_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
@@ -50,6 +51,7 @@ class _HomePageState extends State<HomePage> {
         const AwsAdminUsersPageWrapperProvider(),
       ],
       const MyTeamPageWrapperProvider(),
+      const ManageTeamsWrapperProvider(),
       if (!kIsWeb) ...[
         const SalesPageWrapperProvider(),
       ],
@@ -73,6 +75,10 @@ class _HomePageState extends State<HomePage> {
       const NavigationDestination(
         icon: HeroIcon(HeroIcons.userGroup),
         label: 'Team',
+      ),
+      const NavigationDestination(
+        icon: Icon(FontAwesomeIcons.usersGear),
+        label: 'Manage Team',
       ),
       if (!kIsWeb) ...[
         const NavigationDestination(

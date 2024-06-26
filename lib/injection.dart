@@ -8,6 +8,9 @@ import 'package:water_analytics_australia/2_application/pages/admin_users/bloc/a
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/bloc/aws_admin_users_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/bloc/admin_users_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/bloc/aws_admin_users_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/bloc/manage_team_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/view/manage_teams_detail_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/bloc/manage_team_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/bloc/my_team_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/bloc/aws_sales_details_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
@@ -119,8 +122,15 @@ Future<void> init() async {
         repo: sl<Repository>(),
       ),
     )
+    ..registerFactory(
+      () => ManageTeamsCubit(
+        repo: sl<Repository>(),
+      ),
+    )
     // ..registerFactory(
-    //   () => SortFilterCubit.new,
+    //   () => ManageTeamDetailCubit(
+    //     repo: sl<Repository>(),
+    //   ),
     // )
 
 // // ! domain Layer

@@ -7,37 +7,40 @@ import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
-import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/view/manage_teams_detail_page.dart';
-import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/bloc/manage_team_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/bloc/manage_team_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
-class ManageTeamsWrapperProvider extends StatelessWidget {
-  const ManageTeamsWrapperProvider({super.key});
-
+class ManageTeamDetailWrapperProvider extends StatelessWidget {
+  const ManageTeamDetailWrapperProvider({required this.id, super.key});
+  final String id;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<ManageTeamsCubit>(),
-      child: ManageTeams(
-        client: sl<OdooClient>(),
+      create: (context) => ManageTeamDetailCubit(
+        repo: sl<Repository>(),
+        managerId: id,
+      ),
+      child: ManageTeamDetail(
+        id: id,
       ),
     );
   }
 }
 
-class ManageTeams extends StatefulWidget {
-  const ManageTeams({required this.client, super.key});
+class ManageTeamDetail extends StatefulWidget {
+  const ManageTeamDetail({required this.id, super.key});
 
-  static const name = 'ManageTeams';
-  static const path = '/ManageTeams';
+  static const name = 'ManageTeamDetail';
+  static const path = '/ManageTeamDetail/:id';
 
-  final OdooClient client;
+  final String id;
 
   static final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -50,27 +53,27 @@ class ManageTeams extends StatefulWidget {
   }
 
   @override
-  State<ManageTeams> createState() => _ManageTeamsState();
+  State<ManageTeamDetail> createState() => _ManageTeamDetailState();
 }
 
-class _ManageTeamsState extends State<ManageTeams> {
+class _ManageTeamDetailState extends State<ManageTeamDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: ManageTeams._scaffoldKey,
+      key: ManageTeamDetail._scaffoldKey,
       endDrawer: const HomeEndDrawer(),
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: false,
         backgroundColor: Colors.black,
         title: const Text(
-          'Manage Teams',
+          'Manage Teamsz',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
           IconButton(
             onPressed: () =>
-                ManageTeams._scaffoldKey.currentState!.openEndDrawer(),
+                ManageTeamDetail._scaffoldKey.currentState!.openEndDrawer(),
             icon: const HeroIcon(
               HeroIcons.bars3,
               color: Colors.white,
@@ -80,10 +83,10 @@ class _ManageTeamsState extends State<ManageTeams> {
       ),
       body: RefreshIndicator(
         color: const Color(0xff0083ff),
-        onRefresh: () => context.read<ManageTeamsCubit>().fetchUsers(),
-        child: BlocBuilder<ManageTeamsCubit, ManageTeamsCubitState>(
+        onRefresh: () => context.read<ManageTeamDetailCubit>().fetchUsers(),
+        child: BlocBuilder<ManageTeamDetailCubit, ManageTeamDetailCubitState>(
           builder: (context, state) {
-            if (state is ManageTeamsStateLoading) {
+            if (state is ManageTeamDetailStateLoading) {
               return ListView.builder(
                 itemCount: 10,
                 itemBuilder: (context, index) => const Padding(
@@ -93,13 +96,14 @@ class _ManageTeamsState extends State<ManageTeams> {
                   ),
                 ),
               );
-            } else if (state is ManageTeamsStateLoaded) {
-              return ManageTeamsLoaded(
-                teams: state.teams,
+            } else if (state is ManageTeamDetailStateLoaded) {
+              return ManageTeamDetailLoaded(
+                team: state.team,
               );
-            } else if (state is ManageTeamsStateError) {
-              return ManageTeamsError(
-                onRefresh: () => context.read<ManageTeamsCubit>().fetchUsers(),
+            } else if (state is ManageTeamDetailStateError) {
+              return ManageTeamDetailError(
+                onRefresh: () =>
+                    context.read<ManageTeamDetailCubit>().fetchUsers(),
               );
             }
             return const SizedBox();
@@ -110,16 +114,16 @@ class _ManageTeamsState extends State<ManageTeams> {
   }
 }
 
-class ManageTeamsLoaded extends StatefulWidget {
-  const ManageTeamsLoaded({required this.teams, super.key});
+class ManageTeamDetailLoaded extends StatefulWidget {
+  const ManageTeamDetailLoaded({required this.team, super.key});
 
-  final List<List<AwsUser>> teams;
+  final List<AwsUser> team;
 
   @override
-  State<ManageTeamsLoaded> createState() => _ManageTeamsLoadedState();
+  State<ManageTeamDetailLoaded> createState() => _ManageTeamDetailLoadedState();
 }
 
-class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
+class _ManageTeamDetailLoadedState extends State<ManageTeamDetailLoaded> {
   final ctrlSearch = TextEditingController();
   int _rowsPerPage = 10;
 
@@ -169,27 +173,33 @@ class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount:
-            widget.teams.length, // Set the number of items based on data length
-        itemBuilder: (context, index) {
-          final salesManager =
-              widget.teams[index].firstWhere((e) => e.accessLevel == 3);
-
-          return ListTile(
-            title: Text(salesManager.displayName +
-                "'s Team"), // Set the title from the data list
-            trailing: Icon(Icons.arrow_right), // Add a trailing icon
-            onTap: () {
-              context.pushNamed(
-                ManageTeamDetail.name,
-                pathParameters: {'id': salesManager.id.toString()},
-              );
+        body: Column(
+      children: [
+        Text(widget.team.toString()),
+        Expanded(
+          child: PaginatedDataTable2(
+            availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
+            rowsPerPage: _rowsPerPage,
+            onRowsPerPageChanged: (value) {
+              setState(() {
+                if (value != null) {
+                  _rowsPerPage = value;
+                }
+              });
             },
-          );
-        },
-      ),
-    );
+            minWidth: 1200,
+            columns: const [
+              DataColumn(label: Text('Name')),
+              DataColumn(label: Text('Email')),
+              DataColumn(label: Text('Role')),
+              DataColumn(label: Text('Commission %')),
+              DataColumn(label: Text('Actions')),
+            ],
+            source: MyDataTableSource(widget.team, context),
+          ),
+        ),
+      ],
+    ));
 
     // Scaffold(
     //   backgroundColor: Colors.white,
@@ -245,8 +255,8 @@ class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
   }
 }
 
-class ManageTeamsError extends StatelessWidget {
-  const ManageTeamsError({
+class ManageTeamDetailError extends StatelessWidget {
+  const ManageTeamDetailError({
     required this.onRefresh,
     super.key,
   });

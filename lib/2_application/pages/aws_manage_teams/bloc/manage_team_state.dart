@@ -16,8 +16,8 @@ class ManageTeamsStateLoading extends ManageTeamsCubitState {
 }
 
 class ManageTeamsStateLoaded extends ManageTeamsCubitState {
-  const ManageTeamsStateLoaded(this.users);
-  final List<AwsUser> users;
+  const ManageTeamsStateLoaded(this.teams);
+  final List<List<AwsUser>> teams;
 
   @override
   List<Object> get props => [];
