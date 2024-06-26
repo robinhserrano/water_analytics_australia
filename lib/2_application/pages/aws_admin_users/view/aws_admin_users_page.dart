@@ -73,6 +73,9 @@ class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
       //   onChanged: () => setState(() {}),
       // ),
       endDrawer: const HomeEndDrawer(),
+          // Drawer(
+          //     width: 500,
+          //     child: CreateUsersPageWrapperProvider()), //const HomeEndDrawer(),
       backgroundColor: const Color(0xfff9fafb), // Colors.blueGrey.shade50,
       appBar: AppBar(
         automaticallyImplyLeading: false,

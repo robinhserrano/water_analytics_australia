@@ -340,13 +340,13 @@ class Repository {
   Future<bool> updateUser(AwsUser awsUser) async {
     final user = await HiveHelper.getAllUsers();
     try {
-      final data = <String, dynamic>{
-        'name': awsUser.displayName,
-        'email': awsUser.email,
-        'access_level': awsUser.accessLevel,
-        'commission_split': awsUser.commissionSplit,
-        'sales_manager_id': awsUser.salesManagerId,
-      };
+      // final data = <String, dynamic>{
+      //   'name': awsUser.displayName,
+      //   'email': awsUser.email,
+      //   'access_level': awsUser.accessLevel,
+      //   'commission_split': awsUser.commissionSplit,
+      //   'sales_manager_id': awsUser.salesManagerId,
+      // };
 
       final response = await client.patch<Map<String, dynamic>>(
         '$url/users/${awsUser.id}',

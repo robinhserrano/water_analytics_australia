@@ -1,31 +1,27 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
-import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
-part 'my_team_state.dart';
+part 'manage_team_state.dart';
 
-class MyTeamCubit extends Cubit<MyTeamCubitState> {
-  MyTeamCubit({
+class ManageTeamsCubit extends Cubit<ManageTeamsCubitState> {
+  ManageTeamsCubit({
     required this.repo,
-  }) : super(const MyTeamStateLoading()) {
+  }) : super(const ManageTeamsStateLoading()) {
     fetchUsers();
   }
-
-  // final FirebaseFirestoreService firestoreService;
+  
   final Repository repo;
 
   Future<void> fetchUsers() async {
-    emit(const MyTeamStateLoading());
+    emit(const ManageTeamsStateLoading());
     try {
       final user = await HiveHelper.getCurrentUser();
 
       final users = await repo.fetchUsers();
       if (users != null) {
         var filteredUsers = <AwsUser>[];
-        //Filtering
         if ((user?.accessLevel ?? 1) >= 2) {
           final salesTeamManager = users
               .where(
@@ -47,22 +43,12 @@ class MyTeamCubit extends Cubit<MyTeamCubitState> {
           filteredUsers = [...salesTeamManager, ...salesPerson];
         }
 
-        emit(MyTeamStateLoaded(filteredUsers.toSet().toList()));
+        emit(ManageTeamsStateLoaded(filteredUsers.toSet().toList()));
       } else {
-        emit(const MyTeamStateError(message: 'CloudSales Failed'));
+        emit(const ManageTeamsStateError(message: 'CloudSales Failed'));
       }
     } catch (e) {
-      emit(MyTeamStateError(message: e.toString()));
+      emit(ManageTeamsStateError(message: e.toString()));
     }
   }
-
-  // Future<bool> saveCloudSales(CloudSalesOrder sale) async {
-  //   try {
-  //     await firestoreService.saveCloudSales(sale);
-
-  //     return true;
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
 }

@@ -96,7 +96,7 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black,
         title: const Text(
-          'Sales Quotation - AWS',
+          'Sales Quotation',
           style: TextStyle(color: Colors.white),
         ),
         actions: [

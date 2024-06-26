@@ -20,16 +20,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int accessLevel = 1;
+  int userAccessLevel = 1;
   @override
   void initState() {
-    super.initState();
     _getUserFromHive();
+    super.initState();
   }
 
   Future<void> _getUserFromHive() async {
     final user = await HiveHelper.getCurrentUser();
-    accessLevel = user?.accessLevel ?? 1;
+    userAccessLevel = user?.accessLevel ?? 1;
     setState(() {});
   }
 
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
     final screens = <Widget>[
       const AwsSalesPageWrapperProvider(),
       // const CloudSalesPageWrapperProvider(),
-      if (accessLevel >= 4) ...[
+      if (userAccessLevel >= 4) ...[
         const AwsAdminUsersPageWrapperProvider(),
       ],
       const MyTeamPageWrapperProvider(),
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       //   icon: HeroIcon(HeroIcons.fire),
       //   label: 'Firebase',
       // ),
-      if (accessLevel >= 4) ...[
+      if (userAccessLevel >= 4) ...[
         const NavigationDestination(
           icon: Icon(FontAwesomeIcons.addressBook),
           label: 'Users',
@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
       ],
     ];
 
-    return accessLevel == 1
+    return userAccessLevel == 1
         ? const AwsSalesPageWrapperProvider()
         : AdaptiveLayout(
             internalAnimations: false,

@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,7 @@ import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart'
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/bloc/aws_admin_users_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/bloc/admin_users_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/pick_manager_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/widget/cloud_sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/cubit/landing_price_detail_cubit.dart';
@@ -22,6 +24,7 @@ import 'package:water_analytics_australia/2_application/pages/landing_price_page
 import 'package:water_analytics_australia/2_application/pages/landing_price_page/widget/landing_price_card.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/widgets/custom_text_field.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
@@ -164,12 +167,30 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
   @override
   void initState() {
     ctrlCommissionSplit.text = widget.user.commissionSplit.toString();
-    // ctrlInstallationService.text =
-    //     widget.landingPrice.installationService.toString();
-    // ctrlSupplyOnly.text = widget.landingPrice.supplyOnly.toString();
-
+    salesManagerId = widget.user.salesManagerId;
+    accessLevel = widget.user.accessLevel;
+    _getUserFromHive();
     super.initState();
   }
+
+  Future<void> _getUserFromHive() async {
+    final user = await HiveHelper.getCurrentUser();
+    userAccessLevel = user?.accessLevel ?? 1;
+
+    setState(() {});
+  }
+
+  int? accessLevel;
+  int? userAccessLevel;
+  int? salesManagerId;
+
+  final List<String> leadSource = [
+    'Sales Person',
+    'Sales Team Manager',
+    'Sales Manager',
+    'Admin',
+    'Super Admin',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -204,6 +225,133 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                   inputType:
                       const TextInputType.numberWithOptions(decimal: true),
                 ),
+                if ((userAccessLevel ?? 1) >= 4) ...[
+                  const Text(
+                    'User Role',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  DropdownButtonFormField2(
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    isExpanded: true,
+                    hint: const Text('Select Role'),
+                    value: accessLevel == null
+                        ? null
+                        : accessLevelToString(accessLevel!),
+                    items: leadSource
+                        .map(
+                          (item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        accessLevel = stringToAccessLevel(value ?? '');
+                      });
+                    },
+                    buttonStyleData: const ButtonStyleData(
+                      height: 60,
+                      padding: EdgeInsets.only(left: 20, right: 10),
+                    ),
+                    iconStyleData: const IconStyleData(
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.black45,
+                      ),
+                      iconSize: 30,
+                    ),
+                    dropdownStyleData: DropdownStyleData(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  OutlinedButton(
+                    onPressed: null,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: Row(
+                        children: [
+                          const Text(
+                            'Select Manager',
+                            style: TextStyle(
+                              color: Color(0xff667085),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const Spacer(),
+                          ElevatedButton(
+                            onPressed: () async {
+                              final data = await showPickManager(
+                                context,
+                                salesManagerId != null ? [salesManagerId!] : [],
+                                widget.user.id,
+                                accessLevel ?? widget.user.accessLevel,
+                              );
+
+                              //  if (data != null) {
+                              setState(() {
+                                if (data == null || data.isEmpty) {
+                                  salesManagerId = null;
+                                } else {
+                                  salesManagerId = data.first;
+                                }
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: const Color(0xff7F56D9),
+                            ),
+                            child: salesManagerId == null
+                                ? const Text(
+                                    'Select',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  )
+                                : const Row(
+                                    children: [
+                                      HeroIcon(
+                                        HeroIcons.tag,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        '1',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -237,8 +385,9 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                   id: widget.user.id,
                   displayName: widget.user.displayName,
                   email: widget.user.email,
-                  salesManagerId: widget.user.salesManagerId,
-                  accessLevel: widget.user.accessLevel,
+                  salesManagerId:
+                      salesManagerId, //?? widget.user.salesManagerId,
+                  accessLevel: accessLevel ?? widget.user.accessLevel,
                   commissionSplit:
                       double.tryParse(ctrlCommissionSplit.text) ?? 0,
                 ),
