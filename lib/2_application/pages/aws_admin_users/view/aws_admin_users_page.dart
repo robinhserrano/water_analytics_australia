@@ -1,14 +1,12 @@
-// ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, prefer_int_literals
+// ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, prefer_int_literals, directives_ordering
 
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
-import 'package:water_analytics_australia/1_domain/models/cloud_user_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/bloc/aws_admin_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
@@ -54,29 +52,12 @@ class AwsAdminUsersPage extends StatefulWidget {
 }
 
 class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-//  final ctrlSearch = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     context.pushNamed(CreateUsersPage.name);
-      //   },
-      //   label: const Row(
-      //     children: [HeroIcon(HeroIcons.plus), Text(' Create User')],
-      //   ),
-      // ),
       key: AwsAdminUsersPage._scaffoldKey,
-      // drawer: SortFilterModal(
-      //   onChanged: () => setState(() {}),
-      // ),
       endDrawer: const HomeEndDrawer(),
-          // Drawer(
-          //     width: 500,
-          //     child: CreateUsersPageWrapperProvider()), //const HomeEndDrawer(),
-      backgroundColor: const Color(0xfff9fafb), // Colors.blueGrey.shade50,
+      backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black, //(0xff0083ff),
@@ -207,7 +188,19 @@ class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
 }
 
 class AwsAdminUsersPageLoaded extends StatefulWidget {
-  const AwsAdminUsersPageLoaded({required this.users, super.key});
+  const AwsAdminUsersPageLoaded({
+    required this.users,
+    super.key,
+  });
+  static final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  static void closeDrawer() {
+    _scaffoldKey.currentState?.closeDrawer();
+  }
+
+  static void openDrawer() {
+    _scaffoldKey.currentState?.openEndDrawer();
+  }
 
   final List<AwsUser> users;
 
@@ -219,6 +212,33 @@ class AwsAdminUsersPageLoaded extends StatefulWidget {
 class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
   final ctrlSearch = TextEditingController();
   int _rowsPerPage = 10;
+  int? id;
+
+  Widget endDrawer({int? id}) {
+    final canEdit = id != null;
+
+    return Drawer(
+      width: 500,
+      child: canEdit
+          ? AwsAdminUsersDetailPageWrapperProvider(
+              id: id.toString(),
+              onUserUpdate: () {
+                context.read<AwsAdminUsersCubit>().fetchUsers();
+                // print('haha');
+              },
+              // onUserCreated: () {
+              //   context.read<AwsAdminUsersCubit>().fetchUsers();
+              //   // print('haha');
+              // },
+            )
+          : CreateUsersPageWrapperProvider(
+              onUserCreated: () {
+                context.read<AwsAdminUsersCubit>().fetchUsers();
+                // print('haha');
+              },
+            ),
+    );
+  }
 
   Widget searchBox() {
     return Container(
@@ -266,6 +286,9 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: AwsAdminUsersPageLoaded._scaffoldKey,
+      endDrawer: endDrawer(id: id),
+      // drawer: Drawer(),
       backgroundColor: Colors.white,
       body: widget.users.isEmpty
           ? Column(
@@ -275,7 +298,14 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                   children: [
                     searchBox(),
                     IconButton(
-                      onPressed: () => context.pushNamed(CreateUsersPage.name),
+                      onPressed: () {
+                        setState(() {
+                          id = null;
+                        });
+
+                        AwsAdminUsersPageLoaded.openDrawer();
+                      },
+                      //context.pushNamed(CreateUsersPage.name),
                       icon: const HeroIcon(
                         HeroIcons.userPlus,
                       ),
@@ -296,7 +326,13 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                   children: [
                     searchBox(),
                     IconButton(
-                      onPressed: () => context.pushNamed(CreateUsersPage.name),
+                      onPressed: () {
+                        setState(() {
+                          id = null;
+                        });
+                        AwsAdminUsersPageLoaded.openDrawer();
+                      },
+                      // context.pushNamed(CreateUsersPage.name),
                       icon: const HeroIcon(
                         HeroIcons.userPlus,
                       ),
@@ -322,34 +358,15 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                       DataColumn(label: Text('Commission %')),
                       DataColumn(label: Text('Actions')),
                     ],
-                    source: MyDataTableSource(widget.users, context),
+                    source:
+                        MyDataTableSource(widget.users, context, (int value) {
+                      setState(() {
+                        id = value;
+                      });
+                      AwsAdminUsersPageLoaded.openDrawer();
+                    }),
                   ),
                 ),
-                // Expanded(
-                //   child: Scrollbar(
-                //     child: ListView.builder(
-                //       itemCount: state.records.length,
-                //       itemBuilder: (context, index) {
-                //         final record = state.records[index];
-                //         if ((record.name?.toLowerCase() ?? '')
-                //                 .contains(
-                //               ctrlSearch.text.toLowerCase(),
-                //             ) ||
-                //             (record.partnerIdDisplayName ?? '')
-                //                 .toLowerCase()
-                //                 .contains(
-                //                   ctrlSearch.text.toLowerCase(),
-                //                 )) {
-                //           return AwsAdminUsersRecordCard(
-                //             record: record,
-                //           );
-                //         }
-
-                //         return const SizedBox();
-                //       },
-                //     ),
-                //   ),
-                // ),
               ],
             ),
     );
@@ -384,9 +401,10 @@ class AwsAdminUsersPageError extends StatelessWidget {
 }
 
 class MyDataTableSource extends DataTableSource {
-  MyDataTableSource(this.data, this.context);
+  MyDataTableSource(this.data, this.context, this.insertUserId);
   final List<AwsUser> data;
   final BuildContext context;
+  void Function(int value) insertUserId;
   Set<int> selectedRows = {};
 
   @override
@@ -447,10 +465,12 @@ class MyDataTableSource extends DataTableSource {
         DataCell(onTap: () {}, Text(item.commissionSplit.toString())),
         DataCell(
           onTap: () {
-            context.pushNamed(
-              AwsAdminUsersDetailPage.name,
-              pathParameters: {'id': item.id.toString()},
-            );
+            insertUserId(item.id);
+            //  insertUserId
+            // context.pushNamed(
+            //   AwsAdminUsersDetailPage.name,
+            //   pathParameters: {'id': item.id.toString()},
+            // );
           },
           const HeroIcon(
             HeroIcons.pencilSquare,

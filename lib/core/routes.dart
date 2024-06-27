@@ -101,8 +101,8 @@ final routes = GoRouter(
       },
     ),
     GoRoute(
-      name: CreateUsersPage.name,
-      path: CreateUsersPage.path,
+      name: CreateUserPage.name,
+      path: CreateUserPage.path,
       builder: (context, state) {
         return const CreateUsersPageWrapperProvider();
       },
@@ -161,6 +161,7 @@ final routes = GoRouter(
       builder: (context, state) {
         return ManageTeamDetailWrapperProvider(
           id: state.pathParameters['id']!,
+          managerName: state.pathParameters['managerName']!,
         );
       },
     ),

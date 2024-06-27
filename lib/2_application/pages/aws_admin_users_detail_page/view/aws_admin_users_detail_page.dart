@@ -30,26 +30,37 @@ import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
 class AwsAdminUsersDetailPageWrapperProvider extends StatelessWidget {
-  const AwsAdminUsersDetailPageWrapperProvider({required this.id, super.key});
+  const AwsAdminUsersDetailPageWrapperProvider({
+    required this.id,
+    super.key,
+    this.onUserUpdate,
+  });
   final String id;
+  final void Function()? onUserUpdate;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<AwsAdminUsersDetailCubit>(),
       child: AwsAdminUsersDetailPage(
         id: id,
+        onUserUpdate: onUserUpdate,
       ),
     );
   }
 }
 
 class AwsAdminUsersDetailPage extends StatefulWidget {
-  const AwsAdminUsersDetailPage({required this.id, super.key});
+  const AwsAdminUsersDetailPage({
+    required this.id,
+    super.key,
+    this.onUserUpdate,
+  });
 
   static const name = 'awsAdminUsersDetail';
   static const path = '/awsAdminUsersDetail/:id';
 
   final String id;
+  final void Function()? onUserUpdate;
 
   @override
   State<AwsAdminUsersDetailPage> createState() =>
@@ -78,6 +89,16 @@ class _AwsAdminUsersDetailPageState extends State<AwsAdminUsersDetailPage> {
           'Edit User',
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          if (widget.onUserUpdate != null) ...[
+            IconButton(
+              onPressed: () {
+                context.pop();
+              },
+              icon: const HeroIcon(HeroIcons.xMark),
+            ),
+          ],
+        ],
       ),
       body: RefreshIndicator(
         color: const Color(0xff0083ff),
@@ -102,6 +123,7 @@ class _AwsAdminUsersDetailPageState extends State<AwsAdminUsersDetailPage> {
               } else if (state is AwsAdminUsersDetailStateLoaded) {
                 return EditLandingPricePage(
                   user: state.user,
+                  onUserUpdate: widget.onUserUpdate,
                 );
               } else if (state is AwsAdminUsersDetailStateError) {
                 return SalesListPageError(
@@ -150,9 +172,14 @@ class SalesListPageError extends StatelessWidget {
 }
 
 class EditLandingPricePage extends StatefulWidget {
-  const EditLandingPricePage({required this.user, super.key});
+  const EditLandingPricePage({
+    required this.user,
+    super.key,
+    this.onUserUpdate,
+  });
 
   final AwsUser user;
+  final void Function()? onUserUpdate;
 
   @override
   State<EditLandingPricePage> createState() => _EditLandingPricePageState();
@@ -405,6 +432,9 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
 
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+                if (widget.onUserUpdate != null) {
+                  widget.onUserUpdate!();
                 }
               } else {
                 if (context.mounted) {

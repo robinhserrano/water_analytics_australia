@@ -27,122 +27,130 @@ import 'package:water_analytics_australia/core/widgets/custom_text_field.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
+//stl
+
 class CreateUsersPageWrapperProvider extends StatelessWidget {
-  const CreateUsersPageWrapperProvider({super.key});
+  const CreateUsersPageWrapperProvider({super.key, this.onUserCreated});
+  final void Function()? onUserCreated;
   // final String id;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<CreateUsersCubit>(),
-      child: const CreateUsersPage(),
+      child: CreateUserPage(onUserCreated: onUserCreated),
     );
   }
 }
 
-class CreateUsersPage extends StatefulWidget {
-  const CreateUsersPage({super.key});
+// class CreateUsersPage extends StatefulWidget {
+//   const CreateUsersPage({super.key, this.onUserCreated});
+
+//   final void Function()? onUserCreated;
+
+//   static const name = 'createUsers';
+//   static const path = '/createUsers';
+
+//   // final String id;
+
+//   @override
+//   State<CreateUsersPage> createState() => _CreateUsersPageState();
+// }
+
+// class _CreateUsersPageState extends State<CreateUsersPage> {
+//   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+//   final ctrlSearch = TextEditingController();
+//   bool isValidating = false;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     // context.read<CreateUsersCubit>().fetchUserById(widget.id);
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       key: _scaffoldKey,
+//       backgroundColor: const Color(0xfff9fafb),
+//       appBar: AppBar(
+//         backgroundColor: Colors.black, //const Color(0xff0083ff),
+//         title: const Text(
+//           'Create User',
+//           style: TextStyle(color: Colors.white),
+//         ),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 4),
+//         child: BlocBuilder<CreateUsersCubit, CreateUsersCubitState>(
+//           builder: (context, state) {
+//             // if (state is CreateUsersStateLoading) {
+//             //   return ListView.builder(
+//             //     itemCount: 10,
+//             //     itemBuilder: (context, index) => const Padding(
+//             //       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+//             //       child: ShimmerBox(
+//             //         height: 110,
+//             //       ),
+//             //     ),
+//             //   );
+//             // } else if (state is CreateUsersStateLoaded) {
+//             return const CreateUserPage(
+//                 //     user: state.user,
+//                 );
+//             // } else if (state is CreateUsersStateError) {
+//             //   return SalesListPageError(
+//             //     onRefresh: () {},
+
+//             //     //  =>
+//             //     //     context.read<CreateUsersCubit>().fetchUserById(
+//             //     //           widget.id,
+//             //     //         ),
+//             //   );
+//             // }
+//             // return const SizedBox(
+//             //   child: Text('unknown'),
+//             // );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class SalesListPageError extends StatelessWidget {
+//   const SalesListPageError({
+//     required this.onRefresh,
+//     super.key,
+//   });
+//   final void Function()? onRefresh;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           const Text(
+//             'Something went wrong',
+//           ),
+//           const SizedBox(height: 32),
+//           ElevatedButton(
+//             onPressed: onRefresh,
+//             child: const Text('Refresh'),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+class CreateUserPage extends StatefulWidget {
+  const CreateUserPage({super.key, this.onUserCreated});
+
+  final void Function()? onUserCreated;
 
   static const name = 'createUsers';
   static const path = '/createUsers';
-
-  // final String id;
-
-  @override
-  State<CreateUsersPage> createState() => _CreateUsersPageState();
-}
-
-class _CreateUsersPageState extends State<CreateUsersPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  final ctrlSearch = TextEditingController();
-  bool isValidating = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // context.read<CreateUsersCubit>().fetchUserById(widget.id);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xfff9fafb),
-      appBar: AppBar(
-        backgroundColor: Colors.black, //const Color(0xff0083ff),
-        title: const Text(
-          'Create User',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: BlocBuilder<CreateUsersCubit, CreateUsersCubitState>(
-          builder: (context, state) {
-            // if (state is CreateUsersStateLoading) {
-            //   return ListView.builder(
-            //     itemCount: 10,
-            //     itemBuilder: (context, index) => const Padding(
-            //       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            //       child: ShimmerBox(
-            //         height: 110,
-            //       ),
-            //     ),
-            //   );
-            // } else if (state is CreateUsersStateLoaded) {
-            return const CreateUserPage(
-                //     user: state.user,
-                );
-            // } else if (state is CreateUsersStateError) {
-            //   return SalesListPageError(
-            //     onRefresh: () {},
-
-            //     //  =>
-            //     //     context.read<CreateUsersCubit>().fetchUserById(
-            //     //           widget.id,
-            //     //         ),
-            //   );
-            // }
-            // return const SizedBox(
-            //   child: Text('unknown'),
-            // );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class SalesListPageError extends StatelessWidget {
-  const SalesListPageError({
-    required this.onRefresh,
-    super.key,
-  });
-  final void Function()? onRefresh;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Something went wrong',
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: onRefresh,
-            child: const Text('Refresh'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CreateUserPage extends StatefulWidget {
-  const CreateUserPage({super.key});
-
-  //final CloudUser user;
 
   @override
   State<CreateUserPage> createState() => _CreateUserPageState();
@@ -180,6 +188,23 @@ class _CreateUserPageState extends State<CreateUserPage> {
     final cubit = context.read<CreateUsersCubit>();
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black, //const Color(0xff0083ff),
+        title: const Text(
+          'Create User',
+          style: TextStyle(color: Colors.white),
+        ),
+
+        actions: [
+          if(widget.onUserCreated != null)...[ 
+          IconButton(
+            onPressed: () {
+              context.pop();
+            },
+            icon: const HeroIcon(HeroIcons.xMark),
+          ),],
+        ],
+      ),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 600),
@@ -344,6 +369,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+
+                if (widget.onUserCreated != null) {
+                  widget.onUserCreated!();
                 }
               } else {
                 if (context.mounted) {

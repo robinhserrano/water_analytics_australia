@@ -61,7 +61,7 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          context.pushNamed(CreateUsersPage.name);
+          context.pushNamed(CreateUserPage.name);
         },
         label: const Row(
           children: [HeroIcon(HeroIcons.plus), Text(' Create User')],

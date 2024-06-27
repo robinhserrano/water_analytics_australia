@@ -183,7 +183,10 @@ class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
             onTap: () {
               context.pushNamed(
                 ManageTeamDetail.name,
-                pathParameters: {'id': salesManager.id.toString()},
+                pathParameters: {
+                  'id': salesManager.id.toString(),
+                  'managerName': salesManager.displayName,
+                },
               );
             },
           );

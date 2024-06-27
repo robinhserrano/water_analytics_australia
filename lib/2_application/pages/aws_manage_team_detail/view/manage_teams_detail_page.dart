@@ -18,8 +18,13 @@ import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
 class ManageTeamDetailWrapperProvider extends StatelessWidget {
-  const ManageTeamDetailWrapperProvider({required this.id, super.key});
+  const ManageTeamDetailWrapperProvider({
+    required this.id,
+    required this.managerName,
+    super.key,
+  });
   final String id;
+  final String managerName;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -29,18 +34,24 @@ class ManageTeamDetailWrapperProvider extends StatelessWidget {
       ),
       child: ManageTeamDetail(
         id: id,
+        managerName: managerName,
       ),
     );
   }
 }
 
 class ManageTeamDetail extends StatefulWidget {
-  const ManageTeamDetail({required this.id, super.key});
+  const ManageTeamDetail({
+    required this.id,
+    required this.managerName,
+    super.key,
+  });
 
   static const name = 'ManageTeamDetail';
-  static const path = '/ManageTeamDetail/:id';
+  static const path = '/ManageTeamDetail/:id/:managerName';
 
   final String id;
+  final String managerName;
 
   static final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -64,11 +75,10 @@ class _ManageTeamDetailState extends State<ManageTeamDetail> {
       endDrawer: const HomeEndDrawer(),
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
-        //automaticallyImplyLeading: false,
         backgroundColor: Colors.black,
-        title: const Text(
-          'Manage Teamsz',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          "${widget.managerName}'s Team",
+          style: const TextStyle(color: Colors.white),
         ),
         actions: [
           IconButton(
@@ -175,7 +185,7 @@ class _ManageTeamDetailLoadedState extends State<ManageTeamDetailLoaded> {
     return Scaffold(
         body: Column(
       children: [
-        Text(widget.team.toString()),
+      //  Text(widget.team.toString()),
         Expanded(
           child: PaginatedDataTable2(
             availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
