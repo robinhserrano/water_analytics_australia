@@ -378,14 +378,18 @@ String getInitials({required String name}) {
 
 String? getLevel2SalesManagerName(List<AwsUser> users, AwsUser currentUser) {
   // final user = users.firstWhere((u) => u.id == userId);
-  if (currentUser.accessLevel >= 3 || currentUser.salesManagerId == null) {
+  try {
+    if (currentUser.accessLevel >= 3 || currentUser.salesManagerId == null) {
+      return null;
+    }
+
+    final manager = users.firstWhere((u) => u.id == currentUser.salesManagerId);
+    if (manager.accessLevel != 2) {
+      return null;
+    }
+
+    return manager.displayName;
+  } catch (e) {
     return null;
   }
-
-  final manager = users.firstWhere((u) => u.id == currentUser.salesManagerId);
-  if (manager.accessLevel != 2) {
-    return null;
-  }
-
-  return manager.displayName;
 }

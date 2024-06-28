@@ -88,8 +88,10 @@ class HomeEndDrawer extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () async {
-                  final box = await Hive.openBox<UserHive>('user');
-                  await box.clear();
+                  final userBox = await Hive.openBox<UserHive>('user');
+                  await userBox.clear();
+                  final sortBox = await Hive.openBox<UserHive>('user');
+                  await sortBox.clear();
                   if (!kIsWeb) {
                     await GoogleSignIn().signOut();
                   }

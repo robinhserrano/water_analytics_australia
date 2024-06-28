@@ -30,15 +30,19 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
     emit(const AwsSalesStateLoading());
     try {
       final user = await HiveHelper.getCurrentUser();
-   
+
       List<AwsSalesOrder>? data;
 
       // //ACCESS RESTRICTION
       if (user?.accessLevel == 1) {
         data = await repo.fetchSalesByReps([user?.displayName ?? '']);
+      } else if (user?.accessLevel == 2 || user?.accessLevel == 3) {
+        final users = await repo.fetchUsers();
+        final userNames = users!.map((e) => e.displayName).toList();
+        data = await repo.fetchSalesByReps(userNames);
       } else {
         data = await repo.fetchSales();
-     }
+      }
 
       if (data != null) {
         print('totalllll ' + data.length.toString());

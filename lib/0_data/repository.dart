@@ -260,13 +260,13 @@ class Repository {
   }
 
   Future<List<AwsUser>?> fetchUsers() async {
-    final user = await HiveHelper.getAllUsers();
+    final user = await HiveHelper.getCurrentUser();
     try {
       final response = await client.get<List<dynamic>>(
         '$url/users',
         options: Options(
           headers: {
-            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.authorizationHeader: 'Bearer ${user!.accessToken}',
             HttpHeaders.contentTypeHeader: 'application/json',
             HttpHeaders.acceptHeader: 'application/json',
           },
@@ -278,6 +278,32 @@ class Repository {
       // var hehe = parsedData.where((e) => e.salesManagerId == user.first.userId);
       // var hihi = hehe ;
 
+      if (user.accessLevel == 2 || user.accessLevel == 3) {
+        final salesTeamManager = parsedData
+            .where(
+              (e) => e.salesManagerId == user.userId && e.accessLevel == 2,
+            )
+            .toList();
+
+        final managers = [
+          ...salesTeamManager.map((e) => e.id),
+          user.userId,
+        ];
+
+        final salesPerson = parsedData
+            .where(
+              (e) => managers.contains(e.salesManagerId),
+            )
+            .toList();
+
+        final currentUser = parsedData.firstWhere(
+          (e) => e.id == user.userId,
+        );
+
+        return [currentUser, ...salesTeamManager, ...salesPerson]
+            .toSet()
+            .toList();
+      }
       return parsedData;
     } catch (e) {
       print(e);
