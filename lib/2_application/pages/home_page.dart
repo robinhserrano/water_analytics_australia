@@ -50,10 +50,12 @@ class _HomePageState extends State<HomePage> {
       if (userAccessLevel >= 4) ...[
         const AwsAdminUsersPageWrapperProvider(),
       ],
-      if (userAccessLevel > 2 && userAccessLevel < 4) ...[
+      if (userAccessLevel >= 2 && userAccessLevel < 4) ...[
         const MyTeamPageWrapperProvider(),
       ],
-      const ManageTeamsWrapperProvider(),
+      if (userAccessLevel >= 4) ...[
+        const ManageTeamsWrapperProvider(),
+      ],
       if (!kIsWeb) ...[
         const SalesPageWrapperProvider(),
       ],
@@ -74,15 +76,18 @@ class _HomePageState extends State<HomePage> {
           label: 'Users',
         ),
       ],
-      if (userAccessLevel > 2 && userAccessLevel < 4)
+      if (userAccessLevel > 1 && userAccessLevel < 4) ...[
         const NavigationDestination(
           icon: HeroIcon(HeroIcons.userGroup),
           label: 'Team',
         ),
-      const NavigationDestination(
-        icon: Icon(FontAwesomeIcons.usersGear),
-        label: 'Manage Team',
-      ),
+      ],
+      if (userAccessLevel >= 4) ...[
+        const NavigationDestination(
+          icon: Icon(FontAwesomeIcons.usersGear),
+          label: 'Manage Team',
+        ),
+      ],
       if (!kIsWeb) ...[
         const NavigationDestination(
           icon: HeroIcon(HeroIcons.circleStack),

@@ -354,6 +354,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
                   commissionSplit:
                       double.tryParse(ctrlCommissionSplit.text) ?? 0,
                   salesManagerId: null,
+                  selfGen: 1000, 
+                  companyLead: 500, 
                 ),
               );
 

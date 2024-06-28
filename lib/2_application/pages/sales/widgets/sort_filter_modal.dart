@@ -114,6 +114,7 @@ class _OdooSortFilterModalState extends State<OdooSortFilterModal> {
                             ),
                             selectedSortValue.name,
                             [], 
+                            false, 
                           ),
                         );
 

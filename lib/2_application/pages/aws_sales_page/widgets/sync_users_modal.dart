@@ -72,7 +72,6 @@ class _SyncUsersState extends State<SyncUsers> {
 
   @override
   Widget build(BuildContext context) {
- 
     // if (widget.salesRepNames.isNotEmpty) {
     if (widget.salesRepNames.isNotEmpty) {
       return Container(
@@ -150,6 +149,8 @@ class _SyncUsersState extends State<SyncUsers> {
                                       widget.salesRepNames[index],
                                     ),
                                     salesManagerId: null,
+                                    selfGen: 1000,
+                                    companyLead: 500,
                                   ),
                                 );
 

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
-import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/pick_users_modal.dart';
@@ -29,8 +28,9 @@ class _SortFilterModalState extends State<SortFilterModal> {
   List<InvoicePaymentStatus> selectedInvoicePaymentStatus = [];
   List<DeliveryStatus> selectedDeliverStatus = [];
   bool commissionPayableActive = false;
+  bool commissionPayableAccountsActive = false;
   List<String> selectedNames = [];
-  int accessLevel = 0;
+  int userAccessLevel = 0;
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
 
   Future<void> _getUserFromHive() async {
     final user = await HiveHelper.getCurrentUser();
-    accessLevel = user?.accessLevel ?? 1;
+    userAccessLevel = user?.accessLevel ?? 1;
     setState(() {});
   }
 
@@ -132,6 +132,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                             ),
                             selectedSortValue.name,
                             selectedNames,
+                            commissionPayableAccountsActive,
                           ),
                         );
 
@@ -278,6 +279,54 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   ],
                 ),
               ),
+              if (userAccessLevel > 4) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: commissionPayableAccountsActive,
+                        onChanged: (value) {
+                          if (value == false) {
+                            setState(() {
+                              commissionPayableAccountsActive = false;
+                            });
+                          } else {
+                            setState(() {
+                              commissionPayableAccountsActive = true;
+                              selectedCommissionStatus
+                                ..clear()
+                                ..add(
+                                  CommissionStatus.notPaid,
+                                );
+                              selectedInvoicePaymentStatus
+                                ..clear()
+                                ..add(
+                                  InvoicePaymentStatus.full,
+                                );
+
+                              selectedDeliverStatus
+                                ..clear()
+                                ..add(
+                                  DeliveryStatus.full,
+                                );
+                            });
+                          }
+                        },
+                      ),
+                      const Expanded(
+                        child: Text(
+                          'Payable Commissions (Accounts)',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff243242),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               const Padding(
                 padding: EdgeInsets.only(
                   left: 24,
@@ -286,7 +335,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 child: Divider(),
               ),
               //ACCESS RESTRICTION
-              if (accessLevel >= 2) ...[
+              if (userAccessLevel >= 2) ...[
                 //FIX THIS 6/24
                 const Padding(
                   padding: EdgeInsets.only(left: 24),

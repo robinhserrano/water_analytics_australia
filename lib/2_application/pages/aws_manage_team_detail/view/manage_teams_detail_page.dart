@@ -13,6 +13,7 @@ import 'package:water_analytics_australia/2_application/pages/aws_admin_users_de
 import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/bloc/manage_team_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
@@ -68,6 +69,19 @@ class ManageTeamDetail extends StatefulWidget {
 }
 
 class _ManageTeamDetailState extends State<ManageTeamDetail> {
+  int userAccessLevel = 1;
+  @override
+  void initState() {
+    _getUserFromHive();
+    super.initState();
+  }
+
+  Future<void> _getUserFromHive() async {
+    final user = await HiveHelper.getCurrentUser();
+    userAccessLevel = user?.accessLevel ?? 1;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,6 +123,7 @@ class _ManageTeamDetailState extends State<ManageTeamDetail> {
             } else if (state is ManageTeamDetailStateLoaded) {
               return ManageTeamDetailLoaded(
                 team: state.team,
+                userAccessLevel: userAccessLevel,
               );
             } else if (state is ManageTeamDetailStateError) {
               return ManageTeamDetailError(
@@ -125,9 +140,14 @@ class _ManageTeamDetailState extends State<ManageTeamDetail> {
 }
 
 class ManageTeamDetailLoaded extends StatefulWidget {
-  const ManageTeamDetailLoaded({required this.team, super.key});
+  const ManageTeamDetailLoaded({
+    required this.team,
+    required this.userAccessLevel,
+    super.key,
+  });
 
   final List<AwsUser> team;
+  final int userAccessLevel;
 
   @override
   State<ManageTeamDetailLoaded> createState() => _ManageTeamDetailLoadedState();
@@ -183,33 +203,42 @@ class _ManageTeamDetailLoadedState extends State<ManageTeamDetailLoaded> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-      //  Text(widget.team.toString()),
-        Expanded(
-          child: PaginatedDataTable2(
-            availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
-            rowsPerPage: _rowsPerPage,
-            onRowsPerPageChanged: (value) {
-              setState(() {
-                if (value != null) {
-                  _rowsPerPage = value;
-                }
-              });
-            },
-            minWidth: 1200,
-            columns: const [
-              DataColumn(label: Text('Name')),
-              DataColumn(label: Text('Email')),
-              DataColumn(label: Text('Role')),
-              DataColumn(label: Text('Commission %')),
-              DataColumn(label: Text('Actions')),
-            ],
-            source: MyDataTableSource(widget.team, context),
+      body: Column(
+        children: [
+          //  Text(widget.team.toString()),
+          Expanded(
+            child: PaginatedDataTable2(
+              availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
+              rowsPerPage: _rowsPerPage,
+              onRowsPerPageChanged: (value) {
+                setState(() {
+                  if (value != null) {
+                    _rowsPerPage = value;
+                  }
+                });
+              },
+              minWidth: 1200,
+              columns: [
+                const DataColumn(
+                  label: Text('Name'),
+                ),
+                const DataColumn(label: Text('Email')),
+                const DataColumn(label: Text('Role')),
+                const DataColumn(label: Text('Commission %')),
+                if (widget.userAccessLevel >= 3) ...[
+                  const DataColumn(label: Text('Actions')),
+                ],
+              ],
+              source: MyDataTableSource(
+                widget.team,
+                context,
+                widget.userAccessLevel,
+              ),
+            ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
 
     // Scaffold(
     //   backgroundColor: Colors.white,
@@ -293,9 +322,10 @@ class ManageTeamDetailError extends StatelessWidget {
 }
 
 class MyDataTableSource extends DataTableSource {
-  MyDataTableSource(this.data, this.context);
+  MyDataTableSource(this.data, this.context, this.userAccessLevel);
   final List<AwsUser> data;
   final BuildContext context;
+  final int userAccessLevel;
   Set<int> selectedRows = {};
 
   @override
@@ -321,7 +351,31 @@ class MyDataTableSource extends DataTableSource {
               pathParameters: {'rep': item.displayName},
             );
           },
-          Text(item.displayName),
+          Row(
+            children: [
+              if (getLevel2SalesManagerName(data, item) != null) ...[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 8.0,
+                    top: 8.0,
+                    bottom: 8.0,
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.teal,
+                    child: Text(
+                      getInitials(
+                        name: getLevel2SalesManagerName(data, item) ?? '',
+                      ),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+              Text(item.displayName),
+            ],
+          ),
         ),
         DataCell(onTap: () {}, Text(item.email)),
         DataCell(
@@ -341,21 +395,44 @@ class MyDataTableSource extends DataTableSource {
           ),
         ),
         DataCell(onTap: () {}, Text(item.commissionSplit.toString())),
-        DataCell(
-          onTap: () {
-            context.pushNamed(
-              AwsAdminUsersDetailPage.name,
-              pathParameters: {'id': item.id.toString()},
-            );
-          },
-          const HeroIcon(
-            HeroIcons.pencilSquare,
+        if (userAccessLevel >= 3) ...[
+          DataCell(
+            onTap: () {
+              context.pushNamed(
+                AwsAdminUsersDetailPage.name,
+                pathParameters: {'id': item.id.toString()},
+              );
+            },
+            const HeroIcon(
+              HeroIcons.pencilSquare,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }
 
   @override
   int get selectedRowCount => selectedRows.length;
+}
+
+String getInitials({required String name}) {
+  if (name.isEmpty) return '';
+
+  final words = name.split(' ');
+  return words.take(2).map((word) => word[0]).join().toUpperCase();
+}
+
+String? getLevel2SalesManagerName(List<AwsUser> users, AwsUser currentUser) {
+  // final user = users.firstWhere((u) => u.id == userId);
+  if (currentUser.accessLevel >= 3 || currentUser.salesManagerId == null) {
+    return null;
+  }
+
+  final manager = users.firstWhere((u) => u.id == currentUser.salesManagerId);
+  if (manager.accessLevel != 2) {
+    return null;
+  }
+
+  return manager.displayName;
 }

@@ -11,6 +11,7 @@ class SortFilterHive {
     this.selectedDeliverStatus,
     this.selectedSortValue,
     this.selectedNames,
+    this.confirmedByManager,
   );
   @HiveField(0)
   final List<String> selectedCommissionStatus;
@@ -26,4 +27,7 @@ class SortFilterHive {
 
   @HiveField(4)
   final List<String> selectedNames;
+
+  @HiveField(5)
+  final bool confirmedByManager;
 }

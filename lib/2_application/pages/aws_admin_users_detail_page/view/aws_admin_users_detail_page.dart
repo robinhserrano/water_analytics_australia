@@ -187,6 +187,8 @@ class EditLandingPricePage extends StatefulWidget {
 
 class _EditLandingPricePageState extends State<EditLandingPricePage> {
   TextEditingController ctrlCommissionSplit = TextEditingController();
+  TextEditingController ctrlSelfGen = TextEditingController();
+  TextEditingController ctrlCompLead = TextEditingController();
   // TextEditingController ctrlInstallationService = TextEditingController();
   // TextEditingController ctrlSupplyOnly = TextEditingController();
   bool isValidating = false;
@@ -194,6 +196,8 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
   @override
   void initState() {
     ctrlCommissionSplit.text = widget.user.commissionSplit.toString();
+    ctrlSelfGen.text = widget.user.selfGen.toString();
+    ctrlCompLead.text = widget.user.companyLead.toString();
     salesManagerId = widget.user.salesManagerId;
     accessLevel = widget.user.accessLevel;
     _getUserFromHive();
@@ -248,6 +252,26 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                     setState(() {});
                   },
                   title: 'Commission Split (%)',
+                  isValidating: isValidating,
+                  inputType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+                CustomTextField(
+                  ctrl: ctrlSelfGen,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  title: 'Self Gen',
+                  isValidating: isValidating,
+                  inputType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                ),
+                CustomTextField(
+                  ctrl: ctrlCompLead,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  title: 'Company Lead',
                   isValidating: isValidating,
                   inputType:
                       const TextInputType.numberWithOptions(decimal: true),
@@ -417,6 +441,8 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                   accessLevel: accessLevel ?? widget.user.accessLevel,
                   commissionSplit:
                       double.tryParse(ctrlCommissionSplit.text) ?? 0,
+                  selfGen: double.tryParse(ctrlSelfGen.text) ?? 0,
+                  companyLead: double.tryParse(ctrlCompLead.text) ?? 0,
                 ),
               );
 

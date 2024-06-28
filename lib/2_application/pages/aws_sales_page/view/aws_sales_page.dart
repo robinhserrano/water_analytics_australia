@@ -147,8 +147,10 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                       final deliverStatus =
                           sortFilterData.selectedDeliverStatus;
                       final selectedNames = sortFilterData.selectedNames;
+                      final confirmedByManager =
+                          sortFilterData.confirmedByManager;
 
-                      final temp = state.records
+                      final tempFiltered = state.records
                           .where(
                             (record) =>
                                 (!commissionStatus.any(
@@ -169,6 +171,14 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                                 )),
                           )
                           .toList();
+
+                      final temp = confirmedByManager
+                          ? tempFiltered
+                              .where(
+                                (record) => record.confirmedByManager == true,
+                              )
+                              .toList()
+                          : tempFiltered;
 
                       var filteredRecords = <AwsSalesOrder>[];
 
