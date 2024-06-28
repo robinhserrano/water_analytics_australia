@@ -45,7 +45,8 @@ class ManageTeamsCubit extends Cubit<ManageTeamsCubitState> {
               .toList();
 
           filteredTeams.add(
-              [manager, ...salesTeamManager, ...salesPerson].toSet().toList());
+            [manager, ...salesTeamManager, ...salesPerson].toSet().toList(),
+          );
         }
 
         emit(ManageTeamsStateLoaded(filteredTeams));

@@ -26,20 +26,23 @@ class ManageTeamDetailCubit extends Cubit<ManageTeamDetailCubitState> {
       final users = await repo.fetchUsers();
       if (users != null) {
         // var filteredUsers = <AwsUser>[];
-        final managers = users
+        final salesManagers = users
             .where((e) => e.accessLevel == 3 && e.id == int.parse(managerId))
             .toList();
         final filteredTeams = <List<AwsUser>>[];
-        for (final manager in managers) {
+        for (final salesManager in salesManagers) {
+          //lvl3
           final salesTeamManager = users
               .where(
-                (e) => e.salesManagerId == manager.id && e.accessLevel == 2,
+                (e) =>
+                    e.salesManagerId == salesManager.id && e.accessLevel == 2,
               )
               .toList();
 
           final managers = [
+            salesManagers.first,
             ...salesTeamManager.map((e) => e.id),
-            (user?.userId ?? 0),
+            // (user?.userId ?? 0),
           ];
 
           final salesPerson = users
@@ -49,7 +52,9 @@ class ManageTeamDetailCubit extends Cubit<ManageTeamDetailCubitState> {
               .toList();
 
           filteredTeams.add(
-            [manager, ...salesTeamManager, ...salesPerson].toSet().toList(),
+            [salesManagers.first, ...salesTeamManager, ...salesPerson]
+                .toSet()
+                .toList(),
           );
         }
 
