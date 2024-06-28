@@ -962,8 +962,8 @@ double calculateFinalCommission(
   ))
       ? 200
       : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
-          ? 1000
-          : 500;
+          ? (order.user?.selfGen ?? 1000)
+          : (order.user?.companyLead ?? 500);
   final finalCommission = extraCommission + baseCommission;
 
   return finalCommission;
