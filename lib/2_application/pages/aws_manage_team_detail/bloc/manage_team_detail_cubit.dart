@@ -40,7 +40,7 @@ class ManageTeamDetailCubit extends Cubit<ManageTeamDetailCubitState> {
               .toList();
 
           final managers = [
-            salesManagers.first,
+            salesManagers.first.id,
             ...salesTeamManager.map((e) => e.id),
             // (user?.userId ?? 0),
           ];
