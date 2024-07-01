@@ -90,7 +90,7 @@ class HomeEndDrawer extends StatelessWidget {
                 onTap: () async {
                   final userBox = await Hive.openBox<UserHive>('user');
                   await userBox.clear();
-                  final sortBox = await Hive.openBox<UserHive>('user');
+                  final sortBox = await Hive.openBox<UserHive>('sortFilter');
                   await sortBox.clear();
                   if (!kIsWeb) {
                     await GoogleSignIn().signOut();

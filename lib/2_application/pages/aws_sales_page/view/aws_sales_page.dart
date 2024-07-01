@@ -101,6 +101,13 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
         ),
         actions: [
           IconButton(
+            onPressed: () => context.read<AwsSalesCubit>().fetchSales(),
+            icon: const HeroIcon(
+              HeroIcons.arrowPath,
+              color: Colors.white,
+            ),
+          ),
+          IconButton(
             onPressed: () =>
                 AwsSalesPage._scaffoldKey.currentState!.openEndDrawer(),
             icon: const HeroIcon(
@@ -396,7 +403,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                 ),
                 Expanded(
                   child: PaginatedDataTable2(
-                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50,100],
+                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
                       setState(() {
