@@ -91,7 +91,7 @@ class _ManageTeamDetailState extends State<ManageTeamDetail> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
-          "${widget.managerName}'s Team",
+          "${widget.managerName.endsWith('s') ? widget.managerName : '${widget.managerName}s'}' Team",
           style: const TextStyle(color: Colors.white),
         ),
         actions: [
@@ -149,13 +149,40 @@ class ManageTeamDetailLoaded extends StatefulWidget {
   final List<AwsUser> team;
   final int userAccessLevel;
 
+  static final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  static void closeDrawer() {
+    _scaffoldKey.currentState?.closeDrawer();
+  }
+
+  static void openDrawer() {
+    _scaffoldKey.currentState?.openEndDrawer();
+  }
+
   @override
   State<ManageTeamDetailLoaded> createState() => _ManageTeamDetailLoadedState();
 }
 
 class _ManageTeamDetailLoadedState extends State<ManageTeamDetailLoaded> {
   final ctrlSearch = TextEditingController();
-  int _rowsPerPage = 10;
+  int _rowsPerPage = 50;
+  int? id;
+
+  Widget? endDrawer({int? id}) {
+    final canEdit = id != null;
+
+    return canEdit
+        ? Drawer(
+            width: 500,
+            child: AwsAdminUsersDetailPageWrapperProvider(
+              id: id.toString(),
+              onUserUpdate: () {
+                context.read<ManageTeamDetailCubit>().fetchUsers();
+              },
+            ),
+          )
+        : null;
+  }
 
   Widget searchBox() {
     return Container(
@@ -203,12 +230,14 @@ class _ManageTeamDetailLoadedState extends State<ManageTeamDetailLoaded> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: ManageTeamDetailLoaded._scaffoldKey,
+      endDrawer: endDrawer(id: id),
       body: Column(
         children: [
           //  Text(widget.team.toString()),
           Expanded(
             child: PaginatedDataTable2(
-              availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
+              availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
               rowsPerPage: _rowsPerPage,
               onRowsPerPageChanged: (value) {
                 setState(() {
@@ -230,67 +259,17 @@ class _ManageTeamDetailLoadedState extends State<ManageTeamDetailLoaded> {
                 ],
               ],
               source: MyDataTableSource(
-                widget.team,
-                context,
-                widget.userAccessLevel,
-              ),
+                  widget.team, context, widget.userAccessLevel, (int value) {
+                setState(() {
+                  id = value;
+                  ManageTeamDetailLoaded.openDrawer();
+                });
+              }),
             ),
           ),
         ],
       ),
     );
-
-    // Scaffold(
-    //   backgroundColor: Colors.white,
-    //   body: widget.users.isEmpty
-    //       ? Column(
-    //           children: [
-    //             Row(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 searchBox(),
-    //               ],
-    //             ),
-    //             const Expanded(
-    //               child: Center(
-    //                 child: Text('No sales yet.'),
-    //               ),
-    //             ),
-    //           ],
-    //         )
-    //       : Column(
-    //           children: [
-    //             Row(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 searchBox(),
-    //               ],
-    //             ),
-    //             Expanded(
-    //               child: PaginatedDataTable2(
-    //                 availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
-    //                 rowsPerPage: _rowsPerPage,
-    //                 onRowsPerPageChanged: (value) {
-    //                   setState(() {
-    //                     if (value != null) {
-    //                       _rowsPerPage = value;
-    //                     }
-    //                   });
-    //                 },
-    //                 minWidth: 1200,
-    //                 columns: const [
-    //                   DataColumn(label: Text('Name')),
-    //                   DataColumn(label: Text('Email')),
-    //                   DataColumn(label: Text('Role')),
-    //                   DataColumn(label: Text('Commission %')),
-    //                   DataColumn(label: Text('Actions')),
-    //                 ],
-    //                 source: MyDataTableSource(widget.users, context),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    // );
   }
 }
 
@@ -322,10 +301,16 @@ class ManageTeamDetailError extends StatelessWidget {
 }
 
 class MyDataTableSource extends DataTableSource {
-  MyDataTableSource(this.data, this.context, this.userAccessLevel);
+  MyDataTableSource(
+    this.data,
+    this.context,
+    this.userAccessLevel,
+    this.insertUserId,
+  );
   final List<AwsUser> data;
   final BuildContext context;
   final int userAccessLevel;
+  void Function(int value) insertUserId;
   Set<int> selectedRows = {};
 
   @override
@@ -377,7 +362,15 @@ class MyDataTableSource extends DataTableSource {
             ],
           ),
         ),
-        DataCell(onTap: () {}, Text(item.email)),
+        DataCell(
+          onTap: () {
+            context.pushNamed(
+              MemberDetailPage.name,
+              pathParameters: {'rep': item.displayName},
+            );
+          },
+          Text(item.email),
+        ),
         DataCell(
           onTap: () {},
           Card(
@@ -398,15 +391,23 @@ class MyDataTableSource extends DataTableSource {
         if (userAccessLevel >= 3) ...[
           DataCell(
             onTap: () {
-              context.pushNamed(
-                AwsAdminUsersDetailPage.name,
-                pathParameters: {'id': item.id.toString()},
-              );
+              insertUserId(item.id);
             },
             const HeroIcon(
               HeroIcons.pencilSquare,
             ),
           ),
+          // DataCell(
+          //   onTap: () {
+          //     context.pushNamed(
+          //       AwsAdminUsersDetailPage.name,
+          //       pathParameters: {'id': item.id.toString()},
+          //     );
+          //   },
+          //   const HeroIcon(
+          //     HeroIcons.pencilSquare,
+          //   ),
+          // ),
         ],
       ],
     );

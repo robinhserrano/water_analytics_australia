@@ -109,8 +109,10 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
-          "${widget.rep}'s Sales",
-          style: const TextStyle(color: Colors.white),
+          "${widget.rep.endsWith('s') ? widget.rep : '${widget.rep}s'}' Sales",
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
         actions: [
           IconButton(
@@ -265,7 +267,7 @@ class SalesListPageLoaded extends StatefulWidget {
 
 class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
   final ctrlSearch = TextEditingController();
-  int _rowsPerPage = 10;
+  int _rowsPerPage = 50;
   Set<String> selectedSalesNo = {};
 
   void updateSelectedSaleNo(String salesNo, bool isSelected) {
@@ -400,7 +402,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                 ),
                 Expanded(
                   child: PaginatedDataTable2(
-                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
+                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
                       setState(() {

@@ -212,7 +212,7 @@ class AdminUsersPageLoaded extends StatefulWidget {
 
 class _AdminUsersPageLoadedState extends State<AdminUsersPageLoaded> {
   final ctrlSearch = TextEditingController();
-  int _rowsPerPage = 10;
+  int _rowsPerPage = 50;
 
   Widget searchBox() {
     return Container(
@@ -299,7 +299,7 @@ class _AdminUsersPageLoadedState extends State<AdminUsersPageLoaded> {
                 ),
                 Expanded(
                   child: PaginatedDataTable2(
-                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
+                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
                       setState(() {

@@ -121,7 +121,6 @@ class ManageTeamsLoaded extends StatefulWidget {
 
 class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
   final ctrlSearch = TextEditingController();
-  int _rowsPerPage = 10;
 
   Widget searchBox() {
     return Container(
@@ -170,16 +169,16 @@ class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount:
-            widget.teams.length, // Set the number of items based on data length
+        itemCount: widget.teams.length,
         itemBuilder: (context, index) {
           final salesManager =
               widget.teams[index].firstWhere((e) => e.accessLevel == 3);
 
           return ListTile(
-            title: Text(salesManager.displayName +
-                "'s Team"), // Set the title from the data list
-            trailing: Icon(Icons.arrow_right), // Add a trailing icon
+            title: Text(
+              "${salesManager.displayName.endsWith('s') ? salesManager.displayName : '${salesManager.displayName}s'}' Team",
+            ),
+            trailing: const Icon(Icons.arrow_right),
             onTap: () {
               context.pushNamed(
                 ManageTeamDetail.name,
@@ -193,58 +192,6 @@ class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
         },
       ),
     );
-
-    // Scaffold(
-    //   backgroundColor: Colors.white,
-    //   body: widget.users.isEmpty
-    //       ? Column(
-    //           children: [
-    //             Row(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 searchBox(),
-    //               ],
-    //             ),
-    //             const Expanded(
-    //               child: Center(
-    //                 child: Text('No sales yet.'),
-    //               ),
-    //             ),
-    //           ],
-    //         )
-    //       : Column(
-    //           children: [
-    //             Row(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 searchBox(),
-    //               ],
-    //             ),
-    //             Expanded(
-    //               child: PaginatedDataTable2(
-    //                 availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
-    //                 rowsPerPage: _rowsPerPage,
-    //                 onRowsPerPageChanged: (value) {
-    //                   setState(() {
-    //                     if (value != null) {
-    //                       _rowsPerPage = value;
-    //                     }
-    //                   });
-    //                 },
-    //                 minWidth: 1200,
-    //                 columns: const [
-    //                   DataColumn(label: Text('Name')),
-    //                   DataColumn(label: Text('Email')),
-    //                   DataColumn(label: Text('Role')),
-    //                   DataColumn(label: Text('Commission %')),
-    //                   DataColumn(label: Text('Actions')),
-    //                 ],
-    //                 source: MyDataTableSource(widget.users, context),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    // );
   }
 }
 
@@ -306,7 +253,15 @@ class MyDataTableSource extends DataTableSource {
           },
           Text(item.displayName),
         ),
-        DataCell(onTap: () {}, Text(item.email)),
+        DataCell(
+          onTap: () {
+            context.pushNamed(
+              MemberDetailPage.name,
+              pathParameters: {'rep': item.displayName},
+            );
+          },
+          Text(item.email),
+        ),
         DataCell(
           onTap: () {},
           Card(

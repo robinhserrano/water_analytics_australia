@@ -150,7 +150,7 @@ class MyTeamPageLoaded extends StatefulWidget {
 
 class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
   final ctrlSearch = TextEditingController();
-  int _rowsPerPage = 10;
+  int _rowsPerPage = 50;
   int? id;
 
   Widget? endDrawer({int? id}) {
@@ -214,11 +214,23 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredUsers = ctrlSearch.text.trim().isNotEmpty
+        ? widget.users
+            .where(
+              (e) =>
+                  e.displayName
+                      .toLowerCase()
+                      .contains(ctrlSearch.text.toLowerCase()) ||
+                  e.email.toLowerCase().contains(ctrlSearch.text.toLowerCase()),
+            )
+            .toList()
+        : widget.users;
+
     return Scaffold(
       key: MyTeamPageLoaded._scaffoldKey,
       backgroundColor: Colors.white,
       endDrawer: endDrawer(id: id),
-      body: widget.users.isEmpty
+      body: filteredUsers.isEmpty
           ? Column(
               children: [
                 Row(
@@ -229,7 +241,7 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
                 ),
                 const Expanded(
                   child: Center(
-                    child: Text('No sales yet.'),
+                    child: Text('No users found.'),
                   ),
                 ),
               ],
@@ -244,7 +256,7 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
                 ),
                 Expanded(
                   child: PaginatedDataTable2(
-                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
+                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
                       setState(() {
@@ -264,7 +276,7 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
                       ],
                     ],
                     source: MyDataTableSource(
-                        widget.users, context, widget.userAccessLevel,
+                        filteredUsers, context, widget.userAccessLevel,
                         (int value) {
                       setState(() {
                         id = value;
@@ -368,7 +380,15 @@ class MyDataTableSource extends DataTableSource {
             ],
           ),
         ),
-        DataCell(onTap: () {}, Text(item.email)),
+        DataCell(
+          onTap: () {
+            context.pushNamed(
+              MemberDetailPage.name,
+              pathParameters: {'rep': item.displayName},
+            );
+          },
+          Text(item.email),
+        ),
         DataCell(
           onTap: () {},
           Card(
@@ -412,7 +432,6 @@ String getInitials({required String name}) {
 }
 
 String? getLevel2SalesManagerName(List<AwsUser> users, AwsUser currentUser) {
-  // final user = users.firstWhere((u) => u.id == userId);
   try {
     if (currentUser.accessLevel >= 3 || currentUser.salesManagerId == null) {
       return null;

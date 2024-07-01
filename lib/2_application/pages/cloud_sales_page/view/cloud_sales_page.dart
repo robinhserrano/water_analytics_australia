@@ -335,7 +335,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                 ),
                 Expanded(
                   child: PaginatedDataTable2(
-                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
+                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
                       setState(() {

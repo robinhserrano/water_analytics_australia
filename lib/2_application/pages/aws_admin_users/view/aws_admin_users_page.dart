@@ -3,6 +3,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -10,6 +11,7 @@ import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/bloc/aws_admin_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
+import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
@@ -60,7 +62,7 @@ class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.black, //(0xff0083ff),
+        backgroundColor: Colors.black,
         title: const Text(
           'Users',
           style: TextStyle(color: Colors.white),
@@ -95,84 +97,6 @@ class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
               return AwsAdminUsersPageLoaded(
                 users: state.users,
               );
-              // return FutureBuilder<Box<SortFilterHive>>(
-              //   future: Hive.openBox<SortFilterHive>('sortFilter'),
-              //   builder: (context, snapshot) {
-              //     SortFilterHive? sortFilterData;
-
-              //     try {
-              //       sortFilterData = snapshot.data?.values.first;
-              //     } catch (e) {
-              //       sortFilterData = null;
-              //     }
-
-              //     if (sortFilterData != null) {
-              //       final commissionStatus =
-              //           sortFilterData.selectedCommissionStatus;
-              //       final invoicePaymentStatus =
-              //           sortFilterData.selectedInvoicePaymentStatus;
-              //       final deliverStatus = sortFilterData.selectedDeliverStatus;
-
-              //       final filteredRecords = state.users;
-              //       //     .where(
-              //       //       (record) =>
-              //       //           (!commissionStatus.any(
-              //       //             (status) =>
-              //       //                 status !=
-              //       //                 record.xStudioCommissionPaid.toString(),
-              //       //           )) &&
-              //       //           (!invoicePaymentStatus.any(
-              //       //             (status) =>
-              //       //                 status !=
-              //       //                 record.xStudioInvoicePaymentStatus
-              //       //                     .toString(),
-              //       //           )) &&
-              //       //           (!deliverStatus.any(
-              //       //             (status) =>
-              //       //                 status != record.deliveryStatus.toString(),
-              //       //           )),
-              //       //     )
-              //       //     .toList();
-
-              //       // final selectedSortValue = sortFilterData.selectedSortValue;
-              //       // if (selectedSortValue == 'Newest') {
-              //       //   filteredRecords.sort(
-              //       //     (a, b) => b.createDate!.compareTo(a.createDate!),
-              //       //   );
-              //       // }
-              //       // if (selectedSortValue == 'Oldest') {
-              //       //   filteredRecords.sort(
-              //       //     (a, b) => a.createDate!.compareTo(b.createDate!),
-              //       //   );
-              //       // }
-              //       // if (selectedSortValue == 'A-Z') {
-              //       //   filteredRecords.sort(
-              //       //     (a, b) => (a.partnerIdDisplayName ?? '')
-              //       //         .toLowerCase()
-              //       //         .compareTo(
-              //       //           (b.partnerIdDisplayName ?? '').toLowerCase(),
-              //       //         ),
-              //       //   );
-              //       // }
-              //       // if (selectedSortValue == 'Z-A') {
-              //       //   filteredRecords.sort(
-              //       //     (a, b) => (b.partnerIdDisplayName ?? '')
-              //       //         .toLowerCase()
-              //       //         .compareTo(
-              //       //           (a.partnerIdDisplayName ?? '').toLowerCase(),
-              //       //         ),
-              //       //   );
-              //       // }
-              //       return AwsAdminUsersPageLoaded(
-              //         users: filteredRecords,
-              //       );
-              //     }
-              //     return AwsAdminUsersPageLoaded(
-              //       users: state.users,
-              //     );
-              //   },
-              // );
-              //return AwsAdminUsersPageLoaded(records: state.records);
             } else if (state is AwsAdminUsersStateError) {
               return AwsAdminUsersPageError(
                 onRefresh: () =>
@@ -211,7 +135,7 @@ class AwsAdminUsersPageLoaded extends StatefulWidget {
 
 class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
   final ctrlSearch = TextEditingController();
-  int _rowsPerPage = 10;
+  int _rowsPerPage = 50;
   int? id;
 
   Widget endDrawer({int? id}) {
@@ -279,12 +203,23 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredUsers = ctrlSearch.text.trim().isNotEmpty
+        ? widget.users
+            .where(
+              (e) =>
+                  e.displayName
+                      .toLowerCase()
+                      .contains(ctrlSearch.text.toLowerCase()) ||
+                  e.email.toLowerCase().contains(ctrlSearch.text.toLowerCase()),
+            )
+            .toList()
+        : widget.users;
+
     return Scaffold(
       key: AwsAdminUsersPageLoaded._scaffoldKey,
       endDrawer: endDrawer(id: id),
-      // drawer: Drawer(),
       backgroundColor: Colors.white,
-      body: widget.users.isEmpty
+      body: filteredUsers.isEmpty
           ? Column(
               children: [
                 Row(
@@ -299,7 +234,6 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
 
                         AwsAdminUsersPageLoaded.openDrawer();
                       },
-                      //context.pushNamed(CreateUsersPage.name),
                       icon: const HeroIcon(
                         HeroIcons.userPlus,
                       ),
@@ -308,7 +242,7 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                 ),
                 const Expanded(
                   child: Center(
-                    child: Text('No sales yet.'),
+                    child: Text('No users found.'),
                   ),
                 ),
               ],
@@ -326,7 +260,6 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                         });
                         AwsAdminUsersPageLoaded.openDrawer();
                       },
-                      // context.pushNamed(CreateUsersPage.name),
                       icon: const HeroIcon(
                         HeroIcons.userPlus,
                       ),
@@ -335,7 +268,7 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                 ),
                 Expanded(
                   child: PaginatedDataTable2(
-                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50],
+                    availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
                       setState(() {
@@ -353,7 +286,7 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                       DataColumn(label: Text('Actions')),
                     ],
                     source:
-                        MyDataTableSource(widget.users, context, (int value) {
+                        MyDataTableSource(filteredUsers, context, (int value) {
                       setState(() {
                         id = value;
                       });
@@ -417,29 +350,24 @@ class MyDataTableSource extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: [
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     item.name ?? '',
-        //     style: const TextStyle(
-        //       fontWeight: FontWeight.w600,
-        //       color: Color(0xff374151),
-        //     ),
-        //   ),
-        // ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     item.createDate == null
-        //         ? ''
-        //         : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
-        //   ),
-        // ),
         DataCell(
-          onTap: () {},
+          onTap: () {
+            context.pushNamed(
+              MemberDetailPage.name,
+              pathParameters: {'rep': item.displayName},
+            );
+          },
           Text(item.displayName),
         ),
-        DataCell(onTap: () {}, Text(item.email)),
+        DataCell(
+          onTap: () {
+            context.pushNamed(
+              MemberDetailPage.name,
+              pathParameters: {'rep': item.displayName},
+            );
+          },
+          Text(item.email),
+        ),
         DataCell(
           onTap: () {},
           Card(
@@ -460,49 +388,14 @@ class MyDataTableSource extends DataTableSource {
         DataCell(
           onTap: () {
             insertUserId(item.id);
-            //  insertUserId
-            // context.pushNamed(
-            //   AwsAdminUsersDetailPage.name,
-            //   pathParameters: {'id': item.id.toString()},
-            // );
           },
           const HeroIcon(
             HeroIcons.pencilSquare,
           ),
         ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Checkbox(
-        //     onChanged: null, //(value) {},
-        //     value: item.xStudioCommissionPaid,
-        //   ),
-        // ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     formatCurrency(item.amountTotal ?? 0),
-        //   ),
-        // ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     (item.deliveryStatus ?? '').toString() == 'full'
-        //         ? 'Fully Delivered'
-        //         : (item.deliveryStatus ?? '').toString() == 'partial'
-        //             ? 'Partially Delivered'
-        //             : '',
-        //   ),
-        // ),
       ],
     );
   }
-
-  // void onTap(AwsAdminUsersOrder item) {
-  //   context.pushNamed(
-  //     AwsAdminUsersDetailsPage.name,
-  //     pathParameters: {'id': item.id.toString()},
-  //   );
-  // }
 
   @override
   int get selectedRowCount => selectedRows.length;

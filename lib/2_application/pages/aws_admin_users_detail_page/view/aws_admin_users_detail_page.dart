@@ -186,6 +186,8 @@ class EditLandingPricePage extends StatefulWidget {
 }
 
 class _EditLandingPricePageState extends State<EditLandingPricePage> {
+  TextEditingController ctrlDisplayName = TextEditingController();
+  TextEditingController ctrlEmail = TextEditingController();
   TextEditingController ctrlCommissionSplit = TextEditingController();
   TextEditingController ctrlSelfGen = TextEditingController();
   TextEditingController ctrlCompLead = TextEditingController();
@@ -195,6 +197,8 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
 
   @override
   void initState() {
+    ctrlDisplayName.text = widget.user.displayName;
+    ctrlEmail.text = widget.user.email;
     ctrlCommissionSplit.text = widget.user.commissionSplit.toString();
     ctrlSelfGen.text = widget.user.selfGen.toString();
     ctrlCompLead.text = widget.user.companyLead.toString();
@@ -246,6 +250,26 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                 const SizedBox(
                   height: 16,
                 ),
+                if ((userAccessLevel ?? 1) >= 4) ...[
+                  CustomTextField(
+                    ctrl: ctrlDisplayName,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    title: 'Display Name',
+                    isValidating: isValidating,
+                    inputType: TextInputType.emailAddress,
+                  ),
+                  CustomTextField(
+                    ctrl: ctrlEmail,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    title: 'Email',
+                    isValidating: isValidating,
+                    inputType: TextInputType.emailAddress,
+                  ),
+                ],
                 CustomTextField(
                   ctrl: ctrlCommissionSplit,
                   onChanged: (value) {
@@ -336,72 +360,75 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                   const SizedBox(
                     height: 12,
                   ),
-                  OutlinedButton(
-                    onPressed: null,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Select Manager',
-                            style: TextStyle(
-                              color: Color(0xff667085),
-                              fontWeight: FontWeight.w500,
+                  if ((accessLevel ?? widget.user.accessLevel) < 3)
+                    OutlinedButton(
+                      onPressed: null,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Select Manager',
+                              style: TextStyle(
+                                color: Color(0xff667085),
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          const Spacer(),
-                          ElevatedButton(
-                            onPressed: () async {
-                              final data = await showPickManager(
-                                context,
-                                salesManagerId != null ? [salesManagerId!] : [],
-                                widget.user.id,
-                                accessLevel ?? widget.user.accessLevel,
-                              );
+                            const Spacer(),
+                            ElevatedButton(
+                              onPressed: () async {
+                                final data = await showPickManager(
+                                  context,
+                                  salesManagerId != null
+                                      ? [salesManagerId!]
+                                      : [],
+                                  widget.user.id,
+                                  accessLevel ?? widget.user.accessLevel,
+                                );
 
-                              //  if (data != null) {
-                              setState(() {
-                                if (data == null || data.isEmpty) {
-                                  salesManagerId = null;
-                                } else {
-                                  salesManagerId = data.first;
-                                }
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              backgroundColor: const Color(0xff7F56D9),
-                            ),
-                            child: salesManagerId == null
-                                ? const Text(
-                                    'Select',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  )
-                                : const Row(
-                                    children: [
-                                      HeroIcon(
-                                        HeroIcons.tag,
+                                //  if (data != null) {
+                                setState(() {
+                                  if (data == null || data.isEmpty) {
+                                    salesManagerId = null;
+                                  } else {
+                                    salesManagerId = data.first;
+                                  }
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: const Color(0xff7F56D9),
+                              ),
+                              child: salesManagerId == null
+                                  ? const Text(
+                                      'Select',
+                                      style: TextStyle(
                                         color: Colors.white,
-                                        size: 20,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        '1',
-                                        style: TextStyle(
+                                    )
+                                  : const Row(
+                                      children: [
+                                        HeroIcon(
+                                          HeroIcons.tag,
                                           color: Colors.white,
-                                          fontWeight: FontWeight.w600,
+                                          size: 20,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                        ],
+                                        SizedBox(width: 8),
+                                        Text(
+                                          '1',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ],
             ),
@@ -434,8 +461,13 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
               final success = await cubit.updateUser(
                 AwsUser(
                   id: widget.user.id,
-                  displayName: widget.user.displayName,
-                  email: widget.user.email,
+                  displayName: ctrlDisplayName.text.trim().isNotEmpty
+                      ? ctrlDisplayName.text.trim()
+                      : widget.user.displayName,
+
+                  email: ctrlEmail.text.trim().isNotEmpty
+                      ? ctrlEmail.text.trim()
+                      : widget.user.email,
                   salesManagerId:
                       salesManagerId, //?? widget.user.salesManagerId,
                   accessLevel: accessLevel ?? widget.user.accessLevel,
