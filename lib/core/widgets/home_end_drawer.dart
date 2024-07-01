@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
+import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
@@ -90,7 +91,8 @@ class HomeEndDrawer extends StatelessWidget {
                 onTap: () async {
                   final userBox = await Hive.openBox<UserHive>('user');
                   await userBox.clear();
-                  final sortBox = await Hive.openBox<UserHive>('sortFilter');
+                  final sortBox =
+                      await Hive.openBox<SortFilterHive>('sortFilter');
                   await sortBox.clear();
                   if (!kIsWeb) {
                     await GoogleSignIn().signOut();
