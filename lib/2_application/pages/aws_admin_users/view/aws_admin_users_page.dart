@@ -224,17 +224,11 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
               id: id.toString(),
               onUserUpdate: () {
                 context.read<AwsAdminUsersCubit>().fetchUsers();
-                // print('haha');
               },
-              // onUserCreated: () {
-              //   context.read<AwsAdminUsersCubit>().fetchUsers();
-              //   // print('haha');
-              // },
             )
           : CreateUsersPageWrapperProvider(
               onUserCreated: () {
                 context.read<AwsAdminUsersCubit>().fetchUsers();
-                // print('haha');
               },
             ),
     );

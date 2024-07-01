@@ -134,6 +134,16 @@ class MyTeamPageLoaded extends StatefulWidget {
   final List<AwsUser> users;
   final int userAccessLevel;
 
+  static final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  static void closeDrawer() {
+    _scaffoldKey.currentState?.closeDrawer();
+  }
+
+  static void openDrawer() {
+    _scaffoldKey.currentState?.openEndDrawer();
+  }
+
   @override
   State<MyTeamPageLoaded> createState() => _MyTeamPageLoadedState();
 }
@@ -141,6 +151,23 @@ class MyTeamPageLoaded extends StatefulWidget {
 class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
   final ctrlSearch = TextEditingController();
   int _rowsPerPage = 10;
+  int? id;
+
+  Widget? endDrawer({int? id}) {
+    final canEdit = id != null;
+
+    return canEdit
+        ? Drawer(
+            width: 500,
+            child: AwsAdminUsersDetailPageWrapperProvider(
+              id: id.toString(),
+              onUserUpdate: () {
+                context.read<MyTeamCubit>().fetchUsers();
+              },
+            ),
+          )
+        : null;
+  }
 
   Widget searchBox() {
     return Container(
@@ -188,7 +215,9 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: MyTeamPageLoaded._scaffoldKey,
       backgroundColor: Colors.white,
+      endDrawer: endDrawer(id: id),
       body: widget.users.isEmpty
           ? Column(
               children: [
@@ -235,10 +264,13 @@ class _MyTeamPageLoadedState extends State<MyTeamPageLoaded> {
                       ],
                     ],
                     source: MyDataTableSource(
-                      widget.users,
-                      context,
-                      widget.userAccessLevel,
-                    ),
+                        widget.users, context, widget.userAccessLevel,
+                        (int value) {
+                      setState(() {
+                        id = value;
+                      });
+                      MyTeamPageLoaded.openDrawer();
+                    }),
                   ),
                 ),
               ],
@@ -275,10 +307,16 @@ class MyTeamPageError extends StatelessWidget {
 }
 
 class MyDataTableSource extends DataTableSource {
-  MyDataTableSource(this.data, this.context, this.userAccessLevel);
+  MyDataTableSource(
+    this.data,
+    this.context,
+    this.userAccessLevel,
+    this.insertUserId,
+  );
   final List<AwsUser> data;
   final BuildContext context;
   final int userAccessLevel;
+  void Function(int value) insertUserId;
   Set<int> selectedRows = {};
 
   @override
@@ -351,10 +389,7 @@ class MyDataTableSource extends DataTableSource {
         if (userAccessLevel >= 3) ...[
           DataCell(
             onTap: () {
-              context.pushNamed(
-                AwsAdminUsersDetailPage.name,
-                pathParameters: {'id': item.id.toString()},
-              );
+              insertUserId(item.id);
             },
             const HeroIcon(
               HeroIcons.pencilSquare,
