@@ -13,6 +13,7 @@ class AwsSalesOrder with _$AwsSalesOrder {
     required int? id,
     required String? name, //A
     @JsonKey(name: 'create_date') required DateTime? createDate, //B
+    @JsonKey(name: 'updated_at') required DateTime? updatedAt, //B
     @JsonKey(name: 'partner_id_display_name')
     required String? partnerIdDisplayName, //C
     @JsonKey(name: 'partner_id_contact_address')

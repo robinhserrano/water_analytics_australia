@@ -105,8 +105,12 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
       // drawer: SortFilterModal(
       //   onChanged: () => setState(() {}),
       // ),
+      // drawer: SortFilterModal(
+      //   onChanged: () => setState(() {}),
+      // ),
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         backgroundColor: Colors.black,
         title: Text(
           "${widget.rep.endsWith('s') ? widget.rep : '${widget.rep}s'}' Sales",
@@ -358,6 +362,12 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                     //     HeroIcons.adjustmentsHorizontal,
                     //   ),
                     // ),
+                    // const IconButton(
+                    //   onPressed: MemberDetailPage.openDrawer,
+                    //   icon: HeroIcon(
+                    //     HeroIcons.adjustmentsHorizontal,
+                    //   ),
+                    // ),
                   ],
                 ),
                 const Expanded(
@@ -373,6 +383,12 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     searchBox(),
+                    // const IconButton(
+                    //   onPressed: MemberDetailPage.openDrawer,
+                    //   icon: HeroIcon(
+                    //     HeroIcons.adjustmentsHorizontal,
+                    //   ),
+                    // ),
                     // const IconButton(
                     //   onPressed: MemberDetailPage.openDrawer,
                     //   icon: HeroIcon(

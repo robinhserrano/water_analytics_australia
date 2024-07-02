@@ -13,6 +13,9 @@ _$AwsSalesOrderImpl _$$AwsSalesOrderImplFromJson(Map<String, dynamic> json) =>
       createDate: json['create_date'] == null
           ? null
           : DateTime.parse(json['create_date'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
       partnerIdDisplayName: json['partner_id_display_name'] as String?,
       partnerIdContactAddress: json['partner_id_contact_address'] as String?,
       partnerIdPhone: json['partner_id_phone'],
@@ -48,6 +51,7 @@ Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
       'id': instance.id,
       'name': instance.name,
       'create_date': instance.createDate?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
       'partner_id_display_name': instance.partnerIdDisplayName,
       'partner_id_contact_address': instance.partnerIdContactAddress,
       'partner_id_phone': instance.partnerIdPhone,

@@ -7,6 +7,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -238,8 +239,13 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                         records: filteredRecords,
                       );
                     }
+
+                    final defaultSortRecords = state.records
+                      ..sort(
+                        (a, b) => b.createDate!.compareTo(a.createDate!),
+                      );
                     return SalesListPageLoaded(
-                      records: state.records,
+                      records: defaultSortRecords,
                     );
                   },
                 );
@@ -401,6 +407,22 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                     // ),
                   ],
                 ),
+                if (findLatestAwsSalesOrder(widget.records) != null) ...[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        'Last Synced: ${DateFormat('MM/dd/yyyy hh:mm a').format(findLatestAwsSalesOrder(widget.records)!.toLocal())}',
+                        style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+
                 Expanded(
                   child: PaginatedDataTable2(
                     availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
@@ -1082,4 +1104,19 @@ List<LandingPriceWithQuantity> getLandingPrice(
   }
 
   return matchingLandingPrices.toList();
+}
+
+DateTime? findLatestAwsSalesOrder(List<AwsSalesOrder> salesOrders) {
+  if (salesOrders.isEmpty) return null;
+
+  var haha = salesOrders
+      .reduce(
+        (latest, current) => (latest.updatedAt ?? latest.createDate!)
+                .isAfter((current.updatedAt ?? current.createDate!))
+            ? latest
+            : current,
+      )
+      .updatedAt;
+
+  return haha;
 }

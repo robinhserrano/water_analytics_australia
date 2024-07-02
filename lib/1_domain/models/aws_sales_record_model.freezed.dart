@@ -24,6 +24,8 @@ mixin _$AwsSalesOrder {
   String? get name => throw _privateConstructorUsedError; //A
   @JsonKey(name: 'create_date')
   DateTime? get createDate => throw _privateConstructorUsedError; //B
+  @JsonKey(name: 'updated_at')
+  DateTime? get updatedAt => throw _privateConstructorUsedError; //B
   @JsonKey(name: 'partner_id_display_name')
   String? get partnerIdDisplayName => throw _privateConstructorUsedError; //C
   @JsonKey(name: 'partner_id_contact_address')
@@ -87,6 +89,7 @@ abstract class $AwsSalesOrderCopyWith<$Res> {
       {int? id,
       String? name,
       @JsonKey(name: 'create_date') DateTime? createDate,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
       @JsonKey(name: 'partner_id_display_name') String? partnerIdDisplayName,
       @JsonKey(name: 'partner_id_contact_address')
       String? partnerIdContactAddress,
@@ -136,6 +139,7 @@ class _$AwsSalesOrderCopyWithImpl<$Res, $Val extends AwsSalesOrder>
     Object? id = freezed,
     Object? name = freezed,
     Object? createDate = freezed,
+    Object? updatedAt = freezed,
     Object? partnerIdDisplayName = freezed,
     Object? partnerIdContactAddress = freezed,
     Object? partnerIdPhone = freezed,
@@ -170,6 +174,10 @@ class _$AwsSalesOrderCopyWithImpl<$Res, $Val extends AwsSalesOrder>
       createDate: freezed == createDate
           ? _value.createDate
           : createDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       partnerIdDisplayName: freezed == partnerIdDisplayName
           ? _value.partnerIdDisplayName
@@ -283,6 +291,7 @@ abstract class _$$AwsSalesOrderImplCopyWith<$Res>
       {int? id,
       String? name,
       @JsonKey(name: 'create_date') DateTime? createDate,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
       @JsonKey(name: 'partner_id_display_name') String? partnerIdDisplayName,
       @JsonKey(name: 'partner_id_contact_address')
       String? partnerIdContactAddress,
@@ -331,6 +340,7 @@ class __$$AwsSalesOrderImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? name = freezed,
     Object? createDate = freezed,
+    Object? updatedAt = freezed,
     Object? partnerIdDisplayName = freezed,
     Object? partnerIdContactAddress = freezed,
     Object? partnerIdPhone = freezed,
@@ -365,6 +375,10 @@ class __$$AwsSalesOrderImplCopyWithImpl<$Res>
       createDate: freezed == createDate
           ? _value.createDate
           : createDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       partnerIdDisplayName: freezed == partnerIdDisplayName
           ? _value.partnerIdDisplayName
@@ -461,6 +475,7 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
       {required this.id,
       required this.name,
       @JsonKey(name: 'create_date') required this.createDate,
+      @JsonKey(name: 'updated_at') required this.updatedAt,
       @JsonKey(name: 'partner_id_display_name')
       required this.partnerIdDisplayName,
       @JsonKey(name: 'partner_id_contact_address')
@@ -504,6 +519,10 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
   @override
   @JsonKey(name: 'create_date')
   final DateTime? createDate;
+//B
+  @override
+  @JsonKey(name: 'updated_at')
+  final DateTime? updatedAt;
 //B
   @override
   @JsonKey(name: 'partner_id_display_name')
@@ -594,7 +613,7 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
 
   @override
   String toString() {
-    return 'AwsSalesOrder(id: $id, name: $name, createDate: $createDate, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed, orderLine: $orderLine, additionalDeduction: $additionalDeduction, confirmedByManager: $confirmedByManager, user: $user, lastDeductedBy: $lastDeductedBy, lastConfirmedBy: $lastConfirmedBy)';
+    return 'AwsSalesOrder(id: $id, name: $name, createDate: $createDate, updatedAt: $updatedAt, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed, orderLine: $orderLine, additionalDeduction: $additionalDeduction, confirmedByManager: $confirmedByManager, user: $user, lastDeductedBy: $lastDeductedBy, lastConfirmedBy: $lastConfirmedBy)';
   }
 
   @override
@@ -606,6 +625,8 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.createDate, createDate) ||
                 other.createDate == createDate) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.partnerIdDisplayName, partnerIdDisplayName) ||
                 other.partnerIdDisplayName == partnerIdDisplayName) &&
             (identical(
@@ -658,6 +679,7 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
         id,
         name,
         createDate,
+        updatedAt,
         partnerIdDisplayName,
         partnerIdContactAddress,
         const DeepCollectionEquality().hash(partnerIdPhone),
@@ -700,6 +722,7 @@ abstract class _AwsSalesOrder implements AwsSalesOrder {
       {required final int? id,
       required final String? name,
       @JsonKey(name: 'create_date') required final DateTime? createDate,
+      @JsonKey(name: 'updated_at') required final DateTime? updatedAt,
       @JsonKey(name: 'partner_id_display_name')
       required final String? partnerIdDisplayName,
       @JsonKey(name: 'partner_id_contact_address')
@@ -748,6 +771,9 @@ abstract class _AwsSalesOrder implements AwsSalesOrder {
   @override //A
   @JsonKey(name: 'create_date')
   DateTime? get createDate;
+  @override //B
+  @JsonKey(name: 'updated_at')
+  DateTime? get updatedAt;
   @override //B
   @JsonKey(name: 'partner_id_display_name')
   String? get partnerIdDisplayName;
