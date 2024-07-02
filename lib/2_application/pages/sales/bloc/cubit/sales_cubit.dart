@@ -40,7 +40,7 @@ class SalesCubit extends Cubit<SalesCubitState> {
     }
   }
 
-  Future<bool> saveAllSales(
+  Future<bool> saveAwsSalesBulk(
     List<SalesOrder> sales,
     void Function(double) onProgress,
   ) async {
@@ -48,12 +48,81 @@ class SalesCubit extends Cubit<SalesCubitState> {
     var savedCount = 0;
 
     try {
-      for (final sale in sales) {
-        await firestoreService.saveSales(sale);
-        savedCount++;
-        final progress = (savedCount / totalSales) * 100;
-        onProgress(progress); // Update progress callback
+      final dataList = <Map<String, dynamic>>[];
+      for (final salesOrder in sales) {
+        dataList.add({
+          'amount_to_invoice': salesOrder.amountToInvoice,
+          'amount_total': salesOrder.amountTotal,
+          'amount_untaxed': salesOrder.taxTotals?.amountUntaxed,
+          'create_date': salesOrder.createDate?.toIso8601String(),
+          'delivery_status': salesOrder.deliveryStatus,
+          'internal_note_display': salesOrder.internalNoteDisplay,
+          'name': salesOrder.name,
+          'partner_id_contact_address': salesOrder.partnerId?.contactAddress,
+          'partner_id_display_name': salesOrder.partnerId?.displayName,
+          'partner_id_phone': salesOrder.partnerId?.phone,
+          'state': salesOrder.state,
+          'x_studio_commission_paid': salesOrder.xStudioCommissionPaid ? 1 : 0,
+          'x_studio_invoice_payment_status':
+              salesOrder.xStudioInvoicePaymentStatus,
+          'x_studio_payment_type': salesOrder.xStudioPaymentType,
+          'x_studio_referrer_processed':
+              salesOrder.xStudioReferrerProcessed ? 1 : 0,
+          'x_studio_sales_rep_1': salesOrder.xStudioSalesRep1,
+          'x_studio_sales_source': salesOrder.xStudioSalesSource,
+          'order_line': salesOrder.orderLine != null
+              ? salesOrder.orderLine!
+                  .map(
+                    (e) => {
+                      'product': e.productTemplateId?.displayName ?? '',
+                      'description': e.name,
+                      'quantity': e.productUomQty,
+                      'delivered': e.qtyDelivered,
+                      'invoiced': e.qtyInvoiced,
+                      'unit_price': e.priceUnit,
+                      'taxes': e.taxId?.isNotEmpty ?? false
+                          ? e.taxId![0].displayName
+                          : '',
+                      'disc': e.discount,
+                      'tax_excl': e.priceSubtotal,
+                    },
+                  )
+                  .toList()
+              : [],
+        });
       }
+
+      const chunkSize = 500; // Maximum entries per file
+      // var fileCount = 1; // Counter for file names
+
+      var currentChunk = <Map<String, dynamic>>[];
+
+      for (final salesOrder in dataList) {
+        currentChunk.add(salesOrder);
+        if (currentChunk.length == chunkSize) {
+          // Reached chunk size, save data and create a new chunk
+          //  await _saveSalesDataToFile(currentChunk, fileCount);
+          await repo.saveAwsSalesBulk(currentChunk);
+          final progress = (currentChunk.length / totalSales) * 100;
+          onProgress(progress);
+          currentChunk = [];
+          //  fileCount++;
+        }
+      }
+
+      // Save any remaining data in the last chunk
+      if (currentChunk.isNotEmpty) {
+        await repo.saveAwsSalesBulk(currentChunk);
+        final progress = (totalSales / totalSales) * 100;
+        onProgress(progress);
+      }
+
+      // for (final sale in sales) {
+      //   await firestoreService.saveSales(sale);
+      //   savedCount++;
+      //   final progress = (savedCount / totalSales) * 100;
+      //   onProgress(progress); // Update progress callback
+      // }
       await firestoreService.saveLastUploadedTime(DateTime.now());
       return true;
     } catch (e) {
@@ -134,9 +203,9 @@ class SalesCubit extends Cubit<SalesCubitState> {
     var savedCount = 0;
 
     try {
-  //repo.saveAllSalesBulk(currentBatch);
-   
-  await repo.saveAllSalesBulk(sales.sublist(0,10));
+      //repo.saveAllSalesBulk(currentBatch);
+
+      await repo.saveAllSalesBulk(sales.sublist(0, 10));
       // for (var i = 0; i < sales.length; i += 10) {
       //   final endIndex = i + 10;
       //   final currentBatch = sales.sublist(

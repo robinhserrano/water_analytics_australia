@@ -259,6 +259,36 @@ class Repository {
     }
   }
 
+  Future<bool> saveAwsSalesBulk(
+    List<Map<String, dynamic>> dataList,
+  ) async {
+    try {
+      final user = await HiveHelper.getAllUsers();
+
+      client.interceptors.add(ChuckerDioInterceptor());
+
+      final response = await client.post<dynamic>(
+        '$url/bulkStore',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+        data: dataList,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<List<AwsUser>?> fetchUsers() async {
     final user = await HiveHelper.getCurrentUser();
     try {
