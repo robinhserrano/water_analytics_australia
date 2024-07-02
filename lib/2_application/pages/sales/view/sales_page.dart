@@ -75,114 +75,118 @@ class _SalesPageState extends State<SalesPage> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-            BlocBuilder<SalesCubit, SalesCubitState>(
-              builder: (context, state) {
-                if (state is SalesStateLoaded) {
-                  return Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          showSaveAllSalesModal(context, state.records, cubit);
-                        },
-                        icon: const HeroIcon(
-                          HeroIcons.arrowUpOnSquareStack,
-                          color: Colors.white,
-                        ),
+          BlocBuilder<SalesCubit, SalesCubitState>(
+            builder: (context, state) {
+              if (state is SalesStateLoaded) {
+                return Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        showSaveAllSalesModal(context, state.records, cubit);
+                      },
+                      icon: const HeroIcon(
+                        HeroIcons.arrowUpOnSquareStack,
+                        color: Colors.white,
                       ),
-                      IconButton(
-                        onPressed: () async {
-                          final dataList = <Map<String, dynamic>>[];
-                          for (final salesOrder in state.records) {
-                            dataList.add({
-                              'amount_to_invoice': salesOrder.amountToInvoice,
-                              'amount_total': salesOrder.amountTotal,
-                              'amount_untaxed':
-                                  salesOrder.taxTotals?.amountUntaxed,
-                              'create_date':
-                                  salesOrder.createDate?.toIso8601String(),
-                              'delivery_status': salesOrder.deliveryStatus,
-                              'internal_note_display':
-                                  salesOrder.internalNoteDisplay,
-                              'name': salesOrder.name,
-                              'partner_id_contact_address':
-                                  salesOrder.partnerId?.contactAddress,
-                              'partner_id_display_name':
-                                  salesOrder.partnerId?.displayName,
-                              'partner_id_phone': salesOrder.partnerId?.phone,
-                              'state': salesOrder.state,
-                              'x_studio_commission_paid':
-                                  salesOrder.xStudioCommissionPaid ? 1 : 0,
-                              'x_studio_invoice_payment_status':
-                                  salesOrder.xStudioInvoicePaymentStatus,
-                              'x_studio_payment_type':
-                                  salesOrder.xStudioPaymentType,
-                              'x_studio_referrer_processed':
-                                  salesOrder.xStudioReferrerProcessed ? 1 : 0,
-                              'x_studio_sales_rep_1': salesOrder.xStudioSalesRep1,
-                              'x_studio_sales_source':
-                                  salesOrder.xStudioSalesSource,
-                              'order_line': salesOrder.orderLine != null
-                                  ? salesOrder.orderLine!
-                                      .map(
-                                        (e) => {
-                                          'product':
-                                              e.productTemplateId?.displayName ??
-                                                  '',
-                                          'description': e.name,
-                                          'quantity': e.productUomQty,
-                                          'delivered': e.qtyDelivered,
-                                          'invoiced': e.qtyInvoiced,
-                                          'unit_price': e.priceUnit,
-                                          'taxes': e.taxId?.isNotEmpty ?? false
-                                              ? e.taxId![0].displayName
-                                              : '',
-                                          'disc': e.discount,
-                                          'tax_excl': e.priceSubtotal,
-                                        },
-                                      )
-                                      .toList()
-                                  : [],
-                            });
-                          }
-                          String jsonData = jsonEncode(dataList);
-                          var fileName = 'text_file.txt';
-                          var directory2 = await getExternalStorageDirectory();
-                          var filePath = join(directory2!.path, fileName);
-                          print(filePath);
-                          // // Step 3: Write JSON to a text file
-                          // File jsonFile = File('$appDocPath/data.txt');
-                          // await jsonFile.writeAsString(jsonData);
-                          await File(filePath).writeAsString(jsonData);
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        final dataList = <Map<String, dynamic>>[];
+                        for (final salesOrder in state.records) {
+                          dataList.add({
+                            'amount_to_invoice': salesOrder.amountToInvoice,
+                            'amount_total': salesOrder.amountTotal,
+                            'amount_untaxed':
+                                salesOrder.taxTotals?.amountUntaxed,
+                            'create_date':
+                                salesOrder.createDate?.toIso8601String(),
+                            'delivery_status': salesOrder.deliveryStatus,
+                            'internal_note_display':
+                                salesOrder.internalNoteDisplay,
+                            'name': salesOrder.name,
+                            'partner_id_contact_address':
+                                salesOrder.partnerId?.contactAddress,
+                            'partner_id_display_name':
+                                salesOrder.partnerId?.displayName,
+                            'partner_id_phone': salesOrder.partnerId?.phone,
+                            'state': salesOrder.state,
+                            'x_studio_commission_paid':
+                                salesOrder.xStudioCommissionPaid ? 1 : 0,
+                            'x_studio_invoice_payment_status':
+                                salesOrder.xStudioInvoicePaymentStatus,
+                            'x_studio_payment_type':
+                                salesOrder.xStudioPaymentType,
+                            'x_studio_referrer_processed':
+                                salesOrder.xStudioReferrerProcessed ? 1 : 0,
+                            'x_studio_sales_rep_1': salesOrder.xStudioSalesRep1,
+                            'x_studio_sales_source':
+                                salesOrder.xStudioSalesSource,
+                            'order_line': salesOrder.orderLine != null
+                                ? salesOrder.orderLine!
+                                    .map(
+                                      (e) => {
+                                        'product':
+                                            e.productTemplateId?.displayName ??
+                                                '',
+                                        'description': e.name,
+                                        'quantity': e.productUomQty,
+                                        'delivered': e.qtyDelivered,
+                                        'invoiced': e.qtyInvoiced,
+                                        'unit_price': e.priceUnit,
+                                        'taxes': e.taxId?.isNotEmpty ?? false
+                                            ? e.taxId![0].displayName
+                                            : '',
+                                        'disc': e.discount,
+                                        'tax_excl': e.priceSubtotal,
+                                      },
+                                    )
+                                    .toList()
+                                : [],
+                          });
+                        }
+                        // final jsonData = jsonEncode(dataList);
+                        // final fileName = 'text_file.txt';
+                        // final directory2 = await getExternalStorageDirectory();
+                        // final filePath = join(directory2!.path, fileName);
+                        // print(filePath);
+                        // // // Step 3: Write JSON to a text file
+                        // // File jsonFile = File('$appDocPath/data.txt');
+                        // // await jsonFile.writeAsString(jsonData);
+                        // await File(filePath).writeAsString(jsonData);
 
-                          // await Clipboard.setData(
-                          //     ClipboardData(text: dataList.toString()));
-                          // Optionally, show a snackbar to notify the user
+                        // // await Clipboard.setData(
+                        // //     ClipboardData(text: dataList.toString()));
+                        // // Optionally, show a snackbar to notify the user
+                        await saveSalesDataToFiles(dataList);
+                        if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Saved text'),
+                            const SnackBar(
+                              content: Text('Saved texts'),
                             ),
                           );
-                          // showSaveAllSalesModal(context, state.records, cubit);
-                        },
-                        icon: const HeroIcon(
-                          HeroIcons.clipboard,
-                          color: Colors.white,
-                        ),
+                        }
+
+                        // showSaveAllSalesModal(context, state.records, cubit);
+                      },
+                      icon: const HeroIcon(
+                        HeroIcons.clipboard,
+                        color: Colors.white,
                       ),
-                    ],
-                  );
-                }
-                return const SizedBox();
-              },
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox();
+            },
+          ),
+          IconButton(
+            onPressed: () =>
+                SalesPage._scaffoldKey.currentState!.openEndDrawer(),
+            icon: const HeroIcon(
+              HeroIcons.bars3,
+              color: Colors.white,
             ),
-            IconButton(
-              onPressed: () =>
-                  SalesPage._scaffoldKey.currentState!.openEndDrawer(),
-              icon: const HeroIcon(
-                HeroIcons.bars3,
-                color: Colors.white,
-              ),
-            ),
+          ),
           // ],
         ],
       ),
@@ -702,13 +706,13 @@ Future<void> _downloadExcel(
   //   CellValue.string('Canada'),
   // ]);
 
-  var fileName = 'my_data.xlsx';
-  var bytes = excel.save(fileName: fileName);
+  final fileName = 'my_data.xlsx';
+  final bytes = excel.save(fileName: fileName);
 
   // Get the appropriate directory based on platform
   // var directory = await getExternalStorageDirectory();
-  var directory2 = await getExternalStorageDirectory();
-  var filePath = join(directory2!.path, fileName);
+  final directory2 = await getExternalStorageDirectory();
+  final filePath = join(directory2!.path, fileName);
 
   // Write the file bytes to the chosen location
   try {
@@ -735,4 +739,38 @@ Future<void> _downloadExcel(
 
   // // Revoke the object URL to free up resources
   // html.Url.revokeObjectUrl(url);
+}
+
+Future<void> saveSalesDataToFiles(
+  List<Map<String, dynamic>> salesOrders,
+) async {
+  const chunkSize = 500; // Maximum entries per file
+  var fileCount = 1; // Counter for file names
+
+  var currentChunk = <Map<String, dynamic>>[];
+  for (final salesOrder in salesOrders) {
+    currentChunk.add(salesOrder);
+    if (currentChunk.length == chunkSize) {
+      // Reached chunk size, save data and create a new chunk
+      await _saveSalesDataToFile(currentChunk, fileCount);
+      currentChunk = [];
+      fileCount++;
+    }
+  }
+
+  // Save any remaining data in the last chunk
+  if (currentChunk.isNotEmpty) {
+    await _saveSalesDataToFile(currentChunk, fileCount);
+  }
+}
+
+Future<void> _saveSalesDataToFile(
+  List<Map<String, dynamic>> data,
+  int fileNumber,
+) async {
+  final jsonData = jsonEncode(data);
+  final fileName = 'sales_data_$fileNumber.txt';
+  final directory2 = await getExternalStorageDirectory();
+  final filePath = join(directory2!.path, fileName);
+  await File(filePath).writeAsString(jsonData);
 }

@@ -142,8 +142,8 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: isSubmitting
                             ? null
                             : () async {
-                                await cubit.loginWithAws(
-                                // 'wateranalytics',
+                                await cubit.login(      
+                                  'wateranalytics',
                                   emailCtrl.text,
                                   passwordCtrl.text,
                                 );

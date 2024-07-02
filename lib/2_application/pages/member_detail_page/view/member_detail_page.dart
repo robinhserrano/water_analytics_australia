@@ -1,6 +1,6 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, unused_import, prefer_int_literals
 
-import 'dart:html' as html;
+// import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:data_table_2/data_table_2.dart';
