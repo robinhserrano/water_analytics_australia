@@ -39,6 +39,8 @@ _$AwsSalesOrderImpl _$$AwsSalesOrderImplFromJson(Map<String, dynamic> json) =>
       user: json['user'] == null
           ? null
           : AwsUser.fromJson(json['user'] as Map<String, dynamic>),
+      lastDeductedBy: (json['last_deducted_by'] as num?)?.toInt(),
+      lastConfirmedBy: (json['last_confirmed_by'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
@@ -68,6 +70,8 @@ Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
       'confirmed_by_manager':
           const IntToBooleanConverter().toJson(instance.confirmedByManager),
       'user': instance.user,
+      'last_deducted_by': instance.lastDeductedBy,
+      'last_confirmed_by': instance.lastConfirmedBy,
     };
 
 _$AwsOrderLineImpl _$$AwsOrderLineImplFromJson(Map<String, dynamic> json) =>

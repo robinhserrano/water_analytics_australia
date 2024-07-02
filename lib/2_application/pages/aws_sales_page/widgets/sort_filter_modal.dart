@@ -279,7 +279,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   ],
                 ),
               ),
-              if (userAccessLevel > 4) ...[
+              if (userAccessLevel >= 4) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(

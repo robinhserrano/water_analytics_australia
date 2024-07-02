@@ -91,7 +91,7 @@ class _ManageTeamDetailState extends State<ManageTeamDetail> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
-          "${widget.managerName.endsWith('s') ? widget.managerName : "${widget.managerName}'s"} Team",
+          "${widget.managerName.toLowerCase().endsWith('s') ? widget.managerName : "${widget.managerName}'s"} Team",
           style: const TextStyle(color: Colors.white),
         ),
         actions: [
