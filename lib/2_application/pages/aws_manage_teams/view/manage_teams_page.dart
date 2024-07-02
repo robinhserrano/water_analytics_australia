@@ -176,7 +176,7 @@ class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
 
           return ListTile(
             title: Text(
-              "${salesManager.displayName.endsWith('s') ? salesManager.displayName : '${salesManager.displayName}s'}' Team",
+              "${salesManager.displayName.endsWith('s') ? salesManager.displayName : "${salesManager.displayName}'s"}' Team",
             ),
             trailing: const Icon(Icons.arrow_right),
             onTap: () {

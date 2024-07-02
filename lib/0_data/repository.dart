@@ -438,12 +438,12 @@ class Repository {
     }
   }
 
-  Future<bool> updateSalesOrder(AwsSalesOrder awsUser) async {
+  Future<bool> updateSalesOrder(AwsSalesOrder salesOrder) async {
     final user = await HiveHelper.getAllUsers();
     try {
       final response = await client.patch<Map<String, dynamic>>(
-        '$url/salesOrder/${awsUser.id}',
-        data: awsUser.toJson(),
+        '$url/salesOrder/${salesOrder.id}',
+        data: salesOrder.toJson(),
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
