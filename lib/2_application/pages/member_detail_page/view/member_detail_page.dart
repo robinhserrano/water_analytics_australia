@@ -90,6 +90,8 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
   }
 
   Future<void> _initHive() async {
+    // final sortFilterBox = Hive.box<SortFilterHive>('sortFilter');
+    // await sortFilterBox.clear();
     // final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
     // Hive.init(appDocumentDir.path);
     // await Hive.openBox<MyData>('myBox'); // Change 'myBox' to your actual box name
@@ -158,88 +160,88 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                       sortFilterData = null;
                     }
 
-                    if (sortFilterData != null) {
-                      final commissionStatus =
-                          sortFilterData.selectedCommissionStatus;
-                      final invoicePaymentStatus =
-                          sortFilterData.selectedInvoicePaymentStatus;
-                      final deliverStatus =
-                          sortFilterData.selectedDeliverStatus;
-                      final selectedNames = sortFilterData.selectedNames;
+                    // if (sortFilterData != null) {
+                    //   final commissionStatus =
+                    //       sortFilterData.selectedCommissionStatus;
+                    //   final invoicePaymentStatus =
+                    //       sortFilterData.selectedInvoicePaymentStatus;
+                    //   final deliverStatus =
+                    //       sortFilterData.selectedDeliverStatus;
+                    //   final selectedNames = sortFilterData.selectedNames;
 
-                      final temp = state.records
-                          .where(
-                            (record) =>
-                                (!commissionStatus.any(
-                                  (status) =>
-                                      status !=
-                                      record.xStudioCommissionPaid.toString(),
-                                )) &&
-                                (!invoicePaymentStatus.any(
-                                  (status) =>
-                                      status !=
-                                      record.xStudioInvoicePaymentStatus
-                                          .toString(),
-                                )) &&
-                                (!deliverStatus.any(
-                                  (status) =>
-                                      status !=
-                                      record.deliveryStatus.toString(),
-                                )),
-                          )
-                          .toList();
+                    //   final temp = state.records
+                    //       .where(
+                    //         (record) =>
+                    //             (!commissionStatus.any(
+                    //               (status) =>
+                    //                   status !=
+                    //                   record.xStudioCommissionPaid.toString(),
+                    //             )) &&
+                    //             (!invoicePaymentStatus.any(
+                    //               (status) =>
+                    //                   status !=
+                    //                   record.xStudioInvoicePaymentStatus
+                    //                       .toString(),
+                    //             )) &&
+                    //             (!deliverStatus.any(
+                    //               (status) =>
+                    //                   status !=
+                    //                   record.deliveryStatus.toString(),
+                    //             )),
+                    //       )
+                    //       .toList();
 
-                      var filteredRecords = <AwsSalesOrder>[];
+                    //   var filteredRecords = <AwsSalesOrder>[];
 
-                      if (selectedNames.isNotEmpty) {
-                        filteredRecords = temp
-                            .where(
-                              (e) => selectedNames.any(
-                                (name) =>
-                                    name.toLowerCase() ==
-                                    e.xStudioSalesRep1?.toLowerCase(),
-                              ),
-                            )
-                            .toList();
-                      } else {
-                        filteredRecords = temp;
-                      }
+                    //   if (selectedNames.isNotEmpty) {
+                    //     filteredRecords = temp
+                    //         .where(
+                    //           (e) => selectedNames.any(
+                    //             (name) =>
+                    //                 name.toLowerCase() ==
+                    //                 e.xStudioSalesRep1?.toLowerCase(),
+                    //           ),
+                    //         )
+                    //         .toList();
+                    //   } else {
+                    //     filteredRecords = temp;
+                    //   }
 
-                      final selectedSortValue =
-                          sortFilterData.selectedSortValue;
-                      if (selectedSortValue == 'Newest') {
-                        filteredRecords.sort(
-                          (a, b) => b.createDate!.compareTo(a.createDate!),
-                        );
-                      }
-                      if (selectedSortValue == 'Oldest') {
-                        filteredRecords.sort(
-                          (a, b) => a.createDate!.compareTo(b.createDate!),
-                        );
-                      }
-                      if (selectedSortValue == 'A-Z') {
-                        filteredRecords.sort(
-                          (a, b) => (a.partnerIdDisplayName ?? '')
-                              .toLowerCase()
-                              .compareTo(
-                                (b.partnerIdDisplayName ?? '').toLowerCase(),
-                              ),
-                        );
-                      }
-                      if (selectedSortValue == 'Z-A') {
-                        filteredRecords.sort(
-                          (a, b) => (b.partnerIdDisplayName ?? '')
-                              .toLowerCase()
-                              .compareTo(
-                                (a.partnerIdDisplayName ?? '').toLowerCase(),
-                              ),
-                        );
-                      }
+                    //   final selectedSortValue =
+                    //       sortFilterData.selectedSortValue;
+                    //   if (selectedSortValue == 'Newest') {
+                    //     filteredRecords.sort(
+                    //       (a, b) => b.createDate!.compareTo(a.createDate!),
+                    //     );
+                    //   }
+                    //   if (selectedSortValue == 'Oldest') {
+                    //     filteredRecords.sort(
+                    //       (a, b) => a.createDate!.compareTo(b.createDate!),
+                    //     );
+                    //   }
+                    //   if (selectedSortValue == 'A-Z') {
+                    //     filteredRecords.sort(
+                    //       (a, b) => (a.partnerIdDisplayName ?? '')
+                    //           .toLowerCase()
+                    //           .compareTo(
+                    //             (b.partnerIdDisplayName ?? '').toLowerCase(),
+                    //           ),
+                    //     );
+                    //   }
+                    //   if (selectedSortValue == 'Z-A') {
+                    //     filteredRecords.sort(
+                    //       (a, b) => (b.partnerIdDisplayName ?? '')
+                    //           .toLowerCase()
+                    //           .compareTo(
+                    //             (a.partnerIdDisplayName ?? '').toLowerCase(),
+                    //           ),
+                    //     );
+                    //   }
 
-                      return SalesListPageLoaded(
-                        records: filteredRecords,
-                      );
-                    }
+                    //   return SalesListPageLoaded(
+                    //     records: filteredRecords,
+                    //   );
+                    // }
                     return SalesListPageLoaded(
                       records: state.records,
                     );
