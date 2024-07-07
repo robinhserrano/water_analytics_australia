@@ -788,12 +788,11 @@ class CommissionSection extends StatelessWidget {
       (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
     );
 
-    final additionalCost = order.additionalDeduction != null
-        ? order.additionalDeduction ?? 0
-        : getCloudAdditionalCost(orderLine, landingPrices).fold(
-            0.0,
-            (prev, e) => prev + (e.unitPrice ?? 0),
-          );
+    final additionalCost =
+        getCloudAdditionalCost(orderLine, landingPrices).fold(
+      0.0,
+      (prev, e) => prev + (e.unitPrice ?? 0),
+    );
     final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
       0.0,
       (prev, e) =>
@@ -817,6 +816,7 @@ class CommissionSection extends StatelessWidget {
             ? (order.user?.selfGen ?? 1000)
             : (order.user?.companyLead ?? 500);
     final finalCommission = extraCommission + baseCommission;
+    //modify this
 
     return Card(
       elevation: 0,
@@ -1330,12 +1330,10 @@ double calculateFinalCommission(
     (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
   );
 
-  final additionalCost = order.additionalDeduction != null
-      ? order.additionalDeduction ?? 0
-      : getCloudAdditionalCost(orderLine, landingPrices).fold(
-          0.0,
-          (prev, e) => prev + (e.unitPrice ?? 0),
-        );
+  final additionalCost = getCloudAdditionalCost(orderLine, landingPrices).fold(
+    0.0,
+    (prev, e) => prev + (e.unitPrice ?? 0),
+  );
   final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
     0.0,
     (prev, e) =>
@@ -1360,6 +1358,7 @@ double calculateFinalCommission(
           ? (order.user?.selfGen ?? 1000)
           : (order.user?.companyLead ?? 500);
   final finalCommission = extraCommission + baseCommission;
+  //modify this
 
   return finalCommission;
 }
