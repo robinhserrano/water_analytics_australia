@@ -892,6 +892,13 @@ class CommissionSection extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
+            CustomRowTile(
+              'Manual Addition/Subtraction',
+              r'$' + '0', //baseCommission.toStringAsFixed(2),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             //  if (additionalCost <= 0) ...[
             CustomRowTile(
               'Final Commission',
@@ -938,7 +945,7 @@ class CommissionSection extends StatelessWidget {
                             ),
                           );
                         },
-                        child: const Text('Modify Additional Deduction'),
+                        child: const Text('Modify Manual +/-'),
                       ),
                     ),
                     ResponsiveRowColumnItem(
@@ -1480,7 +1487,7 @@ class _ModifyDeductionModalState extends State<ModifyDeductionModal> {
     final context = widget.context;
     return Column(
       children: [
-        const Text('Modify Deduction'),
+        const Text('Modify Manual +/-'),
         const SizedBox(
           height: 8,
         ),
@@ -1489,9 +1496,12 @@ class _ModifyDeductionModalState extends State<ModifyDeductionModal> {
           onChanged: (value) {
             setState(() {});
           },
-          title: 'Additional Deduction',
+          title: 'Addition/Deduction',
           isValidating: isValidating,
-          inputType: const TextInputType.numberWithOptions(decimal: true),
+          inputType: const TextInputType.numberWithOptions(
+            decimal: true,
+            signed: true,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
