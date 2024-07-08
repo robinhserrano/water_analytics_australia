@@ -966,12 +966,10 @@ double calculateFinalCommission(
     (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
   );
 
-  final additionalCost = order.additionalDeduction != null
-      ? order.additionalDeduction ?? 0
-      : getAwsAdditionalCost(orderLine, landingPrices).fold(
-          0.0,
-          (prev, e) => prev + (e.unitPrice ?? 0),
-        );
+  final additionalCost = getAwsAdditionalCost(orderLine, landingPrices).fold(
+    0.0,
+    (prev, e) => prev + (e.unitPrice ?? 0),
+  );
   final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
     0.0,
     (prev, e) =>
@@ -996,7 +994,8 @@ double calculateFinalCommission(
       : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
           ? (order.user?.selfGen ?? 1000)
           : (order.user?.companyLead ?? 500);
-  final finalCommission = extraCommission + baseCommission;
+  final finalCommission =
+      (extraCommission + baseCommission) + (order.additionalDeduction ?? 0);
 
   return finalCommission;
 }

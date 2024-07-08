@@ -53,6 +53,17 @@ class CustomTextField extends HookWidget {
                 const TextInputType.numberWithOptions(decimal: true)) ...[
               FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
             ],
+            if (inputType ==
+                const TextInputType.numberWithOptions(
+                  decimal: true,
+                  signed: true,
+                )) ...[
+              FilteringTextInputFormatter.allow(
+                RegExp(
+                  r'^-?\d*\.?\d*$',
+                ),
+              ),
+            ],
           ],
           decoration: InputDecoration(
             prefixText: inputType == TextInputType.number ? r'$' : null,

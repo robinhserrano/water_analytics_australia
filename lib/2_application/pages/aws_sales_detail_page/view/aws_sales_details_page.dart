@@ -815,7 +815,8 @@ class CommissionSection extends StatelessWidget {
         : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
             ? (order.user?.selfGen ?? 1000)
             : (order.user?.companyLead ?? 500);
-    final finalCommission = extraCommission + baseCommission;
+    final finalCommission =
+        (extraCommission + baseCommission) + (order.additionalDeduction ?? 0);
     //modify this
 
     return Card(
@@ -856,10 +857,7 @@ class CommissionSection extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  order.additionalDeduction != null
-                      ? r'$' +
-                          (order.additionalDeduction ?? 0).toStringAsFixed(2)
-                      : r'$' + additionalCost.toStringAsFixed(2),
+                  r'$' + additionalCost.toStringAsFixed(2),
                   style: TextStyle(
                     color: additionalCost > 0
                         ? Colors.red
@@ -893,8 +891,10 @@ class CommissionSection extends StatelessWidget {
               height: 8,
             ),
             CustomRowTile(
-              'Manual Addition/Subtraction',
-              r'$' + '0', //baseCommission.toStringAsFixed(2),
+              'Manual Addition/Deduction',
+              r'$' +
+                  (order.additionalDeduction ?? 0)
+                      .toStringAsFixed(2), //baseCommission.toStringAsFixed(2),
             ),
             const SizedBox(
               height: 8,
@@ -905,7 +905,6 @@ class CommissionSection extends StatelessWidget {
               r'$' + finalCommission.toStringAsFixed(2),
             ),
             //  ],
-
             Row(
               children: [
                 const Text(
@@ -1334,6 +1333,7 @@ double calculateFinalCommission(
     0.0,
     (prev, e) => prev + (e.unitPrice ?? 0),
   );
+
   final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
     0.0,
     (prev, e) =>
@@ -1357,7 +1357,8 @@ double calculateFinalCommission(
       : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
           ? (order.user?.selfGen ?? 1000)
           : (order.user?.companyLead ?? 500);
-  final finalCommission = extraCommission + baseCommission;
+  final finalCommission =
+      (extraCommission + baseCommission) + (order.additionalDeduction ?? 0);
   //modify this
 
   return finalCommission;
@@ -1416,7 +1417,7 @@ Future<void> showSavingAdditionalDecution(
             width: 16,
           ),
           Text(
-            'Updating Additional Deduction...',
+            'Updating Manual Addition/Deduction...',
             style: TextStyle(fontSize: 16),
           ),
         ],
@@ -1545,8 +1546,8 @@ class _ModifyDeductionModalState extends State<ModifyDeductionModal> {
 
                     const snackBar = SnackBar(
                       backgroundColor: Colors.green,
-                      content:
-                          Text('Successfully updated ' 'additional deduction.'),
+                      content: Text(
+                          'Successfully updated ' 'manual addition/deduction'),
                     );
 
                     if (context.mounted) {
@@ -1569,7 +1570,8 @@ class _ModifyDeductionModalState extends State<ModifyDeductionModal> {
 
                     const snackBar = SnackBar(
                       backgroundColor: Colors.red,
-                      content: Text('Failed to update additional deduction.'),
+                      content:
+                          Text('Failed to update manual addition/deduction.'),
                     );
 
                     if (context.mounted) {
