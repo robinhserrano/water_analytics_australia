@@ -13,12 +13,14 @@ class CustomTextField extends HookWidget {
     required this.title,
     required this.isValidating,
     this.inputType,
+    this.prioValidate = false,
     super.key,
   });
   final TextEditingController ctrl;
   final Function(String) onChanged;
   final String title;
   final bool isValidating;
+  final bool prioValidate;
   final TextInputType? inputType;
 
   @override
@@ -89,10 +91,13 @@ class CustomTextField extends HookWidget {
           onChanged: onChanged,
         ),
         if (isValidating)
-          ctrl.text.isEmpty
+          (ctrl.text.isEmpty || prioValidate)
               ? Text(
                   '$title is required',
-                  style: const TextStyle(color: Colors.red),
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                  ),
                 )
               : const SizedBox.shrink(),
         const SizedBox(

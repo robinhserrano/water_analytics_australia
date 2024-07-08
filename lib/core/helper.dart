@@ -115,3 +115,16 @@ int stringToAccessLevel(String accessLevel) {
       return 0;
   }
 }
+
+bool isValidNumber(String? input) {
+  if (input == null || input.isEmpty) {
+    return false;
+  }
+  // Use try-catch to handle potential errors when parsing
+  try {
+    double.parse(input); // Use double.parse for decimal numbers
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

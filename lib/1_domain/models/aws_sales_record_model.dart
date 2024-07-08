@@ -51,6 +51,7 @@ class AwsSalesOrder with _$AwsSalesOrder {
     required AwsUser? user,
     @JsonKey(name: 'last_deducted_by') required int? lastDeductedBy,
     @JsonKey(name: 'last_confirmed_by') required int? lastConfirmedBy,
+    @JsonKey(name: 'manual_notes') required String? manualNotes,
   }) = _AwsSalesOrder;
 
   factory AwsSalesOrder.fromJson(Map<String, dynamic> json) =>

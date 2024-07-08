@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:heroicons/heroicons.dart';
@@ -16,6 +17,7 @@ import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/bloc/aws_sales_details_cubit.dart';
+import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/temp.dart';
 import 'package:water_analytics_australia/core/widgets/aws_custom_data_table.dart';
@@ -890,11 +892,32 @@ class CommissionSection extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            CustomRowTile(
-              'Manual Addition/Deduction',
-              r'$' +
-                  (order.additionalDeduction ?? 0)
-                      .toStringAsFixed(2), //baseCommission.toStringAsFixed(2),
+            Row(
+              children: [
+                const Text(
+                  'Manual Addition/Deduction',
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                if (order.manualNotes != null ||
+                    (order.manualNotes ?? '').isNotEmpty)
+                  Tooltip(
+                    message: order.manualNotes ?? '',
+                    child: const Icon(
+                      FontAwesomeIcons.noteSticky,
+                    ), //Icon(Icons.info),
+                  ),
+                const Spacer(),
+                Text(
+                  r'$' + (order.additionalDeduction ?? 0).toStringAsFixed(2),
+                  style: TextStyle(
+                    color: (order.additionalDeduction ?? 0) < 0
+                        ? Colors.red
+                        : const Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 8,
@@ -937,7 +960,7 @@ class CommissionSection extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () async {
                           unawaited(
-                            showModifyDeductionModal(
+                            showModifyManualAdditionDeductionModal(
                               context,
                               order,
                               cubit,
@@ -1300,6 +1323,8 @@ String getDeliveryStatusMessage(String deliveryStatus) {
       return 'Fully Delivered';
     case 'partial':
       return 'Partially Delivered';
+    case 'pending':
+      return 'Pending';
     default:
       return '';
   }
@@ -1312,6 +1337,8 @@ String getInvoicePaymentStatusMessage(String invoicePaymentStatus) {
     case 'partial':
       return 'Partial';
     case 'not_paid':
+      return 'Not Paid';
+    case '0':
       return 'Not Paid';
     case 'false':
       return 'Not Set';
@@ -1396,7 +1423,7 @@ Future<void> showConfirmingCommissionBreakdownModal(
   );
 }
 
-Future<void> showSavingAdditionalDecution(
+Future<void> showSavingManualAdditionDecution(
   BuildContext context,
 ) {
   return showDialog(
@@ -1426,7 +1453,7 @@ Future<void> showSavingAdditionalDecution(
   );
 }
 
-Future<void> showModifyDeductionModal(
+Future<void> showModifyManualAdditionDeductionModal(
   BuildContext context,
   AwsSalesOrder order,
   AwsSalesDetailsCubit cubit,
@@ -1439,7 +1466,7 @@ Future<void> showModifyDeductionModal(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      title: ModifyDeductionModal(
+      title: ModifyManualAdditionDeductionModal(
         order: order,
         cubit: cubit,
         context: context,
@@ -1463,8 +1490,8 @@ Future<void> showModifyDeductionModal(
   );
 }
 
-class ModifyDeductionModal extends StatefulWidget {
-  const ModifyDeductionModal({
+class ModifyManualAdditionDeductionModal extends StatefulWidget {
+  const ModifyManualAdditionDeductionModal({
     required this.order,
     required this.cubit,
     required this.context,
@@ -1475,33 +1502,75 @@ class ModifyDeductionModal extends StatefulWidget {
   final AwsSalesDetailsCubit cubit;
 
   @override
-  State<ModifyDeductionModal> createState() => _ModifyDeductionModalState();
+  State<ModifyManualAdditionDeductionModal> createState() =>
+      _ModifyManualAdditionDeductionModalState();
 }
 
-class _ModifyDeductionModalState extends State<ModifyDeductionModal> {
-  TextEditingController ctrlSupplyOnly = TextEditingController();
+class _ModifyManualAdditionDeductionModalState
+    extends State<ModifyManualAdditionDeductionModal> {
+  TextEditingController ctrlManualAdditionDeduction = TextEditingController();
+  TextEditingController ctrlTextContent = TextEditingController();
   bool isValidating = false;
+
+  @override
+  void initState() {
+    ctrlManualAdditionDeduction.text =
+        (widget.order.additionalDeduction ?? 0).toString();
+    ctrlTextContent.text = widget.order.manualNotes ?? '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext _) {
     final context = widget.context;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Modify Manual +/-'),
         const SizedBox(
           height: 8,
         ),
         CustomTextField(
-          ctrl: ctrlSupplyOnly,
+          ctrl: ctrlManualAdditionDeduction,
           onChanged: (value) {
             setState(() {});
           },
           title: 'Addition/Deduction',
           isValidating: isValidating,
+          prioValidate: isValidating,
           inputType: const TextInputType.numberWithOptions(
             decimal: true,
             signed: true,
           ),
+        ),
+        const Text(
+          'Notes (Optional)',
+          style: TextStyle(fontSize: 16),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        TextFormField(
+          controller: ctrlTextContent,
+          enableSuggestions: false,
+          autocorrect: false,
+          minLines: 6,
+          maxLines: 10,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey, width: 0),
+            ),
+            labelStyle: TextStyle(color: Colors.green),
+            hintStyle: TextStyle(color: Color(0xffc3c2c7)),
+            hintText: 'Start writing...',
+          ),
+          onChanged: (value) {
+            setState(() {});
+          },
+        ),
+        const SizedBox(
+          height: 16,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1525,57 +1594,71 @@ class _ModifyDeductionModalState extends State<ModifyDeductionModal> {
               const SizedBox(width: 12),
               ElevatedButton(
                 onPressed: () async {
-                  context.pop();
-                  unawaited(
-                    showSavingAdditionalDecution(
-                      context,
-                      //  widget.jobName,
-                      // widget.cubit,
-                    ),
-                  );
-                  final isSaved = await widget.cubit.updateSalesOrder(
-                    widget.order.copyWith(
-                      additionalDeduction: double.parse(ctrlSupplyOnly.text),
-                    ),
-                  );
+                  if (!isValidNumber(ctrlManualAdditionDeduction.text)) {
+                    setState(() {
+                      isValidating = true;
+                    });
 
-                  if (isSaved) {
-                    if (context.mounted) {
-                      context.pop();
-                    }
-
-                    const snackBar = SnackBar(
-                      backgroundColor: Colors.green,
-                      content: Text(
-                          'Successfully updated ' 'manual addition/deduction'),
-                    );
-
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-
-                    var hehe = widget.order;
-
-                    var hihi = widget.order;
-
+                    var hehe = 0;
+                  } else {
+                    setState(() {
+                      isValidating = false;
+                    });
+                    context.pop();
                     unawaited(
-                      widget.cubit.fetchAwsSalesDetails(
-                        widget.order.id!.toString(),
+                      showSavingManualAdditionDecution(
+                        context,
+                        //  widget.jobName,
+                        // widget.cubit,
                       ),
                     );
-                  } else {
-                    if (context.mounted) {
-                      context.pop();
-                    }
-
-                    const snackBar = SnackBar(
-                      backgroundColor: Colors.red,
-                      content:
-                          Text('Failed to update manual addition/deduction.'),
+                    final isSaved = await widget.cubit.updateSalesOrder(
+                      widget.order.copyWith(
+                        additionalDeduction:
+                            double.parse(ctrlManualAdditionDeduction.text),
+                        manualNotes: ctrlTextContent.text,
+                      ),
                     );
 
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    if (isSaved) {
+                      if (context.mounted) {
+                        context.pop();
+                      }
+
+                      const snackBar = SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text(
+                          'Successfully updated ' 'manual addition/deduction',
+                        ),
+                      );
+
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+
+                      var hehe = widget.order;
+
+                      var hihi = widget.order;
+
+                      unawaited(
+                        widget.cubit.fetchAwsSalesDetails(
+                          widget.order.id!.toString(),
+                        ),
+                      );
+                    } else {
+                      if (context.mounted) {
+                        context.pop();
+                      }
+
+                      const snackBar = SnackBar(
+                        backgroundColor: Colors.red,
+                        content:
+                            Text('Failed to update manual addition/deduction.'),
+                      );
+
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
                     }
                   }
                 },

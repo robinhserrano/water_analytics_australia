@@ -72,6 +72,8 @@ mixin _$AwsSalesOrder {
   int? get lastDeductedBy => throw _privateConstructorUsedError;
   @JsonKey(name: 'last_confirmed_by')
   int? get lastConfirmedBy => throw _privateConstructorUsedError;
+  @JsonKey(name: 'manual_notes')
+  String? get manualNotes => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -118,7 +120,8 @@ abstract class $AwsSalesOrderCopyWith<$Res> {
       bool confirmedByManager,
       AwsUser? user,
       @JsonKey(name: 'last_deducted_by') int? lastDeductedBy,
-      @JsonKey(name: 'last_confirmed_by') int? lastConfirmedBy});
+      @JsonKey(name: 'last_confirmed_by') int? lastConfirmedBy,
+      @JsonKey(name: 'manual_notes') String? manualNotes});
 
   $AwsUserCopyWith<$Res>? get user;
 }
@@ -161,6 +164,7 @@ class _$AwsSalesOrderCopyWithImpl<$Res, $Val extends AwsSalesOrder>
     Object? user = freezed,
     Object? lastDeductedBy = freezed,
     Object? lastConfirmedBy = freezed,
+    Object? manualNotes = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -263,6 +267,10 @@ class _$AwsSalesOrderCopyWithImpl<$Res, $Val extends AwsSalesOrder>
           ? _value.lastConfirmedBy
           : lastConfirmedBy // ignore: cast_nullable_to_non_nullable
               as int?,
+      manualNotes: freezed == manualNotes
+          ? _value.manualNotes
+          : manualNotes // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -320,7 +328,8 @@ abstract class _$$AwsSalesOrderImplCopyWith<$Res>
       bool confirmedByManager,
       AwsUser? user,
       @JsonKey(name: 'last_deducted_by') int? lastDeductedBy,
-      @JsonKey(name: 'last_confirmed_by') int? lastConfirmedBy});
+      @JsonKey(name: 'last_confirmed_by') int? lastConfirmedBy,
+      @JsonKey(name: 'manual_notes') String? manualNotes});
 
   @override
   $AwsUserCopyWith<$Res>? get user;
@@ -362,6 +371,7 @@ class __$$AwsSalesOrderImplCopyWithImpl<$Res>
     Object? user = freezed,
     Object? lastDeductedBy = freezed,
     Object? lastConfirmedBy = freezed,
+    Object? manualNotes = freezed,
   }) {
     return _then(_$AwsSalesOrderImpl(
       id: freezed == id
@@ -464,6 +474,10 @@ class __$$AwsSalesOrderImplCopyWithImpl<$Res>
           ? _value.lastConfirmedBy
           : lastConfirmedBy // ignore: cast_nullable_to_non_nullable
               as int?,
+      manualNotes: freezed == manualNotes
+          ? _value.manualNotes
+          : manualNotes // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -505,7 +519,8 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
       required this.confirmedByManager,
       required this.user,
       @JsonKey(name: 'last_deducted_by') required this.lastDeductedBy,
-      @JsonKey(name: 'last_confirmed_by') required this.lastConfirmedBy})
+      @JsonKey(name: 'last_confirmed_by') required this.lastConfirmedBy,
+      @JsonKey(name: 'manual_notes') required this.manualNotes})
       : _orderLine = orderLine;
 
   factory _$AwsSalesOrderImpl.fromJson(Map<String, dynamic> json) =>
@@ -610,10 +625,13 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
   @override
   @JsonKey(name: 'last_confirmed_by')
   final int? lastConfirmedBy;
+  @override
+  @JsonKey(name: 'manual_notes')
+  final String? manualNotes;
 
   @override
   String toString() {
-    return 'AwsSalesOrder(id: $id, name: $name, createDate: $createDate, updatedAt: $updatedAt, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed, orderLine: $orderLine, additionalDeduction: $additionalDeduction, confirmedByManager: $confirmedByManager, user: $user, lastDeductedBy: $lastDeductedBy, lastConfirmedBy: $lastConfirmedBy)';
+    return 'AwsSalesOrder(id: $id, name: $name, createDate: $createDate, updatedAt: $updatedAt, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed, orderLine: $orderLine, additionalDeduction: $additionalDeduction, confirmedByManager: $confirmedByManager, user: $user, lastDeductedBy: $lastDeductedBy, lastConfirmedBy: $lastConfirmedBy, manualNotes: $manualNotes)';
   }
 
   @override
@@ -669,7 +687,9 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
             (identical(other.lastDeductedBy, lastDeductedBy) ||
                 other.lastDeductedBy == lastDeductedBy) &&
             (identical(other.lastConfirmedBy, lastConfirmedBy) ||
-                other.lastConfirmedBy == lastConfirmedBy));
+                other.lastConfirmedBy == lastConfirmedBy) &&
+            (identical(other.manualNotes, manualNotes) ||
+                other.manualNotes == manualNotes));
   }
 
   @JsonKey(ignore: true)
@@ -700,7 +720,8 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
         confirmedByManager,
         user,
         lastDeductedBy,
-        lastConfirmedBy
+        lastConfirmedBy,
+        manualNotes
       ]);
 
   @JsonKey(ignore: true)
@@ -758,8 +779,9 @@ abstract class _AwsSalesOrder implements AwsSalesOrder {
       required final bool confirmedByManager,
       required final AwsUser? user,
       @JsonKey(name: 'last_deducted_by') required final int? lastDeductedBy,
-      @JsonKey(name: 'last_confirmed_by')
-      required final int? lastConfirmedBy}) = _$AwsSalesOrderImpl;
+      @JsonKey(name: 'last_confirmed_by') required final int? lastConfirmedBy,
+      @JsonKey(name: 'manual_notes')
+      required final String? manualNotes}) = _$AwsSalesOrderImpl;
 
   factory _AwsSalesOrder.fromJson(Map<String, dynamic> json) =
       _$AwsSalesOrderImpl.fromJson;
@@ -840,6 +862,9 @@ abstract class _AwsSalesOrder implements AwsSalesOrder {
   @override
   @JsonKey(name: 'last_confirmed_by')
   int? get lastConfirmedBy;
+  @override
+  @JsonKey(name: 'manual_notes')
+  String? get manualNotes;
   @override
   @JsonKey(ignore: true)
   _$$AwsSalesOrderImplCopyWith<_$AwsSalesOrderImpl> get copyWith =>
