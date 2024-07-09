@@ -24,7 +24,9 @@ class ManageTeamsCubit extends Cubit<ManageTeamsCubitState> {
       final users = await repo.fetchUsers();
       if (users != null) {
         // var filteredUsers = <AwsUser>[];
-        final managers = users.where((e) => e.accessLevel == 3).toList();
+        final managers = users
+            .where((e) => e.accessLevel == 3 || e.accessLevel == 4)
+            .toList();
         final filteredTeams = <List<AwsUser>>[];
         for (final manager in managers) {
           final salesTeamManager = users

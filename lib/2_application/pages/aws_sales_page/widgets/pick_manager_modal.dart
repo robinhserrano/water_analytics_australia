@@ -104,7 +104,7 @@ class _PickManagerState extends State<PickManager> {
           final higherUser = state.users
               .where(
                 (e) =>
-                    (e.accessLevel > 1 && e.accessLevel <= 3) &&
+                    (e.accessLevel > 1 && e.accessLevel <= 4) &&
                     e.id != widget.currentUserId &&
                     e.accessLevel > widget.currentUserAccessLevel,
                 //e.accessLevel > userAccessLevel

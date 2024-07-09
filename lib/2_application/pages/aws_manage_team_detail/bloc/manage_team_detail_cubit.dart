@@ -27,7 +27,11 @@ class ManageTeamDetailCubit extends Cubit<ManageTeamDetailCubitState> {
       if (users != null) {
         // var filteredUsers = <AwsUser>[];
         final salesManagers = users
-            .where((e) => e.accessLevel == 3 && e.id == int.parse(managerId))
+            .where(
+              (e) =>
+                  (e.accessLevel == 3 || e.accessLevel == 4) &&
+                  e.id == int.parse(managerId),
+            )
             .toList();
         final filteredTeams = <List<AwsUser>>[];
         for (final salesManager in salesManagers) {

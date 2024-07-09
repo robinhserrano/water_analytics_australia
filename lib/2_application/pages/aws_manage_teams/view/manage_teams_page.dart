@@ -171,8 +171,9 @@ class _ManageTeamsLoadedState extends State<ManageTeamsLoaded> {
       body: ListView.builder(
         itemCount: widget.teams.length,
         itemBuilder: (context, index) {
-          final salesManager =
-              widget.teams[index].firstWhere((e) => e.accessLevel == 3);
+          final salesManager = widget.teams[index].firstWhere(
+            (e) => e.accessLevel == 3 || e.accessLevel == 4,
+          );
 
           return ListTile(
             title: Text(
