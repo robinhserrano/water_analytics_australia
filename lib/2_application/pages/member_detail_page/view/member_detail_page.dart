@@ -429,7 +429,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                         }
                       });
                     },
-                    minWidth: 1200,
+                    minWidth: 1500,
                     columns: const [
                       DataColumn(label: Text('Number')),
                       DataColumn(label: Text('Order Date')),
@@ -439,6 +439,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       DataColumn(label: Text('Commission Paid')),
                       DataColumn(label: Text('Total')),
                       DataColumn(label: Text('Delivery Status')),
+                      DataColumn(label: Text('EST Install Date')),
                       DataColumn(label: Text('Final Commission')),
                       DataColumn(label: Text('Confirmed by Manager')),
                     ],
@@ -793,7 +794,7 @@ class MyDataTableSource extends DataTableSource {
           Text(
             item.createDate == null
                 ? ''
-                : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+                : DateFormat('MM/dd/yy hh:mm a').format(item.createDate!),
           ),
         ),
         DataCell(
@@ -823,6 +824,14 @@ class MyDataTableSource extends DataTableSource {
                 : (item.deliveryStatus ?? '').toString() == 'partial'
                     ? 'Partially Delivered'
                     : 'Not Delivered',
+          ),
+        ),
+        DataCell(
+          onTap: () => onTap(item),
+          Text(
+            item.dateDeadline == null
+                ? 'Not Set'
+                : DateFormat('MM/dd/yy hh:mm a').format(item.dateDeadline!),
           ),
         ),
         DataCell(

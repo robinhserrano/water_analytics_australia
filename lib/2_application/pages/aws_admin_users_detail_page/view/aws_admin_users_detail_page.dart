@@ -191,6 +191,7 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
   TextEditingController ctrlCommissionSplit = TextEditingController();
   TextEditingController ctrlSelfGen = TextEditingController();
   TextEditingController ctrlCompLead = TextEditingController();
+  TextEditingController ctrlPassword = TextEditingController();
   // TextEditingController ctrlInstallationService = TextEditingController();
   // TextEditingController ctrlSupplyOnly = TextEditingController();
   bool isValidating = false;
@@ -301,6 +302,16 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                       const TextInputType.numberWithOptions(decimal: true),
                 ),
                 if ((userAccessLevel ?? 1) >= 4) ...[
+                  // CustomTextField(
+                  //   ctrl: ctrlCommissionSplit,
+                  //   onChanged: (value) {
+                  //     setState(() {});
+                  //   },
+                  //   title: 'Password',
+                  //   isValidating: isValidating,
+                  //   inputType:
+                  //       const TextInputType.numberWithOptions(decimal: true),
+                  // ),
                   const Text(
                     'User Role',
                     style: TextStyle(fontSize: 16),

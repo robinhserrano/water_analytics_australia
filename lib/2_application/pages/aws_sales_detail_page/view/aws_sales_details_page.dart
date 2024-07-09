@@ -1252,7 +1252,7 @@ class CloudOrderInfos extends StatelessWidget {
             Row(
               children: [
                 const Text(
-                  'Date Deadline',
+                  'EST Install Date',
                 ),
                 const Spacer(),
                 Text(
