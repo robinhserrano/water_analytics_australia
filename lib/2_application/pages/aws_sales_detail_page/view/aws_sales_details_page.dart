@@ -1252,6 +1252,27 @@ class CloudOrderInfos extends StatelessWidget {
             Row(
               children: [
                 const Text(
+                  'Date Deadline',
+                ),
+                const Spacer(),
+                Text(
+                  order.dateDeadline == null
+                      ? 'Not Set'
+                      : DateFormat('MM/dd/yyyy hh:mm a').format(
+                          order.dateDeadline!.add(const Duration(days: 1)),
+                        ),
+                  style: const TextStyle(
+                    color: Color(0xff7a7a7a),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                const Text(
                   'Amount Total',
                 ),
                 const Spacer(),

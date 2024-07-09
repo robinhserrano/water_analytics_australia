@@ -45,6 +45,9 @@ _$AwsSalesOrderImpl _$$AwsSalesOrderImplFromJson(Map<String, dynamic> json) =>
       lastDeductedBy: (json['last_deducted_by'] as num?)?.toInt(),
       lastConfirmedBy: (json['last_confirmed_by'] as num?)?.toInt(),
       manualNotes: json['manual_notes'] as String?,
+      dateDeadline: json['date_deadline'] == null
+          ? null
+          : DateTime.parse(json['date_deadline'] as String),
     );
 
 Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
@@ -78,6 +81,7 @@ Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
       'last_deducted_by': instance.lastDeductedBy,
       'last_confirmed_by': instance.lastConfirmedBy,
       'manual_notes': instance.manualNotes,
+      'date_deadline': instance.dateDeadline?.toIso8601String(),
     };
 
 _$AwsOrderLineImpl _$$AwsOrderLineImplFromJson(Map<String, dynamic> json) =>

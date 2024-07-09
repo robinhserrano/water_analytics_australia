@@ -3,7 +3,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/int_to_boolean_converter.dart';
-import 'package:water_analytics_australia/core/bool_string_converter.dart';
 part 'aws_sales_record_model.freezed.dart';
 part 'aws_sales_record_model.g.dart';
 
@@ -52,6 +51,7 @@ class AwsSalesOrder with _$AwsSalesOrder {
     @JsonKey(name: 'last_deducted_by') required int? lastDeductedBy,
     @JsonKey(name: 'last_confirmed_by') required int? lastConfirmedBy,
     @JsonKey(name: 'manual_notes') required String? manualNotes,
+    @JsonKey(name: 'date_deadline') required DateTime? dateDeadline,
   }) = _AwsSalesOrder;
 
   factory AwsSalesOrder.fromJson(Map<String, dynamic> json) =>
