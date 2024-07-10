@@ -196,13 +196,14 @@ class _CreateUserPageState extends State<CreateUserPage> {
         ),
 
         actions: [
-          if(widget.onUserCreated != null)...[ 
-          IconButton(
-            onPressed: () {
-              context.pop();
-            },
-            icon: const HeroIcon(HeroIcons.xMark),
-          ),],
+          if (widget.onUserCreated != null) ...[
+            IconButton(
+              onPressed: () {
+                context.pop();
+              },
+              icon: const HeroIcon(HeroIcons.xMark),
+            ),
+          ],
         ],
       ),
       body: Center(
@@ -354,8 +355,9 @@ class _CreateUserPageState extends State<CreateUserPage> {
                   commissionSplit:
                       double.tryParse(ctrlCommissionSplit.text) ?? 0,
                   salesManagerId: null,
-                  selfGen: 1000, 
-                  companyLead: 500, 
+                  selfGen: 1000,
+                  companyLead: 500,
+                  plainText: '',
                 ),
               );
 

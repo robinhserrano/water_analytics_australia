@@ -41,4 +41,14 @@ class AwsAdminUsersDetailCubit extends Cubit<AwsAdminUsersDetailCubitState> {
       return false;
     }
   }
+
+  Future<bool> updatePassword(int userId, String password) async {
+    try {
+      await repo.updateUserPassword(userId, password);
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

@@ -34,6 +34,8 @@ mixin _$AwsUser {
   double get selfGen => throw _privateConstructorUsedError;
   @JsonKey(name: 'company_lead')
   double get companyLead => throw _privateConstructorUsedError;
+  @JsonKey(name: 'plain_text')
+  String? get plainText => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -53,7 +55,8 @@ abstract class $AwsUserCopyWith<$Res> {
       String email,
       @JsonKey(name: 'sales_manager_id') int? salesManagerId,
       @JsonKey(name: 'self_gen') double selfGen,
-      @JsonKey(name: 'company_lead') double companyLead});
+      @JsonKey(name: 'company_lead') double companyLead,
+      @JsonKey(name: 'plain_text') String? plainText});
 }
 
 /// @nodoc
@@ -77,6 +80,7 @@ class _$AwsUserCopyWithImpl<$Res, $Val extends AwsUser>
     Object? salesManagerId = freezed,
     Object? selfGen = null,
     Object? companyLead = null,
+    Object? plainText = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -111,6 +115,10 @@ class _$AwsUserCopyWithImpl<$Res, $Val extends AwsUser>
           ? _value.companyLead
           : companyLead // ignore: cast_nullable_to_non_nullable
               as double,
+      plainText: freezed == plainText
+          ? _value.plainText
+          : plainText // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -130,7 +138,8 @@ abstract class _$$AwsUserImplCopyWith<$Res> implements $AwsUserCopyWith<$Res> {
       String email,
       @JsonKey(name: 'sales_manager_id') int? salesManagerId,
       @JsonKey(name: 'self_gen') double selfGen,
-      @JsonKey(name: 'company_lead') double companyLead});
+      @JsonKey(name: 'company_lead') double companyLead,
+      @JsonKey(name: 'plain_text') String? plainText});
 }
 
 /// @nodoc
@@ -152,6 +161,7 @@ class __$$AwsUserImplCopyWithImpl<$Res>
     Object? salesManagerId = freezed,
     Object? selfGen = null,
     Object? companyLead = null,
+    Object? plainText = freezed,
   }) {
     return _then(_$AwsUserImpl(
       id: null == id
@@ -186,6 +196,10 @@ class __$$AwsUserImplCopyWithImpl<$Res>
           ? _value.companyLead
           : companyLead // ignore: cast_nullable_to_non_nullable
               as double,
+      plainText: freezed == plainText
+          ? _value.plainText
+          : plainText // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -201,7 +215,8 @@ class _$AwsUserImpl implements _AwsUser {
       required this.email,
       @JsonKey(name: 'sales_manager_id') required this.salesManagerId,
       @JsonKey(name: 'self_gen') required this.selfGen,
-      @JsonKey(name: 'company_lead') required this.companyLead});
+      @JsonKey(name: 'company_lead') required this.companyLead,
+      @JsonKey(name: 'plain_text') required this.plainText});
 
   factory _$AwsUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$AwsUserImplFromJson(json);
@@ -228,10 +243,13 @@ class _$AwsUserImpl implements _AwsUser {
   @override
   @JsonKey(name: 'company_lead')
   final double companyLead;
+  @override
+  @JsonKey(name: 'plain_text')
+  final String? plainText;
 
   @override
   String toString() {
-    return 'AwsUser(id: $id, accessLevel: $accessLevel, commissionSplit: $commissionSplit, displayName: $displayName, email: $email, salesManagerId: $salesManagerId, selfGen: $selfGen, companyLead: $companyLead)';
+    return 'AwsUser(id: $id, accessLevel: $accessLevel, commissionSplit: $commissionSplit, displayName: $displayName, email: $email, salesManagerId: $salesManagerId, selfGen: $selfGen, companyLead: $companyLead, plainText: $plainText)';
   }
 
   @override
@@ -251,13 +269,15 @@ class _$AwsUserImpl implements _AwsUser {
                 other.salesManagerId == salesManagerId) &&
             (identical(other.selfGen, selfGen) || other.selfGen == selfGen) &&
             (identical(other.companyLead, companyLead) ||
-                other.companyLead == companyLead));
+                other.companyLead == companyLead) &&
+            (identical(other.plainText, plainText) ||
+                other.plainText == plainText));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, accessLevel, commissionSplit,
-      displayName, email, salesManagerId, selfGen, companyLead);
+      displayName, email, salesManagerId, selfGen, companyLead, plainText);
 
   @JsonKey(ignore: true)
   @override
@@ -282,8 +302,9 @@ abstract class _AwsUser implements AwsUser {
       required final String email,
       @JsonKey(name: 'sales_manager_id') required final int? salesManagerId,
       @JsonKey(name: 'self_gen') required final double selfGen,
-      @JsonKey(name: 'company_lead')
-      required final double companyLead}) = _$AwsUserImpl;
+      @JsonKey(name: 'company_lead') required final double companyLead,
+      @JsonKey(name: 'plain_text')
+      required final String? plainText}) = _$AwsUserImpl;
 
   factory _AwsUser.fromJson(Map<String, dynamic> json) = _$AwsUserImpl.fromJson;
 
@@ -309,6 +330,9 @@ abstract class _AwsUser implements AwsUser {
   @override
   @JsonKey(name: 'company_lead')
   double get companyLead;
+  @override
+  @JsonKey(name: 'plain_text')
+  String? get plainText;
   @override
   @JsonKey(ignore: true)
   _$$AwsUserImplCopyWith<_$AwsUserImpl> get copyWith =>

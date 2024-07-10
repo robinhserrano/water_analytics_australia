@@ -52,6 +52,7 @@ class AwsSalesDetailsPage extends StatefulWidget {
 
 class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
   int accessLevel = 0;
+  int currentUserId = 0;
   @override
   void initState() {
     super.initState();
@@ -62,6 +63,7 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
   Future<void> _getUserFromHive() async {
     final user = await HiveHelper.getCurrentUser();
     accessLevel = user?.accessLevel ?? 1;
+    currentUserId = user?.userId ?? 0;
     setState(() {});
   }
 
@@ -97,6 +99,7 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
               child: AwsSalesDetailsPageLoaded(
                 order: state.order,
                 accessLevel: accessLevel,
+                currentUserId: currentUserId,
               ),
             );
           } else if (state is AwsSalesDetailsStateError) {
@@ -125,11 +128,13 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
   const AwsSalesDetailsPageLoaded({
     required this.order,
     required this.accessLevel,
+    required this.currentUserId,
     super.key,
   });
 
   final AwsSalesOrder order;
   final int accessLevel;
+  final int currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +217,7 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
                       order: order,
                       orderLine: order.orderLine ?? [],
                       accessLevel: accessLevel,
+                      currentUserId: currentUserId,
                     ),
                   ),
                 ],
@@ -776,11 +782,13 @@ class CommissionSection extends StatelessWidget {
     required this.order,
     required this.orderLine,
     required this.accessLevel,
+    required this.currentUserId,
     super.key,
   });
   final AwsSalesOrder order;
   final List<AwsOrderLine> orderLine;
   final int accessLevel;
+  final int currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -819,7 +827,6 @@ class CommissionSection extends StatelessWidget {
             : (order.user?.companyLead ?? 500);
     final finalCommission =
         (extraCommission + baseCommission) + (order.additionalDeduction ?? 0);
-    //modify this
 
     return Card(
       elevation: 0,
@@ -964,6 +971,8 @@ class CommissionSection extends StatelessWidget {
                               context,
                               order,
                               cubit,
+                              currentUserId,
+                              order.name ?? '',
                             ),
                           );
                         },
@@ -980,10 +989,17 @@ class CommissionSection extends StatelessWidget {
                               order.confirmedByManager,
                             ),
                           );
-                          final success = await cubit.updateSalesOrder(
-                            order.copyWith(
-                              confirmedByManager: !order.confirmedByManager,
-                            ),
+                          // final success = await cubit.updateSalesOrder(
+                          //   order.copyWith(
+                          //     confirmedByManager: !order.confirmedByManager,
+                          //   ),
+                          // );
+                          //Modified thissssssssssssssssssss
+
+                          final success = await cubit.updateConfirmedBy(
+                            currentUserId,
+                            order.name ?? '',
+                            !order.confirmedByManager,
                           );
                           if (success) {
                             if (context.mounted) {
@@ -1407,7 +1423,6 @@ double calculateFinalCommission(
           : (order.user?.companyLead ?? 500);
   final finalCommission =
       (extraCommission + baseCommission) + (order.additionalDeduction ?? 0);
-  //modify this
 
   return finalCommission;
 }
@@ -1478,6 +1493,8 @@ Future<void> showModifyManualAdditionDeductionModal(
   BuildContext context,
   AwsSalesOrder order,
   AwsSalesDetailsCubit cubit,
+  int userId,
+  String name,
 ) {
   return showDialog(
     barrierColor: Colors.black.withOpacity(0.3),
@@ -1491,6 +1508,8 @@ Future<void> showModifyManualAdditionDeductionModal(
         order: order,
         cubit: cubit,
         context: context,
+        userId: userId,
+        name: name,
       ),
       //  const Row(
       //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1516,11 +1535,15 @@ class ModifyManualAdditionDeductionModal extends StatefulWidget {
     required this.order,
     required this.cubit,
     required this.context,
+    required this.userId,
+    required this.name,
     super.key,
   });
   final BuildContext context;
   final AwsSalesOrder order;
   final AwsSalesDetailsCubit cubit;
+  final int userId;
+  final String name;
 
   @override
   State<ModifyManualAdditionDeductionModal> createState() =>
@@ -1633,12 +1656,18 @@ class _ModifyManualAdditionDeductionModalState
                         // widget.cubit,
                       ),
                     );
-                    final isSaved = await widget.cubit.updateSalesOrder(
-                      widget.order.copyWith(
-                        additionalDeduction:
-                            double.parse(ctrlManualAdditionDeduction.text),
-                        manualNotes: ctrlTextContent.text,
-                      ),
+                    // final isSaved = await widget.cubit.updateSalesOrder(
+                    //   widget.order.copyWith(
+                    //     additionalDeduction:
+                    //         double.parse(ctrlManualAdditionDeduction.text),
+                    //     manualNotes: ctrlTextContent.text,
+                    //   ),
+                    // );
+                    final isSaved = await widget.cubit.updateManualAddition(
+                      widget.userId,
+                      widget.name,
+                      ctrlTextContent.text,
+                      double.parse(ctrlManualAdditionDeduction.text),
                     );
 
                     if (isSaved) {

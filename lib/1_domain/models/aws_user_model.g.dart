@@ -16,6 +16,7 @@ _$AwsUserImpl _$$AwsUserImplFromJson(Map<String, dynamic> json) =>
       salesManagerId: (json['sales_manager_id'] as num?)?.toInt(),
       selfGen: (json['self_gen'] as num).toDouble(),
       companyLead: (json['company_lead'] as num).toDouble(),
+      plainText: json['plain_text'] as String?,
     );
 
 Map<String, dynamic> _$$AwsUserImplToJson(_$AwsUserImpl instance) =>
@@ -28,4 +29,5 @@ Map<String, dynamic> _$$AwsUserImplToJson(_$AwsUserImpl instance) =>
       'sales_manager_id': instance.salesManagerId,
       'self_gen': instance.selfGen,
       'company_lead': instance.companyLead,
+      'plain_text': instance.plainText,
     };

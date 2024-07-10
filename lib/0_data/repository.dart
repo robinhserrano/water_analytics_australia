@@ -400,6 +400,38 @@ class Repository {
     }
   }
 
+  Future<bool> updateUserPassword(int userId, String password) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.post<Map<String, dynamic>>(
+        '$url/updatePassword',
+        data: {
+          'id': userId,
+          'password': password,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      // final parsedData = AwsUser.fromJson(response.data!);
+
+      // return parsedData;
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<bool> createUser(AwsUser awsUser) async {
     final user = await HiveHelper.getAllUsers();
     try {
@@ -444,6 +476,80 @@ class Repository {
       final response = await client.patch<Map<String, dynamic>>(
         '$url/salesOrder/${salesOrder.id}',
         data: salesOrder.toJson(),
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      // final parsedData = AwsUser.fromJson(response.data!);
+
+      // return parsedData;
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateManualAddition(
+    int userId,
+    String name,
+    String manualNotes,
+    double additionalDeduction,
+  ) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.post<Map<String, dynamic>>(
+        '$url/updateManualAddition',
+        data: {
+          'user_id': userId,
+          'name': name,
+          'manual_notes': manualNotes,
+          'additional_deduction': additionalDeduction,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      // final parsedData = AwsUser.fromJson(response.data!);
+
+      // return parsedData;
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  Future<bool> updateConfirmedBy(
+      int userId, String name, bool confirmedByManager) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.post<Map<String, dynamic>>(
+        '$url/updateConfirmedBy',
+        data: {
+          'user_id': userId,
+          'name': name,
+          'confirmed_by_manager': confirmedByManager,
+        },
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',

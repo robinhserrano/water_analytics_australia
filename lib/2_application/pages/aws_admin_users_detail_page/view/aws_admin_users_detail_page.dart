@@ -205,6 +205,8 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
     ctrlCompLead.text = widget.user.companyLead.toString();
     salesManagerId = widget.user.salesManagerId;
     accessLevel = widget.user.accessLevel;
+    ctrlPassword.text = widget.user.plainText ?? '';
+
     _getUserFromHive();
     super.initState();
   }
@@ -302,16 +304,15 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                       const TextInputType.numberWithOptions(decimal: true),
                 ),
                 if ((userAccessLevel ?? 1) >= 4) ...[
-                  // CustomTextField(
-                  //   ctrl: ctrlCommissionSplit,
-                  //   onChanged: (value) {
-                  //     setState(() {});
-                  //   },
-                  //   title: 'Password',
-                  //   isValidating: isValidating,
-                  //   inputType:
-                  //       const TextInputType.numberWithOptions(decimal: true),
-                  // ),
+                  CustomTextField(
+                    ctrl: ctrlPassword,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    title: 'Password',
+                    isValidating: isValidating,
+                    inputType: TextInputType.visiblePassword,
+                  ),
                   const Text(
                     'User Role',
                     style: TextStyle(fontSize: 16),
@@ -469,6 +470,14 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
 
             if (isValidating == false) {
               unawaited(showSavingModal(context));
+
+              if (ctrlPassword.text.trim().isNotEmpty) {
+                final updatePassword = await cubit.updatePassword(
+                  widget.user.id,
+                  ctrlPassword.text,
+                );
+              }
+
               final success = await cubit.updateUser(
                 AwsUser(
                   id: widget.user.id,
@@ -486,6 +495,7 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                       double.tryParse(ctrlCommissionSplit.text) ?? 0,
                   selfGen: double.tryParse(ctrlSelfGen.text) ?? 0,
                   companyLead: double.tryParse(ctrlCompLead.text) ?? 0,
+                  plainText: widget.user.plainText,
                 ),
               );
 

@@ -151,6 +151,7 @@ class _SyncUsersState extends State<SyncUsers> {
                                     salesManagerId: null,
                                     selfGen: 1000,
                                     companyLead: 500,
+                                    plainText: '',
                                   ),
                                 );
 

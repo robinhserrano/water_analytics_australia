@@ -56,8 +56,40 @@ class AwsSalesDetailsCubit extends Cubit<AwsSalesDetailsCubitState> {
 
   Future<bool> updateSalesOrder(AwsSalesOrder order) async {
     try {
+      final success = await repo.updateSalesOrder(order);
+
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updateManualAddition(
+    int userId,
+    String name,
+    String manualNotes,
+    double additionalDeduction,
+  ) async {
+    try {
+      final success = await repo.updateManualAddition(
+        userId,
+        name,
+        manualNotes,
+        additionalDeduction,
+      );
+
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  Future<bool> updateConfirmedBy(
+      int userId, String name, bool confirmedByManager) async {
+    try {
       final success =
-          await repo.updateSalesOrder(order);
+          await repo.updateConfirmedBy(userId, name, confirmedByManager);
 
       return success;
     } catch (e) {

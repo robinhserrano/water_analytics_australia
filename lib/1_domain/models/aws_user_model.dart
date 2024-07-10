@@ -16,6 +16,7 @@ class AwsUser with _$AwsUser {
     @JsonKey(name: 'sales_manager_id') required int? salesManagerId,
     @JsonKey(name: 'self_gen') required double selfGen,
     @JsonKey(name: 'company_lead') required double companyLead,
+    @JsonKey(name: 'plain_text') required String? plainText,
   }) = _AwsUser;
 
   factory AwsUser.fromJson(Map<String, dynamic> json) =>
