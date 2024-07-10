@@ -275,7 +275,7 @@ class OrderInfos extends StatelessWidget {
             Text(
               order.createDate == null
                   ? ''
-                  : DateFormat('MM/dd/yyyy hh:mm a').format(order.createDate!),
+                  : DateFormat('MM/dd/yy').format(order.createDate!),
               style: const TextStyle(color: Color(0xff7a7a7a)),
             ),
           ],

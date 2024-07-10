@@ -414,7 +414,7 @@ class MyDataTableSource extends DataTableSource {
         //   Text(
         //     item.createDate == null
         //         ? ''
-        //         : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+        //         : DateFormat('MM/dd/yy').format(item.createDate!),
         //   ),
         // ),
         DataCell(

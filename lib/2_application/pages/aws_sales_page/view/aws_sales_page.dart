@@ -420,7 +420,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        'Last Synced: ${DateFormat('MM/dd/yyyy hh:mm a').format(findLatestAwsSalesOrder(widget.records)!.toLocal())}',
+                        'Last Synced: ${DateFormat('MM/dd/yyyy').format(findLatestAwsSalesOrder(widget.records)!.toLocal())}',
                         style: TextStyle(
                           color: Colors.blueGrey,
                           fontSize: 10,
@@ -671,7 +671,7 @@ Future<void> _downloadExcelWeb(
       TextCellValue(
         item.createDate == null
             ? ''
-            : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+            : DateFormat('MM/dd/yyyy').format(item.createDate!),
       ),
       TextCellValue(item.partnerIdDisplayName ?? ''),
       TextCellValue(item.xStudioSalesRep1 ?? ''),
@@ -750,7 +750,7 @@ Future<void> _downloadExcelWeb(
   // final anchor = html.AnchorElement(href: url)
   //   ..setAttribute(
   //     'download',
-  //     '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+  //     '${DateFormat('MM-dd-yy').format(DateTime.now())}'
   //         ' Sales Commission.xlsx',
   //   )
   //   ..click();
@@ -806,7 +806,7 @@ class MyDataTableSource extends DataTableSource {
           Text(
             item.createDate == null
                 ? ''
-                : DateFormat('MM/dd/yy hh:mm a').format(item.createDate!),
+                : DateFormat('MM/dd/yy').format(item.createDate!),
           ),
         ),
         DataCell(
@@ -843,7 +843,7 @@ class MyDataTableSource extends DataTableSource {
           Text(
             item.dateDeadline == null
                 ? 'Not Set'
-                : DateFormat('MM/dd/yy hh:mm a').format(item.dateDeadline!),
+                : DateFormat('MM/dd/yy').format(item.dateDeadline!),
           ),
         ),
         DataCell(
@@ -914,7 +914,7 @@ class MyDataTableSource extends DataTableSource {
 //       TextCellValue(
 //         item.createDate == null
 //             ? ''
-//             : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+//             : DateFormat('MM/dd/yyyy').format(item.createDate!),
 //       ),
 //       TextCellValue(item.partnerIdDisplayName ?? ''),
 //       TextCellValue(item.xStudioSalesRep1 ?? ''),
@@ -956,7 +956,7 @@ class MyDataTableSource extends DataTableSource {
 //   final anchor = html.AnchorElement(href: url)
 //     ..setAttribute(
 //       'download',
-//       '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+//       '${DateFormat('MM-dd-yy').format(DateTime.now())}'
 //           ' Sales Commission.xlsx',
 //     )
 //     ..click();

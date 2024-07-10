@@ -626,7 +626,7 @@ Future<void> _downloadExcel(
       TextCellValue(
         item.createDate == null
             ? ''
-            : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+            : DateFormat('MM/dd/yy hh:mm a').format(item.createDate!),
       ),
       TextCellValue(item.partnerId?.displayName ?? ''),
       TextCellValue(item.xStudioSalesRep1 ?? ''),
@@ -728,7 +728,7 @@ Future<void> _downloadExcel(
   // final anchor = html.AnchorElement(href: url)
   //   ..setAttribute(
   //     'download',
-  //     '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+  //     '${DateFormat('MM-dd-yy').format(DateTime.now())}'
   //         ' Sales Commission.xlsx',
   //   )
   //   ..click();

@@ -484,7 +484,7 @@ class MyDataTableSource extends DataTableSource {
           Text(
             item.createDate == null
                 ? ''
-                : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+                : DateFormat('MM/dd/yy').format(item.createDate!),
           ),
         ),
         DataCell(
@@ -583,7 +583,7 @@ class MyDataTableSource extends DataTableSource {
 //       TextCellValue(
 //         item.createDate == null
 //             ? ''
-//             : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+//             : DateFormat('MM/dd/yy').format(item.createDate!),
 //       ),
 //       TextCellValue(item.partnerIdDisplayName ?? ''),
 //       TextCellValue(item.xStudioSalesRep1 ?? ''),
@@ -625,7 +625,7 @@ class MyDataTableSource extends DataTableSource {
 //   final anchor = html.AnchorElement(href: url)
 //     ..setAttribute(
 //       'download',
-//       '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+//       '${DateFormat('MM-dd-yy').format(DateTime.now())}'
 //           ' Sales Commission.xlsx',
 //     )
 //     ..click();

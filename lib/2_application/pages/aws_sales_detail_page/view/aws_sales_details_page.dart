@@ -1201,8 +1201,7 @@ class CloudOrderInfos extends StatelessWidget {
                 Text(
                   order.createDate == null
                       ? ''
-                      : DateFormat('MM/dd/yyyy hh:mm a')
-                          .format(order.createDate!),
+                      : DateFormat('MM/dd/yy').format(order.createDate!),
                   style: const TextStyle(color: Color(0xff7a7a7a)),
                 ),
               ],
@@ -1274,7 +1273,7 @@ class CloudOrderInfos extends StatelessWidget {
                 Text(
                   order.dateDeadline == null
                       ? 'Not Set'
-                      : DateFormat('MM/dd/yyyy hh:mm a').format(
+                      : DateFormat('MM/dd/yy').format(
                           order.dateDeadline!.add(const Duration(days: 1)),
                         ),
                   style: const TextStyle(

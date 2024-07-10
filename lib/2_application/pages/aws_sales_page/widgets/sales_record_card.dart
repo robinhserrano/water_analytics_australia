@@ -70,7 +70,7 @@ class SalesRecordCard extends StatelessWidget {
                           Text(
                             record.createDate == null
                                 ? ''
-                                : DateFormat('MM/dd/yyyy hh:mm a')
+                                : DateFormat('MM/dd/yy')
                                     .format(record.createDate!),
                             style: const TextStyle(color: Color(0xff7a7a7a)),
                           ),

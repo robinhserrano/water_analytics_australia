@@ -22,12 +22,15 @@ import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
+import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/member_sort_filter.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sync_users_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
+import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/member_detail_page/bloc/member_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
@@ -67,15 +70,15 @@ class MemberDetailPage extends StatefulWidget {
   static const name = 'memberDetail';
   static const path = '/memberDetail/:rep';
 
-  static final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // static final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  static void closeDrawer() {
-    _scaffoldKey.currentState?.closeDrawer();
-  }
+  // static void closeDrawer() {
+  //   _scaffoldKey.currentState?.closeDrawer();
+  // }
 
-  static void openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
+  // static void openDrawer() {
+  //   _scaffoldKey.currentState?.openDrawer();
+  // }
 
   @override
   State<MemberDetailPage> createState() => _MemberDetailPageState();
@@ -102,33 +105,39 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: MemberDetailPage._scaffoldKey,
+      //key: MemberDetailPage._scaffoldKey,
       // endDrawer: const HomeEndDrawer(),
       // drawer: SortFilterModal(
       //   onChanged: () => setState(() {}),
       // ),
-      // drawer: SortFilterModal(
+      // drawer: MemberSortFilterModal(
       //   onChanged: () => setState(() {}),
       // ),
       backgroundColor: const Color(0xfff9fafb),
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.black,
         title: Text(
           "${widget.rep.endsWith('s') ? widget.rep : '${widget.rep}s'}' Sales",
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
+        leading: BackButton(
+          color: Colors.white,
+          onPressed: () {
+            if (context.canPop()) return context.pop();
+            context.pushNamed(HomePage.name);
+          },
+        ),
         actions: [
-          IconButton(
-            onPressed: () =>
-                MemberDetailPage._scaffoldKey.currentState!.openEndDrawer(),
-            icon: const HeroIcon(
-              HeroIcons.bars3,
-              color: Colors.white,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: MemberDetailPage.openDrawer,
+          //   icon: const HeroIcon(
+          //     HeroIcons.bars3,
+          //     color: Colors.white,
+          //   ),
+          // ),
         ],
       ),
       body: RefreshIndicator(
@@ -149,103 +158,13 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                   ),
                 );
               } else if (state is MemberDetailStateLoaded) {
-                return FutureBuilder<Box<SortFilterHive>>(
-                  future: Hive.openBox<SortFilterHive>('sortFilter'),
-                  builder: (context, snapshot) {
-                    SortFilterHive? sortFilterData;
+                // List<AwsSalesOrder> records = filterSalesOrder(records:
+                // state.records,
 
-                    try {
-                      sortFilterData = snapshot.data?.values.first;
-                    } catch (e) {
-                      sortFilterData = null;
-                    }
+                // );
 
-                    // if (sortFilterData != null) {
-                    //   final commissionStatus =
-                    //       sortFilterData.selectedCommissionStatus;
-                    //   final invoicePaymentStatus =
-                    //       sortFilterData.selectedInvoicePaymentStatus;
-                    //   final deliverStatus =
-                    //       sortFilterData.selectedDeliverStatus;
-                    //   final selectedNames = sortFilterData.selectedNames;
-
-                    //   final temp = state.records
-                    //       .where(
-                    //         (record) =>
-                    //             (!commissionStatus.any(
-                    //               (status) =>
-                    //                   status !=
-                    //                   record.xStudioCommissionPaid.toString(),
-                    //             )) &&
-                    //             (!invoicePaymentStatus.any(
-                    //               (status) =>
-                    //                   status !=
-                    //                   record.xStudioInvoicePaymentStatus
-                    //                       .toString(),
-                    //             )) &&
-                    //             (!deliverStatus.any(
-                    //               (status) =>
-                    //                   status !=
-                    //                   record.deliveryStatus.toString(),
-                    //             )),
-                    //       )
-                    //       .toList();
-
-                    //   var filteredRecords = <AwsSalesOrder>[];
-
-                    //   if (selectedNames.isNotEmpty) {
-                    //     filteredRecords = temp
-                    //         .where(
-                    //           (e) => selectedNames.any(
-                    //             (name) =>
-                    //                 name.toLowerCase() ==
-                    //                 e.xStudioSalesRep1?.toLowerCase(),
-                    //           ),
-                    //         )
-                    //         .toList();
-                    //   } else {
-                    //     filteredRecords = temp;
-                    //   }
-
-                    //   final selectedSortValue =
-                    //       sortFilterData.selectedSortValue;
-                    //   if (selectedSortValue == 'Newest') {
-                    //     filteredRecords.sort(
-                    //       (a, b) => b.createDate!.compareTo(a.createDate!),
-                    //     );
-                    //   }
-                    //   if (selectedSortValue == 'Oldest') {
-                    //     filteredRecords.sort(
-                    //       (a, b) => a.createDate!.compareTo(b.createDate!),
-                    //     );
-                    //   }
-                    //   if (selectedSortValue == 'A-Z') {
-                    //     filteredRecords.sort(
-                    //       (a, b) => (a.partnerIdDisplayName ?? '')
-                    //           .toLowerCase()
-                    //           .compareTo(
-                    //             (b.partnerIdDisplayName ?? '').toLowerCase(),
-                    //           ),
-                    //     );
-                    //   }
-                    //   if (selectedSortValue == 'Z-A') {
-                    //     filteredRecords.sort(
-                    //       (a, b) => (b.partnerIdDisplayName ?? '')
-                    //           .toLowerCase()
-                    //           .compareTo(
-                    //             (a.partnerIdDisplayName ?? '').toLowerCase(),
-                    //           ),
-                    //     );
-                    //   }
-
-                    //   return SalesListPageLoaded(
-                    //     records: filteredRecords,
-                    //   );
-                    // }
-                    return SalesListPageLoaded(
-                      records: state.records,
-                    );
-                  },
+                return SalesListPageLoaded(
+                  records: state.records,
                 );
               } else if (state is MemberDetailStateError) {
                 return SalesListPageError(
@@ -275,6 +194,14 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
   final ctrlSearch = TextEditingController();
   int _rowsPerPage = 50;
   Set<String> selectedSalesNo = {};
+
+  // SortBy selectedSortValue = SortBy.newestFirst;
+  // List<CommissionStatus> selectedCommissionStatus = [];
+  // List<InvoicePaymentStatus> selectedInvoicePaymentStatus = [];
+  // List<DeliveryStatus> selectedDeliverStatus = [];
+  // List<String> selectedNames = []
+  bool sortAscending = true;
+  int? sortColumnIndex;
 
   void updateSelectedSaleNo(String salesNo, bool isSelected) {
     if (isSelected) {
@@ -337,6 +264,8 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
 
     var records = widget.records;
 
+
+
     if (ctrlSearch.text.trim().isNotEmpty) {
       records = records
           .where(
@@ -347,6 +276,24 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                     .contains(ctrlSearch.text.toLowerCase()),
           )
           .toList();
+    }
+
+    //MODIFY THIS 7/10
+
+    void Function()? onSort(int columnIndex, bool ascending) {
+      setState(() {
+        sortAscending = ascending;
+        sortColumnIndex = columnIndex;
+      });
+      return null;
+    }
+
+    switch (sortColumnIndex) {
+      case 1:
+
+        
+        break;
+      default:
     }
 
     return Scaffold(
@@ -430,18 +377,53 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       });
                     },
                     minWidth: 1500,
-                    columns: const [
-                      DataColumn(label: Text('Number')),
-                      DataColumn(label: Text('Order Date')),
-                      DataColumn(label: Text('Customer')),
-                      DataColumn(label: Text('Sales Rep')),
-                      DataColumn(label: Text('Sales Source')),
-                      DataColumn(label: Text('Commission Paid')),
-                      DataColumn(label: Text('Total')),
-                      DataColumn(label: Text('Delivery Status')),
-                      DataColumn(label: Text('EST Install Date')),
-                      DataColumn(label: Text('Final Commission')),
-                      DataColumn(label: Text('Confirmed by Manager')),
+                    sortAscending: sortAscending,
+                    sortColumnIndex: sortColumnIndex,
+                    columns: [
+                      DataColumn(
+                        label: const Text('Number'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Order Date'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Customer'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Sales Rep'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Sales Source'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Commission Paid'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Total'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Delivery Status'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('EST Install Date'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Final Commission'),
+                        onSort: onSort,
+                      ),
+                      DataColumn(
+                        label: const Text('Confirmed by Manager'),
+                        onSort: onSort,
+                      ),
                     ],
                     source: MyDataTableSource(
                       records,
@@ -659,7 +641,7 @@ Future<void> _downloadExcelWeb(
       TextCellValue(
         item.createDate == null
             ? ''
-            : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+            : DateFormat('MM/dd/yyyy').format(item.createDate!),
       ),
       TextCellValue(item.partnerIdDisplayName ?? ''),
       TextCellValue(item.xStudioSalesRep1 ?? ''),
@@ -738,7 +720,7 @@ Future<void> _downloadExcelWeb(
   // final anchor = html.AnchorElement(href: url)
   //   ..setAttribute(
   //     'download',
-  //     '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+  //     '${DateFormat('MM-dd-yy').format(DateTime.now())}'
   //         ' Sales Commission.xlsx',
   //   )
   //   ..click();
@@ -794,7 +776,7 @@ class MyDataTableSource extends DataTableSource {
           Text(
             item.createDate == null
                 ? ''
-                : DateFormat('MM/dd/yy hh:mm a').format(item.createDate!),
+                : DateFormat('MM/dd/yy').format(item.createDate!),
           ),
         ),
         DataCell(
@@ -831,7 +813,7 @@ class MyDataTableSource extends DataTableSource {
           Text(
             item.dateDeadline == null
                 ? 'Not Set'
-                : DateFormat('MM/dd/yy hh:mm a').format(item.dateDeadline!),
+                : DateFormat('MM/dd/yy').format(item.dateDeadline!),
           ),
         ),
         DataCell(
@@ -902,7 +884,7 @@ class MyDataTableSource extends DataTableSource {
 //       TextCellValue(
 //         item.createDate == null
 //             ? ''
-//             : DateFormat('MM/dd/yyyy hh:mm a').format(item.createDate!),
+//             : DateFormat('MM/dd/yyyy').format(item.createDate!),
 //       ),
 //       TextCellValue(item.partnerIdDisplayName ?? ''),
 //       TextCellValue(item.xStudioSalesRep1 ?? ''),
@@ -944,7 +926,7 @@ class MyDataTableSource extends DataTableSource {
 //   final anchor = html.AnchorElement(href: url)
 //     ..setAttribute(
 //       'download',
-//       '${DateFormat('MM-dd-yyyy').format(DateTime.now())}'
+//       '${DateFormat('MM-dd-yy').format(DateTime.now())}'
 //           ' Sales Commission.xlsx',
 //     )
 //     ..click();
@@ -1108,4 +1090,70 @@ List<LandingPriceWithQuantity> getLandingPrice(
   }
 
   return matchingLandingPrices.toList();
+}
+
+List<AwsSalesOrder> filterSalesOrder({
+  required List<AwsSalesOrder> records,
+  required String selectedSortValue,
+  required List<String> commissionStatus,
+  required List<String> invoicePaymentStatus,
+  required List<String> deliverStatus,
+  required List<String> selectedNames,
+}) {
+  final temp = records
+      .where(
+        (record) =>
+            (!commissionStatus.any(
+              (status) => status != record.xStudioCommissionPaid.toString(),
+            )) &&
+            (!invoicePaymentStatus.any(
+              (status) =>
+                  status != record.xStudioInvoicePaymentStatus.toString(),
+            )) &&
+            (!deliverStatus.any(
+              (status) => status != record.deliveryStatus.toString(),
+            )),
+      )
+      .toList();
+
+  var filteredRecords = <AwsSalesOrder>[];
+
+  if (selectedNames.isNotEmpty) {
+    filteredRecords = temp
+        .where(
+          (e) => selectedNames.any(
+            (name) => name.toLowerCase() == e.xStudioSalesRep1?.toLowerCase(),
+          ),
+        )
+        .toList();
+  } else {
+    filteredRecords = temp;
+  }
+
+  if (selectedSortValue == 'Newest') {
+    filteredRecords.sort(
+      (a, b) => b.createDate!.compareTo(a.createDate!),
+    );
+  }
+  if (selectedSortValue == 'Oldest') {
+    filteredRecords.sort(
+      (a, b) => a.createDate!.compareTo(b.createDate!),
+    );
+  }
+  if (selectedSortValue == 'A-Z') {
+    filteredRecords.sort(
+      (a, b) => (a.partnerIdDisplayName ?? '').toLowerCase().compareTo(
+            (b.partnerIdDisplayName ?? '').toLowerCase(),
+          ),
+    );
+  }
+  if (selectedSortValue == 'Z-A') {
+    filteredRecords.sort(
+      (a, b) => (b.partnerIdDisplayName ?? '').toLowerCase().compareTo(
+            (a.partnerIdDisplayName ?? '').toLowerCase(),
+          ),
+    );
+  }
+
+  return [];
 }
