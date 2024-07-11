@@ -177,9 +177,10 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                                       status !=
                                       record.deliveryStatus.toString(),
                                 )) &&
-                                (record.user?.commissionSplit != 0 &&
+                                (
+                                    //record.user?.commissionSplit != 0 &&
                                     record.user?.selfGen != 0 &&
-                                    record.user?.companyLead != 0),
+                                        record.user?.companyLead != 0),
                           )
                           .toList();
 
@@ -188,9 +189,10 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                               .where(
                                 (record) =>
                                     record.confirmedByManager == true &&
-                                    (record.user?.commissionSplit != 0 &&
+                                    (
+                                        //record.user?.commissionSplit != 0 &&
                                         record.user?.selfGen != 0 &&
-                                        record.user?.companyLead != 0),
+                                            record.user?.companyLead != 0),
                               )
                               .toList()
                           : tempFiltered;
