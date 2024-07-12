@@ -20,7 +20,7 @@ class _MyWidgetState extends State<MyWidget> {
     return Scaffold(
       body: Column(
         children: [
-          AsyncPaginatedDataTable2(
+          PaginatedDataTable2(
             columns: [
               DataColumn(label: Text('Number')),
               DataColumn(label: Text('Order Date')),
@@ -35,6 +35,7 @@ class _MyWidgetState extends State<MyWidget> {
               DataColumn(label: Text('Confirmed by Manager')),
             ],
             source: dataSource,
+            
           )
         ],
       ),
@@ -43,10 +44,10 @@ class _MyWidgetState extends State<MyWidget> {
 }
 
 class ItemDataSource extends AsyncDataTableSource {
-  final Dio dio;
-  int _totalRows = 0;
 
   ItemDataSource(this.dio);
+  final Dio dio;
+  int _totalRows = 0;
 
   @override
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {

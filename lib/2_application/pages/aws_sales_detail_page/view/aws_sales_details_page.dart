@@ -952,7 +952,7 @@ class CommissionSection extends StatelessWidget {
               height: 8,
             ),
             //ACCESS RESTRICTION
-            if (accessLevel >= 3 && !order.xStudioCommissionPaid) ...[
+            if (accessLevel >= 3) ...[
               Center(
                 child: ResponsiveRowColumn(
                   rowMainAxisAlignment: MainAxisAlignment.center,
@@ -962,95 +962,99 @@ class CommissionSection extends StatelessWidget {
                   rowSpacing: 16,
                   columnSpacing: 16,
                   children: [
-                    ResponsiveRowColumnItem(
-                      rowFlex: 1,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          unawaited(
-                            showModifyManualAdditionDeductionModal(
-                              context,
-                              order,
-                              cubit,
-                              currentUserId,
-                              order.name ?? '',
-                            ),
-                          );
-                        },
-                        child: const Text('Modify Manual +/-'),
-                      ),
-                    ),
-                    ResponsiveRowColumnItem(
-                      rowFlex: 1,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          unawaited(
-                            showConfirmingCommissionBreakdownModal(
-                              context,
-                              order.confirmedByManager,
-                            ),
-                          );
-                          // final success = await cubit.updateSalesOrder(
-                          //   order.copyWith(
-                          //     confirmedByManager: !order.confirmedByManager,
-                          //   ),
-                          // );
-                          //Modified thissssssssssssssssssss
-
-                          final success = await cubit.updateConfirmedBy(
-                            currentUserId,
-                            order.name ?? '',
-                            !order.confirmedByManager,
-                          );
-                          if (success) {
-                            if (context.mounted) {
-                              context.pop();
-                            }
-
-                            const snackBar = SnackBar(
-                              backgroundColor: Colors.green,
-                              content: Text(
-                                'Successfully updated commission breakdown.',
-                              ),
-                            );
-
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-                          } else {
-                            if (context.mounted) {
-                              context.pop();
-                            }
-
-                            const snackBar = SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(
-                                'Failed to update commission breakdown.',
-                              ),
-                            );
-
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-                          }
-
-                          if (context.mounted) {
+                    if (accessLevel >= 4) ...[
+                      ResponsiveRowColumnItem(
+                        rowFlex: 1,
+                        child: ElevatedButton(
+                          onPressed: () async {
                             unawaited(
-                              context
-                                  .read<AwsSalesDetailsCubit>()
-                                  .fetchAwsSalesDetails(order.id!.toString()),
+                              showModifyManualAdditionDeductionModal(
+                                context,
+                                order,
+                                cubit,
+                                currentUserId,
+                                order.name ?? '',
+                              ),
                             );
-                          }
-                        },
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          order.confirmedByManager == false
-                              ? 'Confirm Commission Breakdown'
-                              : 'Reject Commission Breakdown',
+                          },
+                          child: const Text('Modify Manual +/-'),
                         ),
                       ),
-                    ),
+                    ],
+                    if (!order.xStudioCommissionPaid) ...[
+                      ResponsiveRowColumnItem(
+                        rowFlex: 1,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            unawaited(
+                              showConfirmingCommissionBreakdownModal(
+                                context,
+                                order.confirmedByManager,
+                              ),
+                            );
+                            // final success = await cubit.updateSalesOrder(
+                            //   order.copyWith(
+                            //     confirmedByManager: !order.confirmedByManager,
+                            //   ),
+                            // );
+                            //Modified thissssssssssssssssssss
+
+                            final success = await cubit.updateConfirmedBy(
+                              currentUserId,
+                              order.name ?? '',
+                              !order.confirmedByManager,
+                            );
+                            if (success) {
+                              if (context.mounted) {
+                                context.pop();
+                              }
+
+                              const snackBar = SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text(
+                                  'Successfully updated commission breakdown.',
+                                ),
+                              );
+
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            } else {
+                              if (context.mounted) {
+                                context.pop();
+                              }
+
+                              const snackBar = SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  'Failed to update commission breakdown.',
+                                ),
+                              );
+
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              }
+                            }
+
+                            if (context.mounted) {
+                              unawaited(
+                                context
+                                    .read<AwsSalesDetailsCubit>()
+                                    .fetchAwsSalesDetails(order.id!.toString()),
+                              );
+                            }
+                          },
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            order.confirmedByManager == false
+                                ? 'Confirm Commission Breakdown'
+                                : 'Reject Commission Breakdown',
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
