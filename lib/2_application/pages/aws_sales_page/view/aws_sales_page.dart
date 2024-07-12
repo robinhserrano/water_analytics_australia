@@ -102,7 +102,11 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => context.read<AwsSalesCubit>().fetchSales(),
+            onPressed: () {
+              context.read<AwsSalesCubit>().fetchSales();
+              //  context.read<AwsSalesCubit>().fec
+              //modify this 07/12
+            },
             icon: const HeroIcon(
               HeroIcons.arrowPath,
               color: Colors.white,
@@ -433,7 +437,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                 ],
 
                 Expanded(
-                  child: PaginatedDataTable2(
+                  child: AsyncPaginatedDataTable2(
                     availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
@@ -760,6 +764,42 @@ Future<void> _downloadExcelWeb(
   // // Revoke the object URL to free up resources
   // html.Url.revokeObjectUrl(url);
 }
+
+// class ItemDataSource extends AsyncDataTableSource {
+//   int _totalRows = 0;
+
+//   ItemDataSource(this.cubit);
+//   final AwsSalesCubit cubit;
+
+//   @override
+//   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
+//     final response =
+//         await cubit.fetchSales()
+        
+//         //dio.get('https://api.example.com/items', queryParameters: {
+//       'start': startIndex,
+//       'count': count,
+//     });
+
+//     final data = response.data['data'] as List;
+//     _totalRows = response.data['total'] as int;
+
+//     List<DataRow> rows = data.map<DataRow>((item) {
+//       return DataRow(
+//         key: ValueKey(item['id']),
+//         cells: [
+//           DataCell(Text(item['id'].toString())),
+//           DataCell(Text(item['name'].toString())),
+//         ],
+//       );
+//     }).toList();
+
+//     return AsyncRowsResponse(_totalRows, rows);
+//   }
+
+//   @override
+//   int get rowCount => _totalRows;
+// }
 
 class MyDataTableSource extends DataTableSource {
   MyDataTableSource(

@@ -572,4 +572,34 @@ class Repository {
       return false;
     }
   }
+
+  Future<PaginatedAwsSalesOrder?> fetchSalesPaginated(
+    int perPage,
+    int page,
+  ) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.get<Map<String, dynamic>>(
+        '$url/getPaginatedSalesOrders',
+        queryParameters: {
+          'page': page,
+          'per_page': perPage,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final parsedData = PaginatedAwsSalesOrder.fromJson(response.data!);
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

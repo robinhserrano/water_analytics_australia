@@ -41,6 +41,7 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
         final userNames = users!.map((e) => e.displayName).toList();
         data = await repo.fetchSalesByReps(userNames);
       } else {
+        var datas = await repo.fetchSalesPaginated(50, 1);
         data = await repo.fetchSales();
       }
 

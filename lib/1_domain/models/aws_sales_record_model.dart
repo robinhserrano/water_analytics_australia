@@ -76,3 +76,27 @@ class AwsOrderLine with _$AwsOrderLine {
   factory AwsOrderLine.fromJson(Map<String, dynamic> json) =>
       _$AwsOrderLineFromJson(json);
 }
+
+@freezed
+class PaginatedAwsSalesOrder with _$PaginatedAwsSalesOrder {
+  const factory PaginatedAwsSalesOrder({
+    required List<AwsSalesOrder> data,
+    required Pagination pagination,
+  }) = _PaginatedAwsSalesOrder;
+
+  factory PaginatedAwsSalesOrder.fromJson(Map<String, dynamic> json) =>
+      _$PaginatedAwsSalesOrderFromJson(json);
+}
+
+@freezed
+class Pagination with _$Pagination {
+  const factory Pagination({
+    @JsonKey(name: 'total_items') required int totalItems,
+    @JsonKey(name: 'current_page') required int currentPage,
+    @JsonKey(name: 'per_page') required int perPage,
+    @JsonKey(name: 'last_page') required int lastPage,
+  }) = _Pagination;
+
+  factory Pagination.fromJson(Map<String, dynamic> json) =>
+      _$PaginationFromJson(json);
+}

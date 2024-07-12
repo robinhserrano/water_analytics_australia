@@ -111,3 +111,36 @@ Map<String, dynamic> _$$AwsOrderLineImplToJson(_$AwsOrderLineImpl instance) =>
       'disc': instance.disc,
       'tax_excl': instance.taxExcl,
     };
+
+_$PaginatedAwsSalesOrderImpl _$$PaginatedAwsSalesOrderImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PaginatedAwsSalesOrderImpl(
+      data: (json['data'] as List<dynamic>)
+          .map((e) => AwsSalesOrder.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      pagination:
+          Pagination.fromJson(json['pagination'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$PaginatedAwsSalesOrderImplToJson(
+        _$PaginatedAwsSalesOrderImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+      'pagination': instance.pagination,
+    };
+
+_$PaginationImpl _$$PaginationImplFromJson(Map<String, dynamic> json) =>
+    _$PaginationImpl(
+      totalItems: (json['total_items'] as num).toInt(),
+      currentPage: (json['current_page'] as num).toInt(),
+      perPage: (json['per_page'] as num).toInt(),
+      lastPage: (json['last_page'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$PaginationImplToJson(_$PaginationImpl instance) =>
+    <String, dynamic>{
+      'total_items': instance.totalItems,
+      'current_page': instance.currentPage,
+      'per_page': instance.perPage,
+      'last_page': instance.lastPage,
+    };
