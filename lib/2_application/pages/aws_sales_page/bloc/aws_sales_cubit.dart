@@ -123,6 +123,27 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
     }
   }
 
+  Future<void> updateSalesLocal(
+    List<AwsSalesOrder> salesOrders,
+    AwsSalesOrder newSales,
+  ) async {
+    final index =
+        salesOrders.indexWhere((salesOrder) => salesOrder.id == newSales.id);
+    var hehe = index;
+
+    var before = salesOrders[index];
+    if (index != -1) {
+      // Replace the existing sales order with the new one
+      salesOrders[index] = newSales;
+    } else {
+      // Add the new sales order if no match is found
+      salesOrders.add(newSales);
+    }
+    var after = salesOrders[index];
+    var lala;
+    emit(AwsSalesStateLoaded(salesOrders));
+  }
+
   // Future<bool> saveAllSalesAwsBulk(
   //   List<SalesOrder> sales,
   //   void Function(double) onProgress,
@@ -319,4 +340,16 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
 //     return false;
 //   }
 // }
+
+  Future<bool> updateConfirmedBy(
+      int userId, String name, bool confirmedByManager) async {
+    try {
+      final success =
+          await repo.updateConfirmedBy(userId, name, confirmedByManager);
+
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
 }

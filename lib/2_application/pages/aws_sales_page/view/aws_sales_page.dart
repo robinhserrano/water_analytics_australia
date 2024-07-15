@@ -1,5 +1,6 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, unused_import, prefer_int_literals
 
+import 'dart:async';
 import 'dart:html' as html;
 import 'dart:io';
 
@@ -31,6 +32,7 @@ import 'package:water_analytics_australia/2_application/pages/cloud_sales_detail
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/core/helper.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/temp.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
@@ -69,19 +71,21 @@ class AwsSalesPage extends StatefulWidget {
 }
 
 class _AwsSalesPageState extends State<AwsSalesPage> {
+  int userAccessLevel = 1;
+  int currentUserId = 0;
   int number = 0;
 
   @override
   void initState() {
+    _getUserFromHive();
     super.initState();
   }
 
-  Future<void> _initHive() async {
-    // final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
-    // Hive.init(appDocumentDir.path);
-    // await Hive.openBox<MyData>('myBox'); // Change 'myBox' to your actual box name
-    // _dataBox = Hive.box<MyData>('myBox');
-    setState(() {}); // Update the widget once data is loaded
+  Future<void> _getUserFromHive() async {
+    final user = await HiveHelper.getCurrentUser();
+    userAccessLevel = user?.accessLevel ?? 1;
+    currentUserId = user?.userId ?? 1;
+    setState(() {});
   }
 
   @override
@@ -250,6 +254,8 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
 
                       return SalesListPageLoaded(
                         records: filteredRecords,
+                        userAccessLevel: userAccessLevel,
+                        currentUserId: currentUserId,
                       );
                     }
 
@@ -259,6 +265,8 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                       );
                     return SalesListPageLoaded(
                       records: defaultSortRecords,
+                      userAccessLevel: userAccessLevel,
+                      currentUserId: currentUserId,
                     );
                   },
                 );
@@ -277,9 +285,16 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
 }
 
 class SalesListPageLoaded extends StatefulWidget {
-  const SalesListPageLoaded({required this.records, super.key});
+  const SalesListPageLoaded({
+    required this.records,
+    required this.userAccessLevel,
+    required this.currentUserId,
+    super.key,
+  });
 
   final List<AwsSalesOrder> records;
+  final int userAccessLevel;
+  final int currentUserId;
 
   @override
   State<SalesListPageLoaded> createState() => _SalesListPageLoadedState();
@@ -433,7 +448,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
 
                 Expanded(
@@ -461,11 +476,18 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       DataColumn(label: Text('Final Commission')),
                       DataColumn(label: Text('Confirmed by Manager')),
                     ],
+                    // wrapInCard: true,
                     source: MyDataTableSource(
                       records,
                       context,
                       updateSelectedSaleNo,
                       selectedSalesNo,
+                      cubit,
+                      () {
+                        setState(() {});
+                      },
+                      widget.userAccessLevel,
+                      widget.currentUserId,
                     ),
                     onSelectAll: (value) {
                       if (selectedSalesNo.isNotEmpty) {
@@ -513,112 +535,6 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
     );
   }
 }
-
-// class SalesListPageLoaded extends StatefulWidget {
-//   const SalesListPageLoaded({required this.records, super.key});
-
-//   final List<AwsSalesOrder> records;
-
-//   @override
-//   State<SalesListPageLoaded> createState() => _SalesListPageLoadedState();
-// }
-
-// class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
-//   final ctrlSearch = TextEditingController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: const Color(0xfff9fafb),
-//       body: widget.records.isEmpty
-//           ? const Center(
-//               child: Text('No sales yet.'),
-//             )
-//           : Column(
-//               children: [
-//                 Row(
-//                   children: [
-//                     Expanded(
-//                       child: Container(
-//                         decoration: const BoxDecoration(
-//                           color: Color(0xffeeeef0),
-//                           borderRadius: BorderRadius.all(Radius.circular(8)),
-//                         ),
-//                         padding: const EdgeInsets.symmetric(
-//                           horizontal: 16,
-//                         ),
-//                         margin: const EdgeInsets.only(
-//                           left: 16,
-//                           top: 8,
-//                           bottom: 8,
-//                         ),
-//                         child: TextFormField(
-//                           controller: ctrlSearch,
-//                           enableSuggestions: false,
-//                           autocorrect: false,
-//                           decoration: const InputDecoration(
-//                             border: InputBorder.none,
-//                             labelStyle: TextStyle(color: Colors.green),
-//                             hintText: 'Search',
-//                             hintStyle: TextStyle(
-//                               color: Color(0xff5f5f60),
-//                               fontWeight: FontWeight.w400,
-//                             ),
-//                           ),
-//                           onChanged: (value) {
-//                             setState(() {});
-//                           },
-//                           onEditingComplete: () {},
-//                           onFieldSubmitted: (value) {},
-//                         ),
-//                       ),
-//                     ),
-//                     const IconButton(
-//                       onPressed: AwsSalesPage.openDrawer,
-//                       icon: HeroIcon(
-//                         HeroIcons.adjustmentsHorizontal,
-//                       ),
-//                     ),
-//                     IconButton(
-//                       onPressed: () {
-//                         _downloadExcelWeb(widget.records);
-//                       },
-//                       icon: HeroIcon(
-//                         HeroIcons.arrowDown,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//                 Text(widget.records.length.toString()),
-//                 Expanded(
-//                   child: Scrollbar(
-//                     child: ListView.builder(
-//                       itemCount: widget.records.length,
-//                       itemBuilder: (context, index) {
-//                         final record = widget.records[index];
-//                         if ((record.name?.toLowerCase() ?? '').contains(
-//                               ctrlSearch.text.toLowerCase(),
-//                             ) ||
-//                             (record.partnerIdDisplayName ?? '')
-//                                 .toLowerCase()
-//                                 .contains(
-//                                   ctrlSearch.text.toLowerCase(),
-//                                 )) {
-//                           return SalesRecordCard(
-//                             record: record,
-//                           );
-//                         }
-
-//                         return const SizedBox();
-//                       },
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//     );
-//   }
-// }
 
 class SalesListPageError extends StatelessWidget {
   const SalesListPageError({
@@ -775,7 +691,7 @@ Future<void> _downloadExcelWeb(
 //   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
 //     final response =
 //         await cubit.fetchSales()
-        
+
 //         //dio.get('https://api.example.com/items', queryParameters: {
 //       'start': startIndex,
 //       'count': count,
@@ -807,11 +723,19 @@ class MyDataTableSource extends DataTableSource {
     this.context,
     this.updateSelectedSaleNo,
     this.selectedSalesNo,
+    this.cubit,
+    this.updateState,
+    this.userAccessLevel,
+    this.currentUserId,
   );
   final List<AwsSalesOrder> data;
   final BuildContext context;
   void Function(String salesNo, bool isSelected) updateSelectedSaleNo;
   Set<String> selectedSalesNo = {};
+  final AwsSalesCubit cubit;
+  void Function() updateState;
+  final int userAccessLevel;
+  final int currentUserId;
 
   @override
   bool get isRowCountApproximate => false;
@@ -897,20 +821,24 @@ class MyDataTableSource extends DataTableSource {
           ),
         ),
         DataCell(
-          onTap: () => onTap(item),
+          onTap: userAccessLevel < 3 || item.confirmedByManager
+              ? () {}
+              : () {
+                  showConfirmByManagerModal(
+                    context,
+                    item,
+                    cubit,
+                    currentUserId,
+                    item.name!,
+                    data,
+                    updateState,
+                  );
+                },
           Checkbox(
-            onChanged: null, //(value) {},
+            onChanged: null,
             value: item.confirmedByManager,
-            // value: item.confirmedByManager != null &&
-            //     !(item.confirmedByManager?.isConfirmed == false),
           ),
         ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     formatCurrency(item.amountTotal ?? 0),
-        //   ),
-        // ),
       ],
     );
   }
@@ -1176,4 +1104,195 @@ DateTime? findLatestAwsSalesOrder(List<AwsSalesOrder> salesOrders) {
       .updatedAt;
 
   return haha;
+}
+
+Future<void> showConfirmingCommissionBreakdownModal(
+  BuildContext context,
+  bool confirmedByManager,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          const SizedBox(
+            width: 16,
+          ),
+          Text(
+            '${confirmedByManager ? 'Rejecting' : 'Confirming'} '
+            'Commission Breakdown...',
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<void> showConfirmByManagerModal(
+  BuildContext context,
+  AwsSalesOrder order,
+  AwsSalesCubit cubit,
+  int userId,
+  String name,
+  List<AwsSalesOrder> data,
+  void Function() updateState,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: ConfirmByManagerModal(
+        order: order,
+        cubit: cubit,
+        context: context,
+        userId: userId,
+        name: name,
+        data: data,
+        updateState: updateState,
+      ),
+    ),
+  );
+}
+
+class ConfirmByManagerModal extends StatefulWidget {
+  const ConfirmByManagerModal({
+    required this.order,
+    required this.cubit,
+    required this.context,
+    required this.userId,
+    required this.name,
+    required this.data,
+    required this.updateState,
+    super.key,
+  });
+  final BuildContext context;
+  final AwsSalesOrder order;
+  final AwsSalesCubit cubit;
+  final int userId;
+  final String name;
+  final List<AwsSalesOrder> data;
+  final void Function() updateState;
+
+  @override
+  State<ConfirmByManagerModal> createState() => _ConfirmByManagerModalState();
+}
+
+class _ConfirmByManagerModalState extends State<ConfirmByManagerModal> {
+  @override
+  Widget build(BuildContext _) {
+    final context = widget.context;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Confirm Commission Breakdown?'),
+        const SizedBox(
+          height: 16,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: context.pop,
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xffB3B7C2),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Color(0xffFFFFFF),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              ElevatedButton(
+                onPressed: () async {
+                  context.pop();
+                  unawaited(
+                    showSavingManualAdditionDecution(
+                      context,
+                    ),
+                  );
+                  final isSaved = await widget.cubit.updateConfirmedBy(
+                    widget.userId,
+                    widget.name,
+                    !widget.order.confirmedByManager,
+                  );
+
+                  if (isSaved) {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text(
+                        'Successfully updated commission breakdown.',
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
+                    await widget.cubit.updateSalesLocal(
+                      widget.data,
+                      widget.order.copyWith(
+                        confirmedByManager: !widget.order.confirmedByManager,
+                      ),
+                    );
+
+                    widget.updateState();
+                  } else {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        'Failed to update commission breakdown.',
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xff0083ff),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
