@@ -46,7 +46,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screens = <Widget>[
       const AwsSalesPageWrapperProvider(),
-      // const CloudSalesPageWrapperProvider(),
       if (userAccessLevel >= 4) ...[
         const AwsAdminUsersPageWrapperProvider(),
       ],
@@ -66,10 +65,6 @@ class _HomePageState extends State<HomePage> {
         icon: HeroIcon(HeroIcons.home),
         label: 'Home',
       ),
-      // const NavigationDestination(
-      //   icon: HeroIcon(HeroIcons.fire),
-      //   label: 'Firebase',
-      // ),
       if (userAccessLevel >= 4) ...[
         const NavigationDestination(
           icon: Icon(FontAwesomeIcons.addressBook),
@@ -100,14 +95,12 @@ class _HomePageState extends State<HomePage> {
         ? const AwsSalesPageWrapperProvider()
         : AdaptiveLayout(
             internalAnimations: false,
-
             primaryNavigation: SlotLayout(
               config: <Breakpoint, SlotLayoutConfig>{
                 Breakpoints.mediumAndUp: SlotLayout.from(
                   key: const Key('primary-navigation-medium'),
                   builder: (context) => AdaptiveScaffold.standardNavigationRail(
                     backgroundColor: Colors.white,
-                    // leading: const HeroIcon(HeroIcons.academicCap),
                     labelType: NavigationRailLabelType.all,
                     onDestinationSelected: (index) =>
                         _tapOnNavigationDestination(context, index),
@@ -121,7 +114,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               },
             ),
-
             bottomNavigation: SlotLayout(
               config: <Breakpoint, SlotLayoutConfig>{
                 Breakpoints.small: SlotLayout.from(
@@ -139,60 +131,10 @@ class _HomePageState extends State<HomePage> {
               config: <Breakpoint, SlotLayoutConfig>{
                 Breakpoints.smallAndUp: SlotLayout.from(
                   key: const Key('primary-body-small'),
-                  builder: (_) =>
-                      screens[_pageIndex], //HomePage.tabs[widget.index].child,
+                  builder: (_) => screens[_pageIndex],
                 ),
               },
             ),
-            // secondaryBody: SlotLayout(
-            //   config: <Breakpoint, SlotLayoutConfig>{
-            //     Breakpoints.large: SlotLayout.from(
-            //       key: const Key('secondary-body-medium'),
-            //     builder: (_){
-            //       return Text('aaaaa');
-            //     }
-            //     //  builder:
-
-            //       // widget.index != 1
-            //       //     ? null
-            //       //     : (_) => BlocBuilder<NavigationToDoCubit, NavigationToDoCubitState>(
-            //       //           builder: (context, state) {
-            //       //             final selectedId = state.selectedCollectionId;
-            //       //             final isSecondBodyDisplayed = Breakpoints.mediumAndUp.isActive(context);
-
-            //       //             context.read<NavigationToDoCubit>().secondBodyHasChanged(
-            //       //                   isSecondBodyDisplayed: isSecondBodyDisplayed,
-            //       //                 );
-
-            //       //             if (selectedId == null) {
-            //       //               return const Placeholder();
-            //       //             }
-            //       //             return ToDoDetailPageProvider(
-            //       //               key: Key(selectedId.value),
-            //       //               collectionId: selectedId,
-            //       //             );
-            //       //           },
-            //       //         ),
-            //     ),
-            //   },
-            // ),
           );
-    // return Scaffold(
-    //   body: _screens[_pageIndex],
-    //   bottomNavigationBar: BottomNavigationBar(
-    //     currentIndex: _pageIndex,
-    //     onTap: _onItemTapped,
-    //     items: const [
-    //       BottomNavigationBarItem(
-    //         icon: HeroIcon(HeroIcons.home),
-    //         label: 'Home',
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: HeroIcon(HeroIcons.fire),
-    //         label: 'Firebase',
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }

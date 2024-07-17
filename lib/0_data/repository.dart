@@ -6,6 +6,7 @@ import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
+import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 
@@ -630,6 +631,41 @@ class Repository {
         return true;
       }
 
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+//Fix this 7/17
+  Future<bool> saveLandingPrice(
+    LandingPrice landingPrice,
+  ) async {
+    try {
+      final user = await HiveHelper.getAllUsers();
+      client.interceptors.add(ChuckerDioInterceptor());
+      final response = await client.post<dynamic>(
+        '$url/landingPrice',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+        data: {
+          'name': landingPrice.name,
+          'internal_reference': landingPrice.internalReference,
+          'product_category': landingPrice.productCategory,
+          'installation_service': landingPrice.installationService,
+          'supply_only': landingPrice.supplyOnly,
+        },
+      );
+      
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      }
       return false;
     } catch (e) {
       print(e);

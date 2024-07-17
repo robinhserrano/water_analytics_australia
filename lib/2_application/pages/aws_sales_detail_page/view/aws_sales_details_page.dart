@@ -986,7 +986,8 @@ class CommissionSection extends StatelessWidget {
                   rowSpacing: 16,
                   columnSpacing: 16,
                   children: [
-                    if (accessLevel >= 4) ...[
+                    if (accessLevel >= 4 ||
+                        order.xStudioCommissionPaid == false) ...[
                       ResponsiveRowColumnItem(
                         rowFlex: 1,
                         child: ElevatedButton(
@@ -1042,6 +1043,7 @@ class CommissionSection extends StatelessWidget {
                                 cubit,
                                 currentUserId,
                                 order.name ?? '',
+                                salesCubit,
                               ),
                             );
                           },
@@ -1764,6 +1766,7 @@ Future<void> showEnteredOdooModal(
   String name,
   //List<AwsSalesOrder> data,
   //void Function() updateState,
+  AwsSalesCubit? salesCubit,
 ) {
   return showDialog(
     barrierColor: Colors.black.withOpacity(0.3),
@@ -1779,6 +1782,7 @@ Future<void> showEnteredOdooModal(
         context: context,
         userId: userId,
         name: name,
+        salesCubit: salesCubit,
         // data: data,
         // updateState: updateState,
       ),
@@ -1793,8 +1797,10 @@ class EnteredOdooByModal extends StatefulWidget {
     required this.context,
     required this.userId,
     required this.name,
+    required this.salesCubit,
     // required this.data,
     // required this.updateState,
+
     super.key,
   });
   final BuildContext context;
@@ -1802,6 +1808,7 @@ class EnteredOdooByModal extends StatefulWidget {
   final AwsSalesDetailsCubit cubit;
   final int userId;
   final String name;
+  final AwsSalesCubit? salesCubit;
   // final List<AwsSalesOrder> data;
   // final void Function() updateState;
 
@@ -1874,12 +1881,16 @@ class _EnteredOdooByModalState extends State<EnteredOdooByModal> {
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
 
-                    // await widget.cubit.updateSalesLocal(
-                    //   widget.data,
-                    //   widget.order.copyWith(
-                    //     isEnteredOdoo: !widget.order.isEnteredOdoo,
-                    //   ),
-                    // );
+                    // try {
+                    //   var newCubit = (widget.salesCubit!.state is AwsSalesStateLoaded).asData;
+
+                    //   await widget.salesCubit!.updateSalesLocal(
+                    //     widget.data,
+                    //     widget.order.copyWith(
+                    //       isEnteredOdoo: !widget.order.isEnteredOdoo,
+                    //     ),
+                    //   );
+                    // } catch (e) {}
 
                     // widget.updateState();
                     unawaited(
