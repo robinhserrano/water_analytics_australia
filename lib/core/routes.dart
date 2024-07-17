@@ -8,6 +8,7 @@ import 'package:water_analytics_australia/2_application/pages/aws_manage_team_de
 import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/view/manage_teams_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/my_team_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
@@ -47,6 +48,7 @@ final routes = GoRouter(
       name: SalesDetailsPage.name,
       path: SalesDetailsPage.path,
       builder: (context, state) {
+        final cubit = state.extra as AwsSalesCubit?;
         return SalesDetailsPageWrapperProvider(
           id: state.pathParameters['id']!,
         );
@@ -118,8 +120,10 @@ final routes = GoRouter(
       name: AwsSalesDetailsPage.name,
       path: AwsSalesDetailsPage.path,
       builder: (context, state) {
+        final cubit = state.extra as AwsSalesCubit?;
         return AwsSalesDetailsPageWrapperProvider(
           id: state.pathParameters['id']!,
+          salesCubit: cubit,
         );
       },
     ),

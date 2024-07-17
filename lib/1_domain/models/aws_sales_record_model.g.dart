@@ -48,6 +48,9 @@ _$AwsSalesOrderImpl _$$AwsSalesOrderImplFromJson(Map<String, dynamic> json) =>
       dateDeadline: json['date_deadline'] == null
           ? null
           : DateTime.parse(json['date_deadline'] as String),
+      isEnteredOdoo: const IntToBooleanConverter()
+          .fromJson((json['is_entered_odoo'] as num?)?.toInt()),
+      lastEnteredOdooBy: (json['last_entered_odoo_by'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
@@ -82,6 +85,9 @@ Map<String, dynamic> _$$AwsSalesOrderImplToJson(_$AwsSalesOrderImpl instance) =>
       'last_confirmed_by': instance.lastConfirmedBy,
       'manual_notes': instance.manualNotes,
       'date_deadline': instance.dateDeadline?.toIso8601String(),
+      'is_entered_odoo':
+          const IntToBooleanConverter().toJson(instance.isEnteredOdoo),
+      'last_entered_odoo_by': instance.lastEnteredOdooBy,
     };
 
 _$AwsOrderLineImpl _$$AwsOrderLineImplFromJson(Map<String, dynamic> json) =>

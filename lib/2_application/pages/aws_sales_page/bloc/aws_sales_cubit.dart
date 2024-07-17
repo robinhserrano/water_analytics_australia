@@ -352,4 +352,16 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
       return false;
     }
   }
+
+  Future<bool> updateEnteredOdooBy(
+      int userId, String name, bool isEnteredOdoo) async {
+    try {
+      final success =
+          await repo.updateEnteredOdooBy(userId, name, isEnteredOdoo);
+
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
 }

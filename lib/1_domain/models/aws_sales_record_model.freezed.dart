@@ -76,6 +76,11 @@ mixin _$AwsSalesOrder {
   String? get manualNotes => throw _privateConstructorUsedError;
   @JsonKey(name: 'date_deadline')
   DateTime? get dateDeadline => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_entered_odoo')
+  @IntToBooleanConverter()
+  bool get isEnteredOdoo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_entered_odoo_by')
+  int? get lastEnteredOdooBy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -124,7 +129,11 @@ abstract class $AwsSalesOrderCopyWith<$Res> {
       @JsonKey(name: 'last_deducted_by') int? lastDeductedBy,
       @JsonKey(name: 'last_confirmed_by') int? lastConfirmedBy,
       @JsonKey(name: 'manual_notes') String? manualNotes,
-      @JsonKey(name: 'date_deadline') DateTime? dateDeadline});
+      @JsonKey(name: 'date_deadline') DateTime? dateDeadline,
+      @JsonKey(name: 'is_entered_odoo')
+      @IntToBooleanConverter()
+      bool isEnteredOdoo,
+      @JsonKey(name: 'last_entered_odoo_by') int? lastEnteredOdooBy});
 
   $AwsUserCopyWith<$Res>? get user;
 }
@@ -169,6 +178,8 @@ class _$AwsSalesOrderCopyWithImpl<$Res, $Val extends AwsSalesOrder>
     Object? lastConfirmedBy = freezed,
     Object? manualNotes = freezed,
     Object? dateDeadline = freezed,
+    Object? isEnteredOdoo = null,
+    Object? lastEnteredOdooBy = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -279,6 +290,14 @@ class _$AwsSalesOrderCopyWithImpl<$Res, $Val extends AwsSalesOrder>
           ? _value.dateDeadline
           : dateDeadline // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isEnteredOdoo: null == isEnteredOdoo
+          ? _value.isEnteredOdoo
+          : isEnteredOdoo // ignore: cast_nullable_to_non_nullable
+              as bool,
+      lastEnteredOdooBy: freezed == lastEnteredOdooBy
+          ? _value.lastEnteredOdooBy
+          : lastEnteredOdooBy // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -338,7 +357,11 @@ abstract class _$$AwsSalesOrderImplCopyWith<$Res>
       @JsonKey(name: 'last_deducted_by') int? lastDeductedBy,
       @JsonKey(name: 'last_confirmed_by') int? lastConfirmedBy,
       @JsonKey(name: 'manual_notes') String? manualNotes,
-      @JsonKey(name: 'date_deadline') DateTime? dateDeadline});
+      @JsonKey(name: 'date_deadline') DateTime? dateDeadline,
+      @JsonKey(name: 'is_entered_odoo')
+      @IntToBooleanConverter()
+      bool isEnteredOdoo,
+      @JsonKey(name: 'last_entered_odoo_by') int? lastEnteredOdooBy});
 
   @override
   $AwsUserCopyWith<$Res>? get user;
@@ -382,6 +405,8 @@ class __$$AwsSalesOrderImplCopyWithImpl<$Res>
     Object? lastConfirmedBy = freezed,
     Object? manualNotes = freezed,
     Object? dateDeadline = freezed,
+    Object? isEnteredOdoo = null,
+    Object? lastEnteredOdooBy = freezed,
   }) {
     return _then(_$AwsSalesOrderImpl(
       id: freezed == id
@@ -492,6 +517,14 @@ class __$$AwsSalesOrderImplCopyWithImpl<$Res>
           ? _value.dateDeadline
           : dateDeadline // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isEnteredOdoo: null == isEnteredOdoo
+          ? _value.isEnteredOdoo
+          : isEnteredOdoo // ignore: cast_nullable_to_non_nullable
+              as bool,
+      lastEnteredOdooBy: freezed == lastEnteredOdooBy
+          ? _value.lastEnteredOdooBy
+          : lastEnteredOdooBy // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -535,7 +568,11 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
       @JsonKey(name: 'last_deducted_by') required this.lastDeductedBy,
       @JsonKey(name: 'last_confirmed_by') required this.lastConfirmedBy,
       @JsonKey(name: 'manual_notes') required this.manualNotes,
-      @JsonKey(name: 'date_deadline') required this.dateDeadline})
+      @JsonKey(name: 'date_deadline') required this.dateDeadline,
+      @JsonKey(name: 'is_entered_odoo')
+      @IntToBooleanConverter()
+      required this.isEnteredOdoo,
+      @JsonKey(name: 'last_entered_odoo_by') required this.lastEnteredOdooBy})
       : _orderLine = orderLine;
 
   factory _$AwsSalesOrderImpl.fromJson(Map<String, dynamic> json) =>
@@ -646,10 +683,17 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
   @override
   @JsonKey(name: 'date_deadline')
   final DateTime? dateDeadline;
+  @override
+  @JsonKey(name: 'is_entered_odoo')
+  @IntToBooleanConverter()
+  final bool isEnteredOdoo;
+  @override
+  @JsonKey(name: 'last_entered_odoo_by')
+  final int? lastEnteredOdooBy;
 
   @override
   String toString() {
-    return 'AwsSalesOrder(id: $id, name: $name, createDate: $createDate, updatedAt: $updatedAt, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed, orderLine: $orderLine, additionalDeduction: $additionalDeduction, confirmedByManager: $confirmedByManager, user: $user, lastDeductedBy: $lastDeductedBy, lastConfirmedBy: $lastConfirmedBy, manualNotes: $manualNotes, dateDeadline: $dateDeadline)';
+    return 'AwsSalesOrder(id: $id, name: $name, createDate: $createDate, updatedAt: $updatedAt, partnerIdDisplayName: $partnerIdDisplayName, partnerIdContactAddress: $partnerIdContactAddress, partnerIdPhone: $partnerIdPhone, xStudioSalesRep1: $xStudioSalesRep1, xStudioSalesSource: $xStudioSalesSource, xStudioCommissionPaid: $xStudioCommissionPaid, xStudioReferrerProcessed: $xStudioReferrerProcessed, xStudioPaymentType: $xStudioPaymentType, amountTotal: $amountTotal, deliveryStatus: $deliveryStatus, amountToInvoice: $amountToInvoice, xStudioInvoicePaymentStatus: $xStudioInvoicePaymentStatus, internalNoteDisplay: $internalNoteDisplay, state: $state, amountUntaxed: $amountUntaxed, orderLine: $orderLine, additionalDeduction: $additionalDeduction, confirmedByManager: $confirmedByManager, user: $user, lastDeductedBy: $lastDeductedBy, lastConfirmedBy: $lastConfirmedBy, manualNotes: $manualNotes, dateDeadline: $dateDeadline, isEnteredOdoo: $isEnteredOdoo, lastEnteredOdooBy: $lastEnteredOdooBy)';
   }
 
   @override
@@ -665,8 +709,7 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
                 other.updatedAt == updatedAt) &&
             (identical(other.partnerIdDisplayName, partnerIdDisplayName) ||
                 other.partnerIdDisplayName == partnerIdDisplayName) &&
-            (identical(
-                    other.partnerIdContactAddress, partnerIdContactAddress) ||
+            (identical(other.partnerIdContactAddress, partnerIdContactAddress) ||
                 other.partnerIdContactAddress == partnerIdContactAddress) &&
             const DeepCollectionEquality()
                 .equals(other.partnerIdPhone, partnerIdPhone) &&
@@ -676,8 +719,7 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
                 other.xStudioSalesSource == xStudioSalesSource) &&
             (identical(other.xStudioCommissionPaid, xStudioCommissionPaid) ||
                 other.xStudioCommissionPaid == xStudioCommissionPaid) &&
-            (identical(
-                    other.xStudioReferrerProcessed, xStudioReferrerProcessed) ||
+            (identical(other.xStudioReferrerProcessed, xStudioReferrerProcessed) ||
                 other.xStudioReferrerProcessed == xStudioReferrerProcessed) &&
             (identical(other.xStudioPaymentType, xStudioPaymentType) ||
                 other.xStudioPaymentType == xStudioPaymentType) &&
@@ -709,7 +751,11 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
             (identical(other.manualNotes, manualNotes) ||
                 other.manualNotes == manualNotes) &&
             (identical(other.dateDeadline, dateDeadline) ||
-                other.dateDeadline == dateDeadline));
+                other.dateDeadline == dateDeadline) &&
+            (identical(other.isEnteredOdoo, isEnteredOdoo) ||
+                other.isEnteredOdoo == isEnteredOdoo) &&
+            (identical(other.lastEnteredOdooBy, lastEnteredOdooBy) ||
+                other.lastEnteredOdooBy == lastEnteredOdooBy));
   }
 
   @JsonKey(ignore: true)
@@ -742,7 +788,9 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
         lastDeductedBy,
         lastConfirmedBy,
         manualNotes,
-        dateDeadline
+        dateDeadline,
+        isEnteredOdoo,
+        lastEnteredOdooBy
       ]);
 
   @JsonKey(ignore: true)
@@ -802,8 +850,12 @@ abstract class _AwsSalesOrder implements AwsSalesOrder {
       @JsonKey(name: 'last_deducted_by') required final int? lastDeductedBy,
       @JsonKey(name: 'last_confirmed_by') required final int? lastConfirmedBy,
       @JsonKey(name: 'manual_notes') required final String? manualNotes,
-      @JsonKey(name: 'date_deadline')
-      required final DateTime? dateDeadline}) = _$AwsSalesOrderImpl;
+      @JsonKey(name: 'date_deadline') required final DateTime? dateDeadline,
+      @JsonKey(name: 'is_entered_odoo')
+      @IntToBooleanConverter()
+      required final bool isEnteredOdoo,
+      @JsonKey(name: 'last_entered_odoo_by')
+      required final int? lastEnteredOdooBy}) = _$AwsSalesOrderImpl;
 
   factory _AwsSalesOrder.fromJson(Map<String, dynamic> json) =
       _$AwsSalesOrderImpl.fromJson;
@@ -890,6 +942,13 @@ abstract class _AwsSalesOrder implements AwsSalesOrder {
   @override
   @JsonKey(name: 'date_deadline')
   DateTime? get dateDeadline;
+  @override
+  @JsonKey(name: 'is_entered_odoo')
+  @IntToBooleanConverter()
+  bool get isEnteredOdoo;
+  @override
+  @JsonKey(name: 'last_entered_odoo_by')
+  int? get lastEnteredOdooBy;
   @override
   @JsonKey(ignore: true)
   _$$AwsSalesOrderImplCopyWith<_$AwsSalesOrderImpl> get copyWith =>

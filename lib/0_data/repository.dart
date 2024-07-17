@@ -602,4 +602,38 @@ class Repository {
       return null;
     }
   }
+
+  Future<bool> updateEnteredOdooBy(
+      int userId, String name, bool isEnteredOdoo) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.post<Map<String, dynamic>>(
+        '$url/updateEnteredOdooBy',
+        data: {
+          'user_id': userId,
+          'name': name,
+          'is_entered_odoo': isEnteredOdoo,
+        },
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      // final parsedData = AwsUser.fromJson(response.data!);
+
+      // return parsedData;
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

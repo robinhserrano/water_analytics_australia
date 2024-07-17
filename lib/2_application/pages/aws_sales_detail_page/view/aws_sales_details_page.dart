@@ -17,6 +17,7 @@ import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/bloc/aws_sales_details_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/temp.dart';
@@ -25,26 +26,33 @@ import 'package:water_analytics_australia/core/widgets/custom_text_field.dart';
 import 'package:water_analytics_australia/injection.dart';
 
 class AwsSalesDetailsPageWrapperProvider extends StatelessWidget {
-  const AwsSalesDetailsPageWrapperProvider({required this.id, super.key});
+  const AwsSalesDetailsPageWrapperProvider({
+    required this.id,
+    required this.salesCubit,
+    super.key,
+  });
   final String id;
+  final AwsSalesCubit? salesCubit;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<AwsSalesDetailsCubit>(),
       child: AwsSalesDetailsPage(
         id: id,
+        salesCubit: salesCubit,
       ),
     );
   }
 }
 
 class AwsSalesDetailsPage extends StatefulWidget {
-  const AwsSalesDetailsPage({required this.id, super.key});
+  const AwsSalesDetailsPage({required this.id, super.key, this.salesCubit});
 
   static const name = 'AwsSalesDetail';
   static const path = '/AwsSalesDetail/:id';
 
   final String id;
+  final AwsSalesCubit? salesCubit;
 
   @override
   State<AwsSalesDetailsPage> createState() => _AwsSalesDetailsPageState();
@@ -100,6 +108,7 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
                 order: state.order,
                 accessLevel: accessLevel,
                 currentUserId: currentUserId,
+                salesCubit: widget.salesCubit,
               ),
             );
           } else if (state is AwsSalesDetailsStateError) {
@@ -129,12 +138,14 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
     required this.order,
     required this.accessLevel,
     required this.currentUserId,
+    required this.salesCubit,
     super.key,
   });
 
   final AwsSalesOrder order;
   final int accessLevel;
   final int currentUserId;
+  final AwsSalesCubit? salesCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -218,6 +229,7 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
                       orderLine: order.orderLine ?? [],
                       accessLevel: accessLevel,
                       currentUserId: currentUserId,
+                      salesCubit: salesCubit,
                     ),
                   ),
                 ],
@@ -783,12 +795,14 @@ class CommissionSection extends StatelessWidget {
     required this.orderLine,
     required this.accessLevel,
     required this.currentUserId,
+    required this.salesCubit,
     super.key,
   });
   final AwsSalesOrder order;
   final List<AwsOrderLine> orderLine;
   final int accessLevel;
   final int currentUserId;
+  final AwsSalesCubit? salesCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -948,8 +962,18 @@ class CommissionSection extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 8,
+            Row(
+              children: [
+                const Text(
+                  'Entered to Odoo',
+                ),
+                const Spacer(),
+                Checkbox(
+                  value: order.isEnteredOdoo,
+                  activeColor: Colors.blue,
+                  onChanged: (value) {},
+                ),
+              ],
             ),
             //ACCESS RESTRICTION
             if (accessLevel >= 3) ...[
@@ -974,6 +998,7 @@ class CommissionSection extends StatelessWidget {
                                 cubit,
                                 currentUserId,
                                 order.name ?? '',
+                                salesCubit,
                               ),
                             );
                           },
@@ -987,70 +1012,44 @@ class CommissionSection extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () async {
                             unawaited(
-                              showConfirmingCommissionBreakdownModal(
+                              showConfirmByManagerModal(
                                 context,
-                                order.confirmedByManager,
+                                order,
+                                cubit,
+                                currentUserId,
+                                order.name ?? '',
                               ),
                             );
-                            // final success = await cubit.updateSalesOrder(
-                            //   order.copyWith(
-                            //     confirmedByManager: !order.confirmedByManager,
-                            //   ),
-                            // );
-                            //Modified thissssssssssssssssssss
-
-                            final success = await cubit.updateConfirmedBy(
-                              currentUserId,
-                              order.name ?? '',
-                              !order.confirmedByManager,
-                            );
-                            if (success) {
-                              if (context.mounted) {
-                                context.pop();
-                              }
-
-                              const snackBar = SnackBar(
-                                backgroundColor: Colors.green,
-                                content: Text(
-                                  'Successfully updated commission breakdown.',
-                                ),
-                              );
-
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            } else {
-                              if (context.mounted) {
-                                context.pop();
-                              }
-
-                              const snackBar = SnackBar(
-                                backgroundColor: Colors.red,
-                                content: Text(
-                                  'Failed to update commission breakdown.',
-                                ),
-                              );
-
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            }
-
-                            if (context.mounted) {
-                              unawaited(
-                                context
-                                    .read<AwsSalesDetailsCubit>()
-                                    .fetchAwsSalesDetails(order.id!.toString()),
-                              );
-                            }
                           },
                           child: Text(
                             textAlign: TextAlign.center,
                             order.confirmedByManager == false
                                 ? 'Confirm Commission Breakdown'
                                 : 'Reject Commission Breakdown',
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (accessLevel >= 4) ...[
+                      ResponsiveRowColumnItem(
+                        rowFlex: 1,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            unawaited(
+                              showEnteredOdooModal(
+                                context,
+                                order,
+                                cubit,
+                                currentUserId,
+                                order.name ?? '',
+                              ),
+                            );
+                          },
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            order.isEnteredOdoo == false
+                                ? 'Confirm Entered to Odoo'
+                                : 'Reject Entered to Odoo',
                           ),
                         ),
                       ),
@@ -1498,6 +1497,7 @@ Future<void> showModifyManualAdditionDeductionModal(
   AwsSalesDetailsCubit cubit,
   int userId,
   String name,
+  AwsSalesCubit? salesCubit,
 ) {
   return showDialog(
     barrierColor: Colors.black.withOpacity(0.3),
@@ -1513,6 +1513,7 @@ Future<void> showModifyManualAdditionDeductionModal(
         context: context,
         userId: userId,
         name: name,
+        salesCubit: salesCubit,
       ),
       //  const Row(
       //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1540,6 +1541,7 @@ class ModifyManualAdditionDeductionModal extends StatefulWidget {
     required this.context,
     required this.userId,
     required this.name,
+    required this.salesCubit,
     super.key,
   });
   final BuildContext context;
@@ -1547,6 +1549,7 @@ class ModifyManualAdditionDeductionModal extends StatefulWidget {
   final AwsSalesDetailsCubit cubit;
   final int userId;
   final String name;
+  final AwsSalesCubit? salesCubit;
 
   @override
   State<ModifyManualAdditionDeductionModal> createState() =>
@@ -1698,6 +1701,24 @@ class _ModifyManualAdditionDeductionModalState
                           widget.order.id!.toString(),
                         ),
                       );
+
+                      try {
+                        //  widget.salesCubit.state
+                        final loadedState =
+                            (widget.salesCubit!.state as AwsSalesStateLoaded)
+                                .asData;
+                        var hehe = loadedState;
+                        await widget.salesCubit!.updateSalesLocal(
+                          loadedState.records,
+                          widget.order.copyWith(
+                            manualNotes: ctrlTextContent.text,
+                            additionalDeduction:
+                                double.parse(ctrlManualAdditionDeduction.text),
+                          ),
+                        );
+                      } catch (e) {
+                        print(e);
+                      }
                     } else {
                       if (context.mounted) {
                         context.pop();
@@ -1733,4 +1754,384 @@ class _ModifyManualAdditionDeductionModalState
       ],
     );
   }
+}
+
+Future<void> showEnteredOdooModal(
+  BuildContext context,
+  AwsSalesOrder order,
+  AwsSalesDetailsCubit cubit,
+  int userId,
+  String name,
+  //List<AwsSalesOrder> data,
+  //void Function() updateState,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: EnteredOdooByModal(
+        order: order,
+        cubit: cubit,
+        context: context,
+        userId: userId,
+        name: name,
+        // data: data,
+        // updateState: updateState,
+      ),
+    ),
+  );
+}
+
+class EnteredOdooByModal extends StatefulWidget {
+  const EnteredOdooByModal({
+    required this.order,
+    required this.cubit,
+    required this.context,
+    required this.userId,
+    required this.name,
+    // required this.data,
+    // required this.updateState,
+    super.key,
+  });
+  final BuildContext context;
+  final AwsSalesOrder order;
+  final AwsSalesDetailsCubit cubit;
+  final int userId;
+  final String name;
+  // final List<AwsSalesOrder> data;
+  // final void Function() updateState;
+
+  @override
+  State<EnteredOdooByModal> createState() => _EnteredOdooByModalState();
+}
+
+class _EnteredOdooByModalState extends State<EnteredOdooByModal> {
+  @override
+  Widget build(BuildContext _) {
+    final context = widget.context;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.order.isEnteredOdoo) ...[
+          const Text('Reject Entered to Odoo?'),
+        ] else ...[
+          const Text('Confirm Entered to Odoo?'),
+        ],
+        const SizedBox(
+          height: 16,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: context.pop,
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xffB3B7C2),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Color(0xffFFFFFF),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              ElevatedButton(
+                onPressed: () async {
+                  context.pop();
+                  unawaited(
+                    showSavingEnteredOdooBy(
+                      context,
+                    ),
+                  );
+                  final isSaved = await widget.cubit.updateEnteredOdooBy(
+                    widget.userId,
+                    widget.name,
+                    !widget.order.isEnteredOdoo,
+                  );
+
+                  if (isSaved) {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text(
+                        'Successfully updated Entered to Odoo.',
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
+                    // await widget.cubit.updateSalesLocal(
+                    //   widget.data,
+                    //   widget.order.copyWith(
+                    //     isEnteredOdoo: !widget.order.isEnteredOdoo,
+                    //   ),
+                    // );
+
+                    // widget.updateState();
+                    unawaited(
+                      widget.cubit.fetchAwsSalesDetails(
+                        widget.order.id!.toString(),
+                      ),
+                    );
+                  } else {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        'Failed to update Entered to Odoo.',
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xff0083ff),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+Future<void> showSavingEnteredOdooBy(
+  BuildContext context,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            'Updating Entered to Odoo...',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<void> showConfirmByManagerModal(
+  BuildContext context,
+  AwsSalesOrder order,
+  AwsSalesDetailsCubit cubit,
+  int userId,
+  String name,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: ConfirmByManagerModal(
+        order: order,
+        cubit: cubit,
+        context: context,
+        userId: userId,
+        name: name,
+      ),
+    ),
+  );
+}
+
+class ConfirmByManagerModal extends StatefulWidget {
+  const ConfirmByManagerModal({
+    required this.order,
+    required this.cubit,
+    required this.context,
+    required this.userId,
+    required this.name,
+    super.key,
+  });
+  final BuildContext context;
+  final AwsSalesOrder order;
+  final AwsSalesDetailsCubit cubit;
+  final int userId;
+  final String name;
+
+  @override
+  State<ConfirmByManagerModal> createState() => _ConfirmByManagerModalState();
+}
+
+class _ConfirmByManagerModalState extends State<ConfirmByManagerModal> {
+  @override
+  Widget build(BuildContext _) {
+    final context = widget.context;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.order.confirmedByManager == false
+              ? 'Confirm Commission Breakdown?'
+              : 'Reject Commission Breakdown?',
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: context.pop,
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xffB3B7C2),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Color(0xffFFFFFF),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              ElevatedButton(
+                onPressed: () async {
+                  context.pop();
+                  unawaited(
+                    showSavingConfirmedBy(
+                      context,
+                    ),
+                  );
+                  final isSaved = await widget.cubit.updateConfirmedBy(
+                    widget.userId,
+                    widget.name,
+                    !widget.order.confirmedByManager,
+                  );
+
+                  if (isSaved) {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text(
+                        'Successfully updated commission breakdown.',
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
+                    unawaited(
+                      widget.cubit.fetchAwsSalesDetails(
+                        widget.order.id!.toString(),
+                      ),
+                    );
+                  } else {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        'Failed to update commission breakdown.',
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xff0083ff),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+Future<void> showSavingConfirmedBy(
+  BuildContext context,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            'Updating Confirmed By Manager...',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
 }

@@ -450,9 +450,13 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                     ),
                   ),
                 ],
-
+// DataTable2(
+//   wid
+//   columns: columns, rows: rows)
                 Expanded(
                   child: PaginatedDataTable2(
+                    // column
+                    //columnSpacing: 0,
                     availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
@@ -470,6 +474,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       DataColumn(label: Text('Sales Rep')),
                       DataColumn(label: Text('Sales Source')),
                       DataColumn(label: Text('Commission Paid')),
+                      DataColumn(label: Text('Entered to Odoo')),
                       DataColumn(label: Text('Total')),
                       DataColumn(label: Text('Delivery Status')),
                       DataColumn(label: Text('EST Install Date')),
@@ -789,6 +794,25 @@ class MyDataTableSource extends DataTableSource {
           ),
         ),
         DataCell(
+          onTap: userAccessLevel < 4 //|| item.isEnteredOdoo
+              ? () {}
+              : () {
+                  showEnteredOdooModal(
+                    context,
+                    item,
+                    cubit,
+                    currentUserId,
+                    item.name!,
+                    data,
+                    updateState,
+                  );
+                },
+          Checkbox(
+            onChanged: null,
+            value: item.isEnteredOdoo,
+          ),
+        ),
+        DataCell(
           onTap: () => onTap(item),
           Text(
             formatCurrency(item.amountTotal ?? 0),
@@ -847,6 +871,7 @@ class MyDataTableSource extends DataTableSource {
     context.pushNamed(
       AwsSalesDetailsPage.name,
       pathParameters: {'id': item.id.toString()},
+      extra: cubit,
     );
   }
 
@@ -1198,7 +1223,11 @@ class _ConfirmByManagerModalState extends State<ConfirmByManagerModal> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Confirm Commission Breakdown?'),
+        Text(
+          widget.order.confirmedByManager == false
+              ? 'Confirm Commission Breakdown?'
+              : 'Reject Commission Breakdown?',
+        ),
         const SizedBox(
           height: 16,
         ),
@@ -1226,7 +1255,7 @@ class _ConfirmByManagerModalState extends State<ConfirmByManagerModal> {
                 onPressed: () async {
                   context.pop();
                   unawaited(
-                    showSavingManualAdditionDecution(
+                    showSavingConfirmedBy(
                       context,
                     ),
                   );
@@ -1295,4 +1324,227 @@ class _ConfirmByManagerModalState extends State<ConfirmByManagerModal> {
       ],
     );
   }
+}
+
+Future<void> showSavingConfirmedBy(
+  BuildContext context,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            'Updating Confirmed By Manager...',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<void> showEnteredOdooModal(
+  BuildContext context,
+  AwsSalesOrder order,
+  AwsSalesCubit cubit,
+  int userId,
+  String name,
+  List<AwsSalesOrder> data,
+  void Function() updateState,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: EnteredOdooByModal(
+        order: order,
+        cubit: cubit,
+        context: context,
+        userId: userId,
+        name: name,
+        data: data,
+        updateState: updateState,
+      ),
+    ),
+  );
+}
+
+class EnteredOdooByModal extends StatefulWidget {
+  const EnteredOdooByModal({
+    required this.order,
+    required this.cubit,
+    required this.context,
+    required this.userId,
+    required this.name,
+    required this.data,
+    required this.updateState,
+    super.key,
+  });
+  final BuildContext context;
+  final AwsSalesOrder order;
+  final AwsSalesCubit cubit;
+  final int userId;
+  final String name;
+  final List<AwsSalesOrder> data;
+  final void Function() updateState;
+
+  @override
+  State<EnteredOdooByModal> createState() => _EnteredOdooByModalState();
+}
+
+class _EnteredOdooByModalState extends State<EnteredOdooByModal> {
+  @override
+  Widget build(BuildContext _) {
+    final context = widget.context;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.order.isEnteredOdoo) ...[
+          const Text('Reject Entered to Odoo?'),
+        ] else ...[
+          const Text('Confirm Entered to Odoo?'),
+        ],
+        const SizedBox(
+          height: 16,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: context.pop,
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xffB3B7C2),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Color(0xffFFFFFF),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              ElevatedButton(
+                onPressed: () async {
+                  context.pop();
+                  unawaited(
+                    showSavingEnteredOdooBy(
+                      context,
+                    ),
+                  );
+                  final isSaved = await widget.cubit.updateEnteredOdooBy(
+                    widget.userId,
+                    widget.name,
+                    !widget.order.isEnteredOdoo,
+                  );
+
+                  if (isSaved) {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text(
+                        'Successfully updated Entered to Odoo.',
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
+                    await widget.cubit.updateSalesLocal(
+                      widget.data,
+                      widget.order.copyWith(
+                        isEnteredOdoo: !widget.order.isEnteredOdoo,
+                      ),
+                    );
+
+                    widget.updateState();
+                  } else {
+                    if (context.mounted) {
+                      context.pop();
+                    }
+
+                    const snackBar = SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                        'Failed to update Entered to Odoo.',
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: const Color(0xff0083ff),
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+Future<void> showSavingEnteredOdooBy(
+  BuildContext context,
+) {
+  return showDialog(
+    barrierColor: Colors.black.withOpacity(0.3),
+    context: context,
+    builder: (BuildContext dialogCon) => AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xff0083ff),
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(
+            'Updating Entered to Odoo...',
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    ),
+  );
 }

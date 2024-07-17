@@ -97,6 +97,18 @@ class AwsSalesDetailsCubit extends Cubit<AwsSalesDetailsCubitState> {
     }
   }
 
+  Future<bool> updateEnteredOdooBy(
+      int userId, String name, bool isEnteredOdoo) async {
+    try {
+      final success =
+          await repo.updateEnteredOdooBy(userId, name, isEnteredOdoo);
+
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Future<bool> saveAdditionalDeduction(AwsSalesOrder order) async {
   //   try {
   //     final success = true; //await repo.saveSales(sale);

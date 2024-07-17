@@ -52,6 +52,10 @@ class AwsSalesOrder with _$AwsSalesOrder {
     @JsonKey(name: 'last_confirmed_by') required int? lastConfirmedBy,
     @JsonKey(name: 'manual_notes') required String? manualNotes,
     @JsonKey(name: 'date_deadline') required DateTime? dateDeadline,
+    @JsonKey(name: 'is_entered_odoo')
+    @IntToBooleanConverter()
+    required bool isEnteredOdoo,
+    @JsonKey(name: 'last_entered_odoo_by') required int? lastEnteredOdooBy,
   }) = _AwsSalesOrder;
 
   factory AwsSalesOrder.fromJson(Map<String, dynamic> json) =>
