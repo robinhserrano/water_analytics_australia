@@ -1071,7 +1071,7 @@ double calculateFinalCommission(
 
   final additionalCost = getAwsAdditionalCost(orderLine, landingPrices).fold(
     0.0,
-    (prev, e) => prev + (e.unitPrice ?? 0),
+    (prev, e) => prev + (e.taxExcl ?? 0) + ((e.taxExcl ?? 0) * 0.10),
   );
   final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
     0.0,

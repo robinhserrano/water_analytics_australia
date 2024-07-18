@@ -1388,49 +1388,6 @@ String getInvoicePaymentStatusMessage(String invoicePaymentStatus) {
   }
 }
 
-double calculateFinalCommission(
-  AwsSalesOrder order,
-  List<AwsOrderLine> orderLine,
-) {
-  final sellingPrice = calculateCashPrice(
-    order.amountTotal ?? 0,
-    (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
-  );
-
-  final additionalCost = getCloudAdditionalCost(orderLine, landingPrices).fold(
-    0.0,
-    (prev, e) => prev + (e.taxExcl ?? 0),
-  );
-
-  final landingPrice = getLandingPrice(orderLine, landingPrices).fold(
-    0.0,
-    (prev, e) =>
-        prev +
-        (e.isSupplyOnly
-            ? (e.landingPrice.supplyOnly ?? 0.0)
-            : (e.landingPrice.installationService ?? 0.0)),
-  );
-  final temp = (sellingPrice - additionalCost) - landingPrice;
-  final extraCommission = temp <= 0
-      ? temp
-      : temp *
-          ((order.user?.commissionSplit?.toDouble() ?? 50) / 100); //FIX THIS
-
-  final baseCommission = (orderLine.any(
-    (element) => (element.product ?? '').contains(
-      'USRO-6S1-2W'.toLowerCase(),
-    ),
-  ))
-      ? 200
-      : (order.xStudioSalesSource ?? '').toLowerCase().contains('self')
-          ? (order.user?.selfGen ?? 1000)
-          : (order.user?.companyLead ?? 500);
-  final finalCommission =
-      (extraCommission + baseCommission) + (order.additionalDeduction ?? 0);
-
-  return finalCommission;
-}
-
 Future<void> showConfirmingCommissionBreakdownModal(
   BuildContext context,
   bool confirmedByManager,
