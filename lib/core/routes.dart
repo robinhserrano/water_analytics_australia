@@ -120,11 +120,19 @@ final routes = GoRouter(
       name: AwsSalesDetailsPage.name,
       path: AwsSalesDetailsPage.path,
       builder: (context, state) {
-        final cubit = state.extra as AwsSalesCubit?;
-        return AwsSalesDetailsPageWrapperProvider(
-          id: state.pathParameters['id']!,
-          salesCubit: cubit,
-        );
+        try {
+          final cubit = state.extra as AwsSalesCubit?;
+
+          return AwsSalesDetailsPageWrapperProvider(
+            id: state.pathParameters['id']!,
+            salesCubit: cubit,
+          );
+        } catch (e) {
+          return AwsSalesDetailsPageWrapperProvider(
+            id: state.pathParameters['id']!,
+            salesCubit: null,
+          );
+        }
       },
     ),
     GoRoute(
