@@ -442,7 +442,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
                         'Last Synced: ${DateFormat('MM/dd/yyyy').format(findLatestAwsSalesOrder(widget.records)!.toLocal())}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.blueGrey,
                           fontSize: 10,
                         ),
@@ -466,20 +466,133 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                         }
                       });
                     },
+                    columnSpacing: 4,
                     minWidth: 1500,
                     columns: const [
-                      DataColumn(label: Text('Number')),
-                      DataColumn(label: Text('Order Date')),
-                      DataColumn(label: Text('Customer')),
-                      DataColumn(label: Text('Sales Rep')),
-                      DataColumn(label: Text('Sales Source')),
-                      DataColumn(label: Text('Commission Paid')),
-                      DataColumn(label: Text('Entered to Odoo')),
-                      DataColumn(label: Text('Total')),
-                      DataColumn(label: Text('Delivery Status')),
-                      DataColumn(label: Text('EST Install Date')),
-                      DataColumn(label: Text('Final Commission')),
-                      DataColumn(label: Text('Confirmed by Manager')),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Number',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Order Date',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Customer',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Sales Rep',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Sales Source',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Commission Paid',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Entered to Odoo',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Center(
+                            child: Text(
+                              'Total',
+                              softWrap: true,
+                              overflow: TextOverflow.visible,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Delivery Status',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'EST Install Date',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Final Commission',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Confirmed by Manager',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
                     ],
                     // wrapInCard: true,
                     source: MyDataTableSource(
@@ -788,9 +901,11 @@ class MyDataTableSource extends DataTableSource {
         DataCell(onTap: () => onTap(item), Text(item.xStudioSalesSource ?? '')),
         DataCell(
           onTap: () => onTap(item),
-          Checkbox(
-            onChanged: null, //(value) {},
-            value: item.xStudioCommissionPaid,
+          Center(
+            child: Checkbox(
+              onChanged: null, //(value) {},
+              value: item.xStudioCommissionPaid,
+            ),
           ),
         ),
         DataCell(
@@ -807,15 +922,19 @@ class MyDataTableSource extends DataTableSource {
                     updateState,
                   );
                 },
-          Checkbox(
-            onChanged: null,
-            value: item.isEnteredOdoo,
+          Center(
+            child: Checkbox(
+              onChanged: null,
+              value: item.isEnteredOdoo,
+            ),
           ),
         ),
         DataCell(
           onTap: () => onTap(item),
-          Text(
-            formatCurrency(item.amountTotal ?? 0),
+          Center(
+            child: Text(
+              formatCurrency(item.amountTotal ?? 0),
+            ),
           ),
         ),
         DataCell(
@@ -838,11 +957,17 @@ class MyDataTableSource extends DataTableSource {
         ),
         DataCell(
           onTap: () => onTap(item),
-          Text(
-            r'$' +
-                calculateFinalCommission(item, item.orderLine ?? [])
-                    .toStringAsFixed(2),
-          ),
+         
+               Center(
+                  child: Text(
+                    r'$' +
+                        calculateFinalCommission(item, item.orderLine ?? [])
+                            .toStringAsFixed(2),
+                  ),
+                ),
+           
+          
+          
         ),
         DataCell(
           onTap: userAccessLevel < 3 || item.confirmedByManager
@@ -858,9 +983,11 @@ class MyDataTableSource extends DataTableSource {
                     updateState,
                   );
                 },
-          Checkbox(
-            onChanged: null,
-            value: item.confirmedByManager,
+          Center(
+            child: Checkbox(
+              onChanged: null,
+              value: item.confirmedByManager,
+            ),
           ),
         ),
       ],
@@ -1547,4 +1674,45 @@ Future<void> showSavingEnteredOdooBy(
       ),
     ),
   );
+}
+
+class ResponsiveText extends StatelessWidget {
+  final String text;
+  final double maxWidth;
+
+  const ResponsiveText({
+    Key? key,
+    required this.text,
+    required this.maxWidth,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double fontSize = 16.0; // Starting font size
+
+    // Calculate the text width
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: TextStyle(fontSize: fontSize)),
+      maxLines: 1,
+      //   textDirection: TextDirection.LTR,
+    );
+    textPainter.layout();
+
+    // Adjust font size if the text exceeds maxWidth
+    while (textPainter.width > maxWidth && fontSize > 10) {
+      fontSize -= 1; // Reduce font size
+      textPainter = TextPainter(
+        text: TextSpan(text: text, style: TextStyle(fontSize: fontSize)),
+        maxLines: 1,
+        //   textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+    }
+
+    return Text(
+      text,
+      style: TextStyle(fontSize: fontSize),
+      softWrap: true,
+    );
+  }
 }

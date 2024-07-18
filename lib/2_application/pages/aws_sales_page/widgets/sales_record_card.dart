@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
-import 'package:water_analytics_australia/2_application/pages/sales_details/view/sales_details_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 
 class SalesRecordCard extends StatelessWidget {
