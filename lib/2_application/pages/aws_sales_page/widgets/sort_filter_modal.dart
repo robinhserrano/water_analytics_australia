@@ -7,6 +7,7 @@ import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/pick_users_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
+import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 
@@ -88,6 +89,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         SalesPage.closeDrawer();
                         CloudSalesPage.closeDrawer();
                         AwsSalesPage.closeDrawer();
+                        MemberDetailPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -140,6 +142,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         SalesPage.closeDrawer();
                         CloudSalesPage.closeDrawer();
                         AwsSalesPage.closeDrawer();
+                        MemberDetailPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -173,6 +176,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   SalesPage.closeDrawer();
                   CloudSalesPage.closeDrawer();
                   AwsSalesPage.closeDrawer();
+                  MemberDetailPage.closeDrawer();
                 },
                 child: const Card(
                   elevation: 0,
@@ -187,6 +191,10 @@ class _SortFilterModalState extends State<SortFilterModal> {
           ),
           body: ListView(
             children: [
+              // Text(selectedCommissionStatus.toString()),
+              // Text(selectedInvoicePaymentStatus.toString()),
+              // Text(selectedDeliverStatus.toString()),
+
               const Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 24,
