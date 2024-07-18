@@ -89,7 +89,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         SalesPage.closeDrawer();
                         CloudSalesPage.closeDrawer();
                         AwsSalesPage.closeDrawer();
-                        MemberDetailPage.closeDrawer();
+                        //MemberDetailPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -142,7 +142,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         SalesPage.closeDrawer();
                         CloudSalesPage.closeDrawer();
                         AwsSalesPage.closeDrawer();
-                        MemberDetailPage.closeDrawer();
+                        //MemberDetailPage.closeDrawer();
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -176,7 +176,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   SalesPage.closeDrawer();
                   CloudSalesPage.closeDrawer();
                   AwsSalesPage.closeDrawer();
-                  MemberDetailPage.closeDrawer();
+                  //MemberDetailPage.closeDrawer();
                 },
                 child: const Card(
                   elevation: 0,
