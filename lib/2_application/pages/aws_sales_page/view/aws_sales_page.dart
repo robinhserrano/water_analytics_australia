@@ -8,7 +8,6 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -166,31 +165,12 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                       final confirmedByManager =
                           sortFilterData.confirmedByManager;
 
-                      final tempFiltered = state.records
-                          .where(
-                            (record) =>
-                                (!commissionStatus.any(
-                                  (status) =>
-                                      status !=
-                                      record.xStudioCommissionPaid.toString(),
-                                )) &&
-                                (!invoicePaymentStatus.any(
-                                  (status) =>
-                                      status !=
-                                      record.xStudioInvoicePaymentStatus
-                                          .toString(),
-                                )) &&
-                                (!deliverStatus.any(
-                                  (status) =>
-                                      status !=
-                                      record.deliveryStatus.toString(),
-                                )) &&
-                                (
-                                    //record.user?.commissionSplit != 0 &&
-                                    record.user?.selfGen != 0 &&
-                                        record.user?.companyLead != 0),
-                          )
-                          .toList();
+                      final tempFiltered = filterRecords(
+                        state.records,
+                        commissionStatus: commissionStatus.toSet(),
+                        invoicePaymentStatus: invoicePaymentStatus.toSet(),
+                        deliverStatus: deliverStatus.toSet(),
+                      );
 
                       final temp = confirmedByManager
                           ? tempFiltered
@@ -1668,43 +1648,37 @@ Future<void> showSavingEnteredOdooBy(
   );
 }
 
-class ResponsiveText extends StatelessWidget {
-  final String text;
-  final double maxWidth;
+List<AwsSalesOrder> filterRecords(
+  List<AwsSalesOrder> records, {
+  required Set<String> commissionStatus,
+  required Set<String> invoicePaymentStatus,
+  required Set<String> deliverStatus,
+}) {
+  return records.where((record) {
+    // Check for commission status (any match)
+    final commissionStatusMatch = commissionStatus.isEmpty ||
+        commissionStatus
+            .any((status) => status == record.xStudioCommissionPaid.toString());
 
-  const ResponsiveText({
-    Key? key,
-    required this.text,
-    required this.maxWidth,
-  }) : super(key: key);
+    // Check for invoice payment status (any match from desired values)
+    final invoicePaymentStatusMatch = invoicePaymentStatus.isEmpty ||
+        invoicePaymentStatus.any(
+          (status) => status == record.xStudioInvoicePaymentStatus.toString(),
+        );
 
-  @override
-  Widget build(BuildContext context) {
-    double fontSize = 16.0; // Starting font size
+    // Check for delivery status (any match)
+    final deliverStatusMatch = deliverStatus.isEmpty ||
+        deliverStatus
+            .any((status) => status == record.deliveryStatus.toString());
 
-    // Calculate the text width
-    TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: TextStyle(fontSize: fontSize)),
-      maxLines: 1,
-      //   textDirection: TextDirection.LTR,
-    );
-    textPainter.layout();
+    // Minimum of one self-generated record and one company lead record
+    final hasSelfGeneratedAndCompanyLead =
+        (record.user?.selfGen ?? 0) > 0 && (record.user?.companyLead ?? 0) > 0;
 
-    // Adjust font size if the text exceeds maxWidth
-    while (textPainter.width > maxWidth && fontSize > 10) {
-      fontSize -= 1; // Reduce font size
-      textPainter = TextPainter(
-        text: TextSpan(text: text, style: TextStyle(fontSize: fontSize)),
-        maxLines: 1,
-        //   textDirection: TextDirection.ltr,
-      );
-      textPainter.layout();
-    }
-
-    return Text(
-      text,
-      style: TextStyle(fontSize: fontSize),
-      softWrap: true,
-    );
-  }
+    // Filter based on all conditions (all checks must be true)
+    return commissionStatusMatch &&
+        invoicePaymentStatusMatch &&
+        deliverStatusMatch &&
+        hasSelfGeneratedAndCompanyLead;
+  }).toList();
 }
