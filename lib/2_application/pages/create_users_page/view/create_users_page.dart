@@ -211,8 +211,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
           constraints: const BoxConstraints(maxWidth: 600),
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
+              //    crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Center(
                   child: Text(
@@ -317,6 +317,9 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       color: Colors.white,
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 80,
                 ),
               ],
             ),

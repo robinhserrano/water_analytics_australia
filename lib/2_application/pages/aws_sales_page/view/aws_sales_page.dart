@@ -450,13 +450,9 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                     ),
                   ),
                 ],
-// DataTable2(
-//   wid
-//   columns: columns, rows: rows)
+
                 Expanded(
                   child: PaginatedDataTable2(
-                    // column
-                    //columnSpacing: 0,
                     availableRowsPerPage: const [2, 5, 10, 15, 20, 30, 50, 100],
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (value) {
@@ -957,17 +953,13 @@ class MyDataTableSource extends DataTableSource {
         ),
         DataCell(
           onTap: () => onTap(item),
-         
-               Center(
-                  child: Text(
-                    r'$' +
-                        calculateFinalCommission(item, item.orderLine ?? [])
-                            .toStringAsFixed(2),
-                  ),
-                ),
-           
-          
-          
+          Center(
+            child: Text(
+              r'$' +
+                  calculateFinalCommission(item, item.orderLine ?? [])
+                      .toStringAsFixed(2),
+            ),
+          ),
         ),
         DataCell(
           onTap: userAccessLevel < 3 || item.confirmedByManager

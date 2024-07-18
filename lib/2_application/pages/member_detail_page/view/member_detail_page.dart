@@ -264,8 +264,6 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
 
     var records = widget.records;
 
-
-
     if (ctrlSearch.text.trim().isNotEmpty) {
       records = records
           .where(
@@ -290,8 +288,6 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
 
     switch (sortColumnIndex) {
       case 1:
-
-        
         break;
       default:
     }
@@ -376,53 +372,134 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                         }
                       });
                     },
+                    columnSpacing: 4,
                     minWidth: 1500,
                     sortAscending: sortAscending,
                     sortColumnIndex: sortColumnIndex,
-                    columns: [
-                      DataColumn(
-                        label: const Text('Number'),
-                        onSort: onSort,
+                    columns: const [
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Number',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                        size: ColumnSize.S,
                       ),
-                      DataColumn(
-                        label: const Text('Order Date'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Order Date',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                        size: ColumnSize.S,
                       ),
-                      DataColumn(
-                        label: const Text('Customer'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Customer',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
                       ),
-                      DataColumn(
-                        label: const Text('Sales Rep'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Sales Rep',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
                       ),
-                      DataColumn(
-                        label: const Text('Sales Source'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Sales Source',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                        size: ColumnSize.S,
                       ),
-                      DataColumn(
-                        label: const Text('Commission Paid'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Commission Paid',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        size: ColumnSize.S,
                       ),
-                      DataColumn(
-                        label: const Text('Total'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Entered to Odoo',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        size: ColumnSize.S,
                       ),
-                      DataColumn(
-                        label: const Text('Delivery Status'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Center(
+                            child: Text(
+                              'Total',
+                              softWrap: true,
+                              overflow: TextOverflow.visible,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        size: ColumnSize.S,
                       ),
-                      DataColumn(
-                        label: const Text('EST Install Date'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Delivery Status',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
                       ),
-                      DataColumn(
-                        label: const Text('Final Commission'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'EST Install Date',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
+                        size: ColumnSize.S,
                       ),
-                      DataColumn(
-                        label: const Text('Confirmed by Manager'),
-                        onSort: onSort,
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Final Commission',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        size: ColumnSize.S,
+                      ),
+                      DataColumn2(
+                        label: Expanded(
+                          child: Text(
+                            'Confirmed by Manager',
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        size: ColumnSize.S,
                       ),
                     ],
                     source: MyDataTableSource(
@@ -787,15 +864,28 @@ class MyDataTableSource extends DataTableSource {
         DataCell(onTap: () => onTap(item), Text(item.xStudioSalesSource ?? '')),
         DataCell(
           onTap: () => onTap(item),
-          Checkbox(
-            onChanged: null, //(value) {},
-            value: item.xStudioCommissionPaid,
+          Center(
+            child: Checkbox(
+              onChanged: null, //(value) {},
+              value: item.xStudioCommissionPaid,
+            ),
+          ),
+        ),
+        DataCell(
+          onTap: () {},
+          Center(
+            child: Checkbox(
+              onChanged: null,
+              value: item.isEnteredOdoo,
+            ),
           ),
         ),
         DataCell(
           onTap: () => onTap(item),
-          Text(
-            formatCurrency(item.amountTotal ?? 0),
+          Center(
+            child: Text(
+              formatCurrency(item.amountTotal ?? 0),
+            ),
           ),
         ),
         DataCell(
@@ -818,27 +908,23 @@ class MyDataTableSource extends DataTableSource {
         ),
         DataCell(
           onTap: () => onTap(item),
-          Text(
-            r'$' +
-                calculateFinalCommission(item, item.orderLine ?? [])
-                    .toStringAsFixed(2),
+          Center(
+            child: Text(
+              r'$' +
+                  calculateFinalCommission(item, item.orderLine ?? [])
+                      .toStringAsFixed(2),
+            ),
           ),
         ),
         DataCell(
-          onTap: () => onTap(item),
-          Checkbox(
-            onChanged: null, //(value) {},
-            value: item.confirmedByManager,
-            // value: item.confirmedByManager != null &&
-            //     !(item.confirmedByManager?.isConfirmed == false),
+          onTap: () {},
+          Center(
+            child: Checkbox(
+              onChanged: null,
+              value: item.confirmedByManager,
+            ),
           ),
         ),
-        // DataCell(
-        //   onTap: () => onTap(item),
-        //   Text(
-        //     formatCurrency(item.amountTotal ?? 0),
-        //   ),
-        // ),
       ],
     );
   }

@@ -240,8 +240,8 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
           constraints: const BoxConstraints(maxWidth: 600),
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
+              //  crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Text(
@@ -442,6 +442,9 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                       ),
                     ),
                 ],
+                const SizedBox(
+                  height: 80,
+                ),
               ],
             ),
           ),
