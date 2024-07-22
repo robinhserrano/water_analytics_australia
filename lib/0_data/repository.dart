@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
@@ -640,7 +641,12 @@ class Repository {
 
 //Fix this 7/17
   Future<bool> saveLandingPrice(
-    LandingPrice landingPrice,
+    String name,
+    String internalReference,
+    String productCategory,
+    double installationService,
+    double supplyOnly,
+    DateTime recordedAt,
   ) async {
     try {
       final user = await HiveHelper.getAllUsers();
@@ -655,14 +661,15 @@ class Repository {
           },
         ),
         data: {
-          'name': landingPrice.name,
-          'internal_reference': landingPrice.internalReference,
-          'product_category': landingPrice.productCategory,
-          'installation_service': landingPrice.installationService,
-          'supply_only': landingPrice.supplyOnly,
+          'name': name,
+          'internal_reference': internalReference,
+          'product_category': productCategory,
+          'installation_service': installationService,
+          'supply_only': supplyOnly,
+          'recorded_at': recordedAt.toIso8601String,
         },
       );
-      
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         return true;
       }
@@ -670,6 +677,30 @@ class Repository {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<List<AwsLandingPrice>?> fetchLandingPrices() async {
+    final user = await HiveHelper.getCurrentUser();
+    try {
+      final response = await client.get<List<dynamic>>(
+        '$url/landingPrice',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user!.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final data = response.data!.cast<Map<String, dynamic>>();
+      final parsedData = data.map(AwsLandingPrice.fromJson).toList();
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }

@@ -76,6 +76,7 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
 
   @override
   void initState() {
+    print('hahahahahhaha');
     _getUserFromHive();
     super.initState();
   }
@@ -543,6 +544,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
                             'EST Install Date',
                             softWrap: true,
                             overflow: TextOverflow.visible,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         size: ColumnSize.S,
@@ -925,10 +927,12 @@ class MyDataTableSource extends DataTableSource {
         ),
         DataCell(
           onTap: () => onTap(item),
-          Text(
-            item.dateDeadline == null
-                ? 'Not Set'
-                : DateFormat('MM/dd/yy').format(item.dateDeadline!),
+          Center(
+            child: Text(
+              item.dateDeadline == null
+                  ? 'Not Set'
+                  : DateFormat('MM/dd/yy').format(item.dateDeadline!),
+            ),
           ),
         ),
         DataCell(

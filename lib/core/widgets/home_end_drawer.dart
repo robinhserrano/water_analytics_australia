@@ -6,6 +6,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:hive/hive.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/0_data/data/hive/user_hive_model.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_landing_price_page/view/aws_landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 
@@ -80,6 +81,17 @@ class HomeEndDrawer extends StatelessWidget {
                               height: 1,
                             ),
                           ],
+                          //  if (user.first.accessLevel >= 4) ...[
+                          //   _DrawerItem(
+                          //     onTap: () {
+                          //       context.pushNamed(AwsLandingPricePage.name);
+                          //     },
+                          //     text: 'AWS Landing Price',
+                          //   ),
+                          //   const Divider(
+                          //     height: 1,
+                          //   ),
+                          // ],
                         ],
                       );
                     }

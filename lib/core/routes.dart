@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/view/admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/view/admin_users_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users_detail_page/view/aws_admin_users_detail_page.dart';
-import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/bloc/manage_team_detail_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_landing_price_page/view/aws_landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/view/manage_teams_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/view/manage_teams_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/my_team_page.dart';
@@ -175,6 +175,13 @@ final routes = GoRouter(
           id: state.pathParameters['id']!,
           managerName: state.pathParameters['managerName']!,
         );
+      },
+    ),
+    GoRoute(
+      name: AwsLandingPricePage.name,
+      path: AwsLandingPricePage.path,
+      builder: (context, state) {
+        return const AwsLandingPricePageWrapperProvider();
       },
     ),
     // GoRoute(
