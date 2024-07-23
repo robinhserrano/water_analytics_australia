@@ -9,6 +9,7 @@ class AwsLandingPrice with _$AwsLandingPrice {
     @JsonKey(name: 'name') required String? name,
     @JsonKey(name: 'internal_reference') required String? internalReference,
     @JsonKey(name: 'product_category') required String? productCategory,
+    required List<AwsLandingPriceHistory>? history,
   }) = _AwsLandingPrice;
 
   factory AwsLandingPrice.fromJson(Map<String, dynamic> json) =>

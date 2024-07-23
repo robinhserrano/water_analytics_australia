@@ -641,16 +641,16 @@ class Repository {
 
 //Fix this 7/17
   Future<bool> saveLandingPrice(
-    String name,
     String internalReference,
+    String name,
     String productCategory,
     double installationService,
     double supplyOnly,
-    DateTime recordedAt,
+    // DateTime recordedAt,
   ) async {
     try {
       final user = await HiveHelper.getAllUsers();
-      client.interceptors.add(ChuckerDioInterceptor());
+      // client.interceptors.add(ChuckerDioInterceptor());
       final response = await client.post<dynamic>(
         '$url/landingPrice',
         options: Options(
@@ -661,12 +661,12 @@ class Repository {
           },
         ),
         data: {
-          'name': name,
           'internal_reference': internalReference,
+          'name': name,
           'product_category': productCategory,
           'installation_service': installationService,
           'supply_only': supplyOnly,
-          'recorded_at': recordedAt.toIso8601String,
+          // 'recorded_at': recordedAt.toIso8601String,
         },
       );
 
@@ -701,6 +701,69 @@ class Repository {
     } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  Future<AwsLandingPrice?> fetchLandingPriceById(String id) async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.get<Map<String, dynamic>>(
+        '$url/landingPrice/$id',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final parsedData = AwsLandingPrice.fromJson(response.data!);
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<bool> updateLandingPrice(
+    String internalReference,
+    String name,
+    String productCategory,
+    double installationService,
+    double supplyOnly,
+    // DateTime recordedAt,
+  ) async {
+    try {
+      final user = await HiveHelper.getAllUsers();
+      // client.interceptors.add(ChuckerDioInterceptor());
+      final response = await client.patch<dynamic>(
+        '$url/landingPrice',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+        data: {
+          'internal_reference': internalReference,
+          'name': name,
+          'product_category': productCategory,
+          'installation_service': installationService,
+          'supply_only': supplyOnly,
+          // 'recorded_at': recordedAt.toIso8601String,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }

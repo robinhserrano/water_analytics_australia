@@ -1,39 +1,41 @@
+// ignore_for_file: prefer_null_aware_method_calls
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:water_analytics_australia/1_domain/models/aws_landing_price_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_landing_price_page/cubit/aws_landing_price_cubit.dart';
 import 'package:water_analytics_australia/core/widgets/custom_text_field.dart';
 
-class CreateUserPage extends StatefulWidget {
-  const CreateUserPage({required this.cubit, super.key, this.onUserCreated});
+class CreateLandingPrice extends StatefulWidget {
+  const CreateLandingPrice({
+    required this.cubit,
+    super.key,
+    this.onLandingPriceCreated,
+  });
 
-  final void Function()? onUserCreated;
+  final void Function()? onLandingPriceCreated;
   final AwsLandingPriceCubit cubit;
 
-  static const name = 'createUsers';
-  static const path = '/createUsers';
+  static const name = 'createLandingPrice';
+  static const path = '/createLandingPrice';
 
   @override
-  State<CreateUserPage> createState() => _CreateUserPageState();
+  State<CreateLandingPrice> createState() => _CreateLandingPriceState();
 }
 
-class _CreateUserPageState extends State<CreateUserPage> {
-  TextEditingController ctrlName = TextEditingController();
-  TextEditingController ctrlEmail = TextEditingController();
-  TextEditingController ctrlCommissionSplit = TextEditingController();
-  // TextEditingController ctrlInstallationService = TextEditingController();
-  // TextEditingController ctrlSupplyOnly = TextEditingController();
+class _CreateLandingPriceState extends State<CreateLandingPrice> {
+  TextEditingController ctrlInternalReference = TextEditingController();
+  TextEditingController ctrlProductName = TextEditingController();
+  TextEditingController ctrlInstallationService = TextEditingController();
+  TextEditingController ctrlSupplyOnly = TextEditingController();
   bool isValidating = false;
 
   @override
   void initState() {
-    ctrlCommissionSplit.text = 50.toString();
-    // ctrlInstallationService.text =
-    //     widget.landingPrice.installationService.toString();
-    // ctrlSupplyOnly.text = widget.landingPrice.supplyOnly.toString();
+    ctrlInstallationService.text = 0.toString();
+    ctrlSupplyOnly.text = 0.toString();
     super.initState();
   }
 
@@ -55,12 +57,12 @@ class _CreateUserPageState extends State<CreateUserPage> {
       appBar: AppBar(
         backgroundColor: Colors.black, //const Color(0xff0083ff),
         title: const Text(
-          'Create User',
+          'Create Landing Price',
           style: TextStyle(color: Colors.white),
         ),
 
         actions: [
-          if (widget.onUserCreated != null) ...[
+          if (widget.onLandingPriceCreated != null) ...[
             IconButton(
               onPressed: () {
                 context.pop();
@@ -81,7 +83,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                 const Center(
                   child: Text(
                     '',
-                    // widget.user
+                    // widget.LandingPrice
                     //     .displayName, //widget.landingPrice.internalReference,
                     style: TextStyle(fontSize: 16),
                   ),
@@ -90,34 +92,51 @@ class _CreateUserPageState extends State<CreateUserPage> {
                   height: 16,
                 ),
                 CustomTextField(
-                  ctrl: ctrlName,
+                  ctrl: ctrlInternalReference,
                   onChanged: (value) {
                     setState(() {});
                   },
-                  title: 'Name',
+                  title: 'Internal Reference',
                   isValidating: isValidating,
                 ),
                 CustomTextField(
-                  ctrl: ctrlEmail,
+                  ctrl: ctrlProductName,
                   onChanged: (value) {
                     setState(() {});
                   },
-                  title: 'Email',
+                  title: 'Product Name',
                   isValidating: isValidating,
-                  inputType: TextInputType.emailAddress,
+                ),
+                // CustomTextField(
+                //   ctrl: ctrlProductName,
+                //   onChanged: (value) {
+                //     setState(() {});
+                //   },
+                //   title: 'Category',
+                //   isValidating: isValidating,
+                // ),
+                CustomTextField(
+                  ctrl: ctrlInstallationService,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  title: 'Installation Service',
+                  isValidating: isValidating,
+                  inputType:
+                      const TextInputType.numberWithOptions(decimal: true),
                 ),
                 CustomTextField(
-                  ctrl: ctrlCommissionSplit,
+                  ctrl: ctrlSupplyOnly,
                   onChanged: (value) {
                     setState(() {});
                   },
-                  title: 'Commission Split (%)',
+                  title: 'Supply Only',
                   isValidating: isValidating,
                   inputType:
                       const TextInputType.numberWithOptions(decimal: true),
                 ),
                 // CustomTextField(
-                //   ctrl: ctrlCommissionSplit,
+                //   ctrl: ctrlInstallationService,
                 //   onChanged: (value) {
                 //     setState(() {});
                 //   },
@@ -126,14 +145,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                 //   inputType:
                 //       const TextInputType.numberWithOptions(decimal: true),
                 // ),
-                const Text(
-                  'User Role',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const SizedBox(
+                      const SizedBox(
                   height: 80,
                 ),
               ],
@@ -152,7 +164,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
             backgroundColor: const Color(0xff475467),
           ),
           onPressed: () async {
-            if (ctrlCommissionSplit.text.isEmpty) {
+            if (ctrlInstallationService.text.isEmpty) {
               setState(() {
                 isValidating = true;
               });
@@ -165,13 +177,11 @@ class _CreateUserPageState extends State<CreateUserPage> {
             if (isValidating == false) {
               unawaited(showSavingModal(context));
               final success = await cubit.saveAwsLandingPrices(
-                ctrlName.text,
-                ctrlName.text,
-                ctrlName.text,
-                double.tryParse(ctrlName.text) ?? 0,
-                double.tryParse(ctrlName.text) ?? 0,
-                DateTime.now(),
-                //FIX THIS
+                ctrlInternalReference.text,
+                ctrlProductName.text,
+                '',
+                double.tryParse(ctrlInstallationService.text) ?? 0,
+                double.tryParse(ctrlSupplyOnly.text) ?? 0,
               );
 
               if (success) {
@@ -181,15 +191,15 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
                 const snackBar = SnackBar(
                   backgroundColor: Colors.green,
-                  content: Text('Successfully created user.'),
+                  content: Text('Successfully created Landing Price.'),
                 );
 
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
 
-                if (widget.onUserCreated != null) {
-                  widget.onUserCreated!();
+                if (widget.onLandingPriceCreated != null) {
+                  widget.onLandingPriceCreated!();
                 }
               } else {
                 if (context.mounted) {
@@ -198,7 +208,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
 
                 const snackBar = SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text('Failed to create user.'),
+                  content: Text('Failed to create Landing Price.'),
                 );
 
                 if (context.mounted) {

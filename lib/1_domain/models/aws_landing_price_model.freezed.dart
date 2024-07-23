@@ -27,6 +27,8 @@ mixin _$AwsLandingPrice {
   String? get internalReference => throw _privateConstructorUsedError;
   @JsonKey(name: 'product_category')
   String? get productCategory => throw _privateConstructorUsedError;
+  List<AwsLandingPriceHistory>? get history =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,7 +46,8 @@ abstract class $AwsLandingPriceCopyWith<$Res> {
       {int id,
       @JsonKey(name: 'name') String? name,
       @JsonKey(name: 'internal_reference') String? internalReference,
-      @JsonKey(name: 'product_category') String? productCategory});
+      @JsonKey(name: 'product_category') String? productCategory,
+      List<AwsLandingPriceHistory>? history});
 }
 
 /// @nodoc
@@ -64,6 +67,7 @@ class _$AwsLandingPriceCopyWithImpl<$Res, $Val extends AwsLandingPrice>
     Object? name = freezed,
     Object? internalReference = freezed,
     Object? productCategory = freezed,
+    Object? history = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -82,6 +86,10 @@ class _$AwsLandingPriceCopyWithImpl<$Res, $Val extends AwsLandingPrice>
           ? _value.productCategory
           : productCategory // ignore: cast_nullable_to_non_nullable
               as String?,
+      history: freezed == history
+          ? _value.history
+          : history // ignore: cast_nullable_to_non_nullable
+              as List<AwsLandingPriceHistory>?,
     ) as $Val);
   }
 }
@@ -98,7 +106,8 @@ abstract class _$$AwsLandingPriceImplCopyWith<$Res>
       {int id,
       @JsonKey(name: 'name') String? name,
       @JsonKey(name: 'internal_reference') String? internalReference,
-      @JsonKey(name: 'product_category') String? productCategory});
+      @JsonKey(name: 'product_category') String? productCategory,
+      List<AwsLandingPriceHistory>? history});
 }
 
 /// @nodoc
@@ -116,6 +125,7 @@ class __$$AwsLandingPriceImplCopyWithImpl<$Res>
     Object? name = freezed,
     Object? internalReference = freezed,
     Object? productCategory = freezed,
+    Object? history = freezed,
   }) {
     return _then(_$AwsLandingPriceImpl(
       id: null == id
@@ -134,6 +144,10 @@ class __$$AwsLandingPriceImplCopyWithImpl<$Res>
           ? _value.productCategory
           : productCategory // ignore: cast_nullable_to_non_nullable
               as String?,
+      history: freezed == history
+          ? _value._history
+          : history // ignore: cast_nullable_to_non_nullable
+              as List<AwsLandingPriceHistory>?,
     ));
   }
 }
@@ -145,7 +159,9 @@ class _$AwsLandingPriceImpl implements _AwsLandingPrice {
       {required this.id,
       @JsonKey(name: 'name') required this.name,
       @JsonKey(name: 'internal_reference') required this.internalReference,
-      @JsonKey(name: 'product_category') required this.productCategory});
+      @JsonKey(name: 'product_category') required this.productCategory,
+      required final List<AwsLandingPriceHistory>? history})
+      : _history = history;
 
   factory _$AwsLandingPriceImpl.fromJson(Map<String, dynamic> json) =>
       _$$AwsLandingPriceImplFromJson(json);
@@ -161,10 +177,19 @@ class _$AwsLandingPriceImpl implements _AwsLandingPrice {
   @override
   @JsonKey(name: 'product_category')
   final String? productCategory;
+  final List<AwsLandingPriceHistory>? _history;
+  @override
+  List<AwsLandingPriceHistory>? get history {
+    final value = _history;
+    if (value == null) return null;
+    if (_history is EqualUnmodifiableListView) return _history;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'AwsLandingPrice(id: $id, name: $name, internalReference: $internalReference, productCategory: $productCategory)';
+    return 'AwsLandingPrice(id: $id, name: $name, internalReference: $internalReference, productCategory: $productCategory, history: $history)';
   }
 
   @override
@@ -177,13 +202,14 @@ class _$AwsLandingPriceImpl implements _AwsLandingPrice {
             (identical(other.internalReference, internalReference) ||
                 other.internalReference == internalReference) &&
             (identical(other.productCategory, productCategory) ||
-                other.productCategory == productCategory));
+                other.productCategory == productCategory) &&
+            const DeepCollectionEquality().equals(other._history, _history));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, internalReference, productCategory);
+  int get hashCode => Object.hash(runtimeType, id, name, internalReference,
+      productCategory, const DeepCollectionEquality().hash(_history));
 
   @JsonKey(ignore: true)
   @override
@@ -206,8 +232,9 @@ abstract class _AwsLandingPrice implements AwsLandingPrice {
       @JsonKey(name: 'name') required final String? name,
       @JsonKey(name: 'internal_reference')
       required final String? internalReference,
-      @JsonKey(name: 'product_category')
-      required final String? productCategory}) = _$AwsLandingPriceImpl;
+      @JsonKey(name: 'product_category') required final String? productCategory,
+      required final List<AwsLandingPriceHistory>?
+          history}) = _$AwsLandingPriceImpl;
 
   factory _AwsLandingPrice.fromJson(Map<String, dynamic> json) =
       _$AwsLandingPriceImpl.fromJson;
@@ -223,6 +250,8 @@ abstract class _AwsLandingPrice implements AwsLandingPrice {
   @override
   @JsonKey(name: 'product_category')
   String? get productCategory;
+  @override
+  List<AwsLandingPriceHistory>? get history;
   @override
   @JsonKey(ignore: true)
   _$$AwsLandingPriceImplCopyWith<_$AwsLandingPriceImpl> get copyWith =>

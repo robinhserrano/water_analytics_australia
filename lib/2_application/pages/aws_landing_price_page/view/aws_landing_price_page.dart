@@ -7,11 +7,12 @@ import 'package:go_router/go_router.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_edit_landing_price_page/view/aws_edit_landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_landing_price_page/cubit/aws_landing_price_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_landing_price_page/widget/aws_landing_price_card.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_landing_price_page/widget/create_landing_price_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_landing_price_page/widget/edit_landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/view/landing_price_detail_page.dart';
-import 'package:water_analytics_australia/2_application/pages/landing_price_page/cubit/landing_price_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/landing_price_page/widget/landing_price_card.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
 
@@ -44,6 +45,29 @@ class AwsLandingPricePage extends StatefulWidget {
 class _AwsLandingPricePageState extends State<AwsLandingPricePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   final ctrlSearch = TextEditingController();
+  int? id;
+
+  Widget endDrawer({int? id}) {
+    final canEdit = id != null;
+
+    return Drawer(
+      width: 500,
+      child: canEdit
+          ? EditLandingPricePageProvider(
+              // cubit: context.read<AwsLandingPriceCubit>(),
+              onLandingPriceEdited: () {
+                context.read<AwsLandingPriceCubit>().fetchAwsLandingPrices();
+              },
+              id: id,
+            )
+          : CreateLandingPrice(
+              cubit: context.read<AwsLandingPriceCubit>(),
+              onLandingPriceCreated: () {
+                context.read<AwsLandingPriceCubit>().fetchAwsLandingPrices();
+              },
+            ),
+    );
+  }
 
   Widget searchBox() {
     return Container(
@@ -120,7 +144,7 @@ class _AwsLandingPricePageState extends State<AwsLandingPricePage> {
                 );
               } else if (state is AwsLandingPriceStateLoaded) {
                 return Scaffold(
-                  endDrawer: const Drawer(),
+                  endDrawer: endDrawer(id: id),
                   backgroundColor: const Color(0xfff9fafb),
                   body: state.records.isEmpty
                       ? const Center(
@@ -136,6 +160,10 @@ class _AwsLandingPricePageState extends State<AwsLandingPricePage> {
                                   builder: (context) => ElevatedButton.icon(
                                     icon: const HeroIcon(HeroIcons.plus),
                                     onPressed: () {
+                                      setState(() {
+                                        id = null;
+                                      });
+
                                       Scaffold.of(context).openEndDrawer();
                                     },
                                     label: const Text('Create'),
@@ -194,6 +222,13 @@ class _AwsLandingPricePageState extends State<AwsLandingPricePage> {
                                             )) {
                                       return AwsLandingPriceCard(
                                         record: record,
+                                        insertLandingPriceId: (int value) {
+                                          setState(() {
+                                            id = value;
+                                            Scaffold.of(context)
+                                                .openEndDrawer();
+                                          });
+                                        },
                                       );
                                     }
 
@@ -335,20 +370,4 @@ class ItemModel {
   final String title;
   final HeroIcons icon;
   final int index;
-}
-
-class CreateLandingPrice extends StatefulWidget {
-  const CreateLandingPrice({super.key});
-
-  @override
-  State<CreateLandingPrice> createState() => _CreateAwsLandingPriceState();
-}
-
-class _CreateAwsLandingPriceState extends State<CreateLandingPrice> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [const Text('data')],
-    );
-  }
 }

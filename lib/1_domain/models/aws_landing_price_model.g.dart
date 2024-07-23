@@ -13,6 +13,10 @@ _$AwsLandingPriceImpl _$$AwsLandingPriceImplFromJson(
       name: json['name'] as String?,
       internalReference: json['internal_reference'] as String?,
       productCategory: json['product_category'] as String?,
+      history: (json['history'] as List<dynamic>?)
+          ?.map(
+              (e) => AwsLandingPriceHistory.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$AwsLandingPriceImplToJson(
@@ -22,6 +26,7 @@ Map<String, dynamic> _$$AwsLandingPriceImplToJson(
       'name': instance.name,
       'internal_reference': instance.internalReference,
       'product_category': instance.productCategory,
+      'history': instance.history,
     };
 
 _$AwsLandingPriceHistoryImpl _$$AwsLandingPriceHistoryImplFromJson(

@@ -19,7 +19,7 @@ class AwsLandingPriceCubit extends Cubit<AwsLandingPriceCubitState> {
     try {
       final data = await repo.fetchLandingPrices();
       if (data != null) {
-        emit(AwsLandingPriceStateLoaded(data.reversed.toList()));
+        emit(AwsLandingPriceStateLoaded(data));
       } else {
         emit(const AwsLandingPriceStateError(message: 'Sales Failed'));
       }
@@ -29,22 +29,22 @@ class AwsLandingPriceCubit extends Cubit<AwsLandingPriceCubitState> {
   }
 
   Future<bool> saveAwsLandingPrices(
-    String name,
     String internalReference,
+    String name,
     String productCategory,
     double installationService,
     double supplyOnly,
-    DateTime recordedAt,
+    // DateTime recordedAt,
   ) async {
-    emit(const AwsLandingPriceStateLoading());
+    //emit(const AwsLandingPriceStateLoading());
     try {
       final success = await repo.saveLandingPrice(
-        name,
         internalReference,
+        name,
         productCategory,
         installationService,
         supplyOnly,
-        recordedAt,
+        // recordedAt,
       );
       if (success) {
         return true;
