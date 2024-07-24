@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:water_analytics_australia/0_data/firebase_repository.dart';
 import 'package:water_analytics_australia/0_data/odoo_repository.dart';
 import 'package:water_analytics_australia/0_data/repository.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
@@ -31,26 +32,29 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
     try {
       final user = await HiveHelper.getCurrentUser();
 
-      List<AwsSalesOrder>? data;
+      List<AwsSalesOrder>? salesData;
 
       // //ACCESS RESTRICTION
       if (user?.accessLevel == 1) {
-        data = await repo.fetchSalesByReps([user?.displayName ?? '']);
+        salesData = await repo.fetchSalesByReps([user?.displayName ?? '']);
       } else if (user?.accessLevel == 2 || user?.accessLevel == 3) {
         final users = await repo.fetchUsers();
         final userNames = users!.map((e) => e.displayName).toList();
-        data = await repo.fetchSalesByReps(userNames);
+        salesData = await repo.fetchSalesByReps(userNames);
       } else {
-        var datas = await repo.fetchSalesPaginated(50, 1);
-        data = await repo.fetchSales();
+        //var salesDatas = await repo.fetchSalesPaginated(50, 1);
+        salesData = await repo.fetchSales();
       }
 
-      if (data != null) {
-        print('totalllll ' + data.length.toString());
-        var filteredData = data.where((e) => e.state == 'sale').toList();
-        print('sales only :  ' + filteredData.toString());
+      final landingPriceData = await repo.fetchLandingPrices();
 
-        emit(AwsSalesStateLoaded(filteredData));
+      if (salesData != null && landingPriceData != null) {
+        print('totalllll ' + salesData.length.toString());
+        final filteredsalesData =
+            salesData.where((e) => e.state == 'sale').toList();
+        print('sales only :  ' + filteredsalesData.toString());
+
+        emit(AwsSalesStateLoaded(filteredsalesData, landingPriceData));
       } else {
         emit(const AwsSalesStateError(message: 'Sales Failed'));
       }
@@ -141,7 +145,7 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
     }
     var after = salesOrders[index];
     var lala;
-    emit(AwsSalesStateLoaded(salesOrders));
+    emit(AwsSalesStateLoaded(salesOrders, []));
   }
 
   // Future<bool> saveAllSalesAwsBulk(
@@ -166,41 +170,41 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
   //   }
   // }
 
-  Future<bool> saveAllSalesAwsBulk(
-    List<SalesOrder> sales,
-    void Function(double) onProgress,
-  ) async {
-    final totalSales = sales.length;
-    var savedCount = 0;
+  // Future<bool> saveAllSalesAwsBulk(
+  //   List<SalesOrder> sales,
+  //   void Function(double) onProgress,
+  // ) async {
+  //   final totalSales = sales.length;
+  //   var savedCount = 0;
 
-    try {
-      for (var i = 0; i < sales.length; i += 10) {
-        final endIndex = i + 10;
-        final currentBatch = sales.sublist(
-            i,
-            endIndex < sales.length
-                ? endIndex
-                : sales.length); // Handle end-of-list case
+  //   try {
+  //     for (var i = 0; i < sales.length; i += 10) {
+  //       final endIndex = i + 10;
+  //       final currentBatch = sales.sublist(
+  //           i,
+  //           endIndex < sales.length
+  //               ? endIndex
+  //               : sales.length); // Handle end-of-list case
 
-        final batchSuccess = await repo.saveAllSalesBulk(currentBatch);
+  //       final batchSuccess = await repo.saveAllSalesBulk(currentBatch);
 
-        final processedSales = currentBatch.length;
-        savedCount += processedSales;
-        final progress = (savedCount / totalSales) * 100;
-        onProgress(progress); // Update progress callback
+  //       final processedSales = currentBatch.length;
+  //       savedCount += processedSales;
+  //       final progress = (savedCount / totalSales) * 100;
+  //       onProgress(progress); // Update progress callback
 
-        if (!batchSuccess) {
-          print('Failed to save batch of SalesOrders.');
-          return false; // Handle error for the entire batch (optional)
-        }
-      }
+  //       if (!batchSuccess) {
+  //         print('Failed to save batch of SalesOrders.');
+  //         return false; // Handle error for the entire batch (optional)
+  //       }
+  //     }
 
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
-    }
-  }
+  //     return true;
+  //   } catch (e) {
+  //     print(e);
+  //     return false;
+  //   }
+  // }
 
   // Future<bool> saveAllSalesAwsBulk(
   //   List<SalesOrder> sales,
@@ -309,7 +313,7 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
 //   try {
 //     for (var i = 0; i < salesOrders.length; i += 10) {
 //       final currentBatch = salesOrders.sublist(i, i + 10);
-//       final batchDataList = currentBatch.map((salesOrder) => _prepareSalesOrderData(salesOrder)).toList();
+//       final batchsalesDataList = currentBatch.map((salesOrder) => _prepareSalesOrdersalesData(salesOrder)).toList();
 
 //       final response = await client.post<dynamic>(
 //         'http://3.27.69.251/salesOrder',
@@ -320,7 +324,7 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
 //             HttpHeaders.acceptHeader: 'application/json',
 //           },
 //         ),
-//         data: batchDataList,
+//         salesData: batchsalesDataList,
 //       );
 
 //       if (response.statusCode == 200 || response.statusCode == 201) {

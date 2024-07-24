@@ -81,17 +81,17 @@ class HomeEndDrawer extends StatelessWidget {
                               height: 1,
                             ),
                           ],
-                          // if (user.first.accessLevel >= 4) ...[
-                          //   _DrawerItem(
-                          //     onTap: () {
-                          //       context.pushNamed(AwsLandingPricePage.name);
-                          //     },
-                          //     text: 'AWS Landing Price',
-                          //   ),
-                          //   const Divider(
-                          //     height: 1,
-                          //   ),
-                          // ],
+                          if (user.first.accessLevel >= 4) ...[
+                            _DrawerItem(
+                              onTap: () {
+                                context.pushNamed(AwsLandingPricePage.name);
+                              },
+                              text: 'AWS Landing Price',
+                            ),
+                            const Divider(
+                              height: 1,
+                            ),
+                          ],
                         ],
                       );
                     }

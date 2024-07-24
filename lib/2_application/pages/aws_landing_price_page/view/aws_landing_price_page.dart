@@ -147,8 +147,33 @@ class _AwsLandingPricePageState extends State<AwsLandingPricePage> {
                   endDrawer: endDrawer(id: id),
                   backgroundColor: const Color(0xfff9fafb),
                   body: state.records.isEmpty
-                      ? const Center(
-                          child: Text('No sales yet.'),
+                      ? Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                searchBox(),
+                                Builder(
+                                  builder: (context) => ElevatedButton.icon(
+                                    icon: const HeroIcon(HeroIcons.plus),
+                                    onPressed: () {
+                                      setState(() {
+                                        id = null;
+                                      });
+
+                                      Scaffold.of(context).openEndDrawer();
+                                    },
+                                    label: const Text('Create'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Center(
+                              child: Center(
+                                child: Text('No sales yet.'),
+                              ),
+                            ),
+                          ],
                         )
                       : Column(
                           children: [
@@ -283,91 +308,92 @@ class SalesListPageError extends StatelessWidget {
   }
 }
 
-class CustomPopMenu extends StatefulWidget {
-  const CustomPopMenu({
-    required this.id,
-    super.key,
-  });
+// class CustomPopMenu extends StatefulWidget {
+//   const CustomPopMenu({
+//     required this.id,
+//     super.key,
+//   });
 
-  final String id;
+//   final String id;
 
-  @override
-  State<CustomPopMenu> createState() => _CustomPopMenuState();
-}
+//   @override
+//   State<CustomPopMenu> createState() => _CustomPopMenuState();
+// }
 
-class _CustomPopMenuState extends State<CustomPopMenu> {
-  CustomPopupMenuController controller = CustomPopupMenuController();
+// class _CustomPopMenuState extends State<CustomPopMenu> {
+//   CustomPopupMenuController controller = CustomPopupMenuController();
 
-  @override
-  Widget build(BuildContext context) {
-    final menuItems = <ItemModel>[
-      const ItemModel('Edit Landing Price', HeroIcons.documentDuplicate, 0),
-    ];
+//   @override
+//   Widget build(BuildContext context) {
+//     final menuItems = <ItemModel>[
+//       const ItemModel('Edit Landing Price', HeroIcons.documentDuplicate, 0),
+//       const ItemModel('Delete Landing Price', HeroIcons.trash, 1),
+//     ];
 
-    return CustomPopupMenu(
-      arrowColor: Colors.white,
-      menuBuilder: () => ClipRRect(
-        borderRadius: BorderRadius.circular(5),
-        child: ColoredBox(
-          color: Colors.white,
-          child: IntrinsicWidth(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: menuItems
-                  .map(
-                    (item) => GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        controller.hideMenu();
+//     return CustomPopupMenu(
+//       arrowColor: Colors.white,
+//       menuBuilder: () => ClipRRect(
+//         borderRadius: BorderRadius.circular(5),
+//         child: ColoredBox(
+//           color: Colors.white,
+//           child: IntrinsicWidth(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.stretch,
+//               children: menuItems
+//                   .map(
+//                     (item) => GestureDetector(
+//                       behavior: HitTestBehavior.translucent,
+//                       onTap: () {
+//                         controller.hideMenu();
 
-                        if (item.index == 0) {
-                          context.pushNamed(
-                            LandingPriceDetailPage.name,
-                            pathParameters: {
-                              'id': widget.id,
-                            },
-                          );
-                        }
-                      },
-                      child: Container(
-                        height: 40,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 10),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Row(
-                            children: [
-                              Text(
-                                item.title,
-                                style: TextStyle(
-                                  color: item.index == 1
-                                      ? const Color(0xffD92D20)
-                                      : const Color(0xff1D2939),
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ),
-      ),
-      pressType: PressType.singleClick,
-      verticalMargin: -10,
-      controller: controller,
-      child: const Icon(Icons.more_vert, color: Color(0xff0F172A)),
-    );
-  }
-}
+//                         if (item.index == 0) {
+//                           context.pushNamed(
+//                             LandingPriceDetailPage.name,
+//                             pathParameters: {
+//                               'id': widget.id,
+//                             },
+//                           );
+//                         }
+//                       },
+//                       child: Container(
+//                         height: 40,
+//                         padding: const EdgeInsets.symmetric(horizontal: 20),
+//                         child: Container(
+//                           margin: const EdgeInsets.only(left: 10),
+//                           padding: const EdgeInsets.symmetric(vertical: 10),
+//                           child: Row(
+//                             children: [
+//                               Text(
+//                                 item.title,
+//                                 style: TextStyle(
+//                                   color: item.index == 1
+//                                       ? const Color(0xffD92D20)
+//                                       : const Color(0xff1D2939),
+//                                   fontSize: 14,
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                   )
+//                   .toList(),
+//             ),
+//           ),
+//         ),
+//       ),
+//       pressType: PressType.singleClick,
+//       verticalMargin: -10,
+//       controller: controller,
+//       child: const Icon(Icons.more_vert, color: Color(0xff0F172A)),
+//     );
+//   }
+// }
 
-class ItemModel {
-  const ItemModel(this.title, this.icon, this.index);
-  final String title;
-  final HeroIcons icon;
-  final int index;
-}
+// class ItemModel {
+//   const ItemModel(this.title, this.icon, this.index);
+//   final String title;
+//   final HeroIcons icon;
+//   final int index;
+// }

@@ -156,6 +156,7 @@ class _CustomPopMenuState extends State<CustomPopMenu> {
   Widget build(BuildContext context) {
     final menuItems = <ItemModel>[
       const ItemModel('Edit Landing Price', HeroIcons.documentDuplicate, 0),
+      const ItemModel('Delete Landing Price', HeroIcons.trash, 1),
     ];
 
     return CustomPopupMenu(
@@ -176,12 +177,12 @@ class _CustomPopMenuState extends State<CustomPopMenu> {
 
                         if (item.index == 0) {
                           widget.insertLandingPriceId(widget.id);
-                          // context.pushNamed(
-                          //   LandingPriceDetailPage.name,
-                          //   pathParameters: {
-                          //     'id': widget.id,
-                          //   },
-                          // );
+                        }
+                        if (item.index == 1) {
+                          showGeneralDialog(
+                            context: context,
+                            pageBuilder: (_, __, ___) => const Center(),
+                          );
                         }
                       },
                       child: Container(

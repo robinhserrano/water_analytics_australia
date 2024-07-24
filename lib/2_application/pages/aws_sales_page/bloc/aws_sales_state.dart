@@ -16,11 +16,15 @@ class AwsSalesStateLoading extends AwsSalesCubitState {
 }
 
 class AwsSalesStateLoaded extends AwsSalesCubitState {
-  const AwsSalesStateLoaded(this.records);
+  const AwsSalesStateLoaded(
+    this.records,
+    this.landingPrice,
+  );
   final List<AwsSalesOrder> records;
+  final List<AwsLandingPrice> landingPrice;
   AwsSalesStateLoaded get asData => this;
   @override
-  List<Object> get props => [records];
+  List<Object> get props => [records, landingPrice];
 }
 
 class AwsSalesStateError extends AwsSalesCubitState {
