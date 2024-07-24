@@ -21,10 +21,11 @@ class MemberDetailCubit extends Cubit<MemberDetailCubitState> {
   Future<void> fetchSales() async {
     emit(const MemberDetailStateLoading());
     try {
-      final users = await repo.fetchSalesByReps(reps);
+      final data = await repo.fetchSalesByReps(reps);
 
-      if (users != null) {
-        emit(MemberDetailStateLoaded(users));
+      if (data != null) {
+        final filteredData = data.where((e) => e.state == 'sale').toList();
+        emit(MemberDetailStateLoaded(filteredData));
       } else {
         emit(const MemberDetailStateError(message: 'CloudSales Failed'));
       }
