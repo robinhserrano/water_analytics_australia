@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users/view/admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/admin_users_detail_page/view/admin_users_detail_page.dart';
@@ -120,19 +121,33 @@ final routes = GoRouter(
       name: AwsSalesDetailsPage.name,
       path: AwsSalesDetailsPage.path,
       builder: (context, state) {
-        try {
-          final cubit = state.extra as AwsSalesCubit?;
+        // try {
+        //   final cubit = state.extra as AwsSalesCubit?;
 
-          return AwsSalesDetailsPageWrapperProvider(
-            id: state.pathParameters['id']!,
-            salesCubit: cubit,
-          );
-        } catch (e) {
-          return AwsSalesDetailsPageWrapperProvider(
-            id: state.pathParameters['id']!,
-            salesCubit: null,
+        //   return AwsSalesDetailsPageWrapperProvider(
+        //     id: state.pathParameters['id']!,
+        //     salesCubit: cubit,
+        //   );
+        // } catch (e) {
+        //   return AwsSalesDetailsPageWrapperProvider(
+        //     id: state.pathParameters['id']!,
+        //     salesCubit: null,
+        //   );
+        // }
+
+        if (state.extra != null && state.extra! is AwsSalesCubit) {
+          return BlocProvider.value(
+            value: state.extra! as AwsSalesCubit,
+            child: AwsSalesDetailsPageWrapperProvider(
+              id: state.pathParameters['id']!,
+              //  salesCubit: null,
+            ),
           );
         }
+
+        return AwsSalesDetailsPageWrapperProvider(
+          id: state.pathParameters['id']!,
+        );
       },
     ),
     GoRoute(

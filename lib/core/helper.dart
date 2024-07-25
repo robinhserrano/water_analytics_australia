@@ -128,3 +128,7 @@ bool isValidNumber(String? input) {
     return false;
   }
 }
+
+int countOccurrences<T>(List<T> list, T item) {
+  return list.where((element) => list.contains(item)).length;
+}

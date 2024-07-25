@@ -131,6 +131,7 @@ class AwsSalesCubit extends Cubit<AwsSalesCubitState> {
     List<AwsSalesOrder> salesOrders,
     AwsSalesOrder newSales,
   ) async {
+     emit(const AwsSalesStateLoading());
     final index =
         salesOrders.indexWhere((salesOrder) => salesOrder.id == newSales.id);
     var hehe = index;

@@ -28,31 +28,34 @@ import 'package:water_analytics_australia/injection.dart';
 class AwsSalesDetailsPageWrapperProvider extends StatelessWidget {
   const AwsSalesDetailsPageWrapperProvider({
     required this.id,
-    required this.salesCubit,
+    //required this.salesCubit,
     super.key,
   });
   final String id;
-  final AwsSalesCubit? salesCubit;
+  //final AwsSalesCubit? salesCubit;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<AwsSalesDetailsCubit>(),
       child: AwsSalesDetailsPage(
         id: id,
-        salesCubit: salesCubit,
+        // salesCubit: salesCubit,
       ),
     );
   }
 }
 
 class AwsSalesDetailsPage extends StatefulWidget {
-  const AwsSalesDetailsPage({required this.id, super.key, this.salesCubit});
+  const AwsSalesDetailsPage({
+    required this.id,
+    super.key, //this.salesCubit
+  });
 
   static const name = 'AwsSalesDetail';
   static const path = '/AwsSalesDetail/:id';
 
   final String id;
-  final AwsSalesCubit? salesCubit;
+  //final AwsSalesCubit? salesCubit;
 
   @override
   State<AwsSalesDetailsPage> createState() => _AwsSalesDetailsPageState();
@@ -61,8 +64,16 @@ class AwsSalesDetailsPage extends StatefulWidget {
 class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
   int accessLevel = 0;
   int currentUserId = 0;
+  AwsSalesCubit? salesCubit;
+
   @override
   void initState() {
+    try {
+      salesCubit = context.read<AwsSalesCubit>();
+    } catch (e) {
+      salesCubit = null;
+    }
+
     super.initState();
     _getUserFromHive();
     context.read<AwsSalesDetailsCubit>().fetchAwsSalesDetails(widget.id);
@@ -108,7 +119,7 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
                 order: state.order,
                 accessLevel: accessLevel,
                 currentUserId: currentUserId,
-                salesCubit: widget.salesCubit,
+                salesCubit: salesCubit,
               ),
             );
           } else if (state is AwsSalesDetailsStateError) {
@@ -1067,6 +1078,7 @@ class CommissionSection extends StatelessWidget {
   }
 }
 
+//Updated 7/25
 List<LandingPriceWithQuantity> getLandingPrice(
   List<AwsOrderLine> orderLines,
   List<LandingPrice> landingPrices,
@@ -1076,17 +1088,23 @@ List<LandingPriceWithQuantity> getLandingPrice(
     (orderLine) => orderLine.product?.toLowerCase() == 'supply only',
   );
 
+  final seenReferences = <String>[];
+
   for (final orderLine in orderLines) {
     final displayName = orderLine.product;
     final quantity = orderLine.quantity;
+
     if (displayName != null && quantity != null) {
       for (final landingPrice in landingPrices) {
         if (displayName
             .toLowerCase()
             .contains(landingPrice.internalReference!.toLowerCase())) {
+          final isDuplicate =
+              countOccurrences(seenReferences, displayName.toLowerCase()) > 0;
+
           matchingLandingPrices.add(
             LandingPriceWithQuantity(
-              landingPrice: (quantity >= 2 &&
+              landingPrice: (isDuplicate &&
                       landingPrice.internalReference == 'USRO-3S1-2W' &&
                       !isSupplyOnly)
                   ? landingPrice.copyWith(installationService: 790)
@@ -1099,6 +1117,9 @@ List<LandingPriceWithQuantity> getLandingPrice(
           break;
         }
       }
+    }
+    if (displayName != null) {
+      seenReferences.add(displayName.toLowerCase());
     }
   }
 

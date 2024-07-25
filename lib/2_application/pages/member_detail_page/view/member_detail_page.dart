@@ -1219,17 +1219,23 @@ List<LandingPriceWithQuantity> getLandingPrice(
     (orderLine) => orderLine.product?.toLowerCase() == 'supply only',
   );
 
+  final seenReferences = <String>[];
+
   for (final orderLine in orderLines) {
     final displayName = orderLine.product;
     final quantity = orderLine.quantity;
+
     if (displayName != null && quantity != null) {
       for (final landingPrice in landingPrices) {
         if (displayName
             .toLowerCase()
             .contains(landingPrice.internalReference!.toLowerCase())) {
+          final isDuplicate =
+              countOccurrences(seenReferences, displayName.toLowerCase()) > 0;
+
           matchingLandingPrices.add(
             LandingPriceWithQuantity(
-              landingPrice: (quantity >= 2 &&
+              landingPrice: (isDuplicate &&
                       landingPrice.internalReference == 'USRO-3S1-2W' &&
                       !isSupplyOnly)
                   ? landingPrice.copyWith(installationService: 790)
@@ -1242,6 +1248,9 @@ List<LandingPriceWithQuantity> getLandingPrice(
           break;
         }
       }
+    }
+    if (displayName != null) {
+      seenReferences.add(displayName.toLowerCase());
     }
   }
 
