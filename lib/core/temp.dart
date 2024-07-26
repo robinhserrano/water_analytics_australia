@@ -103,8 +103,8 @@ List<LandingPrice> landingPrices = [
     name: '3 Way Mixer 7624B (U Detachable)',
     internalReference: '3WM 7624B',
     productCategory: 'Taps',
-    installationService: 300,
-    supplyOnly: 300,
+    installationService: 400,
+    supplyOnly: 400,
   ),
   const LandingPrice(
     name: '3 Way Mixer 7624G (U Detachable)',
