@@ -35,14 +35,14 @@ final routes = GoRouter(
       name: LoginPage.name,
       path: LoginPage.path,
       builder: (context, state) {
-        return const LoginPageWrapperProvider();
+        return const SelectionArea(child: LoginPageWrapperProvider());
       },
     ),
     GoRoute(
       name: SalesPage.name,
       path: SalesPage.path,
       builder: (context, state) {
-        return const SalesPageWrapperProvider();
+        return const SelectionArea(child: SalesPageWrapperProvider());
       },
     ),
     GoRoute(
@@ -50,8 +50,10 @@ final routes = GoRouter(
       path: SalesDetailsPage.path,
       builder: (context, state) {
         final cubit = state.extra as AwsSalesCubit?;
-        return SalesDetailsPageWrapperProvider(
-          id: state.pathParameters['id']!,
+        return SelectionArea(
+          child: SalesDetailsPageWrapperProvider(
+            id: state.pathParameters['id']!,
+          ),
         );
       },
     ),
@@ -59,15 +61,17 @@ final routes = GoRouter(
       name: HomePage.name,
       path: HomePage.path,
       builder: (context, state) {
-        return const HomePage();
+        return const SelectionArea(child: HomePage());
       },
     ),
     GoRoute(
       name: CloudSalesDetailsPage.name,
       path: CloudSalesDetailsPage.path,
       builder: (context, state) {
-        return CloudSalesDetailsPageWrapperProvider(
-          id: state.pathParameters['id']!,
+        return SelectionArea(
+          child: CloudSalesDetailsPageWrapperProvider(
+            id: state.pathParameters['id']!,
+          ),
         );
       },
     ),
@@ -75,15 +79,17 @@ final routes = GoRouter(
       name: LandingPricePage.name,
       path: LandingPricePage.path,
       builder: (context, state) {
-        return const LandingPricePageWrapperProvider();
+        return const SelectionArea(child: LandingPricePageWrapperProvider());
       },
     ),
     GoRoute(
       name: LandingPriceDetailPage.name,
       path: LandingPriceDetailPage.path,
       builder: (context, state) {
-        return LandingPriceDetailPageWrapperProvider(
-          id: state.pathParameters['id']!,
+        return SelectionArea(
+          child: LandingPriceDetailPageWrapperProvider(
+            id: state.pathParameters['id']!,
+          ),
         );
       },
     ),
@@ -91,15 +97,17 @@ final routes = GoRouter(
       name: AdminUsersPage.name,
       path: AdminUsersPage.path,
       builder: (context, state) {
-        return const AdminUsersPageWrapperProvider();
+        return const SelectionArea(child: AdminUsersPageWrapperProvider());
       },
     ),
     GoRoute(
       name: AdminUsersDetailPage.name,
       path: AdminUsersDetailPage.path,
       builder: (context, state) {
-        return AdminUsersDetailPageWrapperProvider(
-          id: state.pathParameters['id']!,
+        return SelectionArea(
+          child: AdminUsersDetailPageWrapperProvider(
+            id: state.pathParameters['id']!,
+          ),
         );
       },
     ),
@@ -107,14 +115,14 @@ final routes = GoRouter(
       name: CreateUserPage.name,
       path: CreateUserPage.path,
       builder: (context, state) {
-        return const CreateUsersPageWrapperProvider();
+        return const SelectionArea(child: CreateUsersPageWrapperProvider());
       },
     ),
     GoRoute(
       name: AwsSalesPage.name,
       path: AwsSalesPage.path,
       builder: (context, state) {
-        return const AwsSalesPageWrapperProvider();
+        return const SelectionArea(child: AwsSalesPageWrapperProvider());
       },
     ),
     GoRoute(
@@ -138,15 +146,19 @@ final routes = GoRouter(
         if (state.extra != null && state.extra! is AwsSalesCubit) {
           return BlocProvider.value(
             value: state.extra! as AwsSalesCubit,
-            child: AwsSalesDetailsPageWrapperProvider(
-              id: state.pathParameters['id']!,
-              //  salesCubit: null,
+            child: SelectionArea(
+              child: AwsSalesDetailsPageWrapperProvider(
+                id: state.pathParameters['id']!,
+                //  salesCubit: null,
+              ),
             ),
           );
         }
 
-        return AwsSalesDetailsPageWrapperProvider(
-          id: state.pathParameters['id']!,
+        return SelectionArea(
+          child: AwsSalesDetailsPageWrapperProvider(
+            id: state.pathParameters['id']!,
+          ),
         );
       },
     ),
@@ -154,8 +166,10 @@ final routes = GoRouter(
       name: AwsAdminUsersDetailPage.name,
       path: AwsAdminUsersDetailPage.path,
       builder: (context, state) {
-        return AwsAdminUsersDetailPageWrapperProvider(
-          id: state.pathParameters['id']!,
+        return SelectionArea(
+          child: AwsAdminUsersDetailPageWrapperProvider(
+            id: state.pathParameters['id']!,
+          ),
         );
       },
     ),
@@ -163,15 +177,17 @@ final routes = GoRouter(
       name: MyTeamPage.name,
       path: MyTeamPage.path,
       builder: (context, state) {
-        return const MyTeamPageWrapperProvider();
+        return const SelectionArea(child: MyTeamPageWrapperProvider());
       },
     ),
     GoRoute(
       name: MemberDetailPage.name,
       path: MemberDetailPage.path,
       builder: (context, state) {
-        return MemberDetailPageWrapperProvider(
-          rep: state.pathParameters['rep']!,
+        return SelectionArea(
+          child: MemberDetailPageWrapperProvider(
+            rep: state.pathParameters['rep']!,
+          ),
         );
       },
     ),
@@ -179,16 +195,18 @@ final routes = GoRouter(
       name: ManageTeams.name,
       path: ManageTeams.path,
       builder: (context, state) {
-        return const ManageTeamsWrapperProvider();
+        return const SelectionArea(child: ManageTeamsWrapperProvider());
       },
     ),
     GoRoute(
       name: ManageTeamDetail.name,
       path: ManageTeamDetail.path,
       builder: (context, state) {
-        return ManageTeamDetailWrapperProvider(
-          id: state.pathParameters['id']!,
-          managerName: state.pathParameters['managerName']!,
+        return SelectionArea(
+          child: ManageTeamDetailWrapperProvider(
+            id: state.pathParameters['id']!,
+            managerName: state.pathParameters['managerName']!,
+          ),
         );
       },
     ),
@@ -196,7 +214,7 @@ final routes = GoRouter(
       name: AwsLandingPricePage.name,
       path: AwsLandingPricePage.path,
       builder: (context, state) {
-        return const AwsLandingPricePageWrapperProvider();
+        return const SelectionArea(child: AwsLandingPricePageWrapperProvider());
       },
     ),
     // GoRoute(
