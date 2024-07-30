@@ -67,6 +67,8 @@ String formatDisplayNameToEmail(String text) {
 
 String accessLevelToString(int accessLevel) {
   switch (accessLevel) {
+    case 0:
+      return 'Account Officer';
     case 1:
       return 'Sales Person';
     case 2:
@@ -84,6 +86,8 @@ String accessLevelToString(int accessLevel) {
 
 MaterialColor accessLevelToColor(int accessLevel) {
   switch (accessLevel) {
+    case 0:
+      return Colors.purple;
     case 1:
       return Colors.lightGreen;
     case 2:
@@ -101,6 +105,8 @@ MaterialColor accessLevelToColor(int accessLevel) {
 
 int stringToAccessLevel(String accessLevel) {
   switch (accessLevel) {
+    case 'Account Officer':
+      return 0;
     case 'Sales Person':
       return 1;
     case 'Sales Team Manager':
@@ -112,7 +118,7 @@ int stringToAccessLevel(String accessLevel) {
     case 'Super Admin':
       return 5;
     default:
-      return 0;
+      return -1;
   }
 }
 

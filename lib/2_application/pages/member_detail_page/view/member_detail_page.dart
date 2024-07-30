@@ -916,7 +916,8 @@ class MyDataTableSource extends DataTableSource {
           ),
         ),
         DataCell(
-          onTap: userAccessLevel < 4 //|| item.isEnteredOdoo
+          onTap: userAccessLevel < 4 ||
+                  userAccessLevel != 0 //|| item.isEnteredOdoo
               ? () {}
               : () {
                   showEnteredOdooModal(

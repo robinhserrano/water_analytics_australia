@@ -223,6 +223,7 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
   int? salesManagerId;
 
   final List<String> leadSource = [
+    'Account Officer',
     'Sales Person',
     'Sales Team Manager',
     'Sales Manager',

@@ -13,6 +13,7 @@ import 'package:water_analytics_australia/2_application/pages/aws_admin_users/bl
 import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
+import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/widgets/home_end_drawer.dart';
 import 'package:water_analytics_australia/core/widgets/shimmer_box.dart';
 import 'package:water_analytics_australia/injection.dart';
@@ -54,6 +55,19 @@ class AwsAdminUsersPage extends StatefulWidget {
 }
 
 class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
+  int userAccessLevel = 1;
+  @override
+  void initState() {
+    _getUserFromHive();
+    super.initState();
+  }
+
+  Future<void> _getUserFromHive() async {
+    final user = await HiveHelper.getCurrentUser();
+    userAccessLevel = user?.accessLevel ?? 1;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +110,7 @@ class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
             } else if (state is AwsAdminUsersStateLoaded) {
               return AwsAdminUsersPageLoaded(
                 users: state.users,
+                userAccessLevel: userAccessLevel,
               );
             } else if (state is AwsAdminUsersStateError) {
               return AwsAdminUsersPageError(
@@ -114,6 +129,7 @@ class _AwsAdminUsersPageState extends State<AwsAdminUsersPage> {
 class AwsAdminUsersPageLoaded extends StatefulWidget {
   const AwsAdminUsersPageLoaded({
     required this.users,
+    required this.userAccessLevel,
     super.key,
   });
   static final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -127,6 +143,7 @@ class AwsAdminUsersPageLoaded extends StatefulWidget {
   }
 
   final List<AwsUser> users;
+  final int userAccessLevel;
 
   @override
   State<AwsAdminUsersPageLoaded> createState() =>
@@ -226,18 +243,20 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     searchBox(),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          id = null;
-                        });
+                    if (widget.userAccessLevel != 0) ...[
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            id = null;
+                          });
 
-                        AwsAdminUsersPageLoaded.openDrawer();
-                      },
-                      icon: const HeroIcon(
-                        HeroIcons.userPlus,
+                          AwsAdminUsersPageLoaded.openDrawer();
+                        },
+                        icon: const HeroIcon(
+                          HeroIcons.userPlus,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
                 const Expanded(
@@ -253,17 +272,19 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     searchBox(),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          id = null;
-                        });
-                        AwsAdminUsersPageLoaded.openDrawer();
-                      },
-                      icon: const HeroIcon(
-                        HeroIcons.userPlus,
+                    if (widget.userAccessLevel != 0) ...[
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            id = null;
+                          });
+                          AwsAdminUsersPageLoaded.openDrawer();
+                        },
+                        icon: const HeroIcon(
+                          HeroIcons.userPlus,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
                 Expanded(
@@ -278,20 +299,26 @@ class _AwsAdminUsersPageLoadedState extends State<AwsAdminUsersPageLoaded> {
                       });
                     },
                     minWidth: 1200,
-                    columns: const [
-                      DataColumn(label: Text('Name')),
-                      DataColumn(label: Text('Email')),
-                      DataColumn(label: Text('Role')),
-                      DataColumn(label: Text('Commission %')),
-                      DataColumn(label: Text('Actions')),
+                    columns: [
+                      const DataColumn(label: Text('Name')),
+                      const DataColumn(label: Text('Email')),
+                      const DataColumn(label: Text('Role')),
+                      const DataColumn(label: Text('Commission %')),
+                      if (widget.userAccessLevel != 0) ...[
+                        const DataColumn(label: Text('Actions')),
+                      ],
                     ],
-                    source:
-                        MyDataTableSource(filteredUsers, context, (int value) {
-                      setState(() {
-                        id = value;
-                      });
-                      AwsAdminUsersPageLoaded.openDrawer();
-                    }),
+                    source: MyDataTableSource(
+                      filteredUsers,
+                      context,
+                      (int value) {
+                        setState(() {
+                          id = value;
+                        });
+                        AwsAdminUsersPageLoaded.openDrawer();
+                      },
+                      widget.userAccessLevel,
+                    ),
                   ),
                 ),
               ],
@@ -328,10 +355,17 @@ class AwsAdminUsersPageError extends StatelessWidget {
 }
 
 class MyDataTableSource extends DataTableSource {
-  MyDataTableSource(this.data, this.context, this.insertUserId);
+  MyDataTableSource(
+    this.data,
+    this.context,
+    this.insertUserId,
+    this.userAccessLevel,
+  );
   final List<AwsUser> data;
   final BuildContext context;
   void Function(int value) insertUserId;
+  final int userAccessLevel;
+
   Set<int> selectedRows = {};
 
   @override
@@ -385,14 +419,16 @@ class MyDataTableSource extends DataTableSource {
           ),
         ),
         DataCell(onTap: () {}, Text(item.commissionSplit.toString())),
-        DataCell(
-          onTap: () {
-            insertUserId(item.id);
-          },
-          const HeroIcon(
-            HeroIcons.pencilSquare,
+        if (userAccessLevel != 0) ...[
+          DataCell(
+            onTap: () {
+              insertUserId(item.id);
+            },
+            const HeroIcon(
+              HeroIcons.pencilSquare,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

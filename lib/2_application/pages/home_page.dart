@@ -46,13 +46,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screens = <Widget>[
       const AwsSalesPageWrapperProvider(),
-      if (userAccessLevel >= 4) ...[
+      if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
         const AwsAdminUsersPageWrapperProvider(),
       ],
       if (userAccessLevel >= 2 && userAccessLevel < 4) ...[
         const MyTeamPageWrapperProvider(),
       ],
-      if (userAccessLevel >= 4) ...[
+      if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
         const ManageTeamsWrapperProvider(),
       ],
       if (!kIsWeb) ...[
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
         icon: HeroIcon(HeroIcons.home),
         label: 'Home',
       ),
-      if (userAccessLevel >= 4) ...[
+      if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
         const NavigationDestination(
           icon: Icon(FontAwesomeIcons.addressBook),
           label: 'Users',
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
           label: 'Team',
         ),
       ],
-      if (userAccessLevel >= 4) ...[
+      if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
         const NavigationDestination(
           icon: Icon(FontAwesomeIcons.usersGear),
           label: 'Manage Team',

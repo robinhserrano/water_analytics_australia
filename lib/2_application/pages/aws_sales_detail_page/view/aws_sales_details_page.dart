@@ -987,7 +987,7 @@ class CommissionSection extends StatelessWidget {
               ],
             ),
             //ACCESS RESTRICTION
-            if (accessLevel >= 3) ...[
+            if (accessLevel >= 3 || accessLevel == 0) ...[
               Center(
                 child: ResponsiveRowColumn(
                   rowMainAxisAlignment: MainAxisAlignment.center,
@@ -998,7 +998,8 @@ class CommissionSection extends StatelessWidget {
                   columnSpacing: 16,
                   children: [
                     if (accessLevel >= 4 ||
-                        order.xStudioCommissionPaid == false) ...[
+                        order.xStudioCommissionPaid == false &&
+                            accessLevel != 0) ...[
                       ResponsiveRowColumnItem(
                         rowFlex: 1,
                         child: ElevatedButton(
@@ -1018,7 +1019,7 @@ class CommissionSection extends StatelessWidget {
                         ),
                       ),
                     ],
-                    if (!order.xStudioCommissionPaid) ...[
+                    if (!order.xStudioCommissionPaid && accessLevel != 0) ...[
                       ResponsiveRowColumnItem(
                         rowFlex: 1,
                         child: ElevatedButton(
@@ -1042,7 +1043,7 @@ class CommissionSection extends StatelessWidget {
                         ),
                       ),
                     ],
-                    if (accessLevel >= 4) ...[
+                    if (accessLevel >= 4 || accessLevel == 0) ...[
                       ResponsiveRowColumnItem(
                         rowFlex: 1,
                         child: ElevatedButton(
