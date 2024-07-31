@@ -49,6 +49,18 @@ class _SortFilterModalState extends State<SortFilterModal> {
       selectedSortValue =
           convertStringToSortBy(userBox.values.first.selectedSortValue);
       selectedNames = userBox.values.first.selectedNames;
+
+      if (checkPayableCommission(
+        selectedCommissionStatus,
+        selectedInvoicePaymentStatus,
+        selectedDeliverStatus,
+      )) {
+        if (userBox.values.first.confirmedByManager) {
+          commissionPayableAccountsActive = true;
+        } else {
+          commissionPayableActive = true;
+        }
+      }
     }
     _getUserFromHive();
 
@@ -61,8 +73,42 @@ class _SortFilterModalState extends State<SortFilterModal> {
     setState(() {});
   }
 
+  bool checkPayableCommission(
+    List<CommissionStatus> selectedCommissionStatus,
+    List<InvoicePaymentStatus> selectedInvoicePaymentStatus,
+    List<DeliveryStatus> selectedDeliverStatus,
+  ) {
+    final total = selectedCommissionStatus.length +
+        selectedInvoicePaymentStatus.length +
+        selectedDeliverStatus.length;
+
+    if (selectedCommissionStatus.isNotEmpty &&
+        selectedInvoicePaymentStatus.isNotEmpty &&
+        selectedDeliverStatus.isNotEmpty) {
+      if (selectedCommissionStatus[0] == CommissionStatus.notPaid &&
+          selectedInvoicePaymentStatus[0] == InvoicePaymentStatus.full &&
+          selectedDeliverStatus[0] == DeliveryStatus.full &&
+          total == 3) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!checkPayableCommission(
+      selectedCommissionStatus,
+      selectedInvoicePaymentStatus,
+      selectedDeliverStatus,
+    )) {
+      setState(() {
+        commissionPayableAccountsActive = false;
+        commissionPayableActive = false;
+      });
+    }
+
     return Drawer(
       backgroundColor: Colors.white,
       child: SafeArea(
@@ -193,6 +239,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
               // Text(selectedCommissionStatus.toString()),
               // Text(selectedInvoicePaymentStatus.toString()),
               // Text(selectedDeliverStatus.toString()),
+              // Text(commissionPayableAccountsActive.toString()),
 
               const Padding(
                 padding: EdgeInsets.symmetric(
@@ -253,10 +300,14 @@ class _SortFilterModalState extends State<SortFilterModal> {
                           if (value == false) {
                             setState(() {
                               commissionPayableActive = false;
+                              selectedCommissionStatus.clear();
+                              selectedInvoicePaymentStatus.clear();
+                              selectedDeliverStatus.clear();
                             });
                           } else {
                             setState(() {
                               commissionPayableActive = true;
+                              commissionPayableAccountsActive = false;
                               selectedCommissionStatus
                                 ..clear()
                                 ..add(
@@ -299,10 +350,14 @@ class _SortFilterModalState extends State<SortFilterModal> {
                           if (value == false) {
                             setState(() {
                               commissionPayableAccountsActive = false;
+                              selectedCommissionStatus.clear();
+                              selectedInvoicePaymentStatus.clear();
+                              selectedDeliverStatus.clear();
                             });
                           } else {
                             setState(() {
                               commissionPayableAccountsActive = true;
+                              commissionPayableActive = false;
                               selectedCommissionStatus
                                 ..clear()
                                 ..add(

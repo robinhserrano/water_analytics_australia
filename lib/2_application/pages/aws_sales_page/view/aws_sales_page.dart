@@ -24,8 +24,8 @@ import 'package:water_analytics_australia/1_domain/models/landing_price_model.da
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/aws_sort_filter_modal.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sync_users_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
@@ -170,31 +170,18 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                       final selectedNames = sortFilterData.selectedNames;
                       final confirmedByManager =
                           sortFilterData.confirmedByManager;
+                      final selectedSortValue =
+                          sortFilterData.selectedSortValue;
 
-                      final tempFiltered = filterRecords(
+                      //Sort Records via SortBy
+                      var sortedRecords = sortRecords(
+                        selectedSortValue,
                         state.records,
-                        commissionStatus: commissionStatus.toSet(),
-                        invoicePaymentStatus: invoicePaymentStatus.toSet(),
-                        deliverStatus: deliverStatus.toSet(),
                       );
 
-                      final temp = confirmedByManager
-                          ? tempFiltered
-                              .where(
-                                (record) =>
-                                    record.confirmedByManager == true &&
-                                    (
-                                        //record.user?.commissionSplit != 0 &&
-                                        record.user?.selfGen != 0 &&
-                                            record.user?.companyLead != 0),
-                              )
-                              .toList()
-                          : tempFiltered;
-
-                      var filteredRecords = <AwsSalesOrder>[];
-
+                      //Filter records via Chosen SalesRep
                       if (selectedNames.isNotEmpty) {
-                        filteredRecords = temp
+                        sortedRecords = sortedRecords
                             .where(
                               (e) => selectedNames.any(
                                 (name) =>
@@ -203,39 +190,49 @@ class _AwsSalesPageState extends State<AwsSalesPage> {
                               ),
                             )
                             .toList();
-                      } else {
-                        filteredRecords = temp;
                       }
 
-                      final selectedSortValue =
-                          sortFilterData.selectedSortValue;
-                      if (selectedSortValue == 'Newest') {
-                        filteredRecords.sort(
-                          (a, b) => b.createDate!.compareTo(a.createDate!),
-                        );
+                      //Filter Records via CommissionStatus,
+                      //InvoicePaymentStatus, DeliveryStatus
+                      var filteredRecords = filterRecords(
+                        sortedRecords,
+                        commissionStatus: commissionStatus.toSet(),
+                        invoicePaymentStatus: invoicePaymentStatus.toSet(),
+                        deliverStatus: deliverStatus.toSet(),
+                      );
+
+                      final total = commissionStatus.length +
+                          invoicePaymentStatus.length +
+                          deliverStatus.length;
+
+                      var isPayableCommission = false;
+                      if (commissionStatus.isNotEmpty &&
+                          invoicePaymentStatus.isNotEmpty &&
+                          deliverStatus.isNotEmpty) {
+                        if (commissionStatus[0] == 'false' &&
+                            invoicePaymentStatus[0] == 'paid' &&
+                            deliverStatus[0] == 'full' &&
+                            total == 3) {
+                          isPayableCommission = true;
+                        }
                       }
-                      if (selectedSortValue == 'Oldest') {
-                        filteredRecords.sort(
-                          (a, b) => a.createDate!.compareTo(b.createDate!),
-                        );
+
+                      if (confirmedByManager) {
+                        filteredRecords = filteredRecords
+                            .where(
+                              (record) => record.confirmedByManager == true,
+                            )
+                            .toList();
                       }
-                      if (selectedSortValue == 'A-Z (Sales Rep)') {
-                        filteredRecords.sort(
-                          (a, b) => (a.xStudioSalesRep1 ?? '')
-                              .toLowerCase()
-                              .compareTo(
-                                (b.xStudioSalesRep1 ?? '').toLowerCase(),
-                              ),
-                        );
-                      }
-                      if (selectedSortValue == 'Z-A (Sales Rep)') {
-                        filteredRecords.sort(
-                          (a, b) => (b.xStudioSalesRep1 ?? '')
-                              .toLowerCase()
-                              .compareTo(
-                                (a.xStudioSalesRep1 ?? '').toLowerCase(),
-                              ),
-                        );
+
+                      if (isPayableCommission) {
+                        filteredRecords = filteredRecords
+                            .where(
+                              (record) =>
+                                  record.user?.selfGen != 0 &&
+                                  record.user?.companyLead != 0,
+                            )
+                            .toList();
                       }
 
                       return SalesListPageLoaded(
@@ -1691,13 +1688,45 @@ List<AwsSalesOrder> filterRecords(
             .any((status) => status == record.deliveryStatus.toString());
 
     // Minimum of one self-generated record and one company lead record
-    final hasSelfGeneratedAndCompanyLead =
-        (record.user?.selfGen ?? 0) > 0 && (record.user?.companyLead ?? 0) > 0;
+    // final hasSelfGeneratedAndCompanyLead =
+    //     (record.user?.selfGen ?? 0) > 0 && (record.user?.companyLead ?? 0) > 0;
 
     // Filter based on all conditions (all checks must be true)
     return commissionStatusMatch &&
         invoicePaymentStatusMatch &&
-        deliverStatusMatch &&
-        hasSelfGeneratedAndCompanyLead;
+        deliverStatusMatch;
+    //&&
+    //hasSelfGeneratedAndCompanyLead;
   }).toList();
+}
+
+List<AwsSalesOrder> sortRecords(
+  String selectedSortValue,
+  List<AwsSalesOrder> records,
+) {
+  if (selectedSortValue == 'Newest') {
+    records.sort(
+      (a, b) => b.createDate!.compareTo(a.createDate!),
+    );
+  }
+  if (selectedSortValue == 'Oldest') {
+    records.sort(
+      (a, b) => a.createDate!.compareTo(b.createDate!),
+    );
+  }
+  if (selectedSortValue == 'A-Z (Sales Rep)') {
+    records.sort(
+      (a, b) => (a.xStudioSalesRep1 ?? '').toLowerCase().compareTo(
+            (b.xStudioSalesRep1 ?? '').toLowerCase(),
+          ),
+    );
+  }
+  if (selectedSortValue == 'Z-A (Sales Rep)') {
+    records.sort(
+      (a, b) => (b.xStudioSalesRep1 ?? '').toLowerCase().compareTo(
+            (a.xStudioSalesRep1 ?? '').toLowerCase(),
+          ),
+    );
+  }
+  return records;
 }
