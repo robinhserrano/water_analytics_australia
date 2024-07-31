@@ -7,7 +7,6 @@ import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/pick_users_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
-import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 
@@ -243,51 +242,53 @@ class _SortFilterModalState extends State<SortFilterModal> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: commissionPayableActive,
-                      onChanged: (value) {
-                        if (value == false) {
-                          setState(() {
-                            commissionPayableActive = false;
-                          });
-                        } else {
-                          setState(() {
-                            commissionPayableActive = true;
-                            selectedCommissionStatus
-                              ..clear()
-                              ..add(
-                                CommissionStatus.notPaid,
-                              );
-                            selectedInvoicePaymentStatus
-                              ..clear()
-                              ..add(
-                                InvoicePaymentStatus.full,
-                              );
+              if (userAccessLevel > 0) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: commissionPayableActive,
+                        onChanged: (value) {
+                          if (value == false) {
+                            setState(() {
+                              commissionPayableActive = false;
+                            });
+                          } else {
+                            setState(() {
+                              commissionPayableActive = true;
+                              selectedCommissionStatus
+                                ..clear()
+                                ..add(
+                                  CommissionStatus.notPaid,
+                                );
+                              selectedInvoicePaymentStatus
+                                ..clear()
+                                ..add(
+                                  InvoicePaymentStatus.full,
+                                );
 
-                            selectedDeliverStatus
-                              ..clear()
-                              ..add(
-                                DeliveryStatus.full,
-                              );
-                          });
-                        }
-                      },
-                    ),
-                    const Text(
-                      'Payable Commissions',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xff243242),
+                              selectedDeliverStatus
+                                ..clear()
+                                ..add(
+                                  DeliveryStatus.full,
+                                );
+                            });
+                          }
+                        },
                       ),
-                    ),
-                  ],
+                      const Text(
+                        'Payable Commissions',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff243242),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              if (userAccessLevel >= 4) ...[
+              ],
+              if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(

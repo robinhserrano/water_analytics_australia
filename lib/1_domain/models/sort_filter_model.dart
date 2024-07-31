@@ -8,8 +8,8 @@ enum SortBy {
     return switch (this) {
       SortBy.newestFirst => 'Newest',
       SortBy.oldestFirst => 'Oldest',
-      SortBy.aZCourseName => 'A-Z',
-      SortBy.zACourseName => 'Z-A',
+      SortBy.aZCourseName => 'A-Z (Sales Rep)',
+      SortBy.zACourseName => 'Z-A (Sales Rep)',
     };
   }
 }
@@ -20,9 +20,9 @@ SortBy convertStringToSortBy(String statusString) {
       return SortBy.newestFirst;
     case 'Oldest':
       return SortBy.oldestFirst;
-    case 'A-Z':
+    case 'A-Z (Sales Rep)':
       return SortBy.aZCourseName;
-    case 'Z-A':
+    case 'Z-A (Sales Rep)':
       return SortBy.zACourseName;
     default:
       throw Exception('Unsupported statusString: $statusString');

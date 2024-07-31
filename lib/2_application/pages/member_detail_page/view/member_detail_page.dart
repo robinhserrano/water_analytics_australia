@@ -28,7 +28,7 @@ import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_p
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/member_sort_filter.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sales_record_card.dart';
-import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sort_filter_modal.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/aws_sort_filter_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sync_users_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/home_page.dart';
@@ -242,21 +242,21 @@ class _MemberDetailPageState extends State<MemberDetailPage> {
                           (a, b) => a.createDate!.compareTo(b.createDate!),
                         );
                       }
-                      if (selectedSortValue == 'A-Z') {
+                      if (selectedSortValue == 'A-Z (Sales Rep)') {
                         filteredRecords.sort(
-                          (a, b) => (a.partnerIdDisplayName ?? '')
+                          (a, b) => (a.xStudioSalesRep1 ?? '')
                               .toLowerCase()
                               .compareTo(
-                                (b.partnerIdDisplayName ?? '').toLowerCase(),
+                                (b.xStudioSalesRep1 ?? '').toLowerCase(),
                               ),
                         );
                       }
-                      if (selectedSortValue == 'Z-A') {
+                      if (selectedSortValue == 'Z-A (Sales Rep)') {
                         filteredRecords.sort(
-                          (a, b) => (b.partnerIdDisplayName ?? '')
+                          (a, b) => (b.xStudioSalesRep1 ?? '')
                               .toLowerCase()
                               .compareTo(
-                                (a.partnerIdDisplayName ?? '').toLowerCase(),
+                                (a.xStudioSalesRep1 ?? '').toLowerCase(),
                               ),
                         );
                       }

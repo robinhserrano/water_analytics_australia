@@ -14,7 +14,7 @@ import 'package:odoo_rpc/odoo_rpc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_model.dart';
 import 'package:water_analytics_australia/1_domain/models/cloud_sales_record_model.dart';
-import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sort_filter_modal.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/aws_sort_filter_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
