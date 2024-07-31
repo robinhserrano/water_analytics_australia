@@ -399,7 +399,7 @@ class _SortFilterModalState extends State<SortFilterModal> {
                 child: Divider(),
               ),
               //ACCESS RESTRICTION
-              if (userAccessLevel >= 2) ...[
+              if (userAccessLevel >= 2 || userAccessLevel == 0) ...[
                 //FIX THIS 6/24
                 const Padding(
                   padding: EdgeInsets.only(left: 24),
