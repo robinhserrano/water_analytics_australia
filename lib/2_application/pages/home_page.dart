@@ -59,9 +59,9 @@ class _HomePageState extends State<HomePage> {
       if (!kIsWeb) ...[
         const SalesPageWrapperProvider(),
       ],
-      if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
-        const ProductStockPageWrapperProvider(),
-      ],
+      // if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
+      const ProductStockPageWrapperProvider(),
+      // ],
     ];
 
     final destinations = [
@@ -93,12 +93,12 @@ class _HomePageState extends State<HomePage> {
           label: 'Odoo',
         ),
       ],
-      if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
-        const NavigationDestination(
-          icon: Icon(FontAwesomeIcons.chartBar),
-          label: 'Stock',
-        ),
-      ],
+      // if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
+      const NavigationDestination(
+        icon: Icon(FontAwesomeIcons.chartBar),
+        label: 'Stock',
+      ),
+      // ],
     ];
 
     return userAccessLevel == 1

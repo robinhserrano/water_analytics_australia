@@ -475,7 +475,7 @@ class _ProductStockLoadedState extends State<ProductStockLoaded> {
                           },
                           columnSpacing: 4,
                           minWidth: 1500,
-                          columns: const [
+                          columns: [
                             DataColumn2(
                               fixedWidth: 200,
                               label: Expanded(
@@ -498,54 +498,56 @@ class _ProductStockLoadedState extends State<ProductStockLoaded> {
                               ),
                               size: ColumnSize.S,
                             ),
-                            DataColumn2(
-                              fixedWidth: 100,
-                              label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Unit Cost',
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  ],
+                            if (widget.userAccessLevel >= 4) ...[
+                              DataColumn2(
+                                fixedWidth: 100,
+                                label: Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Unit Cost',
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                size: ColumnSize.S,
                               ),
-                              size: ColumnSize.S,
-                            ),
-                            DataColumn2(
-                              fixedWidth: 100,
-                              label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Total Value',
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  ],
+                              DataColumn2(
+                                fixedWidth: 100,
+                                label: Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Total Value',
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                size: ColumnSize.S,
                               ),
-                              size: ColumnSize.S,
-                            ),
-                            DataColumn2(
-                              fixedWidth: 100,
-                              label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'On Hand',
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  ],
+                              DataColumn2(
+                                fixedWidth: 100,
+                                label: Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'On Hand',
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                size: ColumnSize.S,
                               ),
-                              size: ColumnSize.S,
-                            ),
+                            ],
                             DataColumn2(
                               fixedWidth: 100,
                               label: Expanded(
@@ -563,56 +565,58 @@ class _ProductStockLoadedState extends State<ProductStockLoaded> {
                               ),
                               size: ColumnSize.S,
                             ),
-                            DataColumn2(
-                              fixedWidth: 100,
-                              label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Incoming',
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                            if (widget.userAccessLevel >= 4) ...[
+                              DataColumn2(
+                                fixedWidth: 100,
+                                label: Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Incoming',
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                size: ColumnSize.S,
                               ),
-                              size: ColumnSize.S,
-                            ),
-                            DataColumn2(
-                              fixedWidth: 100,
-                              label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Outgoing',
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                              DataColumn2(
+                                fixedWidth: 100,
+                                label: Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Outgoing',
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                size: ColumnSize.S,
                               ),
-                              size: ColumnSize.S,
-                            ),
-                            DataColumn2(
-                              fixedWidth: 100,
-                              label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Forcasted',
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  ],
+                              DataColumn2(
+                                fixedWidth: 100,
+                                label: Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Forcasted',
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ],
+                                  ),
                                 ),
+                                size: ColumnSize.S,
                               ),
-                              size: ColumnSize.S,
-                            ),
+                            ],
                           ],
                           // wrapInCard: true,
                           source: MyDataTableSource(
@@ -758,46 +762,47 @@ class MyDataTableSource extends DataTableSource {
             item.categName ?? '',
           ),
         ),
-        // DataCell(Text((item.avgCost ?? 0).toString())),
-        DataCell(
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              r'$ ' + (item.avgCost ?? 0).toStringAsFixed(2),
-              style: TextStyle(
-                fontWeight: (index == data.length - 1)
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+        if (userAccessLevel >= 4) ...[
+          DataCell(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                r'$ ' + (item.avgCost ?? 0).toStringAsFixed(2),
+                style: TextStyle(
+                  fontWeight: (index == data.length - 1)
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
               ),
             ),
           ),
-        ),
-        DataCell(
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              r'$ ' + (item.totalValue ?? 0).toStringAsFixed(2),
-              style: TextStyle(
-                fontWeight: (index == data.length - 1)
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+          DataCell(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                r'$ ' + (item.totalValue ?? 0).toStringAsFixed(2),
+                style: TextStyle(
+                  fontWeight: (index == data.length - 1)
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
               ),
             ),
           ),
-        ),
-        DataCell(
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              (item.qtyAvailable ?? 0).toString(),
-              style: TextStyle(
-                fontWeight: (index == data.length - 1)
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+          DataCell(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                (item.qtyAvailable ?? 0).toString(),
+                style: TextStyle(
+                  fontWeight: (index == data.length - 1)
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
               ),
             ),
           ),
-        ),
+        ],
         DataCell(
           Align(
             alignment: Alignment.centerRight,
@@ -811,45 +816,47 @@ class MyDataTableSource extends DataTableSource {
             ),
           ),
         ),
-        DataCell(
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              (item.incomingQty ?? 0).toString(),
-              style: TextStyle(
-                fontWeight: (index == data.length - 1)
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+        if (userAccessLevel >= 4) ...[
+          DataCell(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                (item.incomingQty ?? 0).toString(),
+                style: TextStyle(
+                  fontWeight: (index == data.length - 1)
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
               ),
             ),
           ),
-        ),
-        DataCell(
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              (item.outgoingQty ?? 0).toString(),
-              style: TextStyle(
-                fontWeight: (index == data.length - 1)
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+          DataCell(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                (item.outgoingQty ?? 0).toString(),
+                style: TextStyle(
+                  fontWeight: (index == data.length - 1)
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
               ),
             ),
           ),
-        ),
-        DataCell(
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              (item.virtualAvailable ?? 0).toString(),
-              style: TextStyle(
-                fontWeight: (index == data.length - 1)
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+          DataCell(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                (item.virtualAvailable ?? 0).toString(),
+                style: TextStyle(
+                  fontWeight: (index == data.length - 1)
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ],
     );
   }
