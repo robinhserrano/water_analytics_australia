@@ -6,6 +6,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_admin_users/view/aws_admin_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/view/manage_teams_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/my_team_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_product_stocks_page/view/product_stock_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
@@ -58,6 +59,9 @@ class _HomePageState extends State<HomePage> {
       if (!kIsWeb) ...[
         const SalesPageWrapperProvider(),
       ],
+      if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
+        const ProductStockPageWrapperProvider(),
+      ],
     ];
 
     final destinations = [
@@ -87,6 +91,12 @@ class _HomePageState extends State<HomePage> {
         const NavigationDestination(
           icon: HeroIcon(HeroIcons.circleStack),
           label: 'Odoo',
+        ),
+      ],
+      if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
+        const NavigationDestination(
+          icon: Icon(FontAwesomeIcons.chartBar),
+          label: 'Stock',
         ),
       ],
     ];

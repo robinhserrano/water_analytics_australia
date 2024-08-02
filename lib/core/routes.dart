@@ -8,6 +8,7 @@ import 'package:water_analytics_australia/2_application/pages/aws_landing_price_
 import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/view/manage_teams_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/view/manage_teams_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/my_team_page.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_product_stocks_page/view/product_stock_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
@@ -215,6 +216,13 @@ final routes = GoRouter(
       path: AwsLandingPricePage.path,
       builder: (context, state) {
         return const SelectionArea(child: AwsLandingPricePageWrapperProvider());
+      },
+    ),
+    GoRoute(
+      name: ProductStockPage.name,
+      path: ProductStockPage.path,
+      builder: (context, state) {
+        return const SelectionArea(child: ProductStockPageWrapperProvider());
       },
     ),
     // GoRoute(

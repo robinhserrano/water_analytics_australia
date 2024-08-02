@@ -12,6 +12,7 @@ import 'package:water_analytics_australia/2_application/pages/aws_edit_landing_p
 import 'package:water_analytics_australia/2_application/pages/aws_landing_price_page/cubit/aws_landing_price_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_manage_teams/bloc/manage_team_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_my_team/bloc/my_team_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_product_stocks_page/bloc/procuct_stock_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/bloc/aws_sales_details_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/users_cubit.dart';
@@ -134,6 +135,11 @@ Future<void> init() async {
     )
     ..registerFactory(
       () => AwsEditLandingPriceCubit(
+        repo: sl<Repository>(),
+      ),
+    )
+    ..registerFactory(
+      () => ProductStockCubit(
         repo: sl<Repository>(),
       ),
     )

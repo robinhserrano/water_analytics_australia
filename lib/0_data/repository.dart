@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_landing_price_model.dart';
+import 'package:water_analytics_australia/1_domain/models/aws_product_stocks_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 import 'package:water_analytics_australia/1_domain/models/landing_price_model.dart';
@@ -764,6 +765,54 @@ class Repository {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<List<CurrentWarehouse>?> fetchCurrentWarehouses() async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.get<List<dynamic>>(
+        '$url/currentWarehouse',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final data = response.data!.cast<Map<String, dynamic>>();
+      final parsedData = data.map(CurrentWarehouse.fromJson).toList();
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<List<AwsProductStocks>?> fetchProductStocks() async {
+    final user = await HiveHelper.getAllUsers();
+    try {
+      final response = await client.get<List<dynamic>>(
+        '$url/productStocks',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user.first.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final data = response.data!.cast<Map<String, dynamic>>();
+      final parsedData = data.map(AwsProductStocks.fromJson).toList();
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }
