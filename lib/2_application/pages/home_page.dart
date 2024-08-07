@@ -101,50 +101,48 @@ class _HomePageState extends State<HomePage> {
       // ],
     ];
 
-    return userAccessLevel == 1
-        ? const AwsSalesPageWrapperProvider()
-        : AdaptiveLayout(
-            internalAnimations: false,
-            primaryNavigation: SlotLayout(
-              config: <Breakpoint, SlotLayoutConfig>{
-                Breakpoints.mediumAndUp: SlotLayout.from(
-                  key: const Key('primary-navigation-medium'),
-                  builder: (context) => AdaptiveScaffold.standardNavigationRail(
-                    backgroundColor: Colors.white,
-                    labelType: NavigationRailLabelType.all,
-                    onDestinationSelected: (index) =>
-                        _tapOnNavigationDestination(context, index),
-                    selectedIndex: _pageIndex,
-                    destinations: destinations
-                        .map(
-                          AdaptiveScaffold.toRailDestination,
-                        )
-                        .toList(),
-                  ),
-                ),
-              },
+    return AdaptiveLayout(
+      internalAnimations: false,
+      primaryNavigation: SlotLayout(
+        config: <Breakpoint, SlotLayoutConfig>{
+          Breakpoints.mediumAndUp: SlotLayout.from(
+            key: const Key('primary-navigation-medium'),
+            builder: (context) => AdaptiveScaffold.standardNavigationRail(
+              backgroundColor: Colors.white,
+              labelType: NavigationRailLabelType.all,
+              onDestinationSelected: (index) =>
+                  _tapOnNavigationDestination(context, index),
+              selectedIndex: _pageIndex,
+              destinations: destinations
+                  .map(
+                    AdaptiveScaffold.toRailDestination,
+                  )
+                  .toList(),
             ),
-            bottomNavigation: SlotLayout(
-              config: <Breakpoint, SlotLayoutConfig>{
-                Breakpoints.small: SlotLayout.from(
-                  key: const Key('bottom-navigation-small'),
-                  builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
-                    destinations: destinations,
-                    currentIndex: _pageIndex,
-                    onDestinationSelected: (value) =>
-                        _tapOnNavigationDestination(context, value),
-                  ),
-                ),
-              },
+          ),
+        },
+      ),
+      bottomNavigation: SlotLayout(
+        config: <Breakpoint, SlotLayoutConfig>{
+          Breakpoints.small: SlotLayout.from(
+            key: const Key('bottom-navigation-small'),
+            builder: (_) => AdaptiveScaffold.standardBottomNavigationBar(
+              destinations: destinations,
+              currentIndex: _pageIndex,
+              onDestinationSelected: (value) =>
+                  _tapOnNavigationDestination(context, value),
             ),
-            body: SlotLayout(
-              config: <Breakpoint, SlotLayoutConfig>{
-                Breakpoints.smallAndUp: SlotLayout.from(
-                  key: const Key('primary-body-small'),
-                  builder: (_) => screens[_pageIndex],
-                ),
-              },
-            ),
-          );
+          ),
+        },
+      ),
+      body: SlotLayout(
+        config: <Breakpoint, SlotLayoutConfig>{
+          Breakpoints.smallAndUp: SlotLayout.from(
+            key: const Key('primary-body-small'),
+            builder: (_) => screens[_pageIndex],
+          ),
+        },
+      ),
+    );
   }
 }
