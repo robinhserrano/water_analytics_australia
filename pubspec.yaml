@@ -59,6 +59,10 @@ dev_dependencies:
   json_serializable: ^6.7.1
   very_good_analysis: ^5.1.0
 
+dependency_overrides:
+  # Remove this override when the excel package releases 4.0.4+
+  archive: 3.6.1
+
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
