@@ -60,6 +60,15 @@ class AwsSalesOrder with _$AwsSalesOrder {
 
   factory AwsSalesOrder.fromJson(Map<String, dynamic> json) =>
       _$AwsSalesOrderFromJson(json);
+
+  static AwsSalesOrder getEarliestCreatedDate(List<AwsSalesOrder> salesOrders) {
+    // Sort the list by createDate in ascending order
+    final sortedOrders = salesOrders.toList()
+      ..sort((a, b) => a.createDate!.compareTo(b.createDate!));
+
+    // Return the first element (earliest createDate)
+    return sortedOrders.first;
+  }
 }
 
 @freezed

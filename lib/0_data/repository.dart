@@ -815,4 +815,28 @@ class Repository {
       return null;
     }
   }
+
+  Future<List<AwsUser>> fetchUsersAboveLevel2() async {
+    final user = await HiveHelper.getCurrentUser();
+    try {
+      final response = await client.get<List<dynamic>>(
+        '$url/usersAboveLevel2',
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: 'Bearer ${user!.accessToken}',
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.acceptHeader: 'application/json',
+          },
+        ),
+      );
+
+      final data = response.data!.cast<Map<String, dynamic>>();
+      final parsedData = data.map(AwsUser.fromJson).toList();
+
+      return parsedData;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
 }

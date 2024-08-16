@@ -16,6 +16,7 @@ import 'package:water_analytics_australia/2_application/pages/aws_product_stocks
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/bloc/aws_sales_details_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/users_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_report_page/bloc/sales_report_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/bloc/create_users_cubit.dart';
@@ -140,6 +141,11 @@ Future<void> init() async {
     )
     ..registerFactory(
       () => ProductStockCubit(
+        repo: sl<Repository>(),
+      ),
+    )
+    ..registerFactory(
+      () => SalesReportCubit(
         repo: sl<Repository>(),
       ),
     )
