@@ -37,7 +37,7 @@ class SalesReportCubit extends Cubit<SalesReportCubitState> {
         salesData = await repo.fetchSalesByReps([user?.displayName ?? '']);
       } else if (user?.accessLevel == 2 || user?.accessLevel == 3) {
         final users = await repo.fetchUsers();
-        final userNames = users!.map((e) => e.displayName).toList();
+        final userNames = users.map((e) => e.displayName).toList();
         salesData = await repo.fetchSalesByReps(userNames);
       } else {
         //var salesDatas = await repo.fetchSalesPaginated(50, 1);
@@ -45,7 +45,7 @@ class SalesReportCubit extends Cubit<SalesReportCubitState> {
       }
 
       final landingPriceData = await repo.fetchLandingPrices();
-      final usersAboveLevel2 = await repo.fetchUsersAboveLevel2();
+      final users = await repo.fetchUsers();
 
       if (salesData != null && landingPriceData != null) {
         print('totalllll ' + salesData.length.toString());
@@ -53,8 +53,8 @@ class SalesReportCubit extends Cubit<SalesReportCubitState> {
             salesData.where((e) => e.state == 'sale').toList();
         print('sales only :  ' + filteredsalesData.toString());
 
-        emit(SalesReportStateLoaded(
-            filteredsalesData, landingPriceData, usersAboveLevel2));
+        emit(
+            SalesReportStateLoaded(filteredsalesData, landingPriceData, users));
       } else {
         emit(const SalesReportStateError(message: 'Sales Failed'));
       }

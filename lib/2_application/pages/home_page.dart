@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
       ],
       // if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
       const ProductStockPageWrapperProvider(),
-      if (userAccessLevel >= 4) ...[
+      if (userAccessLevel >= 3) ...[
         const SalesReportPageWrapperProvider(),
       ],
       // ],
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
         label: 'Stock',
       ),
       // ],
-      if (userAccessLevel >= 4) ...[
+      if (userAccessLevel >= 3) ...[
         const NavigationDestination(
           icon: HeroIcon(HeroIcons.presentationChartBar),
           label: 'Sales Report',

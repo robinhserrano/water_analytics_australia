@@ -19,11 +19,11 @@ class SalesReportStateLoaded extends SalesReportCubitState {
   const SalesReportStateLoaded(
     this.records,
     this.landingPrice,
-    this.usersAboveLevel2,
+    this.users,
   );
   final List<AwsSalesOrder> records;
   final List<AwsLandingPrice> landingPrice;
-  final List<AwsUser> usersAboveLevel2;
+  final List<AwsUser> users;
   SalesReportStateLoaded get asData => this;
   @override
   List<Object> get props => [records, landingPrice];

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_manage_team_detail/view/manage_teams_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_report_page/bloc/sales_report_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_report_page/view/bar_chart_stock_sold.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_report_page/view/bar_chart_total_sales.dart';
@@ -122,12 +123,12 @@ class _SalesReportPageState extends State<SalesReportPage> {
               } else if (state is SalesReportStateLoaded) {
                 final salesOrders = state.records;
                 final landingPrices = state.landingPrice;
-                final usersAboveLevel2 = state.usersAboveLevel2;
+                final initialUsers = state.users;
 
                 return SalesListPageLoaded(
                   salesOrders: salesOrders,
                   landingPrices: landingPrices,
-                  usersAboveLevel2: usersAboveLevel2,
+                  initialUsers: initialUsers,
                   userAccessLevel: userAccessLevel,
                 );
               } else if (state is SalesReportStateError) {
@@ -255,14 +256,14 @@ class SalesListPageLoaded extends StatefulWidget {
   const SalesListPageLoaded({
     required this.salesOrders,
     required this.landingPrices,
-    required this.usersAboveLevel2,
+    required this.initialUsers,
     required this.userAccessLevel,
     super.key,
   });
 
   final List<AwsSalesOrder> salesOrders;
   final List<AwsLandingPrice> landingPrices;
-  final List<AwsUser> usersAboveLevel2;
+  final List<AwsUser> initialUsers;
   final int userAccessLevel;
   @override
   State<SalesListPageLoaded> createState() => _SalesListPageLoadedState();
@@ -277,9 +278,9 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
   Widget build(BuildContext context) {
     final salesOrders = widget.salesOrders;
     final landingPrices = widget.landingPrices;
-    final usersAboveLevel2 = widget.usersAboveLevel2;
+    final initialUsers = widget.initialUsers;
 
-    var users = <AwsUser>[];
+    final usersWithSales = <AwsUser>[];
     var allUsers = <AwsUser>[];
 
     final stockSold = <StockSold>[];
@@ -307,23 +308,24 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
         }
 
         if (sales.user != null) {
-          users.add(sales.user!);
+          usersWithSales.add(sales.user!);
         }
       }
     }
 
-    users = users.toSet().toList();
-    allUsers = [...users, ...usersAboveLevel2];
+    //users = users.toSet().toList();
+    allUsers = <AwsUser>{...usersWithSales, ...initialUsers}.toList();
 
     final filteredTeams = <List<AwsUser>>[];
-    for (final manager in usersAboveLevel2) {
-      final salesManager = users //lvl4
+    final managers = initialUsers.where((e) => e.accessLevel > 2);
+    for (final manager in managers) {
+      final salesManager = allUsers //lvl4
           .where(
             (e) => e.salesManagerId == manager.id && e.accessLevel == 3,
           )
           .toList();
 
-      final salesTeamManager = users //lvl3
+      final salesTeamManager = allUsers //lvl3
           .where(
             (e) => e.salesManagerId == manager.id && e.accessLevel == 2,
           )
@@ -336,7 +338,7 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
         //  (user?.userId ?? 0),
       ];
 
-      final salesPerson = users //lvl2 or lvl1
+      final salesPerson = allUsers //lvl2 or lvl1
           .where(
             (e) => managersIds.contains(e.salesManagerId),
           )
@@ -354,7 +356,12 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
       }
     }
 
-    var selectedOrders = selectedUserIds.isNotEmpty
+    final otherUsers = findUsersNotInFilteredTeams(filteredTeams, allUsers);
+    if (otherUsers.isNotEmpty) {
+      filteredTeams.add(otherUsers);
+    }
+
+    final selectedOrders = selectedUserIds.isNotEmpty
         ? salesOrders
             .where((e) => selectedUserIds.contains(e.user?.id))
             .toList()
@@ -371,6 +378,9 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
             });
             _scaffoldKey.currentState!.closeDrawer();
           },
+          allUsers: allUsers,
+          otherUsers: otherUsers,
+          userAccessLevel: widget.userAccessLevel,
         ),
       ),
       body: ListView(
@@ -637,11 +647,17 @@ class ExpandableCheckboxList extends StatefulWidget {
   final List<List<AwsUser>> filteredTeams;
   final List<int> selectedUserIds;
   final void Function(List<int> selectedUserIds) updateSelectedUserIds;
+  final List<AwsUser> allUsers;
+  final List<AwsUser> otherUsers;
+  final int userAccessLevel;
 
   const ExpandableCheckboxList({
     required this.filteredTeams,
     required this.selectedUserIds,
     required this.updateSelectedUserIds,
+    required this.allUsers,
+    required this.otherUsers,
+    required this.userAccessLevel,
     Key? key,
   }) : super(key: key);
 
@@ -755,7 +771,7 @@ class _ExpandableCheckboxListState extends State<ExpandableCheckboxList> {
       body: ListView(
         children: [
           const Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -768,18 +784,27 @@ class _ExpandableCheckboxListState extends State<ExpandableCheckboxList> {
             ),
           ),
           ...widget.filteredTeams.asMap().entries.map((entry) {
-            final teamIndex = entry.key;
+            // final teamIndex = entry.key;
             final team = entry.value;
 
             final teamName = team
                 .reduce((a, b) => a.accessLevel >= b.accessLevel ? a : b)
                 .displayName;
 
+            team.sort((a, b) => a.displayName.compareTo(b.displayName));
+
             return ExpansionTile(
+              initiallyExpanded: widget.userAccessLevel < 4,
               title: Row(
                 children: [
                   Text(
-                    "${teamName.toLowerCase().endsWith('s') ? teamName : "${teamName}'s"} Team",
+                    widget.otherUsers.contains(
+                      team.reduce(
+                        (a, b) => a.accessLevel >= b.accessLevel ? a : b,
+                      ),
+                    )
+                        ? 'Other Users'
+                        : "${teamName.toLowerCase().endsWith('s') ? teamName : "$teamName's"} Team",
                   ),
                   Text(
                     ' ${getSelectedUsersInTeamLength(team)}',
@@ -788,20 +813,106 @@ class _ExpandableCheckboxListState extends State<ExpandableCheckboxList> {
                 ],
               ),
               children: team.map((user) {
-                return CheckboxListTile(
-                  title: Text(user.displayName),
-                  value: _checkedStatus[user.id] ?? false,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _checkedStatus[user.id] = value ?? false;
-                    });
-                  },
+                return Row(
+                  children: [
+                    // Text('haha'),
+                    if (getLevel2SalesManagerName(widget.allUsers, user) !=
+                        null) ...[
+                      CircleAvatar(
+                        backgroundColor: Colors.teal,
+                        child: Text(
+                          getInitials(
+                            name: getLevel2SalesManagerName(
+                                  widget.allUsers,
+                                  user,
+                                ) ??
+                                '',
+                          ),
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                    Expanded(
+                      child: CheckboxListTile(
+                        title: Text(user.displayName),
+                        value: _checkedStatus[user.id] ?? false,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _checkedStatus[user.id] = value ?? false;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 );
               }).toList(),
             );
           }),
+          // ExpansionTile(
+          //   title: Row(
+          //     children: [
+          //       Text(
+          //         "Other Users",
+          //       ),
+          //       Text(
+          //         ' ${getSelectedUsersInTeamLength(widget.otherUsers)}',
+          //         style: const TextStyle(color: Colors.teal),
+          //       ),
+          //     ],
+          //   ),
+          //   children: widget.otherUsers.map((user) {
+          //     return Row(
+          //       children: [
+          //         // Text('haha'),
+          //         if (getLevel2SalesManagerName(widget.allUsers, user) !=
+          //             null) ...[
+          //           CircleAvatar(
+          //             backgroundColor: Colors.teal,
+          //             child: Text(
+          //               getInitials(
+          //                 name: getLevel2SalesManagerName(
+          //                       widget.allUsers,
+          //                       user,
+          //                     ) ??
+          //                     '',
+          //               ),
+          //               style: const TextStyle(
+          //                 color: Colors.white,
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //         Expanded(
+          //           child: CheckboxListTile(
+          //             title: Text(user.displayName),
+          //             value: _checkedStatus[user.id] ?? false,
+          //             onChanged: (bool? value) {
+          //               setState(() {
+          //                 _checkedStatus[user.id] = value ?? false;
+          //               });
+          //             },
+          //           ),
+          //         ),
+          //       ],
+          //     );
+          //   }).toList(),
+          // ),
         ],
       ),
     );
   }
+}
+
+List<AwsUser> findUsersNotInFilteredTeams(
+  List<List<AwsUser>> filteredTeams,
+  List<AwsUser> allUsers,
+) {
+  final usersInFilteredTeams = filteredTeams.expand((team) => team).toSet();
+  return allUsers
+      .where((user) => !usersInFilteredTeams.contains(user))
+      .toList()
+      .toSet()
+      .toList();
 }
