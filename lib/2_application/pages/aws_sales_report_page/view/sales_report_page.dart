@@ -385,23 +385,25 @@ class _SalesListPageLoadedState extends State<SalesListPageLoaded> {
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-                  child: const Row(
-                    children: [
-                      HeroIcon(HeroIcons.funnel),
-                      Text('Filter by Users'),
-                    ],
+          if (widget.userAccessLevel > 1) ...[
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+                    child: const Row(
+                      children: [
+                        HeroIcon(HeroIcons.funnel),
+                        Text('Filter by Users'),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
           if (selectedOrders.isNotEmpty) ...[
             SizedBox(
               height: 600,
@@ -803,7 +805,7 @@ class _ExpandableCheckboxListState extends State<ExpandableCheckboxList> {
                         (a, b) => a.accessLevel >= b.accessLevel ? a : b,
                       ),
                     )
-                        ? 'Other Users'
+                        ? (widget.userAccessLevel < 4 ? 'Users' : 'Other Users')
                         : "${teamName.toLowerCase().endsWith('s') ? teamName : "$teamName's"} Team",
                   ),
                   Text(

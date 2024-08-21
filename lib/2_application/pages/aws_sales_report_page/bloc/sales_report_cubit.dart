@@ -45,7 +45,10 @@ class SalesReportCubit extends Cubit<SalesReportCubitState> {
       }
 
       final landingPriceData = await repo.fetchLandingPrices();
-      final users = await repo.fetchUsers();
+      var users = <AwsUser>[];
+      if ((user?.accessLevel ?? 1) > 1) {
+        users = await repo.fetchUsers();
+      }
 
       if (salesData != null && landingPriceData != null) {
         print('totalllll ' + salesData.length.toString());
@@ -54,7 +57,8 @@ class SalesReportCubit extends Cubit<SalesReportCubitState> {
         print('sales only :  ' + filteredsalesData.toString());
 
         emit(
-            SalesReportStateLoaded(filteredsalesData, landingPriceData, users));
+          SalesReportStateLoaded(filteredsalesData, landingPriceData, users),
+        );
       } else {
         emit(const SalesReportStateError(message: 'Sales Failed'));
       }

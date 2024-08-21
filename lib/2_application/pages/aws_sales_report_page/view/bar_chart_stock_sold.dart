@@ -164,6 +164,17 @@ class BarChartStockSoldState extends State<BarChartStockSold> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                ] else if (widget.selectedUsers.isEmpty &&
+                    widget.userAccessLevel < 4 &&
+                    widget.userAccessLevel > 1) ...[
+                  const Text(
+                    'of the Team',
+                    style: TextStyle(
+                      color: Color(0xff77839a),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ] else if (widget.selectedUsers.isNotEmpty) ...[
                   if (widget.selectedUsers.length > 1) ...[
                     Tooltip(

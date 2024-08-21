@@ -5,6 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_sales_record_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_user_model.dart';
 
+class MonthlySalesData {
+  MonthlySalesData(this.totalAmount, this.salesCount);
+  double totalAmount;
+  int salesCount;
+}
+
 class BarChartTotalSales extends StatefulWidget {
   const BarChartTotalSales({
     required this.orders,
@@ -29,6 +35,7 @@ class BarChartTotalSalesState extends State<BarChartTotalSales> {
   late List<BarChartGroupData> showingBarGroups;
   int touchedGroupIndex = -1;
   List<DateTime> dateList = [];
+  List<int> quantityList = [];
   NumberFormat formatter = NumberFormat('#,##0.00');
 
   @override
@@ -38,22 +45,28 @@ class BarChartTotalSalesState extends State<BarChartTotalSales> {
   }
 
   void updateChartData() {
-    final salesPerMonth2 = getTotalSalesPerMonth2(widget.orders);
+    //final salesPerMonth2 = getTotalSalesPerMonth2(widget.orders);
+    final salesPerMonth3 = getTotalSalesPerMonth3(widget.orders);
     // final salesPerDay2 = getTotalSalesPerDay2(widget.orders);
+    var lele = salesPerMonth3;
 
     final items = List<BarChartGroupData>.generate(
-      salesPerMonth2.length,
+      salesPerMonth3.length,
       (index) => makeGroupData(
         index,
-        salesPerMonth2.values.elementAt(index),
+        //  salesPerMonth2.values.elementAt(index),
+        salesPerMonth3.values.elementAt(index).totalAmount,
         index.toDouble(),
+        // index.toDouble(),
       ),
     );
 
     setState(() {
       rawBarGroups = items;
       showingBarGroups = rawBarGroups;
-      dateList = salesPerMonth2.keys.toList();
+      dateList = salesPerMonth3.keys.toList();
+      quantityList =
+          salesPerMonth3.entries.map((e) => e.value.salesCount).toList();
     });
   }
 
@@ -83,6 +96,17 @@ class BarChartTotalSalesState extends State<BarChartTotalSales> {
                     widget.userAccessLevel > 3) ...[
                   const Text(
                     'of Water Analytics Australia',
+                    style: TextStyle(
+                      color: Color(0xff77839a),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ] else if (widget.selectedUsers.isEmpty &&
+                    widget.userAccessLevel < 4 &&
+                    widget.userAccessLevel > 1) ...[
+                  const Text(
+                    'of the Team',
                     style: TextStyle(
                       color: Color(0xff77839a),
                       fontSize: 16,
@@ -146,8 +170,9 @@ class BarChartTotalSalesState extends State<BarChartTotalSales> {
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         // Access data from the group and rod to construct the tooltip text
                         final value = rod.toY;
+
                         return BarTooltipItem(
-                          '\$ ${formatter.format(value)}',
+                          '\$ ${formatter.format(value)}\nNo. of Sales: ${quantityList[groupIndex]}',
                           const TextStyle(color: Colors.white),
                         );
                       },
@@ -342,6 +367,53 @@ Map<DateTime, double> getTotalSalesPerMonth2(List<AwsSalesOrder> orders) {
 
   // Convert List of MapEntries back to Map
   return Map.fromEntries(sortedSales);
+}
+
+Map<DateTime, MonthlySalesData> getTotalSalesPerMonth3(
+    List<AwsSalesOrder> orders) {
+  final Map<
+      DateTime,
+      MonthlySalesData //Map<String, dynamic>
+      > monthlySales = {};
+
+  for (final order in orders) {
+    if (order.createDate != null && order.amountTotal != null) {
+      final date = order.createDate!;
+      final startOfMonth =
+          DateTime(date.year, date.month); // Start of the month
+
+      if (!monthlySales.containsKey(startOfMonth)) {
+        monthlySales[startOfMonth] = MonthlySalesData(0.0, 0);
+
+        // {
+        //   'totalAmount': 0.0,
+        //   'salesCount': 0,
+        // };
+      }
+      monthlySales[startOfMonth]!.totalAmount += order.amountTotal!;
+      monthlySales[startOfMonth]!.salesCount += 1;
+    }
+  }
+
+  final sortedSales = monthlySales.entries.toList()
+    ..sort((a, b) => a.key.compareTo(b.key));
+
+  var hehe = sortedSales;
+  var hihi = hehe;
+
+// Convert List of MapEntries back to Map
+  return Map.fromEntries(
+    sortedSales.map(
+      (entry) => MapEntry(
+        entry.key,
+        MonthlySalesData(entry.value.totalAmount, entry.value.salesCount),
+        // {
+        //   'totalAmount': entry.value.totalAmount, //entry.value['totalAmount'],
+        //   'salesCount': entry.value.salesCount, //entry.value['salesCount'],
+        // },
+      ),
+    ),
+  );
 }
 
 Map<DateTime, double> getTotalSalesPerDay2(List<AwsSalesOrder> orders) {
