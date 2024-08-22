@@ -671,16 +671,16 @@ Future<void> _downloadExcelWeb(
 
   final sheetObject = excel['Sheet1']
     ..appendRow([
-      const TextCellValue('Number'),
-      const TextCellValue('Order Date'),
-      const TextCellValue('Customer'),
-      const TextCellValue('Sales Rep'),
-      const TextCellValue('Sales Source'),
-      const TextCellValue('Commission Paid'),
-      const TextCellValue('Total'),
-      const TextCellValue('Delivery Status'),
-      const TextCellValue('Final Commission'),
-      const TextCellValue('Confirmed by Manager'),
+      TextCellValue('Number'),
+      TextCellValue('Order Date'),
+      TextCellValue('Customer'),
+      TextCellValue('Sales Rep'),
+      TextCellValue('Sales Source'),
+      TextCellValue('Commission Paid'),
+      TextCellValue('Total'),
+      TextCellValue('Delivery Status'),
+      TextCellValue('Final Commission'),
+      TextCellValue('Confirmed by Manager'),
     ]);
 
   for (final item in filteredRecords) {

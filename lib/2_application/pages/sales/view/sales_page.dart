@@ -75,114 +75,114 @@ class _SalesPageState extends State<SalesPage> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-            BlocBuilder<SalesCubit, SalesCubitState>(
-              builder: (context, state) {
-                if (state is SalesStateLoaded) {
-                  return Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          showSaveAllSalesModal(context, state.records, cubit);
-                        },
-                        icon: const HeroIcon(
-                          HeroIcons.arrowUpOnSquareStack,
-                          color: Colors.white,
-                        ),
+          BlocBuilder<SalesCubit, SalesCubitState>(
+            builder: (context, state) {
+              if (state is SalesStateLoaded) {
+                return Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        showSaveAllSalesModal(context, state.records, cubit);
+                      },
+                      icon: const HeroIcon(
+                        HeroIcons.arrowUpOnSquareStack,
+                        color: Colors.white,
                       ),
-                      IconButton(
-                        onPressed: () async {
-                          final dataList = <Map<String, dynamic>>[];
-                          for (final salesOrder in state.records) {
-                            dataList.add({
-                              'amount_to_invoice': salesOrder.amountToInvoice,
-                              'amount_total': salesOrder.amountTotal,
-                              'amount_untaxed':
-                                  salesOrder.taxTotals?.amountUntaxed,
-                              'create_date':
-                                  salesOrder.createDate?.toIso8601String(),
-                              'delivery_status': salesOrder.deliveryStatus,
-                              'internal_note_display':
-                                  salesOrder.internalNoteDisplay,
-                              'name': salesOrder.name,
-                              'partner_id_contact_address':
-                                  salesOrder.partnerId?.contactAddress,
-                              'partner_id_display_name':
-                                  salesOrder.partnerId?.displayName,
-                              'partner_id_phone': salesOrder.partnerId?.phone,
-                              'state': salesOrder.state,
-                              'x_studio_commission_paid':
-                                  salesOrder.xStudioCommissionPaid ? 1 : 0,
-                              'x_studio_invoice_payment_status':
-                                  salesOrder.xStudioInvoicePaymentStatus,
-                              'x_studio_payment_type':
-                                  salesOrder.xStudioPaymentType,
-                              'x_studio_referrer_processed':
-                                  salesOrder.xStudioReferrerProcessed ? 1 : 0,
-                              'x_studio_sales_rep_1': salesOrder.xStudioSalesRep1,
-                              'x_studio_sales_source':
-                                  salesOrder.xStudioSalesSource,
-                              'order_line': salesOrder.orderLine != null
-                                  ? salesOrder.orderLine!
-                                      .map(
-                                        (e) => {
-                                          'product':
-                                              e.productTemplateId?.displayName ??
-                                                  '',
-                                          'description': e.name,
-                                          'quantity': e.productUomQty,
-                                          'delivered': e.qtyDelivered,
-                                          'invoiced': e.qtyInvoiced,
-                                          'unit_price': e.priceUnit,
-                                          'taxes': e.taxId?.isNotEmpty ?? false
-                                              ? e.taxId![0].displayName
-                                              : '',
-                                          'disc': e.discount,
-                                          'tax_excl': e.priceSubtotal,
-                                        },
-                                      )
-                                      .toList()
-                                  : [],
-                            });
-                          }
-                          String jsonData = jsonEncode(dataList);
-                          var fileName = 'text_file.txt';
-                          var directory2 = await getExternalStorageDirectory();
-                          var filePath = join(directory2!.path, fileName);
-                          print(filePath);
-                          // // Step 3: Write JSON to a text file
-                          // File jsonFile = File('$appDocPath/data.txt');
-                          // await jsonFile.writeAsString(jsonData);
-                          await File(filePath).writeAsString(jsonData);
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        final dataList = <Map<String, dynamic>>[];
+                        for (final salesOrder in state.records) {
+                          dataList.add({
+                            'amount_to_invoice': salesOrder.amountToInvoice,
+                            'amount_total': salesOrder.amountTotal,
+                            'amount_untaxed':
+                                salesOrder.taxTotals?.amountUntaxed,
+                            'create_date':
+                                salesOrder.createDate?.toIso8601String(),
+                            'delivery_status': salesOrder.deliveryStatus,
+                            'internal_note_display':
+                                salesOrder.internalNoteDisplay,
+                            'name': salesOrder.name,
+                            'partner_id_contact_address':
+                                salesOrder.partnerId?.contactAddress,
+                            'partner_id_display_name':
+                                salesOrder.partnerId?.displayName,
+                            'partner_id_phone': salesOrder.partnerId?.phone,
+                            'state': salesOrder.state,
+                            'x_studio_commission_paid':
+                                salesOrder.xStudioCommissionPaid ? 1 : 0,
+                            'x_studio_invoice_payment_status':
+                                salesOrder.xStudioInvoicePaymentStatus,
+                            'x_studio_payment_type':
+                                salesOrder.xStudioPaymentType,
+                            'x_studio_referrer_processed':
+                                salesOrder.xStudioReferrerProcessed ? 1 : 0,
+                            'x_studio_sales_rep_1': salesOrder.xStudioSalesRep1,
+                            'x_studio_sales_source':
+                                salesOrder.xStudioSalesSource,
+                            'order_line': salesOrder.orderLine != null
+                                ? salesOrder.orderLine!
+                                    .map(
+                                      (e) => {
+                                        'product':
+                                            e.productTemplateId?.displayName ??
+                                                '',
+                                        'description': e.name,
+                                        'quantity': e.productUomQty,
+                                        'delivered': e.qtyDelivered,
+                                        'invoiced': e.qtyInvoiced,
+                                        'unit_price': e.priceUnit,
+                                        'taxes': e.taxId?.isNotEmpty ?? false
+                                            ? e.taxId![0].displayName
+                                            : '',
+                                        'disc': e.discount,
+                                        'tax_excl': e.priceSubtotal,
+                                      },
+                                    )
+                                    .toList()
+                                : [],
+                          });
+                        }
+                        String jsonData = jsonEncode(dataList);
+                        var fileName = 'text_file.txt';
+                        var directory2 = await getExternalStorageDirectory();
+                        var filePath = join(directory2!.path, fileName);
+                        print(filePath);
+                        // // Step 3: Write JSON to a text file
+                        // File jsonFile = File('$appDocPath/data.txt');
+                        // await jsonFile.writeAsString(jsonData);
+                        await File(filePath).writeAsString(jsonData);
 
-                          // await Clipboard.setData(
-                          //     ClipboardData(text: dataList.toString()));
-                          // Optionally, show a snackbar to notify the user
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Saved text'),
-                            ),
-                          );
-                          // showSaveAllSalesModal(context, state.records, cubit);
-                        },
-                        icon: const HeroIcon(
-                          HeroIcons.clipboard,
-                          color: Colors.white,
-                        ),
+                        // await Clipboard.setData(
+                        //     ClipboardData(text: dataList.toString()));
+                        // Optionally, show a snackbar to notify the user
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Saved text'),
+                          ),
+                        );
+                        // showSaveAllSalesModal(context, state.records, cubit);
+                      },
+                      icon: const HeroIcon(
+                        HeroIcons.clipboard,
+                        color: Colors.white,
                       ),
-                    ],
-                  );
-                }
-                return const SizedBox();
-              },
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox();
+            },
+          ),
+          IconButton(
+            onPressed: () =>
+                SalesPage._scaffoldKey.currentState!.openEndDrawer(),
+            icon: const HeroIcon(
+              HeroIcons.bars3,
+              color: Colors.white,
             ),
-            IconButton(
-              onPressed: () =>
-                  SalesPage._scaffoldKey.currentState!.openEndDrawer(),
-              icon: const HeroIcon(
-                HeroIcons.bars3,
-                color: Colors.white,
-              ),
-            ),
+          ),
           // ],
         ],
       ),
@@ -606,16 +606,16 @@ Future<void> _downloadExcel(
 
   final sheetObject = excel['Sheet1']
     ..appendRow([
-      const TextCellValue('Number'),
-      const TextCellValue('Order Date'),
-      const TextCellValue('Customer'),
-      const TextCellValue('Sales Rep'),
-      const TextCellValue('Sales Source'),
-      const TextCellValue('Commission Paid'),
-      const TextCellValue('Total'),
-      const TextCellValue('Delivery Status'),
-      const TextCellValue('Final Commission'),
-      const TextCellValue('Confirmed by Manager'),
+      TextCellValue('Number'),
+      TextCellValue('Order Date'),
+      TextCellValue('Customer'),
+      TextCellValue('Sales Rep'),
+      TextCellValue('Sales Source'),
+      TextCellValue('Commission Paid'),
+      TextCellValue('Total'),
+      TextCellValue('Delivery Status'),
+      TextCellValue('Final Commission'),
+      TextCellValue('Confirmed by Manager'),
     ]);
 
   for (final item in filteredRecords) {

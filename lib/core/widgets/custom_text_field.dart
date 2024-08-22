@@ -12,6 +12,7 @@ class CustomTextField extends HookWidget {
     required this.onChanged,
     required this.title,
     required this.isValidating,
+    this.customInputFormat,
     this.inputType,
     this.prioValidate = false,
     super.key,
@@ -22,6 +23,7 @@ class CustomTextField extends HookWidget {
   final bool isValidating;
   final bool prioValidate;
   final TextInputType? inputType;
+  final TextInputFormatter? customInputFormat;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,9 @@ class CustomTextField extends HookWidget {
                   r'^-?\d*\.?\d*$',
                 ),
               ),
+            ],
+            if (customInputFormat != null) ...[
+              customInputFormat!,
             ],
           ],
           decoration: InputDecoration(

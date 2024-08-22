@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -1569,9 +1570,8 @@ class _ModifyManualAdditionDeductionModalState
           title: 'Addition/Deduction',
           isValidating: isValidating,
           prioValidate: isValidating,
-          inputType: const TextInputType.numberWithOptions(
-            decimal: true,
-            signed: true,
+          customInputFormat: FilteringTextInputFormatter.allow(
+            RegExp(r'^-?\d*\.?\d*$'),
           ),
         ),
         const Text(
