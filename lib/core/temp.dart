@@ -12,8 +12,8 @@ List<LandingPrice> landingPrices = [
     name: 'WAA Full House Healthy Water V2-W (w filters)',
     internalReference: 'FHWR-3S1-20-W',
     productCategory: 'System',
-    installationService: 4390,
-    supplyOnly: 3590,
+    installationService: 4190,
+    supplyOnly: 3390,
   ),
   const LandingPrice(
     name: 'WAA Healthy Independent Undersink 6 Stages V1 (w filters)',
