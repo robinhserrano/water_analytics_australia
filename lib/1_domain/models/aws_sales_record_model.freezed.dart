@@ -82,8 +82,12 @@ mixin _$AwsSalesOrder {
   @JsonKey(name: 'last_entered_odoo_by')
   int? get lastEnteredOdooBy => throw _privateConstructorUsedError;
 
+  /// Serializes this AwsSalesOrder to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AwsSalesOrderCopyWith<AwsSalesOrder> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -148,6 +152,8 @@ class _$AwsSalesOrderCopyWithImpl<$Res, $Val extends AwsSalesOrder>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -301,6 +307,8 @@ class _$AwsSalesOrderCopyWithImpl<$Res, $Val extends AwsSalesOrder>
     ) as $Val);
   }
 
+  /// Create a copy of AwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AwsUserCopyWith<$Res>? get user {
@@ -375,6 +383,8 @@ class __$$AwsSalesOrderImplCopyWithImpl<$Res>
       _$AwsSalesOrderImpl _value, $Res Function(_$AwsSalesOrderImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -758,7 +768,7 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
                 other.lastEnteredOdooBy == lastEnteredOdooBy));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -793,7 +803,9 @@ class _$AwsSalesOrderImpl implements _AwsSalesOrder {
         lastEnteredOdooBy
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AwsSalesOrderImplCopyWith<_$AwsSalesOrderImpl> get copyWith =>
@@ -863,54 +875,54 @@ abstract class _AwsSalesOrder implements AwsSalesOrder {
   @override
   int? get id;
   @override
-  String? get name;
-  @override //A
+  String? get name; //A
+  @override
   @JsonKey(name: 'create_date')
-  DateTime? get createDate;
-  @override //B
+  DateTime? get createDate; //B
+  @override
   @JsonKey(name: 'updated_at')
-  DateTime? get updatedAt;
-  @override //B
+  DateTime? get updatedAt; //B
+  @override
   @JsonKey(name: 'partner_id_display_name')
-  String? get partnerIdDisplayName;
-  @override //C
+  String? get partnerIdDisplayName; //C
+  @override
   @JsonKey(name: 'partner_id_contact_address')
-  String? get partnerIdContactAddress;
-  @override //D
+  String? get partnerIdContactAddress; //D
+  @override
   @JsonKey(name: 'partner_id_phone')
-  dynamic get partnerIdPhone;
-  @override //E
+  dynamic get partnerIdPhone; //E
+  @override
   @JsonKey(name: 'x_studio_sales_rep_1')
-  String? get xStudioSalesRep1;
-  @override //F
+  String? get xStudioSalesRep1; //F
+  @override
   @JsonKey(name: 'x_studio_sales_source')
-  String? get xStudioSalesSource;
-  @override //G
+  String? get xStudioSalesSource; //G
+  @override
   @JsonKey(name: 'x_studio_commission_paid')
   @IntToBooleanConverter()
-  bool get xStudioCommissionPaid;
-  @override //H,
+  bool get xStudioCommissionPaid; //H,
 // @JsonKey(name: 'x_studio_referred_by')
 // required ReferredByModel? xStudioReferredBy,
+  @override
   @JsonKey(name: 'x_studio_referrer_processed')
   @IntToBooleanConverter()
-  bool get xStudioReferrerProcessed;
-  @override //J,
+  bool get xStudioReferrerProcessed; //J,
+  @override
   @JsonKey(name: 'x_studio_payment_type')
-  String? get xStudioPaymentType;
-  @override //K
+  String? get xStudioPaymentType; //K
+  @override
   @JsonKey(name: 'amount_total')
-  double? get amountTotal;
-  @override // L
+  double? get amountTotal; // L
+  @override
   @JsonKey(name: 'delivery_status')
-  dynamic get deliveryStatus;
-  @override //M
+  dynamic get deliveryStatus; //M
+  @override
   @JsonKey(name: 'amount_to_invoice')
-  double? get amountToInvoice;
-  @override //N
+  double? get amountToInvoice; //N
+  @override
   @JsonKey(name: 'x_studio_invoice_payment_status')
-  dynamic get xStudioInvoicePaymentStatus;
-  @override //O
+  dynamic get xStudioInvoicePaymentStatus; //O
+  @override
   @JsonKey(name: 'internal_note_display')
   String? get internalNoteDisplay;
   @override
@@ -949,8 +961,11 @@ abstract class _AwsSalesOrder implements AwsSalesOrder {
   @override
   @JsonKey(name: 'last_entered_odoo_by')
   int? get lastEnteredOdooBy;
+
+  /// Create a copy of AwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AwsSalesOrderImplCopyWith<_$AwsSalesOrderImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -974,8 +989,12 @@ mixin _$AwsOrderLine {
   @JsonKey(name: 'tax_excl')
   num? get taxExcl => throw _privateConstructorUsedError;
 
+  /// Serializes this AwsOrderLine to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AwsOrderLine
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AwsOrderLineCopyWith<AwsOrderLine> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1009,6 +1028,8 @@ class _$AwsOrderLineCopyWithImpl<$Res, $Val extends AwsOrderLine>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AwsOrderLine
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1097,6 +1118,8 @@ class __$$AwsOrderLineImplCopyWithImpl<$Res>
       _$AwsOrderLineImpl _value, $Res Function(_$AwsOrderLineImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AwsOrderLine
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1224,12 +1247,14 @@ class _$AwsOrderLineImpl implements _AwsOrderLine {
             (identical(other.taxExcl, taxExcl) || other.taxExcl == taxExcl));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, product, description,
       quantity, delivered, invoiced, unitPrice, taxes, disc, taxExcl);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AwsOrderLine
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AwsOrderLineImplCopyWith<_$AwsOrderLineImpl> get copyWith =>
@@ -1283,8 +1308,11 @@ abstract class _AwsOrderLine implements AwsOrderLine {
   @override
   @JsonKey(name: 'tax_excl')
   num? get taxExcl;
+
+  /// Create a copy of AwsOrderLine
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AwsOrderLineImplCopyWith<_$AwsOrderLineImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1299,8 +1327,12 @@ mixin _$PaginatedAwsSalesOrder {
   List<AwsSalesOrder> get data => throw _privateConstructorUsedError;
   Pagination get pagination => throw _privateConstructorUsedError;
 
+  /// Serializes this PaginatedAwsSalesOrder to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PaginatedAwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PaginatedAwsSalesOrderCopyWith<PaginatedAwsSalesOrder> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1327,6 +1359,8 @@ class _$PaginatedAwsSalesOrderCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PaginatedAwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1345,6 +1379,8 @@ class _$PaginatedAwsSalesOrderCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of PaginatedAwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PaginationCopyWith<$Res> get pagination {
@@ -1379,6 +1415,8 @@ class __$$PaginatedAwsSalesOrderImplCopyWithImpl<$Res>
       $Res Function(_$PaginatedAwsSalesOrderImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PaginatedAwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1434,12 +1472,14 @@ class _$PaginatedAwsSalesOrderImpl implements _PaginatedAwsSalesOrder {
                 other.pagination == pagination));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_data), pagination);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PaginatedAwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PaginatedAwsSalesOrderImplCopyWith<_$PaginatedAwsSalesOrderImpl>
@@ -1466,8 +1506,11 @@ abstract class _PaginatedAwsSalesOrder implements PaginatedAwsSalesOrder {
   List<AwsSalesOrder> get data;
   @override
   Pagination get pagination;
+
+  /// Create a copy of PaginatedAwsSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PaginatedAwsSalesOrderImplCopyWith<_$PaginatedAwsSalesOrderImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1487,8 +1530,12 @@ mixin _$Pagination {
   @JsonKey(name: 'last_page')
   int get lastPage => throw _privateConstructorUsedError;
 
+  /// Serializes this Pagination to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Pagination
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PaginationCopyWith<Pagination> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1516,6 +1563,8 @@ class _$PaginationCopyWithImpl<$Res, $Val extends Pagination>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Pagination
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1568,6 +1617,8 @@ class __$$PaginationImplCopyWithImpl<$Res>
       _$PaginationImpl _value, $Res Function(_$PaginationImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Pagination
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1641,12 +1692,14 @@ class _$PaginationImpl implements _Pagination {
                 other.lastPage == lastPage));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, totalItems, currentPage, perPage, lastPage);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Pagination
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PaginationImplCopyWith<_$PaginationImpl> get copyWith =>
@@ -1683,8 +1736,11 @@ abstract class _Pagination implements Pagination {
   @override
   @JsonKey(name: 'last_page')
   int get lastPage;
+
+  /// Create a copy of Pagination
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PaginationImplCopyWith<_$PaginationImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

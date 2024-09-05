@@ -37,8 +37,12 @@ mixin _$AwsUser {
   @JsonKey(name: 'plain_text')
   String? get plainText => throw _privateConstructorUsedError;
 
+  /// Serializes this AwsUser to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AwsUser
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AwsUserCopyWith<AwsUser> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -69,6 +73,8 @@ class _$AwsUserCopyWithImpl<$Res, $Val extends AwsUser>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AwsUser
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -150,6 +156,8 @@ class __$$AwsUserImplCopyWithImpl<$Res>
       _$AwsUserImpl _value, $Res Function(_$AwsUserImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AwsUser
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -274,12 +282,14 @@ class _$AwsUserImpl implements _AwsUser {
                 other.plainText == plainText));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, accessLevel, commissionSplit,
       displayName, email, salesManagerId, selfGen, companyLead, plainText);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AwsUser
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AwsUserImplCopyWith<_$AwsUserImpl> get copyWith =>
@@ -333,8 +343,11 @@ abstract class _AwsUser implements AwsUser {
   @override
   @JsonKey(name: 'plain_text')
   String? get plainText;
+
+  /// Create a copy of AwsUser
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AwsUserImplCopyWith<_$AwsUserImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

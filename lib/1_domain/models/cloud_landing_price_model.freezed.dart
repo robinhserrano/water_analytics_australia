@@ -26,8 +26,12 @@ mixin _$CloudLandingPrice {
   String get productCategory => throw _privateConstructorUsedError;
   num get supplyOnly => throw _privateConstructorUsedError;
 
+  /// Serializes this CloudLandingPrice to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CloudLandingPrice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CloudLandingPriceCopyWith<CloudLandingPrice> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$CloudLandingPriceCopyWithImpl<$Res, $Val extends CloudLandingPrice>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CloudLandingPrice
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -114,6 +120,8 @@ class __$$CloudLandingPriceImplCopyWithImpl<$Res>
       $Res Function(_$CloudLandingPriceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CloudLandingPrice
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -193,12 +201,14 @@ class _$CloudLandingPriceImpl implements _CloudLandingPrice {
                 other.supplyOnly == supplyOnly));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, installationService,
       internalReference, name, productCategory, supplyOnly);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CloudLandingPrice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CloudLandingPriceImplCopyWith<_$CloudLandingPriceImpl> get copyWith =>
@@ -234,8 +244,11 @@ abstract class _CloudLandingPrice implements CloudLandingPrice {
   String get productCategory;
   @override
   num get supplyOnly;
+
+  /// Create a copy of CloudLandingPrice
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CloudLandingPriceImplCopyWith<_$CloudLandingPriceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

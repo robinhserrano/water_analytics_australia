@@ -26,8 +26,12 @@ mixin _$LandingPrice {
   double? get installationService => throw _privateConstructorUsedError;
   double? get supplyOnly => throw _privateConstructorUsedError;
 
+  /// Serializes this LandingPrice to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LandingPrice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LandingPriceCopyWith<LandingPrice> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$LandingPriceCopyWithImpl<$Res, $Val extends LandingPrice>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LandingPrice
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -114,6 +120,8 @@ class __$$LandingPriceImplCopyWithImpl<$Res>
       _$LandingPriceImpl _value, $Res Function(_$LandingPriceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LandingPrice
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -193,12 +201,14 @@ class _$LandingPriceImpl implements _LandingPrice {
                 other.supplyOnly == supplyOnly));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, name, internalReference,
       productCategory, installationService, supplyOnly);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LandingPrice
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LandingPriceImplCopyWith<_$LandingPriceImpl> get copyWith =>
@@ -233,8 +243,11 @@ abstract class _LandingPrice implements LandingPrice {
   double? get installationService;
   @override
   double? get supplyOnly;
+
+  /// Create a copy of LandingPrice
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LandingPriceImplCopyWith<_$LandingPriceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

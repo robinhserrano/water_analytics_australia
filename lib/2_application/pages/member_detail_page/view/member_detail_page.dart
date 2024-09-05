@@ -1134,13 +1134,15 @@ List<AwsOrderLine> getAwsAdditionalCost(
         if (displayName
             .toLowerCase()
             .contains(landingPrice.internalReference!.toLowerCase())) {
-          matchingLandingPrices.add(
-            LandingPriceWithQuantity(
-              landingPrice: landingPrice,
-              quantity: quantity.toDouble(),
-              isSupplyOnly: isSupplyOnly,
-            ),
-          );
+          if (quantity > 0) {
+            matchingLandingPrices.add(
+              LandingPriceWithQuantity(
+                landingPrice: landingPrice,
+                quantity: quantity.toDouble(),
+                isSupplyOnly: isSupplyOnly,
+              ),
+            );
+          }
 
           break;
         } else {
@@ -1212,18 +1214,19 @@ List<LandingPriceWithQuantity> getLandingPrice(
             .contains(landingPrice.internalReference!.toLowerCase())) {
           final isDuplicate =
               countOccurrences(seenReferences, displayName.toLowerCase()) > 0;
-
-          matchingLandingPrices.add(
-            LandingPriceWithQuantity(
-              landingPrice: (isDuplicate &&
-                      landingPrice.internalReference == 'USRO-3S1-2W' &&
-                      !isSupplyOnly)
-                  ? landingPrice.copyWith(installationService: 790)
-                  : landingPrice,
-              quantity: quantity.toDouble(),
-              isSupplyOnly: isSupplyOnly,
-            ),
-          );
+          if (quantity > 0) {
+            matchingLandingPrices.add(
+              LandingPriceWithQuantity(
+                landingPrice: (isDuplicate &&
+                        landingPrice.internalReference == 'USRO-3S1-2W' &&
+                        !isSupplyOnly)
+                    ? landingPrice.copyWith(installationService: 790)
+                    : landingPrice,
+                quantity: quantity.toDouble(),
+                isSupplyOnly: isSupplyOnly,
+              ),
+            );
+          }
 
           break;
         }

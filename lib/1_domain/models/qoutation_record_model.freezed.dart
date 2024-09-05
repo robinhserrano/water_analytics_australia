@@ -48,8 +48,12 @@ mixin _$QuotationRecord {
   @JsonKey(name: 'activity_type_id')
   dynamic get activityTypeId => throw _privateConstructorUsedError;
 
+  /// Serializes this QuotationRecord to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of QuotationRecord
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $QuotationRecordCopyWith<QuotationRecord> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -92,6 +96,8 @@ class _$QuotationRecordCopyWithImpl<$Res, $Val extends QuotationRecord>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of QuotationRecord
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -175,6 +181,8 @@ class _$QuotationRecordCopyWithImpl<$Res, $Val extends QuotationRecord>
     ) as $Val);
   }
 
+  /// Create a copy of QuotationRecord
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $IdModelCopyWith<$Res>? get partnerId {
@@ -187,6 +195,8 @@ class _$QuotationRecordCopyWithImpl<$Res, $Val extends QuotationRecord>
     });
   }
 
+  /// Create a copy of QuotationRecord
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $IdModelCopyWith<$Res>? get currencyId {
@@ -240,6 +250,8 @@ class __$$QuotationRecordImplCopyWithImpl<$Res>
       _$QuotationRecordImpl _value, $Res Function(_$QuotationRecordImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of QuotationRecord
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -443,7 +455,7 @@ class _$QuotationRecordImpl implements _QuotationRecord {
                 .equals(other.activityTypeId, activityTypeId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -463,7 +475,9 @@ class _$QuotationRecordImpl implements _QuotationRecord {
       const DeepCollectionEquality().hash(activityTypeIcon),
       const DeepCollectionEquality().hash(activityTypeId));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of QuotationRecord
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$QuotationRecordImplCopyWith<_$QuotationRecordImpl> get copyWith =>
@@ -546,8 +560,11 @@ abstract class _QuotationRecord implements QuotationRecord {
   @override
   @JsonKey(name: 'activity_type_id')
   dynamic get activityTypeId;
+
+  /// Create a copy of QuotationRecord
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$QuotationRecordImplCopyWith<_$QuotationRecordImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -562,8 +579,12 @@ mixin _$IdModel {
   @JsonKey(name: 'display_name')
   String? get displayName => throw _privateConstructorUsedError;
 
+  /// Serializes this IdModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of IdModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $IdModelCopyWith<IdModel> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -585,6 +606,8 @@ class _$IdModelCopyWithImpl<$Res, $Val extends IdModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of IdModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -622,6 +645,8 @@ class __$$IdModelImplCopyWithImpl<$Res>
       _$IdModelImpl _value, $Res Function(_$IdModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of IdModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -672,11 +697,13 @@ class _$IdModelImpl implements _IdModel {
                 other.displayName == displayName));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, displayName);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of IdModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$IdModelImplCopyWith<_$IdModelImpl> get copyWith =>
@@ -703,8 +730,11 @@ abstract class _IdModel implements IdModel {
   @override
   @JsonKey(name: 'display_name')
   String? get displayName;
+
+  /// Create a copy of IdModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$IdModelImplCopyWith<_$IdModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -717,8 +747,12 @@ ActivityIdModel _$ActivityIdModelFromJson(Map<String, dynamic> json) {
 mixin _$ActivityIdModel {
   int? get id => throw _privateConstructorUsedError;
 
+  /// Serializes this ActivityIdModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ActivityIdModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ActivityIdModelCopyWith<ActivityIdModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -742,6 +776,8 @@ class _$ActivityIdModelCopyWithImpl<$Res, $Val extends ActivityIdModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ActivityIdModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -775,6 +811,8 @@ class __$$ActivityIdModelImplCopyWithImpl<$Res>
       _$ActivityIdModelImpl _value, $Res Function(_$ActivityIdModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ActivityIdModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -813,11 +851,13 @@ class _$ActivityIdModelImpl implements _ActivityIdModel {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ActivityIdModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ActivityIdModelImplCopyWith<_$ActivityIdModelImpl> get copyWith =>
@@ -841,8 +881,11 @@ abstract class _ActivityIdModel implements ActivityIdModel {
 
   @override
   int? get id;
+
+  /// Create a copy of ActivityIdModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ActivityIdModelImplCopyWith<_$ActivityIdModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

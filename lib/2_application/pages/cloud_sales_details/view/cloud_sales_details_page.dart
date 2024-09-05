@@ -1087,17 +1087,19 @@ List<LandingPriceWithQuantity> getLandingPrice(
         if (displayName
             .toLowerCase()
             .contains(landingPrice.internalReference!.toLowerCase())) {
-          matchingLandingPrices.add(
-            LandingPriceWithQuantity(
-              landingPrice: (quantity >= 2 &&
-                      landingPrice.internalReference == 'USRO-3S1-2W' &&
-                      !isSupplyOnly)
-                  ? landingPrice.copyWith(installationService: 790)
-                  : landingPrice,
-              quantity: quantity.toDouble(),
-              isSupplyOnly: isSupplyOnly,
-            ),
-          );
+          if (quantity > 0) {
+            matchingLandingPrices.add(
+              LandingPriceWithQuantity(
+                landingPrice: (quantity >= 2 &&
+                        landingPrice.internalReference == 'USRO-3S1-2W' &&
+                        !isSupplyOnly)
+                    ? landingPrice.copyWith(installationService: 790)
+                    : landingPrice,
+                quantity: quantity.toDouble(),
+                isSupplyOnly: isSupplyOnly,
+              ),
+            );
+          }
 
           break;
         }
@@ -1126,14 +1128,15 @@ List<CloudOrderLines> getCloudAdditionalCost(
         if (displayName
             .toLowerCase()
             .contains(landingPrice.internalReference!.toLowerCase())) {
-          matchingLandingPrices.add(
-            LandingPriceWithQuantity(
-              landingPrice: landingPrice,
-              quantity: quantity.toDouble(),
-              isSupplyOnly: isSupplyOnly,
-            ),
-          );
-
+          if (quantity > 0) {
+            matchingLandingPrices.add(
+              LandingPriceWithQuantity(
+                landingPrice: landingPrice,
+                quantity: quantity.toDouble(),
+                isSupplyOnly: isSupplyOnly,
+              ),
+            );
+          }
           break;
         } else {
           additionalCostSet.add(orderLine);
@@ -1209,8 +1212,7 @@ class CloudOrderInfos extends StatelessWidget {
                 Text(
                   order.createDate == null
                       ? ''
-                      : DateFormat('MM/dd/yy')
-                          .format(order.createDate!),
+                      : DateFormat('MM/dd/yy').format(order.createDate!),
                   style: const TextStyle(color: Color(0xff7a7a7a)),
                 ),
               ],

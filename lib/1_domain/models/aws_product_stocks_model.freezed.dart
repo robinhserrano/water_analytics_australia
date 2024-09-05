@@ -42,8 +42,12 @@ mixin _$AwsProductStocks {
   @JsonKey(name: 'warehouse_id')
   int? get warehouseId => throw _privateConstructorUsedError;
 
+  /// Serializes this AwsProductStocks to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AwsProductStocks
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AwsProductStocksCopyWith<AwsProductStocks> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -78,6 +82,8 @@ class _$AwsProductStocksCopyWithImpl<$Res, $Val extends AwsProductStocks>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AwsProductStocks
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -172,6 +178,8 @@ class __$$AwsProductStocksImplCopyWithImpl<$Res>
       $Res Function(_$AwsProductStocksImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AwsProductStocks
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -319,7 +327,7 @@ class _$AwsProductStocksImpl implements _AwsProductStocks {
                 other.warehouseId == warehouseId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -335,7 +343,9 @@ class _$AwsProductStocksImpl implements _AwsProductStocks {
       virtualAvailable,
       warehouseId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AwsProductStocks
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AwsProductStocksImplCopyWith<_$AwsProductStocksImpl> get copyWith =>
@@ -401,8 +411,11 @@ abstract class _AwsProductStocks implements AwsProductStocks {
   @override
   @JsonKey(name: 'warehouse_id')
   int? get warehouseId;
+
+  /// Create a copy of AwsProductStocks
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AwsProductStocksImplCopyWith<_$AwsProductStocksImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -418,8 +431,12 @@ mixin _$CurrentWarehouse {
   String? get name => throw _privateConstructorUsedError;
   String? get code => throw _privateConstructorUsedError;
 
+  /// Serializes this CurrentWarehouse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CurrentWarehouse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CurrentWarehouseCopyWith<CurrentWarehouse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -446,6 +463,8 @@ class _$CurrentWarehouseCopyWithImpl<$Res, $Val extends CurrentWarehouse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CurrentWarehouse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -492,6 +511,8 @@ class __$$CurrentWarehouseImplCopyWithImpl<$Res>
       $Res Function(_$CurrentWarehouseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CurrentWarehouse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -551,11 +572,13 @@ class _$CurrentWarehouseImpl implements _CurrentWarehouse {
             (identical(other.code, code) || other.code == code));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, warehouseId, name, code);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CurrentWarehouse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CurrentWarehouseImplCopyWith<_$CurrentWarehouseImpl> get copyWith =>
@@ -586,8 +609,11 @@ abstract class _CurrentWarehouse implements CurrentWarehouse {
   String? get name;
   @override
   String? get code;
+
+  /// Create a copy of CurrentWarehouse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CurrentWarehouseImplCopyWith<_$CurrentWarehouseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

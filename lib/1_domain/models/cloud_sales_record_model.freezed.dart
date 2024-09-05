@@ -62,8 +62,12 @@ mixin _$CloudSalesOrder {
   CloudAdditionalDeduction? get additionalDeduction =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this CloudSalesOrder to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CloudSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CloudSalesOrderCopyWith<CloudSalesOrder> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -114,6 +118,8 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CloudSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -227,6 +233,8 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
     ) as $Val);
   }
 
+  /// Create a copy of CloudSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CloudConfirmedByManagerCopyWith<$Res>? get confirmedByManager {
@@ -240,6 +248,8 @@ class _$CloudSalesOrderCopyWithImpl<$Res, $Val extends CloudSalesOrder>
     });
   }
 
+  /// Create a copy of CloudSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CloudAdditionalDeductionCopyWith<$Res>? get additionalDeduction {
@@ -302,6 +312,8 @@ class __$$CloudSalesOrderImplCopyWithImpl<$Res>
       _$CloudSalesOrderImpl _value, $Res Function(_$CloudSalesOrderImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CloudSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -587,7 +599,7 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
                 other.additionalDeduction == additionalDeduction));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -614,7 +626,9 @@ class _$CloudSalesOrderImpl implements _CloudSalesOrder {
         additionalDeduction
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CloudSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CloudSalesOrderImplCopyWith<_$CloudSalesOrderImpl> get copyWith =>
@@ -670,49 +684,49 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
   @override
   String? get id;
   @override
-  String? get name;
-  @override //A
+  String? get name; //A
+  @override
   @JsonKey(name: 'create_date')
-  DateTime? get createDate;
-  @override //B
+  DateTime? get createDate; //B
+  @override
   @JsonKey(name: 'partner_id_display_name')
-  String? get partnerIdDisplayName;
-  @override //C
+  String? get partnerIdDisplayName; //C
+  @override
   @JsonKey(name: 'partner_id_contact_address')
-  String? get partnerIdContactAddress;
-  @override //D
+  String? get partnerIdContactAddress; //D
+  @override
   @JsonKey(name: 'partner_id_phone')
-  dynamic get partnerIdPhone;
-  @override //E
+  dynamic get partnerIdPhone; //E
+  @override
   @JsonKey(name: 'x_studio_sales_rep_1')
-  String? get xStudioSalesRep1;
-  @override //F
+  String? get xStudioSalesRep1; //F
+  @override
   @JsonKey(name: 'x_studio_sales_source')
-  String? get xStudioSalesSource;
-  @override //G
+  String? get xStudioSalesSource; //G
+  @override
   @JsonKey(name: 'x_studio_commission_paid')
-  bool get xStudioCommissionPaid;
-  @override //H,
+  bool get xStudioCommissionPaid; //H,
 // @JsonKey(name: 'x_studio_referred_by')
 // required ReferredByModel? xStudioReferredBy,
+  @override
   @JsonKey(name: 'x_studio_referrer_processed')
-  bool get xStudioReferrerProcessed;
-  @override //J,
+  bool get xStudioReferrerProcessed; //J,
+  @override
   @JsonKey(name: 'x_studio_payment_type')
-  String? get xStudioPaymentType;
-  @override //K
+  String? get xStudioPaymentType; //K
+  @override
   @JsonKey(name: 'amount_total')
-  double? get amountTotal;
-  @override // L
+  double? get amountTotal; // L
+  @override
   @JsonKey(name: 'delivery_status')
-  dynamic get deliveryStatus;
-  @override //M
+  dynamic get deliveryStatus; //M
+  @override
   @JsonKey(name: 'amount_to_invoice')
-  double? get amountToInvoice;
-  @override //N
+  double? get amountToInvoice; //N
+  @override
   @JsonKey(name: 'x_studio_invoice_payment_status')
-  dynamic get xStudioInvoicePaymentStatus;
-  @override //O
+  dynamic get xStudioInvoicePaymentStatus; //O
+  @override
   @JsonKey(name: 'internal_note_display')
   String? get internalNoteDisplay;
   @override
@@ -726,8 +740,11 @@ abstract class _CloudSalesOrder implements CloudSalesOrder {
   CloudConfirmedByManager? get confirmedByManager;
   @override
   CloudAdditionalDeduction? get additionalDeduction;
+
+  /// Create a copy of CloudSalesOrder
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CloudSalesOrderImplCopyWith<_$CloudSalesOrderImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -748,8 +765,12 @@ mixin _$CloudOrderLines {
   num? get disc => throw _privateConstructorUsedError;
   num? get taxExcl => throw _privateConstructorUsedError;
 
+  /// Serializes this CloudOrderLines to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CloudOrderLines
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CloudOrderLinesCopyWith<CloudOrderLines> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -782,6 +803,8 @@ class _$CloudOrderLinesCopyWithImpl<$Res, $Val extends CloudOrderLines>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CloudOrderLines
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -864,6 +887,8 @@ class __$$CloudOrderLinesImplCopyWithImpl<$Res>
       _$CloudOrderLinesImpl _value, $Res Function(_$CloudOrderLinesImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CloudOrderLines
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -980,12 +1005,14 @@ class _$CloudOrderLinesImpl implements _CloudOrderLines {
             (identical(other.taxExcl, taxExcl) || other.taxExcl == taxExcl));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, product, description, quantity,
       delivered, invoiced, unitPrice, taxes, disc, taxExcl);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CloudOrderLines
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CloudOrderLinesImplCopyWith<_$CloudOrderLinesImpl> get copyWith =>
@@ -1033,8 +1060,11 @@ abstract class _CloudOrderLines implements CloudOrderLines {
   num? get disc;
   @override
   num? get taxExcl;
+
+  /// Create a copy of CloudOrderLines
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CloudOrderLinesImplCopyWith<_$CloudOrderLinesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1053,8 +1083,12 @@ mixin _$CloudAdditionalDeduction {
   @JsonKey(name: 'additional_deduction')
   double? get additionalDeduction => throw _privateConstructorUsedError;
 
+  /// Serializes this CloudAdditionalDeduction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CloudAdditionalDeduction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CloudAdditionalDeductionCopyWith<CloudAdditionalDeduction> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1082,6 +1116,8 @@ class _$CloudAdditionalDeductionCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CloudAdditionalDeduction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1131,6 +1167,8 @@ class __$$CloudAdditionalDeductionImplCopyWithImpl<$Res>
       $Res Function(_$CloudAdditionalDeductionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CloudAdditionalDeduction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1195,12 +1233,14 @@ class _$CloudAdditionalDeductionImpl implements _CloudAdditionalDeduction {
                 other.additionalDeduction == additionalDeduction));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, updatedAt, lastUpdatedBy, additionalDeduction);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CloudAdditionalDeduction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CloudAdditionalDeductionImplCopyWith<_$CloudAdditionalDeductionImpl>
@@ -1235,8 +1275,11 @@ abstract class _CloudAdditionalDeduction implements CloudAdditionalDeduction {
   @override
   @JsonKey(name: 'additional_deduction')
   double? get additionalDeduction;
+
+  /// Create a copy of CloudAdditionalDeduction
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CloudAdditionalDeductionImplCopyWith<_$CloudAdditionalDeductionImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1255,8 +1298,12 @@ mixin _$CloudConfirmedByManager {
   @JsonKey(name: 'is_confirmed')
   bool? get isConfirmed => throw _privateConstructorUsedError;
 
+  /// Serializes this CloudConfirmedByManager to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CloudConfirmedByManager
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CloudConfirmedByManagerCopyWith<CloudConfirmedByManager> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1284,6 +1331,8 @@ class _$CloudConfirmedByManagerCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CloudConfirmedByManager
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1333,6 +1382,8 @@ class __$$CloudConfirmedByManagerImplCopyWithImpl<$Res>
       $Res Function(_$CloudConfirmedByManagerImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CloudConfirmedByManager
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1396,12 +1447,14 @@ class _$CloudConfirmedByManagerImpl implements _CloudConfirmedByManager {
                 other.isConfirmed == isConfirmed));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, updatedAt, lastUpdatedBy, isConfirmed);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CloudConfirmedByManager
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CloudConfirmedByManagerImplCopyWith<_$CloudConfirmedByManagerImpl>
@@ -1435,8 +1488,11 @@ abstract class _CloudConfirmedByManager implements CloudConfirmedByManager {
   @override
   @JsonKey(name: 'is_confirmed')
   bool? get isConfirmed;
+
+  /// Create a copy of CloudConfirmedByManager
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CloudConfirmedByManagerImplCopyWith<_$CloudConfirmedByManagerImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

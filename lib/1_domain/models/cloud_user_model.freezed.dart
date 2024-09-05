@@ -26,8 +26,12 @@ mixin _$CloudUser {
   String get email => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
 
+  /// Serializes this CloudUser to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CloudUser
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CloudUserCopyWith<CloudUser> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +59,8 @@ class _$CloudUserCopyWithImpl<$Res, $Val extends CloudUser>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CloudUser
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -113,6 +119,8 @@ class __$$CloudUserImplCopyWithImpl<$Res>
       _$CloudUserImpl _value, $Res Function(_$CloudUserImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CloudUser
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -192,12 +200,14 @@ class _$CloudUserImpl implements _CloudUser {
                 other.photoUrl == photoUrl));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, accessLevel, commissionSplit, displayName, email, photoUrl);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CloudUser
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CloudUserImplCopyWith<_$CloudUserImpl> get copyWith =>
@@ -232,8 +242,11 @@ abstract class _CloudUser implements CloudUser {
   String get email;
   @override
   String? get photoUrl;
+
+  /// Create a copy of CloudUser
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CloudUserImplCopyWith<_$CloudUserImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
