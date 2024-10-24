@@ -412,7 +412,9 @@ class _MemberDetailLoadedState extends State<MemberDetailLoaded> {
                             records,
                           );
                         },
-                        label: const Text('Export'),
+                        label: Text(
+                          'Export (${selectedSalesNo.length} sale${selectedSalesNo.length != 1 ? 's' : ''})',
+                        ),
                       ),
                     ],
                     // ElevatedButton.icon(
@@ -680,6 +682,7 @@ Future<void> _downloadExcelWeb(
       TextCellValue('Number'),
       TextCellValue('Order Date'),
       TextCellValue('Customer'),
+      TextCellValue("Customer's Address"),
       TextCellValue('Sales Rep'),
       TextCellValue('Sales Source'),
       TextCellValue('Commission Paid'),
@@ -700,6 +703,7 @@ Future<void> _downloadExcelWeb(
             : DateFormat('MM/dd/yyyy').format(item.createDate!),
       ),
       TextCellValue(item.partnerIdDisplayName ?? ''),
+      TextCellValue(item.partnerIdContactAddress ?? ''),
       TextCellValue(item.xStudioSalesRep1 ?? ''),
       TextCellValue(item.xStudioSalesSource ?? ''),
       TextCellValue(item.xStudioCommissionPaid.toString()),
@@ -750,7 +754,15 @@ Future<void> _downloadExcelWeb(
   //   CellValue.string('Canada'),
   // ]);
 
-  var fileName = 'my_data.xlsx';
+  var now = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
+  var formattedDate = formatter.format(now);
+
+  var salesCount = selectedSalesNo.length; // Assuming this is defined
+  var salesLabel = salesCount == 1 ? 'sale' : 'sales';
+
+  var fileName =
+      'Sales Quotations_$formattedDate ($salesCount $salesLabel).xlsx';
   var bytes = excel.save(fileName: fileName);
 
   // Get the appropriate directory based on platform
