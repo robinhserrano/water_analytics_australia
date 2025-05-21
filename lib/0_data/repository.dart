@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:chucker_flutter/chucker_flutter.dart';
+// import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_landing_price_model.dart';
 import 'package:water_analytics_australia/1_domain/models/aws_product_stocks_model.dart';
@@ -126,7 +126,7 @@ class Repository {
   ) async {
     try {
       final user = await HiveHelper.getAllUsers();
-      client.interceptors.add(ChuckerDioInterceptor());
+      // client.interceptors.add(ChuckerDioInterceptor());
       final response = await client.post<dynamic>(
         '$url/salesOrder',
         options: Options(
@@ -194,7 +194,7 @@ class Repository {
     try {
       final user = await HiveHelper.getAllUsers();
 
-      client.interceptors.add(ChuckerDioInterceptor());
+      // client.interceptors.add(ChuckerDioInterceptor());
 
       final dataList = <Map<String, dynamic>>[];
       for (final salesOrder in salesOrders) {
