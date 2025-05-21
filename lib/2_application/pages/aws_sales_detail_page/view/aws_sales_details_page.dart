@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+// import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -249,23 +249,12 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
               const SizedBox(
                 height: 16,
               ),
-              _TabBar(
-                controller: tabCtrl,
-                onTabChanged: (value) {
-                  tabIndex.value = value;
-                },
-              ),
-              if (tabCtrl.index == 0) ...[
+           
                 OrderLines(
                   order: order,
                   orderLine: order.orderLine ?? [],
                 ),
-              ],
-              if (tabCtrl.index == 1) ...[
-                Notes(
-                  order: order,
-                ),
-              ],
+       
             ],
           ),
         ),
@@ -719,64 +708,6 @@ class OtherInfo extends StatelessWidget {
   }
 }
 
-class Notes extends StatelessWidget {
-  const Notes({required this.order, super.key});
-  final AwsSalesOrder order;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        children: [
-          if (order.internalNoteDisplay != null) ...[
-            Card(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 0,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Notes',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: DottedLine(
-                        lineThickness: 1.5,
-                        dashColor: Color(0xffadadad),
-                        dashLength: 8,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: HtmlWidget(
-                            order.internalNoteDisplay ?? '',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
 class CustomRowTile extends StatelessWidget {
   const CustomRowTile(this.title, this.desc, {super.key});
   final String title;
@@ -818,6 +749,9 @@ class CommissionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final landingPrices =
+        getCurrentLandingPrices(order.createDate ?? DateTime.now());
+
     final cubit = context.read<AwsSalesDetailsCubit>();
     final sellingPrice = calculateCashPrice(
       order.amountTotal ?? 0,

@@ -26,15 +26,12 @@ import 'package:water_analytics_australia/1_domain/models/sales_record_model.dar
 import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
+import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/aws_sort_filter_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/member_sort_filter.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sales_record_card.dart';
-import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/aws_sort_filter_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sync_users_modal.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/member_detail_page/bloc/member_detail_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/temp.dart';
@@ -1089,6 +1086,9 @@ double calculateFinalCommission(
   AwsSalesOrder order,
   List<AwsOrderLine> orderLine,
 ) {
+  final landingPrices =
+      getCurrentLandingPrices(order.createDate ?? DateTime.now());
+
   final sellingPrice = calculateCashPrice(
     order.amountTotal ?? 0,
     (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),

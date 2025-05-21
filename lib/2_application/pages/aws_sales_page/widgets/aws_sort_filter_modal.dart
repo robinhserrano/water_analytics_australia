@@ -6,8 +6,6 @@ import 'package:water_analytics_australia/0_data/data/hive/sort_filter_hive_mode
 import 'package:water_analytics_australia/1_domain/models/sort_filter_model.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/pick_users_modal.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/view/cloud_sales_page.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 
 class SortFilterModal extends StatefulWidget {
@@ -131,8 +129,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
                             Hive.box<SortFilterHive>('sortFilter');
                         await sortFilterBox.clear();
                         widget.onChanged();
-                        SalesPage.closeDrawer();
-                        CloudSalesPage.closeDrawer();
                         AwsSalesPage.closeDrawer();
                         //MemberDetailPage.closeDrawer();
                       },
@@ -184,8 +180,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
                         );
 
                         widget.onChanged();
-                        SalesPage.closeDrawer();
-                        CloudSalesPage.closeDrawer();
                         AwsSalesPage.closeDrawer();
                         //MemberDetailPage.closeDrawer();
                       },
@@ -218,8 +212,6 @@ class _SortFilterModalState extends State<SortFilterModal> {
             actions: [
               GestureDetector(
                 onTap: () {
-                  SalesPage.closeDrawer();
-                  CloudSalesPage.closeDrawer();
                   AwsSalesPage.closeDrawer();
                   //MemberDetailPage.closeDrawer();
                 },

@@ -29,7 +29,7 @@ dependencies:
   flutter_adaptive_scaffold: ^0.1.10+2
   flutter_bloc: ^8.1.4
   flutter_hooks: ^0.20.5
-  flutter_widget_from_html: ^0.14.11
+  # flutter_widget_from_html: ^0.14.11
   font_awesome_flutter: ^10.7.0
   freezed_annotation: ^2.4.1
   get_it: ^7.7.0
