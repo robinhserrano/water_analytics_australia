@@ -1,13 +1,13 @@
 // ignore_for_file: inference_failure_on_collection_literal, avoid_dynamic_calls, unused_import, prefer_int_literals
 
 import 'dart:async';
-import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:data_table_2/data_table_2.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// ignore: unnecessary_import
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,11 +33,8 @@ import 'package:water_analytics_australia/2_application/pages/aws_sales_page/wid
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/aws_sort_filter_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sync_users_modal.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/member_detail_page/bloc/member_detail_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/temp.dart';

@@ -17,14 +17,10 @@ import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_p
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_report_page/bloc/sales_report_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/bloc/cloud_sales_details_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/bloc/create_users_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/cubit/landing_price_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_page/cubit/landing_price_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/login/bloc/login_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales_details/bloc/sales_details_cubit.dart';
 
 final sl = GetIt.I; // sl == Service Locator
 
@@ -36,30 +32,6 @@ Future<void> init() async {
       () => LoginCubit(
         odooRepo: sl<OdooRepository>(),
         repo: sl<Repository>(),
-      ),
-    )
-    ..registerFactory(
-      () => SalesCubit(
-        odooRepo: sl<OdooRepository>(),
-        firestoreService: sl(),
-        repo: sl<Repository>(),
-      ),
-    )
-    ..registerFactory(
-      () => SalesDetailsCubit(
-        odooRepo: sl<OdooRepository>(),
-        firestoreService: sl(),
-        repo: sl<Repository>(),
-      ),
-    )
-    ..registerFactory(
-      () => CloudSalesCubit(
-        firestoreService: sl(),
-      ),
-    )
-    ..registerFactory(
-      () => CloudSalesDetailsCubit(
-        firestoreService: sl(),
       ),
     )
     ..registerFactory(

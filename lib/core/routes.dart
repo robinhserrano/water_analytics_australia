@@ -12,15 +12,12 @@ import 'package:water_analytics_australia/2_application/pages/aws_product_stocks
 import 'package:water_analytics_australia/2_application/pages/aws_sales_detail_page/view/aws_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/bloc/aws_sales_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
 import 'package:water_analytics_australia/2_application/pages/create_users_page/view/create_users_page.dart';
 import 'package:water_analytics_australia/2_application/pages/home_page.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/view/landing_price_detail_page.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_page/view/landing_price_page.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/2_application/pages/member_detail_page/view/member_detail_page.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
-import 'package:water_analytics_australia/2_application/pages/sales_details/view/sales_details_page.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -40,40 +37,10 @@ final routes = GoRouter(
       },
     ),
     GoRoute(
-      name: SalesPage.name,
-      path: SalesPage.path,
-      builder: (context, state) {
-        return const SelectionArea(child: SalesPageWrapperProvider());
-      },
-    ),
-    GoRoute(
-      name: SalesDetailsPage.name,
-      path: SalesDetailsPage.path,
-      builder: (context, state) {
-        final cubit = state.extra as AwsSalesCubit?;
-        return SelectionArea(
-          child: SalesDetailsPageWrapperProvider(
-            id: state.pathParameters['id']!,
-          ),
-        );
-      },
-    ),
-    GoRoute(
       name: HomePage.name,
       path: HomePage.path,
       builder: (context, state) {
         return const SelectionArea(child: HomePage());
-      },
-    ),
-    GoRoute(
-      name: CloudSalesDetailsPage.name,
-      path: CloudSalesDetailsPage.path,
-      builder: (context, state) {
-        return SelectionArea(
-          child: CloudSalesDetailsPageWrapperProvider(
-            id: state.pathParameters['id']!,
-          ),
-        );
       },
     ),
     GoRoute(

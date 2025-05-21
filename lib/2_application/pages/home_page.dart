@@ -9,7 +9,6 @@ import 'package:water_analytics_australia/2_application/pages/aws_my_team/view/m
 import 'package:water_analytics_australia/2_application/pages/aws_product_stocks_page/view/product_stock_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/view/aws_sales_page.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_report_page/view/sales_report_page.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/view/sales_page.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 
 class HomePage extends StatefulWidget {
@@ -56,9 +55,6 @@ class _HomePageState extends State<HomePage> {
       ],
       if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
         const ManageTeamsWrapperProvider(),
-      ],
-      if (!kIsWeb) ...[
-        const SalesPageWrapperProvider(),
       ],
       // if (userAccessLevel >= 4 || userAccessLevel == 0) ...[
       const ProductStockPageWrapperProvider(),

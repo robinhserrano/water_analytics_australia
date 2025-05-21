@@ -14,8 +14,6 @@ import 'package:water_analytics_australia/1_domain/models/landing_price_model.da
 import 'package:water_analytics_australia/2_application/pages/landing_price_detail_page/cubit/landing_price_detail_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_page/cubit/landing_price_cubit.dart';
 import 'package:water_analytics_australia/2_application/pages/landing_price_page/widget/landing_price_card.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/cubit/cloud_sales_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_page/widget/cloud_sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/login/view/login_page.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/widgets/custom_text_field.dart';

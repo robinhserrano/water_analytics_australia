@@ -27,9 +27,6 @@ import 'package:water_analytics_australia/2_application/pages/aws_sales_page/blo
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/aws_sort_filter_modal.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sales_record_card.dart';
 import 'package:water_analytics_australia/2_application/pages/aws_sales_page/widgets/sync_users_modal.dart';
-import 'package:water_analytics_australia/2_application/pages/cloud_sales_details/view/cloud_sales_details_page.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/bloc/cubit/sales_cubit.dart';
-import 'package:water_analytics_australia/2_application/pages/sales/widgets/sort_filter_modal.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
 import 'package:water_analytics_australia/core/temp.dart';
@@ -1082,6 +1079,9 @@ double calculateFinalCommission(
   AwsSalesOrder order,
   List<AwsOrderLine> orderLine,
 ) {
+  final landingPrices =
+      getCurrentLandingPrices(order.createDate ?? DateTime.now());
+
   final sellingPrice = calculateCashPrice(
     order.amountTotal ?? 0,
     (order.xStudioPaymentType ?? '').toLowerCase().contains('cash'),
