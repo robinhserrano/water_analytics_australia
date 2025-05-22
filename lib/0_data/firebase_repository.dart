@@ -8,7 +8,6 @@ import 'package:water_analytics_australia/1_domain/models/landing_price_model.da
 import 'package:water_analytics_australia/1_domain/models/sales_record_model.dart';
 import 'package:water_analytics_australia/core/helper.dart';
 import 'package:water_analytics_australia/core/hive_helper.dart';
-import 'package:water_analytics_australia/core/temp.dart';
 
 class FirebaseFirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

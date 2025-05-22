@@ -53,7 +53,7 @@ class App extends StatelessWidget {
         ),
 
         // dividerColor: Colors.white,
-        cardTheme: const CardTheme(color: Colors.white),
+        cardTheme: const CardThemeData(color: Colors.white),
         // dialogBackgroundColor: Colors.white,
         // bottomNavigationBarTheme: BottomNavigationBarThemeData(
 
