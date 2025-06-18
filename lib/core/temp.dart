@@ -134,6 +134,13 @@ List<LandingPrice> oldLandingPrices = [
     installationService: 900,
     supplyOnly: 900,
   ),
+  const LandingPrice(
+    name: 'WAA Full House UV/Healthy Water POE 4 V2-White (w filters)',
+    internalReference: 'FHWR-4S1-20UV',
+    productCategory: 'Filtration System',
+    installationService: 5190,
+    supplyOnly: 3390,
+  ),
 ];
 
 //If date is after Mar 2025 or Apr 1 Start
@@ -271,6 +278,13 @@ List<LandingPrice> newLandingPrices = [
     productCategory: 'Taps',
     installationService: 900,
     supplyOnly: 900,
+  ),
+  const LandingPrice(
+    name: 'WAA Full House UV/Healthy Water POE 4 V2-White (w filters)',
+    internalReference: 'FHWR-4S1-20UV',
+    productCategory: 'Filtration System',
+    installationService: 5190,
+    supplyOnly: 3390,
   ),
 ];
 
