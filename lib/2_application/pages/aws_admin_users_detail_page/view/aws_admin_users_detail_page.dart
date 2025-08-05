@@ -370,7 +370,7 @@ class _EditLandingPricePageState extends State<EditLandingPricePage> {
                   const SizedBox(
                     height: 12,
                   ),
-                  if ((accessLevel ?? widget.user.accessLevel) < 3)
+                  if ((accessLevel ?? widget.user.accessLevel) < 4)
                     OutlinedButton(
                       onPressed: null,
                       child: Padding(

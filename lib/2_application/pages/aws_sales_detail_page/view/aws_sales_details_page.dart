@@ -65,6 +65,7 @@ class AwsSalesDetailsPage extends StatefulWidget {
 class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
   int accessLevel = 0;
   int currentUserId = 0;
+  String currentUserName = '';
   AwsSalesCubit? salesCubit;
 
   @override
@@ -84,6 +85,7 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
     final user = await HiveHelper.getCurrentUser();
     accessLevel = user?.accessLevel ?? 1;
     currentUserId = user?.userId ?? 0;
+    currentUserName = user?.displayName ?? '';
     setState(() {});
   }
 
@@ -121,6 +123,7 @@ class _AwsSalesDetailsPageState extends State<AwsSalesDetailsPage> {
                 accessLevel: accessLevel,
                 currentUserId: currentUserId,
                 salesCubit: salesCubit,
+                currentUserName: currentUserName,
               ),
             );
           } else if (state is AwsSalesDetailsStateError) {
@@ -151,6 +154,7 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
     required this.accessLevel,
     required this.currentUserId,
     required this.salesCubit,
+    required this.currentUserName,
     super.key,
   });
 
@@ -158,6 +162,7 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
   final int accessLevel;
   final int currentUserId;
   final AwsSalesCubit? salesCubit;
+  final String currentUserName;
 
   @override
   Widget build(BuildContext context) {
@@ -242,6 +247,7 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
                       accessLevel: accessLevel,
                       currentUserId: currentUserId,
                       salesCubit: salesCubit,
+                      currentUserName: currentUserName,
                     ),
                   ),
                 ],
@@ -249,12 +255,10 @@ class AwsSalesDetailsPageLoaded extends HookWidget {
               const SizedBox(
                 height: 16,
               ),
-           
-                OrderLines(
-                  order: order,
-                  orderLine: order.orderLine ?? [],
-                ),
-       
+              OrderLines(
+                order: order,
+                orderLine: order.orderLine ?? [],
+              ),
             ],
           ),
         ),
@@ -739,6 +743,7 @@ class CommissionSection extends StatelessWidget {
     required this.accessLevel,
     required this.currentUserId,
     required this.salesCubit,
+    required this.currentUserName,
     super.key,
   });
   final AwsSalesOrder order;
@@ -746,6 +751,7 @@ class CommissionSection extends StatelessWidget {
   final int accessLevel;
   final int currentUserId;
   final AwsSalesCubit? salesCubit;
+  final String currentUserName;
 
   @override
   Widget build(BuildContext context) {
@@ -922,7 +928,8 @@ class CommissionSection extends StatelessWidget {
               ],
             ),
             //ACCESS RESTRICTION
-            if (accessLevel >= 3 || accessLevel == 0) ...[
+            if ((accessLevel >= 3 || accessLevel == 0) &&
+                (order.xStudioSalesRep1 != currentUserName)) ...[
               Center(
                 child: ResponsiveRowColumn(
                   rowMainAxisAlignment: MainAxisAlignment.center,

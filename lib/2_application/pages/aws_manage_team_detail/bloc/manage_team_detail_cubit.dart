@@ -39,7 +39,9 @@ class ManageTeamDetailCubit extends Cubit<ManageTeamDetailCubitState> {
           final salesTeamManager = users
               .where(
                 (e) =>
-                    e.salesManagerId == salesManager.id && e.accessLevel == 2,
+                    e.salesManagerId == salesManager.id &&
+                    e.accessLevel == 2 &&
+                    e.accessLevel == 3,
               )
               .toList();
 
